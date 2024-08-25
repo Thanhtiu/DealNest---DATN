@@ -236,9 +236,9 @@
                             </span>
                         </a>
                         <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-gift"></i> Ưu Đãi
-                            Dành Riêng Cho Bạn <span class="badge bg-primary rounded-pill" style="float: right;">New</span></a>
+                            Dành Riêng Cho Bạn <span class="badge bg-success rounded-pill" style="float: right;">New</span></a>
                         <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-money"></i> 25.8 Lương Về
-                            Sale To <span class="badge bg-primary rounded-pill" style="float: right;">New</span></a>
+                            Sale To <span class="badge bg-success rounded-pill" style="float: right;">New</span></a>
                         <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-key"></i> Tài
                             Khoản Của Tôi</a>
                         <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-bank"></i> Ngân
@@ -255,96 +255,30 @@
                             Mua</a>
                         <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-bell"></i> Thông
                             Báo</a>
-                        <a href="voucher.html" class="list-group-item list-group-item-action"><i class="fa fa-gift"></i> Kho Voucher</a>
+                        <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-gift"></i> Kho Voucher</a>
                         <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-money"></i> Shopee Xu</a>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-9">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Hồ Sơ Của Tôi</h4>
-                            <p class="card-text">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+                            <h2 class="card-title">Kho Voucher</h2>
+                            <div class="float-end">
+                                <a href="#" class="text-decoration-none text-danger">Tìm thêm voucher</a> |
+                                <a href="#" class="text-decoration-none text-danger">Xem lịch sử voucher</a> |
+                                <a href="#" class="text-decoration-none text-secondary">Tìm hiểu</a>
+                            </div>
                         </div>
                         <div class="card-body">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Tên đăng nhập</label>
-                                <input type="text" class="form-control" id="username"
-                                    value="datbui" readonly>
-                                <small class="form-text text-muted">Tên Đăng nhập chỉ có thể thay đổi một lần.</small>
+                            <div class="form-group">
+                                <label for="voucher-code" class="form-label">Mã Voucher</label>
+                                <input type="text" class="form-control" id="voucher-code" placeholder="Nhập mã voucher tại đây">
                             </div>
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Tên</label>
-                                <input type="text" class="form-control" id="name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email"
-                                    value="" readonly>
-                                <a href="#" class="btn btn-link">Thay Đổi</a>
-                            </div>
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-control" id="phone">
-                                <a href="#" class="btn btn-link">Thêm</a>
-                            </div>
-                            <div class="mb-3">
-                                <label for="gender" class="form-label">Giới tính</label>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" id="male" value="male">
-                                    <label class="form-check-label" for="male">Nam</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" id="female"
-                                        value="female">
-                                    <label class="form-check-label" for="female">Nữ</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" id="other" value="other">
-                                    <label class="form-check-label" for="other">Khác</label>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="birthday" class="form-label">Ngày sinh</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" id="day" value="23" min="1" max="31">
-                                    <span class="input-group-text">/</span>
-                                    <select class="form-select" id="month">
-                                        <option value="8">Tháng 8</option>
-                                        <option value="1">Tháng 1</option>
-                                        <option value="2">Tháng 2</option>
-                                        <option value="3">Tháng 3</option>
-                                        <option value="4">Tháng 4</option>
-                                        <option value="5">Tháng 5</option>
-                                        <option value="6">Tháng 6</option>
-                                        <option value="7">Tháng 7</option>
-                                        <option value="9">Tháng 9</option>
-                                        <option value="10">Tháng 10</option>
-                                        <option value="11">Tháng 11</option>
-                                        <option value="12">Tháng 12</option>
-                                    </select>
-                                    <span class="input-group-text">/</span>
-                                    <input type="number" class="form-control" id="year" value="2024" min="1900" max="2024">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            <button class="btn btn-success mt-3">Lưu</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Ảnh đại diện</h4>
-                        </div>
-                        <div class="card-body">
-                            <img src="" alt="Ảnh đại diện" class="img-fluid rounded-circle mx-auto d-block"
-                                style="width: 150px;">
-                            <button type="button" class="btn btn-success mt-3">Chọn Ảnh</button>
-                            <small class="form-text text-muted mt-2">Dung lượng file tối đa 1 MB.
-                                Định dạng: JPEG, PNG
-                            </small>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </section>
