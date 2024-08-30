@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('google_id', 255)->nullable();
             $table->string('google_email', 255)->nullable();
             $table->string('google_image', 255)->nullable();
+            
         });
     }
 

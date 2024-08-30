@@ -19,6 +19,9 @@ return new class extends Migration
             $table->decimal('rating', 3, 2)->default(0.00)->notNullable();
             $table->integer('follow')->nullable();
             $table->date('join')->nullable();
+            $table->string('store_email',255)->notNullable();
+            $table->string('store_phone',255)->notNullable();
+            $table->foreignId('address_id')->constrained('address')->onDelete('cascade'); 
             $table->timestamps();
         });
     }
