@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tab Navigation</title>
+    <!-- <link rel="stylesheet" href="../../assets/css/style.css"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .tab-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .tab-item.active {
+            color: #ff5722;
+            border-bottom: 2px solid #ff5722;
+        }
+
+        .btn-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: flex-end;
+        }
+
+        .btn-container button {
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            background-color: #ff5722;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn-container button.dropdown {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+    </style>
+</head>
+<div class="btn-container">
+    <button class="dropdown" tabindex="5">Cài đặt sản phẩm</button>
+    <button class="dropdown" tabindex="6">Công cụ xử lý hàng loạt</button>
+    <button tabindex="7">+ Thêm 1 sản phẩm mới</button>
+</div>
+
+<body>
+    <div class="tabs" role="tablist">
+        <a href="#" class="tab-item active" tabindex="0" role="tab">Tất cả</a>
+        <a href="#" class="tab-item" tabindex="1" role="tab">Đang hoạt động (0)</a>
+        <a href="#" class="tab-item" tabindex="2" role="tab">Vi phạm (0)</a>
+        <a href="#" class="tab-item" tabindex="3" role="tab">Chờ duyệt bởi Shopee (0)</a>
+        <a href="#" class="tab-item" tabindex="4" role="tab">Chưa được đăng (0)</a>
+    </div>
+
+   
+    <script>
+        const tabs = document.querySelectorAll('.tab-item');
+        
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(item => item.classList.remove('active'));
+                tab.classList.add('active');
+            });
+
+            tab.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    tabs.forEach(item => item.classList.remove('active'));
+                    tab.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
