@@ -2012,9 +2012,210 @@ ol {
     background-color: rgba(40, 167, 69, 0.1); 
     color: #28a745;
 }
+body {
+    position: relative; /* Ensure relative positioning for the chat box */
+}
 
+.chat-section {
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px; 
+    width: 650px; 
+    max-width: 100%; 
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; 
+}
 
+.chat-header {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
 
+.chat-title {
+    margin: 0;
+    font-size: 16px;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.chat-body {
+    display: flex;
+    max-height: 400px;
+    overflow: hidden;
+}
+
+.chat-list {
+    width: 60%; /* Adjust this width as needed */
+    padding: 10px;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.chat-item {
+    display: flex; 
+    align-items: center; 
+    padding: 10px; 
+    border-bottom: 1px solid #e0e0e0; 
+    cursor: pointer; 
+    transition: background-color 0.3s;
+}
+
+.chat-item:hover {
+    background-color: #f5f5f5;
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+    margin-right: 10px;
+}
+
+.chat-avatar img {
+    width: 100%; 
+    height: auto; 
+}
+
+.chat-info {
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.chat-name {
+    margin: 0;
+    font-weight: bold; 
+    font-size: 14px; 
+    color: #333; 
+}
+
+.chat-message {
+    margin: 5px 0 0 0; 
+    color: #555; 
+    font-size: 13px; 
+}
+
+.chat-date {
+    font-size: 12px; 
+    color: #999; 
+    margin-left: 10px; 
+}
+
+.chat-content {
+    width: 80%; 
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.chat-warning {
+    background-color: #ffeb3b;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.chat-footer {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    margin-right: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-message {
+    margin-top: 10px; 
+    padding: 10px; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 5px; 
+    background-color: #f9f9f9; 
+}
+
+.product-info {
+    display: flex; 
+    align-items: center; 
+    margin-top: 10px; 
+}
+
+.product-image {
+    width: 80px; 
+    height: 80px; 
+    border-radius: 5px; 
+    margin-right: 10px; 
+    margin-top: 2px;
+}
+
+.product-details {
+    flex: 1; 
+}
+
+.product-name {
+    margin: 0; 
+    font-weight: bold; 
+}
+
+.product-price {
+    color: #d9534f; 
+    font-weight: bold; 
+    margin-top: 5px; 
+}
+
+.chat-user {
+    font-weight: bold; 
+    color: #007bff; 
+}
+
+.chat-message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.chat-message:nth-child(odd) {
+    background-color: #e9f7ff; 
+    align-self: flex-start; 
+}
+
+.chat-message:nth-child(even) {
+    background-color: #d4edda; 
+    align-self: flex-end; 
+}
+
+.chat-message > span {
+    font-weight: bold; 
+}
 /*---------------------
   Shop Cart
 -----------------------*/

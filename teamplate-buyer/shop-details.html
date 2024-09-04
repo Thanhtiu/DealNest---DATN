@@ -431,19 +431,19 @@
             <div class="col-lg-3 col-md-6">
                 <div class="shop-info__item">
                     <!-- Header with Avatar and Shop Name -->
-                    <div class="shop-info__header">
+                    <div class="shop-info__header d-flex align-items-center">
                         <!-- Shop Avatar -->
                         <img src="https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg" alt="Shop Avatar" class="shop-avatar">
-                        <div class="shop-name">
+                        <div class="shop-name ml-3">
                             <h5>TORANO Official Store</h5>
                             <p>Online 1 giờ trước</p>
                         </div>
                     </div>
                     
                     <!-- Nút xem shop và chat ngay -->
-                    <div class="shop-info__buttons">
+                    <div class="shop-info__buttons mt-3">
                         <a href="link-to-shop-page" class="btn btn-primary">Xem Shop</a>
-                        <a href="#" class="btn btn-success">Chat Ngay</a>
+                        <button id="chatButton" class="btn btn-success">Chat Ngay</button>
                     </div>
                 </div>
             </div>
@@ -477,6 +477,49 @@
                     <p>578</p>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Separate Chat Section (Hidden by Default) -->
+<section id="chatSection" class="chat-section">
+    <div class="chat-box">
+        <div class="chat-header d-flex justify-content-between align-items-center">
+            <h5 class="chat-title">Chat với <span class="chat-user">rowler.official</span></h5>
+            <button id="closeChat" class="btn btn-close">&times;</button>
+        </div>
+        <div class="chat-body d-flex">
+            <div class="chat-list">
+                <input type="text" placeholder="Tìm kiếm" class="search-input">
+                <div class="chat-item" onclick="selectChat('user1')">
+                    <div class="chat-avatar">
+                        <img src="https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg" alt="User Avatar">
+                    </div>
+                    <div class="chat-info">
+                        <h6 class="chat-name">User1</h6>
+                        <p class="chat-message">Sản phẩm của bạn có sẵn không?</p>
+                    </div>
+                    <span class="chat-date">16/06</span>
+                </div>
+                <div class="chat-item" onclick="selectChat('user2')">
+                    <div class="chat-avatar">
+                        <img src="https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg" alt="User Avatar">
+                    </div>
+                    <div class="chat-info">
+                        <h6 class="chat-name">User 2</h6>
+                        <p class="chat-message">Chào bạn, tôi có thể giúp gì?</p>
+                    </div>
+                    <span class="chat-date">15/06</span>
+                </div>
+            </div>
+            <div class="chat-content" id="chatContent">
+                <p class="welcome-message">Chào mừng bạn đến với Shopee Chat</p>
+                <p>Bắt đầu trả lời người mua!</p>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" placeholder="Nhập nội dung tin nhắn" class="chat-input">
+            <button class="btn btn-primary">Gửi</button>
         </div>
     </div>
 </section>
@@ -718,7 +761,44 @@
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
-     
+     <script>// JavaScript to handle chat box toggle
+
+    function selectChat(user) {
+    const chatContent = document.getElementById('chatContent');
+    chatContent.innerHTML = `
+        <div class="chat-message">Người mua: Sản phẩm của bạn có sẵn không?</div>
+        <div class="chat-message">Người bán: Vâng, sản phẩm hiện có sẵn. Bạn muốn đặt hàng không?</div>
+        <div class="chat-message">Người mua: Tôi muốn đặt hàng.</div>
+        <div class="chat-message">Người bán: Cảm ơn bạn! Tôi sẽ xử lý đơn hàng ngay lập tức.</div>
+        <div class="chat-message">Người mua: Cảm ơn bạn đã hỗ trợ!</div>
+    `;
+}
+
+// Thêm sự kiện để gửi tin nhắn mới
+document.querySelector('.btn-primary').addEventListener('click', function() {
+    const input = document.querySelector('.chat-input');
+    const newMessage = input.value.trim();
+
+    if (newMessage) {
+        const chatContent = document.getElementById('chatContent');
+        chatContent.innerHTML += `<div class="chat-message">Bạn: ${newMessage}</div>`;
+        input.value = ''; // Xóa nội dung ô nhập
+    }
+});
+
+// Thêm sự kiện để đóng chat
+document.getElementById('closeChat').addEventListener('click', function() {
+    document.getElementById('chatSection').style.display = 'none';
+});
+        document.getElementById("chatButton").addEventListener("click", function() {
+            document.getElementById("chatSection").style.display = "block";
+        });
+        
+        // Hide the chat section when close button is clicked
+        document.getElementById("closeChat").addEventListener("click", function() {
+            document.getElementById("chatSection").style.display = "none";
+        });
+        </script>
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.nice-select.min.js"></script>
