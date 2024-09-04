@@ -20,6 +20,223 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="../../assets/images/favicon.png" />
   </head>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+  
+    .container {
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+  
+    .sidebar {
+      width: 300px;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box; /* Ensure padding is included in width */
+    }
+  
+    .sidebar-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+  
+    .sidebar-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  
+    .sidebar-nav-item {
+      font-size: 16px;
+      cursor: pointer;
+    }
+  
+    .sidebar-nav-item.active {
+      font-weight: bold;
+    }
+  
+    .sidebar-search {
+      position: relative;
+      margin-bottom: 20px;
+    }
+  
+    .sidebar-search input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+    }
+  
+    .sidebar-search i {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #ddd;
+    }
+  
+    .sidebar-list {
+      list-style: none;
+      padding: 0;
+    }
+  
+    .sidebar-list-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+    }
+  
+    .sidebar-list-item:last-child {
+      border-bottom: none;
+    }
+  
+    .sidebar-list-item img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  
+    .sidebar-list-item .name {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  
+    .sidebar-list-item .message {
+      font-size: 14px;
+      color: #888;
+    }
+  
+    .sidebar-list-item .badge {
+      background-color: #f00;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 50%;
+      font-size: 12px;
+      margin-left: auto;
+    }
+  
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      width: calc(100% - 300px); /* Adjusted to match sidebar width */
+      box-sizing: border-box; /* Ensure padding is included in width */
+    }
+  
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+  
+    .chat-header-title {
+      font-size: 24px;
+      font-weight: bold;
+    }
+  
+    .chat-header-actions {
+      display: flex;
+      align-items: center;
+    }
+  
+    .chat-header-actions i {
+      font-size: 20px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+  
+    .chat-message {
+      display: flex;
+      margin-bottom: 10px;
+    }
+  
+    .chat-message-sender {
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+    }
+  
+    .chat-message-sender img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+  
+    .chat-message-sender .name {
+      font-size: 14px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+  
+    .chat-message-content {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 60%;
+      word-wrap: break-word;
+    }
+  
+    /* Adjust to make messages from me align to the right */
+    .chat-message.me {
+      justify-content: flex-end;
+    }
+  
+    .chat-message.me .chat-message-content {
+      background-color: #007bff;
+      color: white;
+      margin-left: 0;
+    }
+  
+    .chat-input {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fff;
+    }
+  
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+    }
+  
+    .chat-input button {
+      padding: 10px;
+      border: none;
+      outline: none;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+  
   <body>
     <div class="container-scroller">
       <!-- partial:../../partials/_navbar.html -->
