@@ -520,75 +520,99 @@
         </nav>
         <!-- partial -->
         <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Chart-js </h3>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="#">Charts</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Chart-js</li>
-                </ol>
-              </nav>
+          <div class="container">
+            <div class="sidebar">
+                <div class="sidebar-title">Chat</div>
+                <div class="sidebar-nav">
+                    <div class="sidebar-nav-item active">General</div>
+                    <div class="sidebar-nav-item">Groups</div>
+                    <div class="sidebar-nav-item">Personal</div>
+                </div>
+                <div class="sidebar-search">
+                    <input type="text" placeholder="Search">
+                    <i class="fas fa-search"></i>
+                </div>
+                <ul class="sidebar-list">
+                    <li class="sidebar-list-item">
+                        <img src="https://placehold.co/40x40"  alt="Profile Picture">
+                        <div class="name">Robert Jefferson</div>
+                        <div class="message">Congratulations Friend...</div>
+                        <div class="badge">1</div>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <img src="https://placehold.co/40x40" alt="Profile Picture">
+                        <div class="name">Jesse Ross</div>
+                        <div class="message">How are you Friend...</div>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <img src="https://placehold.co/40x40" alt="Profile Picture">
+                        <div class="name">Mary Schneider</div>
+                        <div class="message">Have A Nice day...</div>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <img src="https://placehold.co/40x40" alt="Profile Picture">
+                        <div class="name">David Herrmann</div>
+                        <div class="message">Good morning! How are you?</div>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <img src="https://placehold.co/40x40" alt="Profile Picture">
+                        <div class="name">Mary Hayes</div>
+                        <div class="message">How are you Friend...</div>
+                    </li>
+                    <li class="sidebar-list-item">
+                        <img src="https://placehold.co/40x40" alt="Profile Picture">
+                        <div class="name">David Ross</div>
+                        <div class="message">How are you Friend...</div>
+                    </li>
+                </ul>
             </div>
-            <div class="row">
-              <div class="col-lg-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Line chart</h4>
-                    <canvas id="lineChart" style="height:250px"></canvas>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Bar chart</h4>
-                    <canvas id="barChart" style="height:230px"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Area chart</h4>
-                    <canvas id="areaChart" style="height:250px"></canvas>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Doughnut chart</h4>
-                    <div class="doughnutjs-wrapper d-flex justify-content-center">
-                      <canvas id="doughnutChart"></canvas>
+            <div class="chat-area">
+                <div class="chat-header">
+                    <div class="chat-header-title">Mary Schneider</div>
+                    <div class="chat-header-actions">
+                        <i class="fas fa-phone"></i>
+                        <i class="fas fa-video"></i>
+                        <i class="fas fa-trash"></i>
+                        <i class="fas fa-ellipsis-v"></i>
                     </div>
-                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Pie chart</h4>
-                    <div class="doughnutjs-wrapper d-flex justify-content-center">
-                      <canvas id="pieChart"></canvas>
+                <div class="chat-messages">
+                    <div class="chat-message">
+                        <div class="chat-message-sender">
+                            <img src="https://placehold.co/40x40" alt="Profile Picture">
+                            <div class="name">Mary Schneider</div>
+                        </div>
+                        <div class="chat-message-content">
+                            Good Morning!
+                        </div>
                     </div>
-                  </div>
+                    <div class="chat-message me">
+                        <div class="chat-message-content">
+                            Hello! How are you?
+                        </div>
+                    </div>
+                    <div class="chat-message">
+                        <div class="chat-message-sender">
+                            <img src="https://placehold.co/40x40" alt="Profile Picture">
+                            <div class="name">Mary Schneider</div>
+                        </div>
+                        <div class="chat-message-content">
+                            There are many variations of passages of Lorem Ipsum available.
+                        </div>
+                    </div>
+                    <div class="chat-message me">
+                        <div class="chat-message-content">
+                            Sounds good!
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="col-lg-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Scatter chart</h4>
-                    <canvas id="scatterChart" style="height:250px"></canvas>
-                  </div>
+                <div class="chat-input">
+                    <input type="text" placeholder="Type a message...">
+                    <button>Send</button>
                 </div>
-              </div>
             </div>
-          </div>
+        </div>
+       
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
           <footer class="footer">

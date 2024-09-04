@@ -25,6 +25,8 @@ Route::prefix('kenh-nguoi-ban')->group(function(){
 
     Route::get('/get-subCategory',[ProductController::class,'getSubCategory'])->name('seller.getSubCategory');
 
+    
+
 });
 
 
