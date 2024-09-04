@@ -111,11 +111,13 @@
           </div>
 
           <div class="form-group">
-            <label for="exampleSelect" class="form-label">Thể loại</label>
-            <select class="form-select" id="exampleSelect">
-              <option value="1">Option 1</option>
-              <option value="2">Option 2</option>
-              <option value="3">Option 3</option>
+            <label for="categorySelect" class="form-label">Thể loại</label>
+            <select class="form-select" id="categorySelect">
+              @foreach ($category as $item)
+              <option value="{{$item->id}}">{{$item->name}}</option>
+              @endforeach
+
+
             </select>
           </div>
 
@@ -126,38 +128,24 @@
                 <p class="card-description"></p>
                 <form>
                   <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group row d-flex">
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input"> Default </label>
-                        </div>
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" checked> Checked </label>
-                        </div>
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" disabled> Disabled </label>
-                        </div>
-                         
-                        
-                      </div>
+                    <!-- Select Thể loại con -->
+                    <div class="form-group">
+                      <label for="subCategorySelect" class="form-label">Thể loại con</label>
+                      <select class="form-select" id="subCategorySelect">
+                        <option value="">Chọn thể loại con</option>
+                        <!-- Thể loại con sẽ được thêm tự động bởi JavaScript -->
+                      </select>
                     </div>
                   </div>
                 </form>
               </div>
             </div>
           </div>
-    
+
           <div class="row">
-            <div class="form-group col-6">
+            <div class="form-group">
               <label for="exampleInputName1">Giá</label>
               <input type="text" class="form-control" id="exampleInputName1" placeholder="Giá">
-            </div>
-            <div class="form-group col-6">
-              <label for="exampleInputName1">Số lượng</label>
-              <input type="text" class="form-control" id="exampleInputName1" placeholder="Số lượng">
             </div>
           </div>
 
@@ -172,7 +160,7 @@
             </div>
           </div> --}}
           <div class="form-group">
-            <label for="exampleTextarea1">Textarea</label>
+            <label for="exampleTextarea1">Mô tả</label>
             <textarea class="form-control" id="exampleTextarea1" rows="4"></textarea>
           </div>
           <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
@@ -189,14 +177,8 @@
         <p class="card-description"> Hoàn thành: Thông tin thuộc tính để tăng mức độ hiển thị cho sản phẩm</p>
         <div class="row">
           <div class="form-group col-6">
-            <label for="exampleFormControlSelect1">Thương hiệu</label>
-            <select class="form-select form-select-lg" id="exampleFormControlSelect1">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
+            <label for="exampleFormControlSelect1">Số lượng</label>
+            <input type="text" class="form-control">
           </div>
           <div class="form-group col-6">
             <label for="exampleFormControlSelect1">Xuất xứ</label>
@@ -209,30 +191,90 @@
             </select>
           </div>
         </div>
-        <div class="row">
-          <div class="form-group col-6">
-            <label for="exampleFormControlSelect2">Màu sắc</label>
-            <select class="form-select" id="exampleFormControlSelect2">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-          </div>
-          <div class="form-group col-6">
-            <label for="exampleFormControlSelect3">Kích cỡ</label>
-            <select class="form-select form-select-sm" id="exampleFormControlSelect3">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
+        <div class="container mt-4">
+          <div class="row">
+            <div class="form-group col-6">
+              <label>Màu sắc</label>
+              <div id="colorContainer">
+                <div class="form-group d-flex align-items-center">
+                  <input type="text" class="form-control me-2" placeholder="Nhập màu sắc">
+                  <button type="button" class="btn btn-primary" onclick="addColor()">Thêm</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-6">
+              <label>Kích cỡ</label>
+              <div id="sizeContainer">
+                <div class="form-group d-flex align-items-center">
+                  <input type="text" class="form-control me-2" placeholder="Nhập kích cỡ">
+                  <button type="button" class="btn btn-primary" onclick="addSize()">Thêm</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        
+        
       </div>
     </div>
   </div>
 </div>
 @endsection
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('categorySelect');
+    if (categorySelect) {
+      categorySelect.addEventListener('change', function () {
+        const categoryId = this.value;
+
+  
+        const subCategorySelect = document.getElementById('subCategorySelect');
+        subCategorySelect.innerHTML = '<option value="">Chọn thể loại con</option>';
+
+        if (categoryId) {
+            const url = `{{ route('seller.getSubCategory') }}?category_id=${categoryId}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(subcategories => {
+                    subcategories.forEach(subcategory => {
+                        const option = document.createElement('option');
+                        option.value = subcategory.id;
+                        option.textContent = subcategory.name;
+                        subCategorySelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error)); 
+        }
+      });
+    }
+  });
+
+
+
+  function addColor() {
+    const colorContainer = document.getElementById('colorContainer');
+    const newColorInput = document.createElement('div');
+    newColorInput.className = 'form-group d-flex align-items-center mt-2';
+    newColorInput.innerHTML = `
+      <input type="text" class="form-control me-2" placeholder="Nhập màu sắc">
+      <button type="button" class="btn btn-danger" onclick="removeElement(this)">Xóa</button>
+    `;
+    colorContainer.appendChild(newColorInput);
+  }
+
+  function addSize() {
+    const sizeContainer = document.getElementById('sizeContainer');
+    const newSizeInput = document.createElement('div');
+    newSizeInput.className = 'form-group d-flex align-items-center mt-2';
+    newSizeInput.innerHTML = `
+      <input type="text" class="form-control me-2" placeholder="Nhập kích cỡ">
+      <button type="button" class="btn btn-danger" onclick="removeElement(this)">Xóa</button>
+    `;
+    sizeContainer.appendChild(newSizeInput);
+  }
+
+  function removeElement(button) {
+    button.parentElement.remove();
+  }
+</script>

@@ -23,6 +23,8 @@ Route::prefix('kenh-nguoi-ban')->group(function(){
 
     Route::post('dang-ky-submit', [RegisterTrationController::class, 'store'])->name('seller.register.store');
 
+    Route::get('/get-subCategory',[ProductController::class,'getSubCategory'])->name('seller.getSubCategory');
+
 });
 
 
