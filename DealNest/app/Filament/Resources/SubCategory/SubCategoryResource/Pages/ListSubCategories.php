@@ -10,10 +10,17 @@ class ListSubCategories extends ListRecords
 {
     protected static string $resource = SubCategoryResource::class;
 
+    protected ?string $heading = 'Thể loại';
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('Thêm thể loại'),
         ];
+    }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Danh sách thể loại'; 
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
             $table->string('store_name', 255)->notNullable();
-            $table->text('store_description')->notNullable();
+            $table->text('store_description')->nullable();
             $table->decimal('rating', 3, 2)->default(0.00)->notNullable();
             $table->integer('follow')->nullable();
             $table->date('join')->nullable();
