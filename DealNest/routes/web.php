@@ -10,41 +10,50 @@ use App\Http\Controllers\Sellers\DashBoardController;
 use App\Http\Controllers\Client\HomeController;
 
 
-Route::get('/',[HomeController::class,'index'])->name('client.index');
+Route::get('/', [HomeController::class, 'index'])->name('client.index');
 
-Route::prefix('kenh-nguoi-ban')->group(function(){
-    Route::get('/',[DashBoardController::class,'index'])->name('seller.index');
+Route::prefix('kenh-nguoi-ban')->group(function () {
+    Route::get('/', [DashBoardController::class, 'index'])->name('seller.index');
 
-    Route::get('/them-san-pham',[ProductController::class,'store'])->name('seller.product.store');
+    Route::get('/them-san-pham', [ProductController::class, 'store'])->name('seller.product.store');
 
-    Route::get('/dang-ky-nguoi-ban',[RegisterTrationController::class,'index'])->name('seller.register.index');
+    Route::get('/dang-ky-nguoi-ban', [RegisterTrationController::class, 'index'])->name('seller.register.index');
 
-    Route::get('/dang-ky',[RegisterTrationController::class,'form'])->name('seller.register.form');
+    Route::get('/dang-ky', [RegisterTrationController::class, 'form'])->name('seller.register.form');
 
     Route::post('dang-ky-submit', [RegisterTrationController::class, 'store'])->name('seller.register.store');
 
-    Route::get('/get-subCategory',[ProductController::class,'getSubCategory'])->name('seller.getSubCategory');
+    Route::get('/get-subCategory', [ProductController::class, 'getSubCategory'])->name('seller.getSubCategory');
 
-    
+    Route::post('/them-san-pham/submit', [ProductController::class, 'create'])->name('seller.product.create');
+
+    Route::get('/danh-sach-san-pham', [ProductController::class, 'list'])->name('seller.product.list');
+
+    Route::get('/sua-san-pham/{id}', [ProductController::class, 'edit'])->name('seller.product.edit');
+
+    Route::put('/cap-nhat-san-pham/{id}', [ProductController::class, 'update'])->name('seller.product.update');
+
+    Route::get('/xoa-san-pham/{id}', [ProductController::class, 'delete'])->name('seller.product.delete');
+
 
 });
 
 
 // Route  Account
 
-Route::get('/dang-nhap',[AccountController::class,'index'])->name('account.login');
+Route::get('/dang-nhap', [AccountController::class, 'index'])->name('account.login');
 
-Route::post('/dang-nhap/authenticate',[AccountController::class,'authenticate'])->name('account.authenticate');
+Route::post('/dang-nhap/authenticate', [AccountController::class, 'authenticate'])->name('account.authenticate');
 
-Route::get('/dang-ky',[AccountController::class,'register'])->name('account.register');
+Route::get('/dang-ky', [AccountController::class, 'register'])->name('account.register');
 
-Route::post('/dang-ky/processRegiter',[AccountController::class,'processRegister'])->name('account.processRegister');
+Route::post('/dang-ky/processRegiter', [AccountController::class, 'processRegister'])->name('account.processRegister');
 
-Route::get('/xac-thuc-tai-khoan',[OTPController::class,'index'])->name('otp.index');
+Route::get('/xac-thuc-tai-khoan', [OTPController::class, 'index'])->name('otp.index');
 
-Route::get('/xac-thuc-tai-khoan/send-otp',[OTPController::class,'sendOTP'])->name('otp.sendOTP');
+Route::get('/xac-thuc-tai-khoan/send-otp', [OTPController::class, 'sendOTP'])->name('otp.sendOTP');
 
-Route::post('/xac-thuc-tai-khoan/otp',[OTPController::class,'verifyOTP'])->name('otp.verifyOTP');
+Route::post('/xac-thuc-tai-khoan/otp', [OTPController::class, 'verifyOTP'])->name('otp.verifyOTP');
 
 
 

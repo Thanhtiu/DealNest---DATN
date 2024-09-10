@@ -20,8 +20,11 @@
     <!-- endinject -->
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{asset('sellers/assets/css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('sellers/assets/css/spinner.css')}}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset('sellers/assets/images/favicon.png')}}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 </head>
 
 <body>
@@ -29,7 +32,8 @@
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-                <a class="navbar-brand brand-logo" href="index.html"><img src="{{asset('sellers/assets/images/logo.svg')}}" alt="logo" /></a>
+                <a class="navbar-brand brand-logo" href="index.html"><img
+                        src="{{asset('sellers/assets/images/logo.svg')}}" alt="logo" /></a>
                 <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg"
                         alt="logo" /></a>
             </div>
@@ -97,7 +101,8 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
-                                    <img src="{{asset('sellers/assets/images/faces/face2.jpg')}}" alt="image" class="profile-pic">
+                                    <img src="{{asset('sellers/assets/images/faces/face2.jpg')}}" alt="image"
+                                        class="profile-pic">
                                 </div>
                                 <div
                                     class="preview-item-content d-flex align-items-start flex-column justify-content-center">
@@ -109,7 +114,8 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
-                                    <img src="{{asset('sellers/assets/images/faces/face3.jpg')}}" alt="image" class="profile-pic">
+                                    <img src="{{asset('sellers/assets/images/faces/face3.jpg')}}" alt="image"
+                                        class="profile-pic">
                                 </div>
                                 <div
                                     class="preview-item-content d-flex align-items-start flex-column justify-content-center">
@@ -244,12 +250,13 @@
                         <div class="collapse" id="ui-basic">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/ui-features/buttons.html">Xem thông tin tài khoản</a>
+                                    <a class="nav-link" href="pages/ui-features/buttons.html">Xem thông tin tài
+                                        khoản</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-                  
+
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false"
                             aria-controls="forms">
@@ -259,10 +266,10 @@
                         <div class="collapse" id="forms">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/forms/basic_elements.html">Tất cả sản phẩm</a>
+                                    <a class="nav-link" href="{{route('seller.product.list')}}">Danh sách sản phẩm</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/forms/basic_elements.html">Thêm sản phẩm</a>
+                                    <a class="nav-link" href="{{route('seller.product.store')}}">Thêm sản phẩm</a>
                                 </li>
                             </ul>
                         </div>
@@ -303,25 +310,39 @@
                     </li>
                 </ul>
             </nav>
+            
             <!-- partial -->
             <div class="main-panel">
+                <div class="loader" id="loader">
+                    <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+                        <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000"
+                            stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round">
+                        </circle>
+                        <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000"
+                            stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round">
+                        </circle>
+                        <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000"
+                            stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+                        <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000"
+                            stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+                    </svg>
+                </div>
+            
                 <div class="content-wrapper">
-                    <!-- ------------------content-wrapper---------------- -->
                     @yield('content')
                 </div>
-                <!-- content-wrapper ends -->
-                <!-- partial:partials/_footer.html -->
+            
                 <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright Â© 2023 <a
-                                href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights
-                            reserved.</span>
-                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made
-                            with <i class="mdi mdi-heart text-danger"></i></span>
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright Â© 2023
+                            <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with
+                            <i class="mdi mdi-heart text-danger"></i></span>
                     </div>
                 </footer>
-                <!-- partial -->
             </div>
+            
+            
             <!-- main-panel ends -->
         </div>
         <!-- page-body-wrapper ends -->
@@ -329,7 +350,35 @@
     <!-- container-scroller -->
 
 
+    <!-- Include jQuery in your HTML -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <script>
+        // Hiển thị loader khi trang đang tải
+        $(window).on('load', function() {
+            $('#loader').fadeOut('slow');
+        });
+    
+        // Hiển thị loader khi bắt đầu submit bất kỳ form nào
+        $(document).on('submit', 'form', function(e) {
+            // Ngăn chặn submit nhiều lần
+            $(this).find('button[type="submit"]').attr('disabled', 'disabled');
+            
+            // Hiển thị loader
+            $('#loader').fadeIn();
+        });
+    
+        // Hiển thị loader khi có yêu cầu Ajax
+        $(document).ajaxStart(function () {
+            $('#loader').fadeIn();
+        });
+    
+        // Ẩn loader sau khi yêu cầu Ajax hoàn thành
+        $(document).ajaxStop(function () {
+            $('#loader').fadeOut();
+        });
+    </script>
+    
 
 
     <!-- plugins:js -->
@@ -348,6 +397,7 @@
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="{{asset('sellers/assets/js/dashboard.js')}}"></script>
+
     <!-- End custom js for this page -->
 </body>
 
