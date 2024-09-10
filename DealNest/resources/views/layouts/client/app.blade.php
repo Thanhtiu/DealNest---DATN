@@ -37,8 +37,12 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
-                                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                                <li>Free Shipping for all Order of $99</li>
+                                <!-- prettier-ignore-start -->
+                                <a href="{{ route('seller.register.index') }}">
+                                    <li><i class="fa fa-envelope"></i>Kênh người bán</li>
+                                </a>
+                                <!-- prettier-ignore-end -->
+                                <li>Miễn phí vận chuyển cho tất cả đơn hàng từ 350k</li>
                             </ul>
                         </div>
                     </div>
@@ -60,7 +64,15 @@
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                @auth()
+                                <a href=" {{route('account.logout')}} "><i class="fa fa-user"></i> Đăng xuất</a>
+                                {{-- <a href=" "><i class="fa fa-user"></i> Tài khoản</a> --}}
+                                @endauth
+
+                                @guest
+                                <a href=" {{route('account.login')}} "><i class="fa fa-user"></i> Login</a>
+                                @endguest
+
                             </div>
                         </div>
                     </div>
@@ -109,7 +121,7 @@
     </header>
     <!-- Header Section End -->
 
-    
+
 
     @yield('content')
 
@@ -170,9 +182,17 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="footer__copyright">
-                        <div class="footer__copyright__text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
+                        <div class="footer__copyright__text">
+                            <p>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;<script>
+                                    document.write(new Date().getFullYear());
+                                </script> All rights reserved | This template is made with <i class="fa fa-heart"
+                                    aria-hidden="true"></i> by <a href="https://colorlib.com"
+                                    target="_blank">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
+                        </div>
                         <div class="footer__copyright__payment"><img src="img/payment-item.png" alt=""></div>
                     </div>
                 </div>

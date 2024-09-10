@@ -10,10 +10,17 @@ class EditSubCategory extends EditRecord
 {
     protected static string $resource = SubCategoryResource::class;
 
+    protected ?string $heading = 'Thể loại';
+
     protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Tùy chỉnh thể loại'; 
     }
 }

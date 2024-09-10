@@ -16,6 +16,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use App\Models\Category;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Toggle;
 
 class SubCategoryResource extends Resource
 {
@@ -60,15 +62,14 @@ class SubCategoryResource extends Resource
                         ->placeholder('Vui lòng chọn danh mục')
                         ->required(),
 
+                    FileUpload::make('url')
+                    ->label('Hình ảnh')
+                    ->directory('subcategories'),
+
                     // Add this block for status
-                    Select::make('status')
-                        ->label('Trạng thái')
-                        ->options([
-                            'active' => 'Active',
-                            'inactive' => 'Inactive',
-                        ])
-                        ->default('active') // Set default value
-                        ->required(),
+                    Toggle::make('status')
+                    ->label('Hiển thị')
+                    ->default(true)
                 ]),
         ]);
 }
@@ -111,5 +112,20 @@ class SubCategoryResource extends Resource
             'create' => Pages\CreateSubCategory::route('/create'),
             'edit' => Pages\EditSubCategory::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() > 10 ? 'primary' : 'warning';
+    }
+
+    public static function getBreadcrumb(): string
+    {
+        return 'Quản lý thể loại'; 
     }
 }

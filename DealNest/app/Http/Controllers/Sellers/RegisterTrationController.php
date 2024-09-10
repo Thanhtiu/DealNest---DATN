@@ -11,38 +11,74 @@ use App\Models\Address;
 
 class RegisterTrationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        if (!Session::has('seller_register_name')) {
-            Session::put('seller_register_name', 'User123');
-            Session::put('seller_register_id', '2');
+
+        if(Session::has('userEmail')){
+
+            $userEmail = Session::get('userEmail');
+
+            $user = Seller::where('store_email',$userEmail)->first();
+
+            if(!is_null($user)){
+
+               return redirect()->route('seller.index');
+            }
+            
         }
+
         return view('sellers.register.index');
     }
 
     public function form()
     {
-        $id = Session::get('seller_register_id');
-        $user = User::find($id);
-        return view('sellers.register.form', compact('user'));
+        if(Session::has('userEmail')){
+
+            $userEmail = Session::get('userEmail');
+
+            $checkSellerAlready = Seller::where('store_email',$userEmail)->first();
+
+            if(!is_null($checkSellerAlready)){
+
+                return redirect()->route('seller.index');
+            }
+
+            $user = User::where('email',$userEmail)->first();
+
+            if(!is_null($user)){
+
+                return view('sellers.register.form', compact('user'));
+            }
+
+        }else{
+            return redirect()->route('account.login');
+        }   
+              
     }
 
     public function store(Request $request)
     {
+
+        $userEmail = Session::get('userEmail');
+
+        $user = User::where('email',$userEmail)->first();
+
+        $userId = $user->id;
+
         $request->validate([
             'store_name' => 'required|string|max:255',
             'province' => 'required|string',
             'district' => 'required|string',
             'ward' => 'required|string',
             'store_phone' => 'required|string',
-            'store_email' => 'required|string',
+            'store_email' => 'required|string|unique:sellers',
             'string_address' => 'required|string',
             'street' => 'required|string',
         ]);
 
         // Create address
         $address = Address::create([
-            'user_id' => Session::get('seller_register_id'),
+            'user_id' => $userId,
             'province_id' => $request->input('province'),
             'district_id' => $request->input('district'),
             'ward_id' => $request->input('ward'),
@@ -52,7 +88,7 @@ class RegisterTrationController extends Controller
 
         // Create seller
         Seller::create([
-            'user_id' => Session::get('seller_register_id'),
+            'user_id' => $userId,
             'store_name' => $request->input('store_name'),
             'store_phone' => $request->input('store_phone'),
             'store_email' => $request->input('store_email'),

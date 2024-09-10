@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('full_name', 255)->notNullable();
-            $table->string('phone', 255)->notNullable();
+            $table->string('full_name', 255)->nullable();
+            $table->string('phone', 255)->nullable();
             $table->string('image')->nullable();
-            $table->enum('role', ['admin', 'seller','buyer'])->notNullable();
+            $table->enum('role', ['admin', 'seller','buyer'])->default('buyer');
             $table->boolean('is_active')->default(true);
             $table->string('google_id', 255)->nullable();
             $table->string('google_email', 255)->nullable();

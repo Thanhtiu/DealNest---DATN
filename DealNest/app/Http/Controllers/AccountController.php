@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -36,6 +35,8 @@ class AccountController extends Controller
                 $check_active = User::where('email',$request->email)->first();
 
                 if($check_active->is_active == 1){
+
+                    session()->put('userEmail', $request->email);
                     
                     return redirect('/');
 
@@ -125,6 +126,15 @@ class AccountController extends Controller
         }
 
 
+    }
+
+    public function logout(){
+
+        Auth::logout();
+
+        session()->forget('userEmail');
+
+        return redirect('/');
     }
 
 }
