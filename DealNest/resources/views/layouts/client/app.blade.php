@@ -21,103 +21,122 @@
     <link rel="stylesheet" href="{{asset('client/css/owl.carousel.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('client/css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('client/css/style.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('client/css/header.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('client/css/home-product.css')}}" type="text/css">
+
 </head>
 
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
 
     <!-- Header Section Begin -->
-    <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__left">
-                            <ul>
-                                <!-- prettier-ignore-start -->
-                                <a href="{{ route('seller.register.index') }}">
-                                    <li><i class="fa fa-envelope"></i>Kênh người bán</li>
-                                </a>
-                                <!-- prettier-ignore-end -->
-                                <li>Miễn phí vận chuyển cho tất cả đơn hàng từ 350k</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__right">
-                            <div class="header__top__right__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-linkedin"></i></a>
-                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
-                            </div>
-                            <div class="header__top__right__language">
-                                <img src="img/language.png" alt="">
-                                <div>English</div>
-                                <span class="arrow_carrot-down"></span>
-                                <ul>
-                                    <li><a href="#">Spanis</a></li>
-                                    <li><a href="#">English</a></li>
-                                </ul>
-                            </div>
-                            <div class="header__top__right__auth">
-                                @auth()
-                                <a href=" {{route('account.logout')}} "><i class="fa fa-user"></i> Đăng xuất</a>
-                                {{-- <a href=" "><i class="fa fa-user"></i> Tài khoản</a> --}}
-                                @endauth
-
-                                @guest
-                                <a href=" {{route('account.login')}} "><i class="fa fa-user"></i> Login</a>
-                                @endguest
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <header>
+        <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand" href="#">
+                <img src="https://salt.tikicdn.com/cache/w500/ts/upload/c0/8b/46/c3f0dc850dd93bfa7af7ada0cbd75dc0.png" alt="Tiki Logo"> <!-- Replace with your logo -->
+                Tốt & Nhanh
+            </a>
+    
+            <!-- Search form -->
+            <form class="d-flex mx-auto">
+                <input class="form-control me-2" type="search" placeholder="100% hàng thật" aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit">Tìm kiếm</button>
+            </form>
+    
+            <!-- Right Side Menu -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tài khoản</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="bi bi-cart" style="font-size: 20px;"></i></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Secondary Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light secondary-nav">
+        <div class="container-fluid">
+            <!-- Product Categories -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">điện gia dụng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">xe cộ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">mẹ & bé</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">khỏe đẹp</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">nhà cửa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">sách</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">thể thao</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">nồi cơm điện</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">máy sấy tóc</a>
+                </li>
+            </ul>
+    
+            <!-- addre -->
+            <span class="navbar-text">
+                Giao đến: <a href="#">H. Giang Thành, X. Vĩnh Điều, Kiên Giang</a>
+            </span>
+        </div>
+    </nav>
+    
+    <!--  nav Icons  -->
+    <nav class="navbar  navbar-light bg-light secondary-nav">
+        <div class="container-fluid">
+    <div class="container">
+        <div class="commitment-section">
+            <div>
+                <h5></h5>
+            </div>
+            <div class="commitment-item">
+                <i class="bi bi-shield-check"></i>
+                <a>Cam kết 100% hàng thật</a>
+            </div>
+            <div class="commitment-item">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>Hoàn 200% nếu hàng giả</span>
+            </div>
+            <div class="commitment-item">
+                <i class="bi bi-box-seam"></i>
+                <span>30 ngày đổi trả</span>    
+            </div>
+            <div class="commitment-item">
+                <i class="bi bi-truck"></i>
+                <span>Giao nhanh 2h</span>
+            </div>
+            <div class="commitment-item">
+                <i class="bi bi-tags"></i>
+                <span>Giá siêu rẻ</span>
+            </div>
+            <div class="commitment-item">
+                <i class="bi bi-truck-flatbed"></i>
+                <span>Freeship mọi đơn</span>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <nav class="header__menu">
-                        <ul>
-                            <li class="active"><a href="./index.html">Home</a></li>
-                            <li><a href="./shop-grid.html">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="header__menu__dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3">
-                    <div class="header__cart">
-                        <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
-                        </ul>
-                        <div class="header__cart__price">item: <span>$150.00</span></div>
-                    </div>
-                </div>
-            </div>
-            <div class="humberger__open">
-                <i class="fa fa-bars"></i>
-            </div>
-        </div>
+    </div>
+    </div>
+    </nav>
     </header>
     <!-- Header Section End -->
 

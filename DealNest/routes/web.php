@@ -11,6 +11,12 @@ use App\Http\Controllers\Client\HomeController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('client.index');
+Route::get('/san-pham-chi-tiet',[HomeController::class, 'productDetail']);
+Route::prefix('/tai-khoan-cua-toi')->group(function(){
+    Route::get('/ho-so',[HomeController::class, 'profile']);
+    Route::get('/dia-chi',[HomeController::class, 'adress']);
+    Route::get('/voucher',[HomeController::class, 'voucher']);
+});
 
 Route::group(['prefix' => 'tai-khoan'], function () {
     Route::get('/dang-nhap', [AccountController::class, 'index'])->name('account.login');
@@ -54,5 +60,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     });
+    
     // End Seller Route
 });
