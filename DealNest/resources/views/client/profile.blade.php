@@ -131,11 +131,11 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="list-group">
-                    <a href="#" class="btn btn-success"
+                    <a href="#" class="btn btn-primary"
                         aria-current="true">
                         <i class="fa fa-user"></i>
                         Datbui2503
-                        <span class="btn btn-success rounded-pill" style="float: right;">
+                        <span class="btn btn-primary rounded-pill" style="float: right;">
                             <i class="fa fa-pencil"></i>
                         </span>
                     </a>
