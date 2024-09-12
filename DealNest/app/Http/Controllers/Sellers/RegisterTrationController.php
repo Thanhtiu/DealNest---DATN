@@ -57,44 +57,47 @@ class RegisterTrationController extends Controller
     }
 
     public function store(Request $request)
-    {
+{
+    $userEmail = Session::get('userEmail');
 
-        $userEmail = Session::get('userEmail');
+    // Get user by email
+    $user = User::where('email', $userEmail)->first();
+    $userId = $user->id;
 
-        $user = User::where('email',$userEmail)->first();
+    // Validate request inputs
+    $request->validate([
+        'store_name' => 'required|string|max:255',
+        'province' => 'required|string',
+        'district' => 'required|string',
+        'ward' => 'required|string',
+        'store_phone' => 'required|string',
+        'store_email' => 'required|string|unique:sellers',
+        'string_address' => 'required|string',
+        'street' => 'required|string',
+    ]);
 
-        $userId = $user->id;
+    // Create address record
+    $address = Address::create([
+        'user_id' => $userId,
+        'province_id' => $request->input('province'),
+        'district_id' => $request->input('district'),
+        'ward_id' => $request->input('ward'),
+        'street' => $request->input('street'),
+        'string_address' => $request->input('string_address'),
+    ]);
 
-        $request->validate([
-            'store_name' => 'required|string|max:255',
-            'province' => 'required|string',
-            'district' => 'required|string',
-            'ward' => 'required|string',
-            'store_phone' => 'required|string',
-            'store_email' => 'required|string|unique:sellers',
-            'string_address' => 'required|string',
-            'street' => 'required|string',
-        ]);
+    // Create seller record
+    $seller = Seller::create([
+        'user_id' => $userId,
+        'store_name' => $request->input('store_name'),
+        'store_phone' => $request->input('store_phone'),
+        'store_email' => $request->input('store_email'),
+        'address_id' => $address->id,
+    ]);
 
-        // Create address
-        $address = Address::create([
-            'user_id' => $userId,
-            'province_id' => $request->input('province'),
-            'district_id' => $request->input('district'),
-            'ward_id' => $request->input('ward'),
-            'street' => $request->input('street'),
-            'string_address' => $request->input('string_address'),
-        ]);
 
-        // Create seller
-        Seller::create([
-            'user_id' => $userId,
-            'store_name' => $request->input('store_name'),
-            'store_phone' => $request->input('store_phone'),
-            'store_email' => $request->input('store_email'),
-            'address_id' => $address->id,
-        ]);
 
-        return redirect()->route('seller.index')->with('success', 'Đăng ký người bán thành công');
-    }
+    return redirect()->route('seller.index')->with('success', 'Đăng ký người bán thành công');
+}
+
 }

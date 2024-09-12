@@ -33,11 +33,14 @@ class AccountController extends Controller
             if(Auth::attempt(['email' => $request->email,'password' => $request->password])){
 
                 $check_active = User::where('email',$request->email)->first();
-
+                $userId = $check_active->id;
+                
                 if($check_active->is_active == 1){
 
                     session()->put('userEmail', $request->email);
+                    session()->put('userId',$userId);
                     
+
                     return redirect('/');
 
                 }else{
@@ -133,6 +136,7 @@ class AccountController extends Controller
         Auth::logout();
 
         session()->forget('userEmail');
+        session()->forget('userId');
 
         return redirect('/');
     }
