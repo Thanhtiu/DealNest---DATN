@@ -1,6 +1,391 @@
 @extends('layouts/client.app')
 @section('content')
 <!-- Product Details Section Begin -->
+ <style>
+    .product-details {
+    padding-top: 80px;
+}
+
+.product__details__pic__item {
+    margin-bottom: 20px;
+}
+
+.product__details__pic__item img {
+    min-width: 100%;
+}
+
+.product__details__pic__slider img {
+    cursor: pointer;
+}
+
+.product__details__pic__slider.owl-carousel .owl-item img {
+    width: auto;
+}
+
+.product__details__text h3 {
+    color: #252525;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.product__details__text .product__details__rating {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.product__details__text .product__details__rating i {
+    margin-right: -2px;
+    color: #EDBB0E;
+}
+
+.product__details__text .product__details__rating span {
+    color: #dd2222;
+    margin-left: 4px;
+}
+
+.product__details__text .product__details__price {
+    font-size: 30px;
+    color: #dd2222;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.product__details__text p {
+    margin-bottom: 45px;
+}
+
+/* Primary Button */
+.product__details__text .primary-btn {
+    padding: 16px 28px 14px;
+    margin-right: 6px;
+    margin-bottom: 5px;
+}
+
+/* Checkout Button */
+.product__details__buttons .primary-btn.btn-checkout {
+    background-color: #28a745;
+    color: white;
+}
+
+.product__details__buttons .primary-btn.btn-checkout:hover {
+    background-color: #218838;
+    color: white;
+}
+
+/* Heart Icon */
+.product__details__text .heart-icon {
+    display: inline-block;
+    font-size: 16px;
+    color: #6f6f6f;
+    padding: 13px 16px 13px;
+    background: #f5f5f5;
+}
+
+/* Size, Color, Voucher Option */
+.product__details__option {
+    margin-bottom: 20px;
+}
+
+.product__details__option b {
+    font-weight: 700;
+    margin-right: 10px;
+}
+
+.product__details__option select {
+    padding: 8px 12px;
+    border: 1px solid #ebebeb;
+    color: #333;
+    font-size: 14px;
+    width: auto;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.product__details__quantity {
+    display: inline-block;
+    margin-right: 6px;
+}
+   /* shop info */
+   .shop-info__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+.shop-info__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+
+.shop-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
+.shop-name {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.shop-name h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.shop-name p {
+    margin: 0;
+    font-size: 12px;
+    color: gray;
+}
+
+
+.shop-info__buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; 
+    margin-top: 10px;
+}
+
+
+.shop-info__item .btn {
+    display: inline-block;
+    width: 120px;
+    padding: 8px 0;
+    font-size: 14px;
+    border-radius: 5px;
+    text-align: center;
+    color: #000;
+    background-color: transparent; 
+    border: 2px solid #000; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+.shop-info__item .btn-primary:hover {
+    background-color: rgba(0, 123, 255, 0.1); 
+    color: #007bff;
+}
+
+.shop-info__item .btn-success:hover {
+    background-color: rgba(40, 167, 69, 0.1); 
+    color: #28a745;
+}
+body {
+    position: relative; 
+}
+ /* chat */
+ .chat-section {
+    display: none;
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px; 
+    width: 650px; 
+    max-width: 100%; 
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; 
+}
+
+.chat-header {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.chat-title {
+    margin: 0;
+    font-size: 16px;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.chat-body {
+    display: flex;
+    max-height: 400px;
+    overflow: hidden;
+}
+
+.chat-list {
+    width: 60%; 
+    padding: 10px;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.chat-item {
+    display: flex; 
+    align-items: center; 
+    padding: 10px; 
+    border-bottom: 1px solid #e0e0e0; 
+    cursor: pointer; 
+    transition: background-color 0.3s;
+}
+
+.chat-item:hover {
+    background-color: #f5f5f5;
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+    margin-right: 10px;
+}
+
+.chat-avatar img {
+    width: 100%; 
+    height: auto; 
+}
+
+.chat-info {
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.chat-name {
+    margin: 0;
+    font-weight: bold; 
+    font-size: 14px; 
+    color: #333; 
+}
+
+.chat-message {
+    margin: 5px 0 0 0; 
+    color: #555; 
+    font-size: 13px; 
+}
+
+.chat-date {
+    font-size: 12px; 
+    color: #999; 
+    margin-left: 10px; 
+}
+
+.chat-content {
+    width: 80%; 
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.chat-warning {
+    background-color: #ffeb3b;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.chat-footer {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    margin-right: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-message {
+    margin-top: 10px; 
+    padding: 10px; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 5px; 
+    background-color: #f9f9f9; 
+}
+
+.product-info {
+    display: flex; 
+    align-items: center; 
+    margin-top: 10px; 
+}
+
+.product-image {
+    width: 80px; 
+    height: 80px; 
+    border-radius: 5px; 
+    margin-right: 10px; 
+    margin-top: 2px;
+}
+
+.product-details {
+    flex: 1; 
+}
+
+.product-name {
+    margin: 0; 
+    font-weight: bold; 
+}
+
+.product-price {
+    color: #d9534f; 
+    font-weight: bold; 
+    margin-top: 5px; 
+}
+
+.chat-user {
+    font-weight: bold; 
+    color: #007bff; 
+}
+
+.chat-message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.chat-message:nth-child(odd) {
+    background-color: #e9f7ff; 
+    align-self: flex-start; 
+}
+
+.chat-message:nth-child(even) {
+    background-color: #d4edda; 
+    align-self: flex-end; 
+}
+
+.chat-message > span {
+    font-weight: bold; 
+}</style>
 <section class="product-details spad">
     <div class="container">
         <div class="row">
@@ -185,6 +570,7 @@
 </section>
 <!-- Product Details Section End -->
 <!-- Shop Info Section Begin -->
+<!-- Shop Info Section -->
 <section class="shop-info spad">
     <div class="container">
         <div class="row">
@@ -194,14 +580,13 @@
                     <!-- Header with Avatar and Shop Name -->
                     <div class="shop-info__header d-flex align-items-center">
                         <!-- Shop Avatar -->
-                        <img src="https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg"
-                            alt="Shop Avatar" class="shop-avatar">
+                        <img src="https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg" alt="Shop Avatar" class="shop-avatar">
                         <div class="shop-name ml-3">
                             <h5>TORANO Official Store</h5>
                             <p>Online 1 giờ trước</p>
                         </div>
                     </div>
-
+                    
                     <!-- Nút xem shop và chat ngay -->
                     <div class="shop-info__buttons mt-3">
                         <a href="link-to-shop-page" class="btn btn-primary">Xem Shop</a>
@@ -242,11 +627,60 @@
         </div>
     </div>
 </section>
-@endsection
-<script>
-    // JavaScript to handle chat box toggle
 
-    function selectChat(user) {
+<!-- Chat Section (Hidden by Default) -->
+<section id="chatSection" class="chat-section">
+    <div class="chat-box">
+        <div class="chat-header d-flex justify-content-between align-items-center">
+            <h5 class="chat-title">Chat với <span class="chat-user">rowler.official</span></h5>
+            <button id="closeChat" class="btn btn-close">&times;</button>
+        </div>
+        <div class="chat-body d-flex">
+            <!-- Chat List -->
+            <div class="chat-list">
+                <input type="text" placeholder="Tìm kiếm" class="search-input">
+                <div class="chat-item" onclick="selectChat('user1')">
+                    <div class="chat-avatar">
+                        <img src="https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg" alt="User Avatar">
+                    </div>
+                    <div class="chat-info">
+                        <h6 class="chat-name">User1</h6>
+                        <p class="chat-message">Sản phẩm của bạn có sẵn không?</p>
+                    </div>
+                    <span class="chat-date">16/06</span>
+                </div>
+                <div class="chat-item" onclick="selectChat('user2')">
+                    <div class="chat-avatar">
+                        <img src="https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg" alt="User Avatar">
+                    </div>
+                    <div class="chat-info">
+                        <h6 class="chat-name">User 2</h6>
+                        <p class="chat-message">Chào bạn, tôi có thể giúp gì?</p>
+                    </div>
+                    <span class="chat-date">15/06</span>
+                </div>
+            </div>
+            
+            <!-- Chat Content -->
+            <div class="chat-content" id="chatContent">
+                <p class="welcome-message">Chào mừng bạn đến với Shopee Chat</p>
+                <p>Bắt đầu trả lời người mua!</p>
+            </div>
+        </div>
+        
+        <!-- Chat Footer -->
+        <div class="chat-footer">
+            <input type="text" placeholder="Nhập nội dung tin nhắn" class="chat-input">
+            <button class="btn btn-primary">Gửi</button>
+        </div>
+    </div>
+</section>
+
+
+<script>// JavaScript to handle chat box toggle
+
+// Function to select a chat and show chat history
+function selectChat(user) {
     const chatContent = document.getElementById('chatContent');
     chatContent.innerHTML = `
         <div class="chat-message">Người mua: Sản phẩm của bạn có sẵn không?</div>
@@ -257,7 +691,6 @@
     `;
 }
 
-// Thêm sự kiện để gửi tin nhắn mới
 document.querySelector('.btn-primary').addEventListener('click', function() {
     const input = document.querySelector('.chat-input');
     const newMessage = input.value.trim();
@@ -265,20 +698,20 @@ document.querySelector('.btn-primary').addEventListener('click', function() {
     if (newMessage) {
         const chatContent = document.getElementById('chatContent');
         chatContent.innerHTML += `<div class="chat-message">Bạn: ${newMessage}</div>`;
-        input.value = ''; // Xóa nội dung ô nhập
+        input.value = ''; 
     }
 });
 
-// Thêm sự kiện để đóng chat
-document.getElementById('closeChat').addEventListener('click', function() {
-    document.getElementById('chatSection').style.display = 'none';
+
+document.getElementById("chatButton").addEventListener("click", function() {
+    document.getElementById("chatSection").style.display = "block";
 });
-        document.getElementById("chatButton").addEventListener("click", function() {
-            document.getElementById("chatSection").style.display = "block";
-        });
-        
-        // Hide the chat section when close button is clicked
-        document.getElementById("closeChat").addEventListener("click", function() {
-            document.getElementById("chatSection").style.display = "none";
-        });
-</script>
+
+
+document.getElementById("closeChat").addEventListener("click", function() {
+    document.getElementById("chatSection").style.display = "none";
+});
+
+    </script>
+    
+ @endsection

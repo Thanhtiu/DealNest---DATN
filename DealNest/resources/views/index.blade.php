@@ -2,124 +2,19 @@
 @section('content')
 
 <div class="container">
-   
+  
     <div class="row product-container">
+        @foreach($products as $item)
         <div class="card">
-            <img src="img/categories/cat-4.jpg" alt="Product Image">
+            <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt="Product Image">
             <div class="discount">-92%</div>
             <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 dâdadada</h2>
-                
-                <p class="price">₫ 71.000</p>
+                <h2 class="title">{{$item->name}}</h2>
+                <p class="price">{{ number_format($item->price, 0, ',', '.') }} đ</p>
             </div>
-            <div class="sold">Đã bán 100+</div>
+            <div class="sold">{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) . ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
         </div>
-        
-        <div class="card">
-            <img src="img/categories/cat-4.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 dâdadada</h2>
-                
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 1k3</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-4.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 dâdadada</h2>
-                
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 200+</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-4.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 dầdasdada</h2>
-                
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 912</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-4.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 dâdadada</h2>
-                
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 100+</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-4.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 dâdadada</h2>
-                
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 100+</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-4.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 dâdadada</h2>
-                
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 100+</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-3.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 Essager 20W</h2>
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 100+</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-2.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 Essager 20W</h2>
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 100+</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-5.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 Essager 20Wđ</h2>
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 100+</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-2.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 Essager 20W</h2>
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 1k3</div>
-        </div>
-        <div class="card">
-            <img src="img/categories/cat-4.jpg" alt="Product Image">
-            <div class="discount">-92%</div>
-            <div class="content">
-                <h2 class="title">Sạc Nhanh QC 3.0 Essager 20W</h2>
-                <p class="price">₫ 71.000</p>
-            </div>
-            <div class="sold">Đã bán 100+</div>
-        </div>
+        @endforeach
     </div>
 </div>
 @endsection

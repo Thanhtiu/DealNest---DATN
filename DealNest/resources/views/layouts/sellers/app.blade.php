@@ -351,33 +351,13 @@
 
 
     <!-- Include jQuery in your HTML -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script>
-        // Hiển thị loader khi trang đang tải
-        $(window).on('load', function() {
-            $('#loader').fadeOut('slow');
-        });
+
+  
     
-        // Hiển thị loader khi bắt đầu submit bất kỳ form nào
-        $(document).on('submit', 'form', function(e) {
-            // Ngăn chặn submit nhiều lần
-            $(this).find('button[type="submit"]').attr('disabled', 'disabled');
-            
-            // Hiển thị loader
-            $('#loader').fadeIn();
-        });
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     
-        // Hiển thị loader khi có yêu cầu Ajax
-        $(document).ajaxStart(function () {
-            $('#loader').fadeIn();
-        });
-    
-        // Ẩn loader sau khi yêu cầu Ajax hoàn thành
-        $(document).ajaxStop(function () {
-            $('#loader').fadeOut();
-        });
-    </script>
+    <script src="{{asset('sellers/assets/js/spinner.js')}}"></script>
     
 
 
@@ -385,15 +365,15 @@
     <script src="{{asset('sellers/assets/vendors/js/vendor.bundle.base.js')}}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script>
-    <script src="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
+    {{-- <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script> --}}
     <!-- End plugin js for this page -->
     <!-- inject:js -->
-    <script src="{{asset('sellers/assets/js/off-canvas.js')}}"></script>
-    <script src="{{asset('sellers/assets/js/misc.js')}}"></script>
-    <script src="{{asset('sellers/assets/js/settings.js')}}"></script>
-    <script src="{{asset('sellers/assets/js/todolist.js')}}"></script>
-    <script src="{{asset('sellers/assets/js/jquery.cookie.js')}}"></script>
+    {{-- <script src="{{asset('sellers/assets/js/off-canvas.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/js/misc.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/js/settings.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/js/todolist.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/js/jquery.cookie.js')}}"></script> --}}
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="{{asset('sellers/assets/js/dashboard.js')}}"></script>

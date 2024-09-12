@@ -11,7 +11,9 @@ use App\Http\Controllers\Client\HomeController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('client.index');
+// test giao diện
 Route::get('/san-pham-chi-tiet',[HomeController::class, 'productDetail']);
+Route::get('/cua-hang',[HomeController::class, 'shop']);
 Route::prefix('/tai-khoan-cua-toi')->group(function(){
     Route::get('/ho-so',[HomeController::class, 'profile']);
     Route::get('/dia-chi',[HomeController::class, 'adress']);

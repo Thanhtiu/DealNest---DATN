@@ -154,7 +154,21 @@
   </nav>
 </div>
 <div class="row">
+  @if (session('success'))
+  <div class="alert alert-success">
+      {{ session('success') }}
+  </div>
+@endif
 
+@if ($errors->any())
+  <div class="alert alert-danger">
+      <ul>
+          @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+          @endforeach
+      </ul>
+  </div>
+@endif
   <div class="col-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
@@ -328,6 +342,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     // const uploadButtons = document.querySelectorAll('.file-upload-browse');
     
+    
     const uploadButtons = document.querySelectorAll('.file-upload-browse');
   
       uploadButtons.forEach((button) => {
@@ -349,7 +364,7 @@
           });
       });
   
-    // Category and Subcategory select functionality
+   
     const categorySelect = document.getElementById('categorySelect');
     const subCategorySelect = document.getElementById('subCategorySelect');
     const selectedCategoryId = categorySelect ? categorySelect.value : null; 
