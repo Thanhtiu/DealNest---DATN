@@ -17,10 +17,12 @@ class HomeController extends Controller
 {
     public function index(){
         $products = Product::with('product_image')->orderBy('sales','desc')->get();
-
-
+        // return dd($products);
         return view('index',compact('products'));
     }
+   
+
+
     public function profile(){
         return view('client.profile');
     }
@@ -30,9 +32,8 @@ class HomeController extends Controller
     public function voucher(){
         return view('client.voucher');
     }
-    public function productDetail(){
-        return view('client.product-detail');
-    }
+
+   
     public function shop(){
         return view('client.shop');
     }

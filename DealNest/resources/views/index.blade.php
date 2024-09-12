@@ -5,7 +5,7 @@
   
     <div class="row product-container">
         @foreach($products as $item)
-        <div class="card">
+        <a class="card d-block" href="{{route('client.productDetail',['id'=>$item->id])}}">
             <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt="Product Image">
             <div class="discount">-92%</div>
             <div class="content">
@@ -13,7 +13,7 @@
                 <p class="price">{{ number_format($item->price, 0, ',', '.') }} đ</p>
             </div>
             <div class="sold">{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) . ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
-        </div>
+        </a>
         @endforeach
     </div>
 </div>

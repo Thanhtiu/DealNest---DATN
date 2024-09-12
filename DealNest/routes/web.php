@@ -8,16 +8,21 @@ use App\Http\Controllers\Sellers\RegisterTrationController;
 use App\Http\Controllers\Sellers\ProductController;
 use App\Http\Controllers\Sellers\DashBoardController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\ProductDetailController;
+use App\Http\Controllers\Client\CartController;
+
 
 
 Route::get('/', [HomeController::class, 'index'])->name('client.index');
 // test giao diện
-Route::get('/san-pham-chi-tiet',[HomeController::class, 'productDetail']);
-Route::get('/cua-hang',[HomeController::class, 'shop']);
-Route::prefix('/tai-khoan-cua-toi')->group(function(){
-    Route::get('/ho-so',[HomeController::class, 'profile']);
-    Route::get('/dia-chi',[HomeController::class, 'adress']);
-    Route::get('/voucher',[HomeController::class, 'voucher']);
+    Route::get('/san-pham-chi-tiet/{id}', [ProductDetailController::class, 'index'])->name('client.productDetail');
+    Route::get('/gio-hang', [CartController::class, 'index'])->name('client.cart');
+    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::get('/cua-hang', [HomeController::class, 'shop']);
+    Route::prefix('/tai-khoan-cua-toi')->group(function () {
+    Route::get('/ho-so', [HomeController::class, 'profile']);
+    Route::get('/dia-chi', [HomeController::class, 'adress']);
+    Route::get('/voucher', [HomeController::class, 'voucher']);
 });
 
 Route::group(['prefix' => 'tai-khoan'], function () {
@@ -62,6 +67,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     });
-    
+
     // End Seller Route
 });
