@@ -2,109 +2,270 @@
 @section('content')
 <!-- Product Details Section Begin -->
  <style>
-    .product-details {
-    padding-top: 80px;
+   
+
+   .product-section {
+  padding: 20px;
+  background-color: #f9f9f9;
 }
 
-.product__details__pic__item {
-    margin-bottom: 20px;
+.product-layout {
+  display: flex;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 1200px; /* Hạn chế chiều rộng tổng thể */
+  margin: 0 auto; /* Canh giữa trang */
 }
 
-.product__details__pic__item img {
-    min-width: 100%;
+.product-images {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 20px;
 }
 
-.product__details__pic__slider img {
-    cursor: pointer;
+.main-image img {
+  width: 200%; /* Giữ tỷ lệ hình ảnh chính */
+  max-width: 500px; /* Kích thước tối đa */
+  height: auto; 
 }
 
-.product__details__pic__slider.owl-carousel .owl-item img {
-    width: auto;
+.thumbnail-images {
+  display: flex;
+  margin-top: 10px;
+  margin-left: 30px; /* Đưa hình thu nhỏ ra khỏi lề */
 }
 
-.product__details__text h3 {
-    color: #252525;
-    font-weight: 700;
-    margin-bottom: 16px;
+.thumbnail-images img {
+  width: 80px; /* Kích thước hình thu nhỏ */
+  height: auto;
+  margin-right: 10px; /* Khoảng cách giữa các hình thu nhỏ */
+  cursor: pointer;
 }
 
-.product__details__text .product__details__rating {
-    font-size: 14px;
-    margin-bottom: 12px;
+.product-info {
+  flex: 6;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 80px;
 }
 
-.product__details__text .product__details__rating i {
-    margin-right: -2px;
-    color: #EDBB0E;
+.product-info h1 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-.product__details__text .product__details__rating span {
-    color: #dd2222;
-    margin-left: 4px;
+.rating-sales {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  margin-right: 125px;
 }
 
-.product__details__text .product__details__price {
-    font-size: 30px;
-    color: #dd2222;
-    font-weight: 600;
-    margin-bottom: 15px;
+.price-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 50px;
 }
 
-.product__details__text p {
-    margin-bottom: 45px;
+.original-price {
+  font-size: 18px;
+  color: #888;
+  text-decoration: line-through;
 }
 
-/* Primary Button */
-.product__details__text .primary-btn {
-    padding: 16px 28px 14px;
-    margin-right: 6px;
-    margin-bottom: 5px;
+.discounted-price {
+  font-size: 24px;
+  color: #e12d2d;
+  font-weight: bold;
 }
 
-/* Checkout Button */
-.product__details__buttons .primary-btn.btn-checkout {
-    background-color: #28a745;
-    color: white;
+.discount-badge {
+  background-color: #e12d2d;
+  color: white;
+  font-size: 14px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-weight: bold;
 }
 
-.product__details__buttons .primary-btn.btn-checkout:hover {
-    background-color: #218838;
-    color: white;
+.discount-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
-/* Heart Icon */
-.product__details__text .heart-icon {
-    display: inline-block;
-    font-size: 16px;
-    color: #6f6f6f;
-    padding: 13px 16px 13px;
-    background: #f5f5f5;
+.discount-tag {
+  background-color: #fef1f1;
+  color: #d83333;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
 }
 
-/* Size, Color, Voucher Option */
-.product__details__option {
-    margin-bottom: 20px;
+.insurance-section{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  margin-right: 20px;
+}
+.shipping-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+ 
 }
 
-.product__details__option b {
-    font-weight: 700;
-    margin-right: 10px;
+.insurance-section span,
+.shipping-section span {
+  margin-bottom: 5px;
+  margin-right: 20px;
 }
 
-.product__details__option select {
-    padding: 8px 12px;
-    border: 1px solid #ebebeb;
-    color: #333;
-    font-size: 14px;
-    width: auto;
-    display: inline-block;
-    margin-right: 10px;
+.insurance-section .new-tag {
+  background-color: #ff4c4c;
+  color: white;
+  padding: 3px 5px;
+  border-radius: 3px;
+  margin-left: 10px;
 }
 
-.product__details__quantity {
-    display: inline-block;
-    margin-right: 6px;
+.shipping-info {
+  display: flex;
+  flex-direction: column;
 }
+
+.product-options {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  margin-left: 145px;
+}
+
+.product-options .option {
+  display: flex;
+  align-items: flex-start; /* Đặt căn chỉnh từ trên xuống */
+  margin-bottom: 15px;
+}
+
+.product-options label {
+  width: 80px;
+  margin-right: 10px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.color-options {
+  display: flex;
+  flex-wrap: wrap; /* Cho phép các tùy chọn tự động xuống dòng */
+  gap: 10px; /* Khoảng cách giữa các tùy chọn */
+  max-width: 500px; /* Giới hạn độ rộng của container tùy chọn màu */
+}
+
+.size-options {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.color-option, .size-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3px 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.color-option img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  margin-bottom: 3px;
+}
+
+.color-option span {
+  font-size: 12px;
+}
+
+.size-option {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 3px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Hiệu ứng hover */
+.color-option:hover, .size-option:hover {
+  background-color: #f0f0f0;
+  border-color: #999;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.quantity-selector label {
+  margin-right: 10px; /* Khoảng cách giữa nhãn số lượng và các nút */
+}
+
+.quantity-selector button {
+  background-color: #dcdcdc;
+  border: none;
+  padding: 5px 10px;
+  margin: 0 5px;
+}
+
+.quantity-selector input {
+  width: 50px;
+  text-align: center;
+}
+
+.product-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.add-to-cart {
+  background-color: #dcdcdc;
+  padding: 10px 20px;
+  border: none;
+  font-size: 16px;
+}
+
+.buy-now {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  font-size: 16px;
+}
+
+.guarantees {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #666;
+  margin-top: 20px;
+  gap: 10px;
+}
+
    /* shop info */
    .shop-info__item {
     display: flex;
@@ -386,187 +547,130 @@ body {
 .chat-message > span {
     font-weight: bold; 
 }</style>
-<section class="product-details spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-6">
-                <div class="product__details__pic">
-                    <div class="product__details__pic__item">
-                        <img class="product__details__pic__item--large" src="img/product/details/product-details-1.jpg"
-                            alt="">
-                    </div>
-                    <div class="product__details__pic__slider owl-carousel">
-                        <img data-imgbigurl="img/product/details/product-details-2.jpg"
-                            src="img/product/details/thumb-1.jpg" alt="">
-                        <img data-imgbigurl="img/product/details/product-details-3.jpg"
-                            src="img/product/details/thumb-2.jpg" alt="">
-                        <img data-imgbigurl="img/product/details/product-details-5.jpg"
-                            src="img/product/details/thumb-3.jpg" alt="">
-                        <img data-imgbigurl="img/product/details/product-details-4.jpg"
-                            src="img/product/details/thumb-4.jpg" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <div class="product__details__text">
-                    <h3>Vetgetable’s Package</h3>
-                    <div class="product__details__rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star-half-o"></i>
-                        <span>(18 reviews)</span>
-                    </div>
-                    <div class="product__details__price">$50.00</div>
-                    <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
-                        vehicula elementum sed sit amet dui.</p>
-
-                    <!-- Size Option -->
-                    <div class="product__details__option">
-                        <b>Size:</b>
-                        <select>
-                            <option value="S">Small</option>
-                            <option value="M">Medium</option>
-                            <option value="L">Large</option>
-                        </select>
-                    </div>
-
-                    <!-- Color Option -->
-                    <div class="product__details__option">
-                        <b>Color:</b>
-                        <select>
-                            <option value="red">Red</option>
-                            <option value="green">Green</option>
-                            <option value="blue">Blue</option>
-                        </select>
-                    </div>
-
-                    <!-- Voucher Option -->
-                    <div class="product__details__option">
-                        <b>Voucher:</b>
-                        <select>
-                            <option value="5off">$5 Off</option>
-                            <option value="10off">$10 Off</option>
-                            <option value="15off">$15 Off</option>
-                        </select>
-                    </div>
-
-                    <!-- Quantity -->
-                    <div class="product__details__quantity">
-                        <div class="quantity">
-                            <div class="pro-qty">
-                                <input type="text" value="1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="product__details__buttons">
-                        <a href="#" class="primary-btn">ADD TO CART</a>
-                        <a href="#" class="primary-btn btn-checkout">CHECKOUT</a>
-                        <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
-                    </div>
-
-                    <ul>
-                        <li><b>Availability:</b> <span>In Stock</span></li>
-                        <li><b>Shipping:</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
-                        <li><b>Weight:</b> <span>0.5 kg</span></li>
-                        <li><b>Share on:</b>
-                            <div class="share">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-pinterest"></i></a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-
-            <div class="col-lg-12">
-                <div class="product__details__tab">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                                aria-selected="true">Description</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
-                                aria-selected="false">Information</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                                aria-selected="false">Reviews <span>(1)</span></a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                            <div class="product__details__tab__desc">
-                                <h6>Products Infomation</h6>
-                                <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                    Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Vivamus
-                                    suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam sit amet quam
-                                    vehicula elementum sed sit amet dui. Donec rutrum congue leo eget malesuada.
-                                    Vivamus suscipit tortor eget felis porttitor volutpat. Curabitur arcu erat,
-                                    accumsan id imperdiet et, porttitor at sem. Praesent sapien massa, convallis a
-                                    pellentesque nec, egestas non nisi. Vestibulum ac diam sit amet quam vehicula
-                                    elementum sed sit amet dui. Vestibulum ante ipsum primis in faucibus orci luctus
-                                    et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
-                                    vel, ullamcorper sit amet ligula. Proin eget tortor risus.</p>
-                                <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
-                                    ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
-                                    elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
-                                    porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
-                                    nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.
-                                    Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Sed
-                                    porttitor lectus nibh. Vestibulum ac diam sit amet quam vehicula elementum
-                                    sed sit amet dui. Proin eget tortor risus.</p>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tabs-2" role="tabpanel">
-                            <div class="product__details__tab__desc">
-                                <h6>Products Infomation</h6>
-                                <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                    Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
-                                    Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
-                                    sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
-                                    eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
-                                    Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
-                                    sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
-                                    diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
-                                    ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                                    Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
-                                    Proin eget tortor risus.</p>
-                                <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
-                                    ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
-                                    elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
-                                    porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
-                                    nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.</p>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tabs-3" role="tabpanel">
-                            <div class="product__details__tab__desc">
-                                <h6>Products Infomation</h6>
-                                <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                                    Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
-                                    Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
-                                    sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
-                                    eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
-                                    Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
-                                    sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
-                                    diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
-                                    ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                                    Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
-                                    Proin eget tortor risus.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<section class="product-section">
+  <div class="product-layout">
+    <!-- Bên trái: Hình ảnh -->
+    <div class="product-images">
+      <div class="main-image">
+        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lwpfrmg96zmh76.webp" alt="Giày PUMA" class="img-responsive" id="main-product-image">
+      </div>
+      <div class="thumbnail-images">
+        <img src="https://down-vn.img.susercontent.com/file/013645d5052bba873e41e1d4e6cec0bb@resize_w450_nl.webp" alt="Thumbnail 1">
+        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lomic8or785n19.webp" alt="Thumbnail 2">
+        <img src="https://down-vn.img.susercontent.com/file/013645d5052bba873e41e1d4e6cec0bb@resize_w450_nl.webp" alt="Thumbnail 3">
+        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lomic8or785n19.webp" alt="Thumbnail 4">
+        <img src="https://down-vn.img.susercontent.com/file/013645d5052bba873e41e1d4e6cec0bb@resize_w450_nl.webp" alt="Thumbnail 4">
+      </div>
     </div>
+
+    <!-- Bên phải: Thông tin sản phẩm -->
+    <div class="product-info">
+      <h1>Đồng Hồ Casio Nam Dây Nhựa GSHOCK GA-2100-1A1</h1>
+      <div class="rating-sales">
+        <span>4.8 ★ (43 Đánh Giá)</span>
+        <span>126 Đã Bán</span>
+      </div>
+      <div class="price-container">
+  <span class="original-price">₫1.000.000</span>
+  <span class="discounted-price">₫600.000</span>
+  <span class="discount-badge">40% GIẢM</span>
+</div>
+      <div class="discount-section">
+        <span>Mã Giảm Giá Của Shop:</span>
+        <span class="discount-tag">5% GIẢM</span>
+      </div>
+      <div class="insurance-section">
+        <span>Bảo Hiểm:</span>
+        <span>Bảo hiểm Bảo vệ người tiêu dùng <span class="new-tag">Mới</span></span>
+        <a href="#" class="learn-more">Tìm hiểu thêm</a>
+      </div>
+      <div class="shipping-section">
+        <span class="shipping-label">Vận Chuyển:</span>
+        <span class="free-ship">Miễn phí vận chuyển</span>
+        <div class="shipping-info">
+          <span>Vận Chuyển Tới: Xã Khánh Lâm, Huyện U Minh</span>
+          <span>Phí Vận Chuyển: 0₫</span>
+        </div>
+      </div>
+      <div class="product-options">
+  <div class="option">
+    <label for="color">MÀU</label>
+    <div class="color-options">
+      <button class="color-option">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Solid_red.png" alt="">
+        <span>ĐỎ</span>
+      </button>
+      <button class="color-option">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEX//wCKxvRFAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8GadCAABYe850QAAAABJRU5ErkJggg==" alt="">
+        <span>VÀNG</span>
+      </button>
+      <button class="color-option">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEVmAJli86GoAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8GadCAABYe850QAAAABJRU5ErkJggg==" alt="">
+        <span>TÍM</span>
+      </button>
+      <button class="color-option">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEVmAJli86GoAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8GadCAABYe850QAAAABJRU5ErkJggg==" alt="">
+        <span>TÍM</span>
+      </button>
+      <button class="color-option">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEVmAJli86GoAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8GadCAABYe850QAAAABJRU5ErkJggg==" alt="">
+        <span>TÍM</span>
+      </button>
+      <button class="color-option">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEVmAJli86GoAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8GadCAABYe850QAAAABJRU5ErkJggg==" alt="">
+        <span>TÍM</span>
+      </button>
+      <button class="color-option">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEVmAJli86GoAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8GadCAABYe850QAAAABJRU5ErkJggg==" alt="">
+        <span>TÍM</span>
+      </button>
+      <button class="color-option">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEVmAJli86GoAAAAPUlEQVR4nO3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8GadCAABYe850QAAAABJRU5ErkJggg==" alt="">
+        <span>TÍM</span>
+      </button>
+      
+      
+    </div>
+  </div>
+
+  <div class="option">
+    <label for="size-uk">SIZE</label>
+    <div class="size-options">
+      <button class="size-option">S</button>
+      <button class="size-option">M</button>
+      <button class="size-option">L</button>
+      <button class="size-option">XL</button>
+      <button class="size-option">XL</button>
+      <button class="size-option">XL</button>
+      <button class="size-option">XL</button>
+      <button class="size-option">XL</button>
+      <button class="size-option">XL</button>
+      <button class="size-option">XL</button>
+      <button class="size-option">XL</button>
+      
+
+    </div>
+  </div>
+</div>
+
+      <div class="quantity-selector">
+        <label for="quantity">Số Lượng</label>
+        <button class="decrease">-</button>
+        <input type="number" id="quantity" value="1">
+        <button class="increase">+</button>
+        <span>1 sản phẩm có sẵn</span>
+      </div>
+      <div class="product-actions">
+        <button class="add-to-cart">Thêm Vào Giỏ Hàng</button>
+        <button class="buy-now">Mua Ngay</button>
+      </div>
+      <div class="guarantees">
+        <span>Đổi ý miễn phí 15 ngày</span>
+        <span>Hàng chính hãng 100%</span>
+        <span>Miễn phí vận chuyển</span>
+      </div>
+    </div>
+  </div>
 </section>
 <!-- Product Details Section End -->
 <!-- Shop Info Section Begin -->
@@ -711,6 +815,22 @@ document.getElementById("chatButton").addEventListener("click", function() {
 document.getElementById("closeChat").addEventListener("click", function() {
     document.getElementById("chatSection").style.display = "none";
 });
+// anh
+// Lấy danh sách các ảnh thumbnail
+const thumbnails = document.querySelectorAll('.thumbnail-images img');
+  
+  // Lấy hình ảnh chính
+  const mainImage = document.getElementById('main-product-image');
+  
+  // Lặp qua từng thumbnail và thêm sự kiện hover
+  thumbnails.forEach(thumbnail => {
+    thumbnail.addEventListener('mouseenter', function() {
+      // Khi rê chuột vào thumbnail, thay đổi src của hình ảnh chính
+      mainImage.src = this.src;
+    });
+  });
+
+
 
     </script>
     
