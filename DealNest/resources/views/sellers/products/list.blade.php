@@ -103,9 +103,9 @@
                                 <td>{{$item->price}}</td>
                                 <td>{{$item->quantity}}</td>
                                 <td>
-                                    @if($item->status == 0)
-                                    <label class="badge badge-warning">Chờ duyệt</label>
-                                    @elseif($item->status == 1)
+                                    @if($item->status == 'Chờ phê duyệt')
+                                    <label class="badge badge-warning">Chờ phê duyệt</label>
+                                    @elseif($item->status == 'Đã phê duyệt')
                                     <label class="badge badge-success">Đang hoạt động</label>
                                     @else
                                     <label class="badge badge-danger">Không hoạt động</label>

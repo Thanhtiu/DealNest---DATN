@@ -16,16 +16,18 @@ use App\Http\Controllers\Client\CategoryController;
 
 Route::get('/', [HomeController::class, 'index'])->name('client.index');
 // test giao diện
-    Route::get('/san-pham-chi-tiet/{id}', [ProductDetailController::class, 'index'])->name('client.productDetail');
-    Route::get('/gio-hang', [CartController::class, 'index'])->name('client.cart');
-    Route::get('/the-loai',[CategoryController::class, 'index']);
-    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
-    Route::get('/cua-hang', [HomeController::class, 'shop']);
-    Route::prefix('/tai-khoan-cua-toi')->group(function () {
-    Route::get('/ho-so', [HomeController::class, 'profile']);
+Route::get('/san-pham-chi-tiet/{id}', [ProductDetailController::class, 'index'])->name('client.productDetail');
+Route::get('/gio-hang', [CartController::class, 'index'])->name('client.cart');
+Route::get('/the-loai', [CategoryController::class, 'index']);
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+Route::get('/cua-hang', [HomeController::class, 'shop']);
+
+Route::prefix('/tai-khoan-cua-toi')->group(function () {
+    Route::get('/ho-so', [HomeController::class, 'profile'])->name('acccount.profile');
     Route::get('/dia-chi', [HomeController::class, 'adress']);
     Route::get('/voucher', [HomeController::class, 'voucher']);
-    
+
 });
 
 Route::group(['prefix' => 'tai-khoan'], function () {

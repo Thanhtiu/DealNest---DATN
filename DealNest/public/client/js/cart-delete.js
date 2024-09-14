@@ -1,30 +1,31 @@
 $(document).ready(function() {
-    // Cấu hình global cho AJAX để bao gồm CSRF token
+    // Configure global AJAX settings to include CSRF token
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    // Xử lý sự kiện click để xóa một mục trong giỏ hàng
+    // Handle click event to delete a cart item
     $(document).on('click', '.delete-cart-item', function(e) {
-        e.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+        e.preventDefault(); // Prevent the default link behavior
 
         var itemId = $(this).data('id');
-        var row = $(this).closest('tr'); // Lấy dòng chứa nút xóa
+        var row = $(this).closest('tr'); // Get the row containing the delete button
 
         $.ajax({
             url: '/cart/' + itemId,
             type: 'DELETE',
             success: function(response) {
                 if (response.success) {
-                    row.remove(); // Xóa dòng khỏi bảng
+                    row.remove(); // Remove the row from the table
+                    toastr.success(response.message, 'Thành công!');
                 } else {
-                    alert('Có lỗi xảy ra!');
+                    toastr.error(response.message, 'Lỗi!');
                 }
             },
             error: function(xhr) {
-                alert('Có lỗi xảy ra!');
+                toastr.error('Có lỗi xảy ra, vui lòng thử lại.', 'Lỗi!');
             }
         });
     });

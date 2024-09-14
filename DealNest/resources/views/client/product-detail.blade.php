@@ -224,24 +224,25 @@
 
   .product-options .option {
     margin-bottom: 20px;
-}
+  }
 
-.attribute-options {
+  .attribute-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; /* Space between the options */
-}
+    gap: 10px;
+    /* Space between the options */
+  }
 
-.attribute-option {
+  .attribute-option {
     padding: 8px 16px;
     border: 1px solid #ddd;
     background-color: #fff;
     cursor: pointer;
-}
+  }
 
-.attribute-option:hover {
+  .attribute-option:hover {
     background-color: #f0f0f0;
-}
+  }
 
   .quantity-selector {
     display: flex;
@@ -585,18 +586,14 @@
     <!-- Bên trái: Hình ảnh -->
     <div class="product-images">
       <div class="main-image">
-        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lwpfrmg96zmh76.webp" alt="Giày PUMA"
+        <img src="{{asset('uploads/'.$productDetail->product_image->first()->url)}}" alt="Giày PUMA"
           class="img-responsive" id="main-product-image">
       </div>
       <div class="thumbnail-images">
-        <img src="https://down-vn.img.susercontent.com/file/013645d5052bba873e41e1d4e6cec0bb@resize_w450_nl.webp"
-          alt="Thumbnail 1">
-        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lomic8or785n19.webp" alt="Thumbnail 2">
-        <img src="https://down-vn.img.susercontent.com/file/013645d5052bba873e41e1d4e6cec0bb@resize_w450_nl.webp"
-          alt="Thumbnail 3">
-        <img src="https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lomic8or785n19.webp" alt="Thumbnail 4">
-        <img src="https://down-vn.img.susercontent.com/file/013645d5052bba873e41e1d4e6cec0bb@resize_w450_nl.webp"
-          alt="Thumbnail 4">
+        @foreach($productDetail->product_image as $item)
+        <img src="{{asset('uploads/'.$item->url)}}" alt="Thumbnail 1">
+        @endforeach
+
       </div>
     </div>
 
@@ -629,33 +626,48 @@
           <span>Phí Vận Chuyển: 0₫</span>
         </div>
       </div>
-      <div class="product-options">
-        @foreach ($productDetail->product_attribute->groupBy('attribute_id') as $attribute_id => $attributes)
-            <div class="option">
-                <label>{{ strtoupper($attributes->first()->attribute->name) }}</label>
-                <div class="attribute-options">
+      <form action="{{ route('cart.add') }}" method="POST">
+        @csrf
+        <div class="product-options">
+            @foreach ($productDetail->product_attribute->groupBy('attribute_id') as $attribute_id => $attributes)
+            <div class="option mb-3">
+                <label class="form-label">{{ strtoupper($attributes->first()->attribute->name) }}</label>
+                <select class="form-select attribute-select" name="attributes[{{ $attribute_id }}]" required>
+                    <option value="" selected>Chọn {{ strtolower($attributes->first()->attribute->name) }}</option>
                     @foreach ($attributes as $attribute)
-                        <button class="attribute-option">{{ $attribute->value }}</button>
+                    <option value="{{ $attribute->value }}" data-attribute-id="{{ $attribute->attribute_id }}">
+                        {{ $attribute->value }}
+                    </option>
                     @endforeach
-                </div>
+                </select>
             </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
+    
+        <div class="quantity-selector">
+            <label for="quantity">Số Lượng</label>
+            <button type="button" class="decrease">-</button>
+            <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $productDetail->quantity }}">
+            <button type="button" class="increase">+</button>
+            <span>{{ $productDetail->quantity }} sản phẩm có sẵn</span>
+        </div>
+    
+        <input type="hidden" name="product_id" value="{{ $productDetail->id }}">
+    
+        <div class="product-actions">
+            @if(Session::get('userId'))
+            <button type="submit" class="add-to-cart">Thêm Vào Giỏ Hàng</button>
+            @else
+            <a href="{{ route('account.login') }}" style="color: red;">Bạn cần phải đăng nhập</a>
+            @endif
+        </div>
+    </form>
+    
+    
     
     
     
 
-      <div class="quantity-selector">
-        <label for="quantity">Số Lượng</label>
-        <button class="decrease">-</button>
-        <input type="number" id="quantity" value="1">
-        <button class="increase">+</button>
-        <span>1 sản phẩm có sẵn</span>
-      </div>
-      <div class="product-actions">
-        <button class="add-to-cart">Thêm Vào Giỏ Hàng</button>
-        <button class="buy-now">Mua Ngay</button>
-      </div>
       <div class="guarantees">
         <span>Đổi ý miễn phí 15 ngày</span>
         <span>Hàng chính hãng 100%</span>
@@ -777,6 +789,50 @@
     </div>
   </div>
 </section>
+
+
+
+
+
+
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const decreaseButton = document.querySelector('.decrease');
+      const increaseButton = document.querySelector('.increase');
+      const quantityInput = document.getElementById('quantity');
+      const maxQuantity = parseInt("{{$productDetail->quantity}}"); // Số lượng sản phẩm tối đa có sẵn
+
+      // Xử lý khi nhấn nút giảm
+      decreaseButton.addEventListener('click', function () {
+          let currentQuantity = parseInt(quantityInput.value);
+          if (currentQuantity > 1) {
+              quantityInput.value = currentQuantity - 1;
+          }
+      });
+
+      // Xử lý khi nhấn nút tăng
+      increaseButton.addEventListener('click', function () {
+          let currentQuantity = parseInt(quantityInput.value);
+          if (currentQuantity < maxQuantity) {
+              quantityInput.value = currentQuantity + 1;
+          }
+      });
+
+      // Giới hạn khi người dùng tự nhập số lượng
+      quantityInput.addEventListener('input', function () {
+          let currentQuantity = parseInt(quantityInput.value);
+
+          if (currentQuantity > maxQuantity) {
+              quantityInput.value = maxQuantity;
+          } else if (currentQuantity < 1 || isNaN(currentQuantity)) {
+              quantityInput.value = 1;
+          }
+      });
+  });
+</script>
 
 
 <script>

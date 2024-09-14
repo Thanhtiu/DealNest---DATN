@@ -16,7 +16,8 @@ use App\Models\Attribute;
 class ProductDetailController extends Controller
 {
     public function index($id){
-        $product = Product::with(['subcategory','product_image'])->find($id);
-        return view('client.product-detail');
+        $productDetail = Product::with(['subcategory','product_image','product_attribute'])->find($id);
+        // return dd($productDetail);
+        return view('client.product-detail',compact('productDetail'));
     }
 }
