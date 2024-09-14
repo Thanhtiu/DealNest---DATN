@@ -14,11 +14,10 @@
         padding: 0;
     }
 
-    /* Sidebar */
    /* Sidebar */
 .sidebar {
     right: 30px;
-    padding: 30px;
+    padding: 50px;
 }
 
 .sidebar h3 {
@@ -113,21 +112,34 @@
 
 
     /* Product Grid Layout */
-    .product-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: flex-start;
-        padding: 20px;
-    }
+ /* Adjusted Container */
+
+/* Adjust Sidebar and Main Content */
+.col-md-3 {
+    padding-right: 10px; /* Reduce space on the right */
+}
+
+.col-md-9 {
+    padding-left: 10px; /* Reduce space on the left */
+}
+
+/* Adjust product list layout */
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+    padding: 10px; /* Reduce padding to move closer to the sidebar */
+    margin-left: 0; /* Set margin to 0 to minimize spacing */
+}
 
     .cardd {
         position: relative;
         display: flex;
         flex-direction: column;
         border-radius: 3px;
-        height: 360px;
-        width: 190px;
+        height: 340px;
+        width: 188px;
         background-color: #fff;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         overflow: hidden;
@@ -186,8 +198,9 @@
         display: inline-block;
         margin-right: 10px;
         color: #FFD700;
-        font-size: 12px;
+        font-size: 10px;
         vertical-align: middle;
+        padding-left: 10px;
     }
 
     .rating i {
@@ -195,13 +208,18 @@
     }
 
     .sold {
-        display: flex;
-        align-items: center;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #777;
+    margin-top: 10px; /* Adjust the margin to create spacing from the price */
+    position: relative; /* Change from absolute to relative to place it naturally within the content flow */
+}
+    .location {
         font-size: 12px;
-        color: #777;
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
+        color: #999;
+        margin-top: 5px;
+        padding-left: 10px;
     }
 </style>
 
@@ -292,6 +310,7 @@
                         </span>
                         Đã bán 100+
                     </div>
+                    <span class="location">Hà Nội</span>
                 </div>
                 <div class="cardd">
                     <img src="https://down-vn.img.susercontent.com/file/sg-11134298-7rd57-lvykdgre54sm71_tn.webp" alt="Product Image">
@@ -310,6 +329,7 @@
                         </span>
                         Đã bán 100+
                     </div>
+                    <span class="location">Hà Nội</span>
                 </div>
                 <div class="cardd">
                     <img src="https://down-vn.img.susercontent.com/file/sg-11134298-7rd57-lvykdgre54sm71_tn.webp" alt="Product Image">
@@ -328,6 +348,7 @@
                         </span>
                         Đã bán 100+
                     </div>
+                    <span class="location">Hà Nội</span>
                 </div>
                 <div class="cardd">
                     <img src="https://down-vn.img.susercontent.com/file/sg-11134298-7rd57-lvykdgre54sm71_tn.webp" alt="Product Image">
@@ -346,6 +367,7 @@
                         </span>
                         Đã bán 100+
                     </div>
+                    <span class="location">Hà Nội</span>
                 </div>
                 <div class="cardd">
                     <img src="https://down-vn.img.susercontent.com/file/sg-11134298-7rd57-lvykdgre54sm71_tn.webp" alt="Product Image">
@@ -364,6 +386,7 @@
                         </span>
                         Đã bán 100+
                     </div>
+                    <span class="location">Hà Nội</span>
                 </div>
                 
                 <!-- Additional product cards -->
