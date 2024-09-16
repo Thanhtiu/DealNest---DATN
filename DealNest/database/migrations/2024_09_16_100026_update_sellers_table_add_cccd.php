@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sellers', function (Blueprint $table) {
-            //
+            Schema::table('sellers', function (Blueprint $table) {
+                $table->string('cccd', 12)->nullable();
+                
+            });
         });
     }
 
@@ -22,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('sellers', function (Blueprint $table) {
-            $table->string('cccd', 12)->nullable()->after('another_column'); // Thêm cột 'cccd' vào sau một cột khác (nếu muốn)
+            //
         });
     }
 };
