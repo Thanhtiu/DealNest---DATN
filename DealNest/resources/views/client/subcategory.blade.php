@@ -244,11 +244,9 @@
                     <li>
                         <a href="#">{{ $category->name }} </a>
                         <ul>
-                            @foreach($listSubCategory as $item)
-                            <li><a href="/the-loai/{{ $category->slug }}/{{ $item->slug }}" style={{ ($item->slug ===
-                                    $subcategory_slug) ? "color:red" : "" }} href="#"
-                                    class="subcategory-link" data-id="{{ $item->id }}">
-                                    {{$item->name}} </a>
+                            @foreach($subCategory as $item)
+                            <li><a href="#" class="subcategory-link" data-id="{{ $item->id }}"> {{$item->name}} id nè {{
+                                    $item->id }} </a>
                             </li>
                             @endforeach
                         </ul>
@@ -259,28 +257,19 @@
                     <li>
                         <a href="#">BỘ LỌC TÌM KIẾM</a>
                         <ul>
-                            <li><input class="province" type="checkbox" id="ao-thun" value="Hà nội">
-                                <label for="ao-thun">Hà nội</label>
+                            <li><input type="checkbox" id="ao-thun" name="ao-thun">
+                                <label for="ao-thun">Áo thun (849k+)</label>
                             </li>
-                            <li><input class="province" type="checkbox" id="ao-so-mi" value="TP HCM">
-                                <label for="ao-so-mi">TP HCM</label>
+                            <li><input type="checkbox" id="ao-so-mi" name="ao-so-mi">
+                                <label for="ao-so-mi">Áo sơ mi (177k+)</label>
                             </li>
-                            <li><input class="province" type="checkbox" id="ao-khoac" value="Thái nguyên">
-                                <label for="ao-khoac">Thái nguyên</label>
+                            <li><input type="checkbox" id="ao-khoac" name="ao-khoac">
+                                <label for="ao-khoac">Áo khoác (142k+)</label>
                             </li>
-                            <li><input class="province" type="checkbox" id="phu-kien" value="Vĩnh phúc">
-                                <label for="phu-kien">Vĩnh phúc</label>
+                            <li><input type="checkbox" id="phu-kien" name="phu-kien">
+                                <label for="phu-kien">Phụ Kiện (141k+)</label>
                             </li>
-                            <li><input class="province" type="checkbox" id="phu-kien" value="Hải phòng">
-                                <label for="phu-kien">Hải phòng</label>
-                            </li>
-                            <li><input class="province" type="checkbox" id="phu-kien" value="Cần thơ">
-                                <label for="phu-kien">Cần thơ</label>
-                            </li>
-                            <li><input class="province" type="checkbox" id="phu-kien" value="Nam định">
-                                <label for="phu-kien">Nam Định</label>
-                            </li>
-                            {{-- <li><a href="#">Thêm</a></li> --}}
+                            <li><a href="#">Thêm</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -297,15 +286,16 @@
                 <div class="sort-options">
                     <label for="sort">Sắp xếp theo:</label>
                     <div class="price-sort">
-                        <button class="price-option" id="sortby-desc" value="DESC">Mới Nhất</button>
-                        <button class="price-option" id="sortby-asc" value="ASC">Cũ Nhất</button>
-                        <button class="price-option" id="sortby-sale" value="sale">Bán Chạy</button>
+                        <button class="price-option" id="price-asc">Phổ Biến</button>
+                        <button class="price-option" id="price-asc">Mới Nhất</button>
+                        <button class="price-option" id="price-desc">Bán Chạy</button>
                     </div>
                     <select id="sort-category">
-                        <option value="">Giá</option>
-                        <option value="price-asc">Thấp Đến Cao</option>
-                        <option value="price-desc">Cao Đến Thấp</option>
+                        <option value="popular">Giá</option>
+                        <option value="newest">Thấp Đến Cao</option>
+                        <option value="best-seller">Cao Đến Thấp</option>
                     </select>
+
                 </div>
             </div>
 
@@ -331,27 +321,7 @@
                         </span>
                         Đã bán {{ $item->sales }}+
                     </div>
-                    {{-- <span class="location">Hà Nội</span> --}}
-                    <span class="location">
-                        @php
-
-                        $string = $item->seller->address->string_address;
-
-                        $array = preg_split('/[\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
-
-                        $lastTwoWords = array_slice($array, -2);
-
-                        $result = implode(' ', $lastTwoWords);
-
-
-                        @endphp
-
-                        {{ $result }}
-
-                    </span>
-
-
-
+                    <span class="location">Hà Nội</span>
                 </div>
                 @endforeach
 

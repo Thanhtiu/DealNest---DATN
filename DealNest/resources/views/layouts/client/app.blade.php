@@ -281,6 +281,78 @@
         @endif
     </script>
 
+    {{-- Category Ajax --}}
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
+    <script>
+        // Button Click
+        const buttons = document.querySelectorAll('.price-option');
+        console.log(buttons);
+        buttons.forEach(button => {
+            button.onclick = function() {
+                const value = this.value;
+                var url = "{{ url()->current() }}?";
+                window.location.href = url + "sortby=" + value;
+            };
+        });
+
+        // Onchange Select 
+        $('#sort-category').change(function() {
+
+        const selectedValue = $(this).val(); 
+
+        var url = "{{ url()->current() }}?";
+
+        window.location.href = url + "sortby=" + selectedValue;
+    });
+
+    // Checkbox Adress
+
+    $(".province").change(function(){
+        apply_filters();
+    });
+
+    function apply_filters(){
+
+        var province = [];
+
+        $('.province').each(function(){
+            if($(this).is(":checked") == true){
+
+                province.push($(this).val());   
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('category.productAddress') }}", 
+            type: "POST", 
+            data: {
+                _token: "{{ csrf_token() }}", 
+                province: province,
+            },
+            success: function(response) {
+                // Xử lý kết quả khi gửi thành công
+                if(response.success){
+                    $.each(response.data,function(key,value){
+
+                        console.log('key ' + key + "value " + value);
+
+                        
+                    })
+                }
+                console.log(response.message);
+            },
+            error: function(xhr) {
+
+                console.log(xhr.responseText);
+            }
+        });
+
+    }
+
+
+
+
+    </script>
 
 </body>
 

@@ -21,7 +21,10 @@ Route::get('/', [HomeController::class, 'index'])->name('client.index');
 // test giao diện
 Route::get('/san-pham-chi-tiet/{id}', [ProductDetailController::class, 'index'])->name('client.productDetail');
 Route::get('/gio-hang', [CartController::class, 'index'])->name('client.cart');
-Route::get('/the-loai', [CategoryController::class, 'index']);
+
+Route::get('/the-loai/{caetegory_slug}/{subcategory_slug?}', [CategoryController::class, 'index']);
+Route::post('/the-loai',[CategoryController::class,'getProductAddress'])->name('category.productAddress');
+
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::get('/cua-hang', [HomeController::class, 'shop'])->name('client.shop');
