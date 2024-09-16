@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <title>Ogani | Template</title>
 
     <!-- Google Font -->
@@ -27,7 +27,8 @@
     {{--
     <link rel="stylesheet" href="{{asset('client/css/slicknav.min.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('client/css/style.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('client/css/spinner.css')}}" type="text/css">
+    {{--
+    <link rel="stylesheet" href="{{asset('client/css/spinner.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('client/css/header.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('client/css/home-product.css')}}" type="text/css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
@@ -64,13 +65,13 @@
                     </li>
                     <li class="nav-item">
                         @if(Auth::check())
-                            <a class="nav-link" href="{{route('acccount.profile')}}">{{ Auth::user()->name }}</a>
+                        <a class="nav-link" href="{{route('acccount.profile')}}">{{ Auth::user()->name }}</a>
                         @else
-                            <a class="nav-link" href="{{route('account.authenticate')}}">Đăng nhập</a>
+                        <a class="nav-link" href="{{route('account.authenticate')}}">Đăng nhập</a>
                         @endif
                     </li>
-                    
-                    
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="bi bi-cart" style="font-size: 20px;"></i></a>
                     </li>
@@ -159,7 +160,7 @@
     <!-- Header Section End -->
 
 
-    <div class="container">
+    {{-- <div class="container">
         <div class="loader-client" id="loader-client">
             <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
                 <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000"
@@ -174,7 +175,7 @@
                     stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
             </svg>
         </div>
-    </div>
+    </div> --}}
     @yield('content')
 
     <!-- Footer Section Begin -->
@@ -256,7 +257,7 @@
     <!-- Js Plugins -->
     <script src="{{asset('client/js/jquery-3.3.1.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="{{asset('client/js/spinner.js')}}"></script>
+    {{-- <script src="{{asset('client/js/spinner.js')}}"></script> --}}
     <script src="{{asset('client/js/cart-delete.js')}}"></script>
     <script src="{{asset('client/js/cart-create.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -273,6 +274,78 @@
         @endif
     </script>
 
+    {{-- Category Ajax --}}
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
+    <script>
+        // Button Click
+        const buttons = document.querySelectorAll('.price-option');
+        console.log(buttons);
+        buttons.forEach(button => {
+            button.onclick = function() {
+                const value = this.value;
+                var url = "{{ url()->current() }}?";
+                window.location.href = url + "sortby=" + value;
+            };
+        });
+
+        // Onchange Select 
+        $('#sort-category').change(function() {
+
+        const selectedValue = $(this).val(); 
+
+        var url = "{{ url()->current() }}?";
+
+        window.location.href = url + "sortby=" + selectedValue;
+    });
+
+    // Checkbox Adress
+
+    $(".province").change(function(){
+        apply_filters();
+    });
+
+    function apply_filters(){
+
+        var province = [];
+
+        $('.province').each(function(){
+            if($(this).is(":checked") == true){
+
+                province.push($(this).val());   
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('category.productAddress') }}", 
+            type: "POST", 
+            data: {
+                _token: "{{ csrf_token() }}", 
+                province: province,
+            },
+            success: function(response) {
+                // Xử lý kết quả khi gửi thành công
+                if(response.success){
+                    $.each(response.data,function(key,value){
+
+                        console.log('key ' + key + "value " + value);
+
+                        
+                    })
+                }
+                console.log(response.message);
+            },
+            error: function(xhr) {
+
+                console.log(xhr.responseText);
+            }
+        });
+
+    }
+
+
+
+
+    </script>
 
 </body>
 
