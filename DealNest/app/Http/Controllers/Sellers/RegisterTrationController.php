@@ -14,17 +14,17 @@ class RegisterTrationController extends Controller
     public function index(Request $request)
     {
 
-        if(Session::has('userEmail')){
+        if (Session::has('userEmail')) {
 
             $userEmail = Session::get('userEmail');
 
-            $user = Seller::where('store_email',$userEmail)->first();
+            $user = Seller::where('store_email', $userEmail)->first();
 
-            if(!is_null($user)){
+            if (!is_null($user)) {
 
-               return redirect()->route('seller.index');
+                return redirect()->route('seller.index');
             }
-            
+
         }
 
         return view('sellers.register.index');
@@ -32,72 +32,73 @@ class RegisterTrationController extends Controller
 
     public function form()
     {
-        if(Session::has('userEmail')){
+        if (Session::has('userEmail')) {
 
             $userEmail = Session::get('userEmail');
 
-            $checkSellerAlready = Seller::where('store_email',$userEmail)->first();
+            $checkSellerAlready = Seller::where('store_email', $userEmail)->first();
 
-            if(!is_null($checkSellerAlready)){
+            if (!is_null($checkSellerAlready)) {
 
                 return redirect()->route('seller.index');
             }
 
-            $user = User::where('email',$userEmail)->first();
+            $user = User::where('email', $userEmail)->first();
 
-            if(!is_null($user)){
+            if (!is_null($user)) {
 
                 return view('sellers.register.form', compact('user'));
             }
 
-        }else{
+        } else {
             return redirect()->route('account.login');
-        }   
-              
+        }
+
     }
 
     public function store(Request $request)
-{
-    $userEmail = Session::get('userEmail');
+    {
+        $userEmail = Session::get('userEmail');
 
-    // Get user by email
-    $user = User::where('email', $userEmail)->first();
-    $userId = $user->id;
+        // Get user by email
+        $user = User::where('email', $userEmail)->first();
+        $userId = $user->id;
 
-    // Validate request inputs
-    $request->validate([
-        'store_name' => 'required|string|max:255',
-        'province' => 'required|string',
-        'district' => 'required|string',
-        'ward' => 'required|string',
-        'store_phone' => 'required|string',
-        'store_email' => 'required|string|unique:sellers',
-        'string_address' => 'required|string',
-        'street' => 'required|string',
-    ]);
+        // Validate request inputs
+        $request->validate([
+            'store_name' => 'required|string|max:255',
+            'province' => 'required|string',
+            'district' => 'required|string',
+            'ward' => 'required|string',
+            'store_phone' => 'required|string',
+            'store_email' => 'required|string|unique:sellers',
+            'string_address' => 'required|string',
+            'street' => 'required|string',
+        ]);
 
-    // Create address record
-    $address = Address::create([
-        'user_id' => $userId,
-        'province_id' => $request->input('province'),
-        'district_id' => $request->input('district'),
-        'ward_id' => $request->input('ward'),
-        'street' => $request->input('street'),
-        'string_address' => $request->input('string_address'),
-    ]);
+        // Create address record
+        $address = Address::create([
+            'user_id' => $userId,
+            'province_id' => $request->input('province'),
+            'district_id' => $request->input('district'),
+            'ward_id' => $request->input('ward'),
+            'street' => $request->input('street'),
+            'string_address' => $request->input('string_address'),
+        ]);
 
-    // Create seller record
-    $seller = Seller::create([
-        'user_id' => $userId,
-        'store_name' => $request->input('store_name'),
-        'store_phone' => $request->input('store_phone'),
-        'store_email' => $request->input('store_email'),
-        'address_id' => $address->id,
-    ]);
+        // Create seller record
+        $seller = Seller::create([
+            'user_id' => $userId,
+            'store_name' => $request->input('store_name'),
+            'store_phone' => $request->input('store_phone'),
+            'store_email' => $request->input('store_email'),
+            'address_id' => $address->id,
+        ]);
 
+        $user->role = 'seller';
+        $user->save();
 
-
-    return redirect()->route('seller.index')->with('success', 'Đăng ký người bán thành công');
-}
+        return redirect()->route('seller.index')->with('success', 'Đăng ký người bán thành công');
+    }
 
 }

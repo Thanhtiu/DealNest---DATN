@@ -264,7 +264,7 @@
           </div> --}}
           <div class="form-group">
             <label for="description">Mô tả</label>
-            <textarea name="description" class="form-control" id="description"
+            <textarea name="description" id="description" class="form-control" id="description"
               rows="4">{{$product->description}}</textarea>
           </div>
           <div class="col-md-12 grid-margin stretch-card">
@@ -337,7 +337,58 @@
 
 </div>
 @endsection
+
+
+
 {{-- <script src="{{asset('sellers/assets/js/process-product-edit.js')}}"></script> --}}
+
+<script type="importmap">
+  {
+      "imports": {
+          "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.js",
+          "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.1.0/"
+      }
+  }
+</script>
+<script type="module">
+  import {
+      ClassicEditor,
+      Essentials,
+      Paragraph,
+      Bold,
+      Italic,
+      Font
+  } from 'ckeditor5';
+
+  ClassicEditor
+      .create( document.querySelector( '#description' ), {
+          plugins: [ Essentials, Paragraph, Bold, Italic, Font ],
+          toolbar: [
+  'undo', 'redo', '|', 'bold', 'italic', '|',
+  'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+          ]
+      } )
+      .then( editor => {
+          window.editor = editor;
+      } )
+      .catch( error => {
+          console.error( error );
+      } );
+</script>
+<!-- A friendly reminder to run on a server, remove this during the integration. -->
+<script>
+  window.onload = function() {
+      if ( window.location.protocol === "file:" ) {
+          alert( "This sample requires an HTTP server. Please serve this file with a web server." );
+      }
+  };
+</script>
+
+
+
+
+
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // const uploadButtons = document.querySelectorAll('.file-upload-browse');

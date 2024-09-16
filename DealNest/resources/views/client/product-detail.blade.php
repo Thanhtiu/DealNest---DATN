@@ -2,6 +2,10 @@
 @section('content')
 <!-- Product Details Section Begin -->
 <style>
+  .col-lg-12{
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   .product-section {
     padding: 20px;
     background-color: #f9f9f9;
@@ -580,6 +584,9 @@
   .chat-message>span {
     font-weight: bold;
   }
+  .text-shop{
+    color:red;
+  }
 </style>
 <section class="product-section">
   <div class="product-layout">
@@ -602,7 +609,7 @@
       <h1>{{$productDetail->name}}</h1>
       <div class="rating-sales">
         <span>4.8 ★ (43 Đánh Giá) -</span>
-        <span>- 126 Đã Bán</span>
+        <span>- {{$productDetail->sales}} Đã Bán</span>
       </div>
       <div class="price-container">
         <span class="original-price">{{number_format($productDetail->price, 0, ',', '.')}}</span>
@@ -662,12 +669,7 @@
             @endif
         </div>
     </form>
-    
-    
-    
-    
-    
-
+  
       <div class="guarantees">
         <span>Đổi ý miễn phí 15 ngày</span>
         <span>Hàng chính hãng 100%</span>
@@ -677,6 +679,143 @@
   </div>
 </section>
 <!-- Product Details Section End -->
+
+<div class="col-lg-12">
+  <div class="product__details__tab">
+      <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                  aria-selected="true">Mô tả</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+                  aria-selected="false">Thông tin liên quan</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+                  aria-selected="false">Đánh giá <span>(1)</span></a>
+          </li>
+      </ul>
+      <div class="tab-content">
+          <div class="tab-pane active" id="tabs-1" role="tabpanel">
+              <div class="product__details__tab__desc">
+                  <h6>Mô tả sản phẩm {{$productDetail->name}}</h6>
+                  {!! $productDetail->description !!}
+              </div>
+          </div>
+          <div class="tab-pane" id="tabs-2" role="tabpanel">
+              <div class="product__details__tab__desc">
+                  <h6>Products Infomation</h6>
+                  <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
+                      Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
+                      Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
+                      sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
+                      eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
+                      Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
+                      sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
+                      diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
+                      ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+                      Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
+                      Proin eget tortor risus.</p>
+                  <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
+                      ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
+                      elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
+                      porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
+                      nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.</p>
+              </div>
+          </div>
+          <div class="tab-pane" id="tabs-3" role="tabpanel">
+              <div class="product__details__tab__desc">
+                  <!-- Đánh giá sản phẩm -->
+    <section class="product-details spad" style="padding: 0px;">
+      <div class="container mt-4" >
+          <div class="border p-3 ">
+              <h4>ĐÁNH GIÁ SẢN PHẨM</h4>
+              <div class="d-flex align-items-center">
+                  <h3 class="mb-0">4.5</h3>
+                  <span class="ms-2 text-muted">trên 5</span>
+                  <div class="ms-3">
+                      <div class="d-flex">
+                          <span class="text-warning">★</span>
+                          <span class="text-warning">★</span>
+                          <span class="text-warning">★</span>
+                          <span class="text-warning">★</span>
+                          <span class="text-warning">★</span>
+                      </div>
+                  </div>
+              </div>
+              <div class="mt-2">
+                  <button class="btn btn-outline-secondary btn-sm">Tất Cả</button>
+                  <button class="btn btn-outline-secondary btn-sm">5 Sao (453)</button>
+                  <button class="btn btn-outline-secondary btn-sm">4 Sao (70)</button>
+                  <button class="btn btn-outline-secondary btn-sm">3 Sao (32)</button>
+                  <button class="btn btn-outline-secondary btn-sm">2 Sao (18)</button>
+                  <button class="btn btn-outline-secondary btn-sm">1 Sao (26)</button>
+                  <button class="btn btn-outline-secondary btn-sm">Có Bình Luận (179)</button>
+                  <button class="btn btn-outline-secondary btn-sm">Có Hình Ảnh / Video (64)</button>
+              </div>
+          </div>
+      
+          <div class="mt-4">
+              <div class="border-bottom pb-3 mb-3">
+                  <div class="d-flex align-items-start">
+                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s" alt="User" class="rounded-circle me-3" style="width: 40px;">
+                      <div>
+                          <h6 class="mb-1">dosen98</h6>
+                          <p class="mb-1 text-muted">2023-08-02 15:38 | Phân loại hàng: COOL,M(30-45KG)</p>
+                          <div class="d-flex align-items-center">
+                              <span class="text-warning">★</span>
+                              <span class="text-warning">★</span>
+                              <span class="text-warning">★</span>
+                              <span class="text-warning">★</span>
+                              <span class="text-warning">★</span>
+                          </div>
+                          <p class="mt-2 mb-2">Đúng với mô tả: chất đẹp ,vừa tiền giao đúng. Shop tư vấn nhiệt tình, giao nhanh.</p>
+                          <div class="d-flex " >
+                              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" class="mr-2 " style="width: 100px;">
+                              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" style="width: 100px;">
+                          </div>
+                          <div class="mt-2">
+                              <span class="text-muted">12  <i class="icon_like mr-2" ></i></span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      
+              <div>
+                  <div class="d-flex align-items-start">
+                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s" alt="User" class="rounded-circle me-3" style="width: 40px;">
+                      <div>
+                          <h6 class="mb-1">trannhicherry1997</h6>
+                          <p class="mb-1 text-muted">2024-06-23 11:52 | Phân loại hàng: UNIQUE HỒNG,M(30-45KG)</p>
+                          <div class="d-flex align-items-center">
+                              <span class="text-warning">★</span>
+                              <span class="text-warning">★</span>
+                              <span class="text-warning">★</span>
+                              <span class="text-warning">★</span>
+                              <span class="text-muted">★</span>
+                          </div>
+                          <p class="mt-2 mb-2">Giao hàng nhanh, đóng gói bao bì cẩn thận, sản phẩm rất đẹp vải mát không bị nóng đâu.</p>
+                          <div class="d-flex " >
+                              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" class="mr-2 " style="width: 100px;">
+                              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" style="width: 100px;">
+                          </div>
+                          <div class="mt-2">
+                              <span class="text-muted">12  <i class="icon_like mr-2" ></i></span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+       <!-- END Đánh giá sản phẩm -->
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
 <!-- Shop Info Section Begin -->
 <!-- Shop Info Section -->
 <section class="shop-info spad">
@@ -692,14 +831,14 @@
               src="https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg"
               alt="Shop Avatar" class="shop-avatar">
             <div class="shop-name ml-3">
-              <h5>TORANO Official Store</h5>
-              <p>Online 1 giờ trước</p>
+              <h5>{{$seller->store_name}}</h5>
+              <p class="text-shop">Online 1 giờ trước</p>
             </div>
           </div>
 
           <!-- Nút xem shop và chat ngay -->
           <div class="shop-info__buttons mt-3">
-            <a href="link-to-shop-page" class="btn btn-primary">Xem Shop</a>
+            <a href="" class="btn btn-primary">Xem Shop</a>
             <button id="chatButton" class="btn btn-success">Chat Ngay</button>
           </div>
         </div>
@@ -709,34 +848,33 @@
       <div class="col-lg-3 col-md-6">
         <div class="shop-info__item">
           <h5>Đánh giá</h5>
-          <p>95,2k</p>
+          <p class="text-shop">95,2k</p>
           <h5>Tham gia</h5>
-          <p>9 năm trước</p>
+          <p class="text-shop">{{$dateJoin}} ngày trước</p>
         </div>
       </div>
 
-      <!-- Response Rate and Response Time -->
-      <div class="col-lg-3 col-md-6">
-        <div class="shop-info__item">
-          <h5>Tỉ lệ phản hồi</h5>
-          <p>100%</p>
-          <h5>Thời gian phản hồi</h5>
-          <p>Trong vài giờ</p>
-        </div>
-      </div>
+      
 
       <!-- Followers and Products -->
       <div class="col-lg-3 col-md-6">
         <div class="shop-info__item">
           <h5>Người theo dõi</h5>
-          <p>438,9k</p>
+          @if($seller->follow == '')
+          <p class="text-shop">0</p>
+          @else
+          <p class="text-shop">{{$seller->follow}}</p>
+          @endif
           <h5>Sản phẩm</h5>
-          <p>578</p>
+          <p class="text-shop">{{$countProduct}}</p>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+
+
 
 <!-- Chat Section (Hidden by Default) -->
 <section id="chatSection" class="chat-section">

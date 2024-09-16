@@ -11,6 +11,8 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductDetailController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CategoryController;
+use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Client\AddressController;
 
 
 
@@ -21,11 +23,18 @@ Route::get('/gio-hang', [CartController::class, 'index'])->name('client.cart');
 Route::get('/the-loai', [CategoryController::class, 'index']);
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
-Route::get('/cua-hang', [HomeController::class, 'shop']);
+Route::get('/cua-hang', [HomeController::class, 'shop'])->name('client.shop');
+
 
 Route::prefix('/tai-khoan-cua-toi')->group(function () {
-    Route::get('/ho-so', [HomeController::class, 'profile'])->name('acccount.profile');
-    Route::get('/dia-chi', [HomeController::class, 'adress']);
+    Route::get('/ho-so', [ProfileController::class, 'index'])->name('account.profile.index');
+    Route::put('/ho-so-cap-nhat/{id}',[ProfileController::class,'update'])->name('account.profile.update');
+    Route::get('/dia-chi', [AddressController::class, 'index'])->name('account.address.index');
+    Route::post('/dia-chi/them',[AddressController::class, 'create'])->name('account.address.create');
+    Route::get('/dia-chi/sua/{id}', [AddressController::class, 'edit'])->name('account.address.edit');
+    Route::put('/dia-chi/cap-nhat/{id}',[AddressController::class,'update'])->name('account.address.update');
+    Route::get('/dia-chi/xoa/{id}',[AddressController::class,'delete'])->name('account.address.delete');
+    Route::get('/dia-chi/mac-dinh/{id}',[AddressController::class,'setDefault'])->name('account.address.setDefault');
     Route::get('/voucher', [HomeController::class, 'voucher']);
 
 });

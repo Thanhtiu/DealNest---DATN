@@ -24,6 +24,9 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset('sellers/assets/images/favicon.png')}}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.css">
+
+
 
 </head>
 
@@ -310,7 +313,7 @@
                     </li>
                 </ul>
             </nav>
-            
+
             <!-- partial -->
             <div class="main-panel">
                 <div class="loader" id="loader">
@@ -327,22 +330,24 @@
                             stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
                     </svg>
                 </div>
-            
+
                 <div class="content-wrapper">
                     @yield('content')
                 </div>
-            
+
                 <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright Â© 2023
-                            <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
-                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with
+                            <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights
+                            reserved.</span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made
+                            with
                             <i class="mdi mdi-heart text-danger"></i></span>
                     </div>
                 </footer>
             </div>
-            
-            
+
+
             <!-- main-panel ends -->
         </div>
         <!-- page-body-wrapper ends -->
@@ -353,20 +358,22 @@
     <!-- Include jQuery in your HTML -->
 
 
-  
-    
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
+
     <script src="{{asset('sellers/assets/js/spinner.js')}}"></script>
-    
+
 
 
     <!-- plugins:js -->
     <script src="{{asset('sellers/assets/vendors/js/vendor.bundle.base.js')}}"></script>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
     {{-- <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script> --}}
-    {{-- <script src="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
+    --}}
     <!-- End plugin js for this page -->
     <!-- inject:js -->
     {{-- <script src="{{asset('sellers/assets/js/off-canvas.js')}}"></script> --}}

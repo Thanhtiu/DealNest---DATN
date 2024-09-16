@@ -116,7 +116,7 @@ class ProductController extends Controller
                 }
             }
 
-            return redirect()->route('seller.product.list')->with('success', 'Product created successfully.');
+            return redirect()->route('seller.product.list')->with('success', 'Thêm sản phẩn thành công.');
 
         } catch (\Exception $e) {
             // Log the error message
@@ -266,7 +266,7 @@ class ProductController extends Controller
         }
 
         // Redirect back with success message
-        return redirect()->back()->with('success', 'Product updated successfully!');
+        return redirect()->back()->with('success', 'Cập nhật sản phẩm thành công!');
     }
 
 

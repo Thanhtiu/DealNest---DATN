@@ -23,12 +23,7 @@ class HomeController extends Controller
    
 
 
-    public function profile(){
-        return view('client.profile');
-    }
-    public function adress(){
-        return view('client.adress');
-    }
+   
     public function voucher(){
         return view('client.voucher');
     }

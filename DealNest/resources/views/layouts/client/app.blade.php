@@ -8,16 +8,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <title>Ogani | Template</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="{{asset('client/css/bootstrap.min.css')}}" type="text/css">
+    {{-- <link rel="stylesheet" href="{{asset('client/css/bootstrap.min.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('client/css/font-awesome.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('client/css/elegant-icons.css')}}" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     {{--
     <link rel="stylesheet" href="{{asset('client/css/nice-select.css')}}" type="text/css"> --}}
     {{--
@@ -27,10 +29,12 @@
     {{--
     <link rel="stylesheet" href="{{asset('client/css/slicknav.min.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('client/css/style.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('client/css/spinner.css')}}" type="text/css">
+    {{-- <link rel="stylesheet" href="{{asset('client/css/spinner.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('client/css/header.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('client/css/home-product.css')}}" type="text/css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
 
 </head>
 
@@ -42,7 +46,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <!-- Logo -->
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{{route('client.index')}}">
                     <img src="https://salt.tikicdn.com/cache/w500/ts/upload/c0/8b/46/c3f0dc850dd93bfa7af7ada0cbd75dc0.png"
                         alt="Tiki Logo"> <!-- Replace with your logo -->
                     Tốt & Nhanh
@@ -64,13 +68,13 @@
                     </li>
                     <li class="nav-item">
                         @if(Auth::check())
-                            <a class="nav-link" href="{{route('acccount.profile')}}">{{ Auth::user()->name }}</a>
+                        <a class="nav-link" href="{{route('account.profile.index')}}">{{ Auth::user()->name }}</a>
                         @else
-                            <a class="nav-link" href="{{route('account.authenticate')}}">Đăng nhập</a>
+                        <a class="nav-link" href="{{route('account.login')}}">Đăng nhập</a>
                         @endif
                     </li>
-                    
-                    
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="bi bi-cart" style="font-size: 20px;"></i></a>
                     </li>
@@ -159,7 +163,7 @@
     <!-- Header Section End -->
 
 
-    <div class="container">
+    {{-- <div class="container">
         <div class="loader-client" id="loader-client">
             <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
                 <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000"
@@ -174,7 +178,7 @@
                     stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
             </svg>
         </div>
-    </div>
+    </div> --}}
     @yield('content')
 
     <!-- Footer Section Begin -->
@@ -256,11 +260,15 @@
     <!-- Js Plugins -->
     <script src="{{asset('client/js/jquery-3.3.1.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="{{asset('client/js/spinner.js')}}"></script>
+    {{-- <script src="{{asset('client/js/spinner.js')}}"></script> --}}
     <script src="{{asset('client/js/cart-delete.js')}}"></script>
     <script src="{{asset('client/js/cart-create.js')}}"></script>
+    <script src="{{asset('client/js/profile.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="{{asset('client/js/bootstrap.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
     {{-- <script src="{{asset('client/js/jquery.nice-select.min.js')}}"></script> --}}
     {{-- <script src="{{asset('client/js/jquery-ui.min.js')}}js/jquery-ui.min.js"></script> --}}
     {{-- <script src="{{asset('client/js/jquery.slicknav.js')}}"></script> --}}
