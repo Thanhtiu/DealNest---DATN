@@ -24,7 +24,7 @@
         Thông Báo</a>
     <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-cog"></i> Những Thiết
         Lập Riêng Tư</a>
-    <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-shopping-cart"></i> Đơn
+    <a href="{{route('client.order.index')}}" class="list-group-item list-group-item-action"><i class="fa fa-shopping-cart"></i> Đơn
         Mua</a>
     <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-bell"></i> Thông
         Báo</a>

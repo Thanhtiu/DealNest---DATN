@@ -13,6 +13,7 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CategoryController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\AddressController;
+use App\Http\Controllers\Client\OrderController;
 
 
 
@@ -26,6 +27,7 @@ Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.dest
 Route::get('/cua-hang', [HomeController::class, 'shop'])->name('client.shop');
 
 
+
 Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::get('/ho-so', [ProfileController::class, 'index'])->name('account.profile.index');
     Route::put('/ho-so-cap-nhat/{id}',[ProfileController::class,'update'])->name('account.profile.update');
@@ -35,6 +37,7 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::put('/dia-chi/cap-nhat/{id}',[AddressController::class,'update'])->name('account.address.update');
     Route::get('/dia-chi/xoa/{id}',[AddressController::class,'delete'])->name('account.address.delete');
     Route::get('/dia-chi/mac-dinh/{id}',[AddressController::class,'setDefault'])->name('account.address.setDefault');
+    Route::get('/don-mua',[OrderController::class,'index'])->name('client.order.index');
     Route::get('/voucher', [HomeController::class, 'voucher']);
 
 });
