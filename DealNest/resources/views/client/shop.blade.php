@@ -1,62 +1,178 @@
 @extends('layouts.client.app')
 @section('content')
-<div class="container mt-5">
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+
+    }
+
+    .shop-container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .shop-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        width: 40%;
+        background-image: url('https://shardaproduction.com.np/wp-content/uploads/2024/02/Logo-Designing.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .shop-image {
+        text-align: center;
+        position: relative;
+    }
+
+    .shop-image img {
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        border: 2px solid #ddd;
+    }
+
+    .favorite-btn {
+        background-color: #f44336;
+        color: #fff;
+        border: none;
+        padding: 4px 15px;
+        font-size: 13px;
+
+
+    }
+
+    .shop-info {
+        margin-left: 20px;
+        color: #fff;
+    }
+
+    .shop-info h1 {
+        margin: 0;
+        font-size: 1.8em;
+        color: #fff;
+    }
+
+    .shop-info p {
+        margin: 5px 0;
+        color: #fff;
+    }
+
+    .follow-btn {
+        background-color: blue;
+        color: #fff;
+        border: 2px solid blue;
+        padding: 5px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .shop-stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        font-size: 15px;
+        color: #666;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    .stat-item i {
+        margin-right: 10px;
+        font-size: 20px;
+        color: #666;
+    }
+
+    .highlight {
+        color: red;
+        font-weight: bold;
+    }
+
+    .shop-categories {
+        display: flex;
+        justify-content: space-between;
+        border-top: 2px solid #ddd;
+        padding-top: 10px;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .shop-categories span {
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .shop-categories span.active {
+        color: red;
+        border-bottom: 2px solid red;
+    }
+
+    .shop-categories span:hover {
+        color: red;
+        border-bottom: 2px solid red;
+    }
+</style>
+
+<div class="shop-container">
     <div class="shop-header">
-        <div class="row align-items-center">
-            <div class="col-md-2">
-                <img src="https://img.lovepik.com/free-png/20211204/lovepik-cartoon-avatar-png-image_401302777_wh1200.png" alt="Shop Logo" class="img-fluid rounded-circle">
+        <div class="logo">
+            <div class="shop-image">
+                <img src="https://shardaproduction.com.np/wp-content/uploads/2024/02/Logo-Designing.jpg"
+                    alt="Shop Logo">
+                <button class="favorite-btn">Yêu thích</button>
             </div>
-            <div class="col-md-6">
-                <div class="shop-name">Qkiet</div>
-                <div class="shop-stats">
-                    <span><i class="fas fa-box-open"></i>Sản Phẩm: <strong>93k</strong></span> | 
-                    <span><i class="fas fa-user-friends"></i>Đang Theo: <strong>3</strong></span> | 
-                    <span><i class="fas fa-comment-dots"></i>Tỉ Lệ Phản Hồi Chat: <strong>100%</strong> (Trong Vài Phút)</span> | 
-                    <span><i class="fas fa-ban"></i>Tỉ Lệ Shop Hủy Đơn: <strong>5%</strong></span>
-                </div>
-            </div>
-            <div class="col-md-4 text-end">
-                <button class="btn btn-primary"><i class="fas fa-plus"></i> THEO DÕI</button>
-                <button class="btn btn-secondary"><i class="fas fa-comments"></i> CHAT</button>
+            <div class="shop-info">
+                <h1>Qkiet_Shop Quần Áo</h1>
+                <p>Online 2 phút trước</p>
+                <button class="follow-btn">ĐANG THEO</button>
             </div>
         </div>
-        <hr>
-        <div class="shop-info">
-            <div>
-                <span><i class="fas fa-users"></i>Người Theo Dõi: <strong>18k</strong></span> | 
-                <span><i class="fas fa-star"></i>Đánh Giá: <strong>4.7</strong> (3k Đánh Giá)</span> | 
-                <span><i class="fas fa-calendar-alt"></i>Tham Gia: <strong>1 Tháng Trước</strong></span>
+        <div class="shop-stats">
+            <div class="stat-item"><i class="fa fa-shopping-bag"></i> Sản Phẩm: <span class="highlight">23</span></div>
+            <div class="stat-item"><i class="fa fa-users"></i> Đang Theo: <span class="highlight">1000</span></div>
+            <div class="stat-item"><i class="fa fa-comments"></i> Tỉ Lệ Phản Hồi Chat: <span
+                    class="highlight">95%</span> (Trong Vài Giờ)</div>
+            <div class="stat-item"><i class="fa fa-user-plus"></i> Người Theo Dõi: <span class="highlight">3k</span>
             </div>
+            <div class="stat-item"><i class="fa fa-star"></i> Đánh Giá: <span class="highlight">5</span> (10k Đánh Giá)
+            </div>
+            <div class="stat-item"><i class="fa fa-users"></i> Tham Gia: <span class="highlight">100 Năm
+                    Trước</span></div>
         </div>
     </div>
-    <nav class="mt-3">
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link active" href="#"><i class="fas fa-store"></i> Dạo</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-list"></i> TẤT CẢ SẢN PHẨM</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-female"></i> Thời Trang Nữ</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-paint-brush"></i> Sắc Đẹp</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-gem"></i> Phụ Kiện & Trang Sức</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-biking"></i> Thể Thao & Du Lịch</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><i class="fas fa-ellipsis-h"></i> Thêm</a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-caret-right"></i> Menu Item 1</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-caret-right"></i> Menu Item 2</a></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
+    <div class="shop-categories">
+        <span class="active">Dạo</span>
+        <span>TẤT CẢ SẢN PHẨM</span>
+        <span>Giá đỡ laptop</span>
+        <span>túi chống sốc laptop và ...</span>
+        <span>Thiết bị nhà bếp và đồ gi...</span>
+        <span>chăm sóc cá nhân</span>
+    </div>
 </div>
 @endsection
