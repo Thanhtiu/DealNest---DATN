@@ -204,7 +204,7 @@
 }
 
 .search-bar button {
-    background-color: #f53d2d;
+    background-color: #0d6efd;
     color: #fff;
     padding: 8px 20px;
     border: none;
@@ -214,7 +214,7 @@
 }
 
 .search-bar button:hover {
-    background-color: #e03a26;
+    background-color: #337ce8;
 }
 
 /* Order Section */
@@ -260,7 +260,7 @@
 }
 
 .order-actions button {
-    background-color: #f53d2d;
+    background-color: #0d6efd;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -270,7 +270,7 @@
 }
 
 .order-actions button:hover {
-    background-color: #e03a26;
+    background-color: #337ce8;
 }
 
 .order-actions .secondary-button {
