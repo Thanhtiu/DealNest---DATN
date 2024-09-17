@@ -92,8 +92,9 @@
                         <tbody>
                             @foreach($productAll as $item)
                             <tr>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->subCategory->name}}</td>
+                                <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+
+                                <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
                                 <td>
                                     @if($item->product_image->isNotEmpty())
                                     <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt=""
