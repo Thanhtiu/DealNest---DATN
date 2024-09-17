@@ -288,6 +288,19 @@
     border-bottom: 1px solid #e1e1e1;
     margin: 20px 0;
 }
+/* Ẩn tất cả các tab content theo mặc định */
+.tab-content {
+    display: none;
+}
+
+/* Chỉ hiển thị tab content có lớp 'active' */
+.tab-content.active {
+    display: block;
+}
+
+/* Thiết lập tab đang hoạt động */
+
+
 </style>
 
 <section class="py-5">
@@ -315,6 +328,7 @@
                         </div>
                     </div>
 
+                   
                     <!-- Search Bar -->
                     <div class="search-bar">
                         <input type="text" placeholder="Bạn có thể tìm kiếm theo tên Shop, ID đơn hàng hoặc Tên Sản phẩm">
@@ -330,52 +344,101 @@
                         </div>
                     </div>
                     
-                    <div class="order-item">
-                        <div class="order-item-info">
-                            <div class="order-item-image">
-                                <img src="https://th.bing.com/th/id/R.03450f28db97b2b1106e14c9d1d86405?rik=euCOdYwSJvFrqQ&riu=http%3a%2f%2fimages6.fanpop.com%2fimage%2fphotos%2f42100000%2fJungkook-jungkook-bts-42110838-1080-1344.jpg&ehk=rDJd4RdvFJIVNTtx5yI5LPTq4cnRym3KIDRrc4KhkXk%3d&risl=&pid=ImgRaw&r=0" alt="Product Image">
+                    <div class="tab-content active" id="1">
+                        <div class="order-item">
+                            <div class="order-item-info">
+                                <div class="order-item-image">
+                                    <img src="https://th.bing.com/th/id/R.03450f28db97b2b1106e14c9d1d86405?rik=euCOdYwSJvFrqQ&riu=http%3a%2f%2fimages6.fanpop.com%2fimage%2fphotos%2f42100000%2fJungkook-jungkook-bts-42110838-1080-1344.jpg&ehk=rDJd4RdvFJIVNTtx5yI5LPTq4cnRym3KIDRrc4KhkXk%3d&risl=&pid=ImgRaw&r=0" alt="Product Image">
+                                </div>
+                                <div class="order-item-details">
+                                    <p>Balo nam nữ đi học đựng laptop 15.6 inch</p>
+                                    <p>Phân loại hàng: Màu đen mặc định, Balo + Gấu cam</p>
+                                </div>
                             </div>
-                            <div class="order-item-details">
-                                <p>Balo nam nữ đi học đựng laptop 15.6 inch</p>
-                                <p>Phân loại hàng: Màu đen mặc định, Balo + Gấu cam</p>
+                            <div class="order-item-price">
+                                <p>₫175.000</p>
+                                <p><s>₫220.000</s></p>
                             </div>
                         </div>
-                        <div class="order-item-price">
-                            <p>₫175.000</p>
-                            <p><s>₫220.000</s></p>
+                        <div class="order-actions">
+                            <button class="secondary-button">Yêu Cầu Trả Hàng/Hoàn Tiền</button>
+                            <button>Mua Lại</button>
+                        </div>
+    
+                        <!-- Separator between products -->
+                        <div class="order-item-separator"></div>
+    
+                        <div class="order-item">
+                            <div class="order-item-info">
+                                <div class="order-item-image">
+                                    <img src="https://th.bing.com/th/id/R.03450f28db97b2b1106e14c9d1d86405?rik=euCOdYwSJvFrqQ&riu=http%3a%2f%2fimages6.fanpop.com%2fimage%2fphotos%2f42100000%2fJungkook-jungkook-bts-42110838-1080-1344.jpg&ehk=rDJd4RdvFJIVNTtx5yI5LPTq4cnRym3KIDRrc4KhkXk%3d&risl=&pid=ImgRaw&r=0" alt="Product Image">
+                                </div>
+                                <div class="order-item-details">
+                                    <p>Balo nam nữ đi học đựng laptop 15.6 inch</p>
+                                    <p>Phân loại hàng: Màu đen mặc định, Balo + Gấu cam</p>
+                                </div>
+                            </div>
+                            <div class="order-item-price">
+                                <p>₫175.000</p>
+                                <p><s>₫220.000</s></p>
+                            </div>
+                        </div>
+                        
+                        <div class="order-actions">
+                            <button class="secondary-button">Yêu Cầu Trả Hàng/Hoàn Tiền</button>
+                            <button>Mua Lại</button>
                         </div>
                     </div>
-                    <div class="order-actions">
-                        <button class="secondary-button">Yêu Cầu Trả Hàng/Hoàn Tiền</button>
-                        <button>Mua Lại</button>
-                    </div>
 
-                    <!-- Separator between products -->
-                    <div class="order-item-separator"></div>
-
-                    <div class="order-item">
-                        <div class="order-item-info">
-                            <div class="order-item-image">
-                                <img src="https://th.bing.com/th/id/R.03450f28db97b2b1106e14c9d1d86405?rik=euCOdYwSJvFrqQ&riu=http%3a%2f%2fimages6.fanpop.com%2fimage%2fphotos%2f42100000%2fJungkook-jungkook-bts-42110838-1080-1344.jpg&ehk=rDJd4RdvFJIVNTtx5yI5LPTq4cnRym3KIDRrc4KhkXk%3d&risl=&pid=ImgRaw&r=0" alt="Product Image">
-                            </div>
-                            <div class="order-item-details">
-                                <p>Balo nam nữ đi học đựng laptop 15.6 inch</p>
-                                <p>Phân loại hàng: Màu đen mặc định, Balo + Gấu cam</p>
-                            </div>
-                        </div>
-                        <div class="order-item-price">
-                            <p>₫175.000</p>
-                            <p><s>₫220.000</s></p>
-                        </div>
+                    <div id="tab-2" class="tab-content">
+                        <p>Tab nội dung Chờ thanh toán</p>
                     </div>
                     
-                    <div class="order-actions">
-                        <button class="secondary-button">Yêu Cầu Trả Hàng/Hoàn Tiền</button>
-                        <button>Mua Lại</button>
+                    <div id="tab-3" class="tab-content">
+                        <p>Tab nội dung Vận chuyển</p>
+                    </div>
+                    
+                    <div id="tab-4" class="tab-content">
+                        <p>Tab nội dung Chờ giao hàng</p>
+                    </div>
+                    
+                    <div id="tab-5" class="tab-content">
+                        <p>Tab nội dung Hoàn thành</p>
+                    </div>
+                    
+                    <div id="tab-6" class="tab-content">
+                        <p>Tab nội dung Đã hủy</p>
+                    </div>
+                    
+                    <div id="tab-7" class="tab-content">
+                        <p>Tab nội dung Trả hàng/Hoàn tiền</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.tabs a');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            // Loại bỏ lớp 'active' khỏi tất cả các tab và nội dung
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Thêm lớp 'active' vào tab được nhấn
+            tab.classList.add('active');
+
+            // Hiển thị nội dung tương ứng với tab
+            contents[index].classList.add('active');
+        });
+    });
+});
+
+</script>
 @endsection

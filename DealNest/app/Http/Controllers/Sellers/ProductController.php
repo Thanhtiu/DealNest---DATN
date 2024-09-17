@@ -254,16 +254,19 @@ class ProductController extends Controller
             // Add new attributes
             foreach ($attributes as $attributeId => $values) {
                 foreach ($values as $value) {
-                    Product_attribute::create([
-                        'product_id' => $product->id,
-                        'attribute_id' => $attributeId,
-                        'value' => $value
-                    ]);
+                    if (!empty($value)) { // Kiểm tra giá trị không rỗng
+                        Product_attribute::create([
+                            'product_id' => $product->id,
+                            'attribute_id' => $attributeId,
+                            'value' => $value
+                        ]);
+                    }
                 }
             }
         } else {
             return redirect()->back()->with('error', 'No attributes found.');
         }
+
 
         // Redirect back with success message
         return redirect()->back()->with('success', 'Cập nhật sản phẩm thành công!');

@@ -338,67 +338,71 @@
     }
 
     
-    const checkboxContainer = document.querySelector('.checkbox-container');
-    const attributeInputs = document.querySelector('.attribute-inputs');
-
-    checkboxContainer.addEventListener('change', function (event) {
-        if (event.target.type === 'checkbox') {
-            const checkbox = event.target;
-            const attributeId = checkbox.dataset.id;  // Get attribute ID
-            const attributeName = checkbox.dataset.name;  // Get attribute name
-
-            if (checkbox.checked) {
-                // Create a new input group for the attribute
-                const attributeDiv = document.createElement('div');
-                attributeDiv.className = 'attribute-input-group';
-                attributeDiv.innerHTML = `
-                    <label>${attributeName}:</label>
-                    <input type="text" name="attributes[${attributeId}][]" placeholder="Nhập giá trị ${attributeName}" class="form-control">
-                    <button type="button" class="btn btn-primary btn-add-value">Thêm</button>
-                `;
-                attributeInputs.appendChild(attributeDiv);
-
-                // Add event listener to 'Thêm' button
-                attributeDiv.querySelector('.btn-add-value').addEventListener('click', function () {
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.name = `attributes[${attributeId}][]`;
-                    input.className = 'form-control';
-                    input.placeholder = `Nhập giá trị ${attributeName}`;
-
-                    // Create 'Xóa' button
-                    const deleteButton = document.createElement('button');
-                    deleteButton.type = 'button';
-                    deleteButton.textContent = 'Xóa';
-                    deleteButton.className = 'btn btn-danger btn-delete-value';
-
-                    // Add event listener to 'Xóa' button
-                    deleteButton.addEventListener('click', function () {
-                        input.remove();
-                        deleteButton.remove();
-                    });
-
-                    // Insert input and delete button into the attribute group
-                    attributeDiv.insertBefore(input, this);
-                    attributeDiv.insertBefore(deleteButton, this);
-                });
-            } else {
-                // Remove input group if checkbox is unchecked
-                const attributeGroups = document.querySelectorAll('.attribute-input-group');
-                attributeGroups.forEach(group => {
-                    if (group.querySelector('label').textContent === `${attributeName}:`) {
-                        group.remove();
-                    }
-                });
-            }
-        }
-    });
+    
 
   });
 
 
+</script>
 
- 
-  
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const checkboxContainer = document.querySelector('.checkbox-container');
+    const attributeInputs = document.querySelector('.attribute-inputs');
+
+    checkboxContainer.addEventListener('change', function(event) {
+        if (event.target.type === 'checkbox') {
+            const checkbox = event.target;
+            const attributeId = checkbox.dataset.id;
+            const attributeName = checkbox.dataset.name;
+            const attributeDivId = `attribute-group-${attributeId}`;
+
+            let attributeDiv = document.getElementById(attributeDivId);
+
+            if (checkbox.checked) {
+                if (!attributeDiv) {
+                    attributeDiv = document.createElement('div');
+                    attributeDiv.id = attributeDivId;
+                    attributeDiv.className = 'attribute-input-group';
+                    attributeDiv.innerHTML = `
+                        <label>${attributeName}:</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Nhập giá trị ${attributeName}" name="attributes[${attributeId}][]">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary btn-add-value" type="button">Thêm</button>
+                            </div>
+                        </div>
+                    `;
+                    attributeInputs.appendChild(attributeDiv);
+
+                    setupInputListeners(attributeDiv);
+                }
+            } else {
+                if (attributeDiv) {
+                    attributeDiv.remove();
+                }
+            }
+        }
+    });
+
+    function setupInputListeners(parentDiv) {
+        parentDiv.querySelector('.btn-add-value').addEventListener('click', function () {
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group mb-3';
+            inputGroup.innerHTML = `
+                <input type="text" class="form-control" placeholder="Nhập giá trị" name="attributes[${parentDiv.id.replace('attribute-group-', '')}][]">
+                <div class="input-group-append">
+                    <button class="btn btn-danger btn-remove-value" type="button">Xóa</button>
+                </div>
+            `;
+
+            parentDiv.appendChild(inputGroup);
+
+            inputGroup.querySelector('.btn-remove-value').addEventListener('click', function () {
+                inputGroup.remove();
+            });
+        });
+    }
+});
 
 </script>
