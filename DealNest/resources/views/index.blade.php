@@ -1,17 +1,29 @@
 @extends('layouts/client.app')
 @section('content')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 <style>
-    .card {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        border-radius: 3px;
-        height: 308px;
-        background-color: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+    .product-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 columns of equal width */
+    gap: 10px; /* Reduced space between items */
+    margin-top: 20px;
+    margin: 70px auto; /* Centering the container with auto margins on the sides */
+    max-width: 1200px; /* Optional: Max width to center the container and prevent it from stretching too wide */
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 3px;
+    height: 308px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Ensures card takes full width of the grid column */
+}
 
     .cardd {
         position: relative;
@@ -225,7 +237,7 @@
 </section>
 
 
-<div class="row product-container">
+<div class="product-container">
     @foreach($products as $item)
     <div class="card">
         <a href="{{route('client.productDetail',['id'=>$item->id])}}">
