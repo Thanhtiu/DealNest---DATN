@@ -27,7 +27,8 @@ class Product extends Model
         'rating',
         'sales',
         'status',
-        'note'
+        'note',
+        'image',
     ];
 
     public function subcategory(){

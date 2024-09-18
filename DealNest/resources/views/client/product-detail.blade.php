@@ -838,7 +838,7 @@
 
           <!-- Nút xem shop và chat ngay -->
           <div class="shop-info__buttons mt-3">
-            <a href="" class="btn btn-primary">Xem Shop</a>
+            <a href="{{route('client.shop',['id'=>$seller->id])}}" class="btn btn-primary">Xem Shop</a>
             <button id="chatButton" class="btn btn-success">Chat Ngay</button>
           </div>
         </div>

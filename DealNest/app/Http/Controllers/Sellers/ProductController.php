@@ -50,7 +50,7 @@ class ProductController extends Controller
                 'quantity' => 'required|integer|min:0',
                 'description' => 'nullable|string',
                 'brand_id' => 'required|integer|exists:brands,id',
-                'img' => 'required|array|min:3|max:5', // Validate the number of images
+                'img' => 'required|array|min:5|max:10', // Validate the number of images
                 'img.*' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048', // Validate image files
                 'attributes' => 'required', // Ensure attributes are present
 
@@ -62,10 +62,10 @@ class ProductController extends Controller
                 'price.required' => 'Giá sản phẩm là bắt buộc.',
                 'quantity.required' => 'Số lượng sản phẩm là bắt buộc.',
                 'brand_id.required' => 'Thương hiệu là bắt buộc.',
-                'img.required' => 'Bạn phải tải lên từ 3 đến 5 hình ảnh.',
+                'img.required' => 'Bạn phải tải lên từ 5 đến 10 hình ảnh.',
                 'img.array' => 'Hình ảnh phải được gửi dưới dạng mảng.',
-                'img.min' => 'Bạn phải tải lên ít nhất 3 hình ảnh.',
-                'img.max' => 'Bạn không thể tải lên quá 5 hình ảnh.',
+                'img.min' => 'Bạn phải tải lên ít nhất 5 hình ảnh.',
+                'img.max' => 'Bạn không thể tải lên quá 10 hình ảnh.',
                 'img.*.image' => 'Tệp ảnh không hợp lệ.',
                 'img.*.mimes' => 'Tệp ảnh phải có định dạng jpg, jpeg, webp,png hoặc gif.',
                 'img.*.max' => 'Tệp ảnh không được vượt quá 2MB.',
@@ -75,6 +75,12 @@ class ProductController extends Controller
             ]);
 
 
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                // Lưu ảnh vào thư mục 'public/products'
+                $image->move(public_path('uploads'), $imageName);
+            }
             // Create product
             $product = Product::create([
                 'seller_id' => $sellerId,
@@ -86,6 +92,8 @@ class ProductController extends Controller
                 'description' => $request->description,
                 'brand_id' => $request->brand_id,
                 'status' => 'Chờ phê duyệt',
+                'image' => $imageName,
+
             ]);
 
             // Handle image uploads
@@ -107,6 +115,12 @@ class ProductController extends Controller
                 $attributes = $request->input('attributes');
                 foreach ($attributes as $attributeId => $values) {
                     foreach ($values as $value) {
+                        // Nếu giá trị là 1 hoặc 2, bỏ qua và không tạo bản ghi mới
+                        if ($value == 1 || $value == 2) {
+                            continue; // Bỏ qua giá trị này
+                        }
+
+                        // Tạo bản ghi mới nếu giá trị không phải là 1 hoặc 2
                         Product_attribute::create([
                             'product_id' => $product->id,
                             'attribute_id' => $attributeId,
@@ -115,6 +129,7 @@ class ProductController extends Controller
                     }
                 }
             }
+
 
             return redirect()->route('seller.product.list')->with('success', 'Thêm sản phẩn thành công.');
 
@@ -212,7 +227,23 @@ class ProductController extends Controller
         // Find the product by ID
         $product = Product::findOrFail($id);
 
-        // Update the basic product information
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            // Kiểm tra và xóa ảnh cũ nếu tồn tại
+            if ($product && $product->image && file_exists(public_path('uploads/' . $product->image))) {
+                unlink(public_path('uploads/' . $product->image));
+            }
+
+            // Lưu ảnh mới
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads'), $imageName);
+
+            // Cập nhật thông tin ảnh mới
+            $product->image = $imageName;
+        }
+
+        // Cập nhật thông tin sản phẩm
         $product->update([
             'name' => $request->input('name'),
             'category_id' => $request->input('category_id'),
@@ -221,8 +252,10 @@ class ProductController extends Controller
             'quantity' => $request->input('quantity'),
             'description' => $request->input('description'),
             'brand_id' => $request->input('brand_id'),
-            'status' => 'Chờ phê duyệt'
+            'status' => 'Chờ phê duyệt',
+            'image' => isset($imageName) ? $imageName : $product->image // Chỉ cập nhật image nếu có ảnh mới
         ]);
+
 
         // Handle image uploads
         if ($request->hasFile('img')) {

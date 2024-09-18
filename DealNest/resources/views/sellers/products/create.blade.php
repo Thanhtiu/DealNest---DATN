@@ -84,6 +84,57 @@
     margin-right: 10px;
     /* Khoảng cách giữa checkbox và label */
   }
+
+  /* Container chính của ảnh bìa */
+  .file-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  /* Label hiển thị thông tin upload */
+  .file-upload-info {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .file-upload-info:hover {
+    color: #007bff;
+  }
+
+  /* Ảnh bìa preview */
+  #coverImagePreview {
+    display: block;
+    max-width: 70%;
+    max-height: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+    /* Đảm bảo ảnh không bị méo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Tạo bóng cho ảnh */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* margin-bottom: 10px; */
+  }
+
+  /* Hiệu ứng hover cho ảnh bìa */
+  #coverImagePreview:hover {
+    transform: scale(1.05);
+    /* Zoom nhẹ khi hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    /* Tăng độ bóng khi hover */
+  }
+
+  /* Thông báo nhỏ dưới ảnh */
+  .mt-2.text-muted {
+    font-size: 12px;
+    color: #6c757d;
+    text-align: center;
+  }
 </style>
 <div class="page-header">
   <h3 class="page-title"> Form elements </h3>
@@ -117,20 +168,27 @@
         <form class="forms-sample" action="{{route('seller.product.create')}}" method="POST"
           enctype="multipart/form-data">
           @csrf
-
-
-          <!-- Cover Image Upload Section -->
           <div class="form-group">
-            <label class="form-label">* Thêm hình ảnh</label>
+            <label class="form-label">* Thêm ảnh bìa</label>
             <div class="file-upload-container">
-              <label for="img" class="file-upload-info" id="fileUploadInfo">Thêm hình ảnh (0/5)</label>
-              <input type="file" id="img" name="img[]" class="file-upload-default" multiple>
-              <img id="coverImagePreview" src="#" alt="Cover Image Preview" style="display: none; margin-top: 10px;" />
+              <label for="image" class="file-upload-info" id="fileUploadCoverInfo">Thêm hình ảnh (0/1)</label>
+              <input type="file" id="image" name="image" class="file-upload-default" accept="image/*">
+              <img id="coverImagePreview" src="#" alt="" style="display: none; margin-top: 10px;" />
             </div>
             <p class="mt-2 text-muted">
               • Tải lên hình ảnh 1:1. Ảnh bìa sẽ được hiển thị tại các trang Kết quả tìm kiếm, Gợi ý hôm nay,...
             </p>
           </div>
+
+          <!-- Section for multiple images without preview -->
+          <div class="form-group">
+            <label class="form-label">* Thêm hình ảnh</label>
+            <div class="file-upload-container">
+              <label for="img" class="file-upload-info" id="fileUploadInfo">Thêm hình ảnh (0/10)</label>
+              <input type="file" id="img" name="img[]" class="file-upload-default" multiple accept="image/*">
+            </div>
+          </div>
+
 
 
           <div class="form-group">
@@ -303,12 +361,47 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
 
-    document.getElementById('img').addEventListener('change', function() {
-        var fileInput = this;
-        var fileCount = fileInput.files.length;
-        var fileUploadInfo = document.getElementById('fileUploadInfo');
-        fileUploadInfo.textContent = `Thêm hình ảnh (${fileCount}/5)`;
+   // Hiển thị số lượng ảnh được chọn và ảnh preview cho ảnh bìa
+document.getElementById('image').addEventListener('change', function() {
+    var fileInput = this;
+    var fileCount = fileInput.files.length;
+    var fileUploadInfo = document.getElementById('fileUploadCoverInfo');
+    fileUploadInfo.textContent = `Thêm hình ảnh (${fileCount}/1)`;
+
+    if (fileCount > 0) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var coverImagePreview = document.getElementById('coverImagePreview');
+            coverImagePreview.src = e.target.result;
+            coverImagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+});
+
+// Cập nhật số lượng file cho phần nhiều hình ảnh mà không hiển thị preview
+document.getElementById('img').addEventListener('change', function() {
+    var fileInput = this;
+    var fileCount = fileInput.files.length;
+    var maxFiles = 10; // Giới hạn số lượng ảnh tối đa là 10
+    var fileUploadInfo = document.getElementById('fileUploadInfo');
+
+    if (fileCount > maxFiles) {
+        alert(`Bạn chỉ có thể chọn tối đa ${maxFiles} ảnh. Chúng tôi sẽ lưu 10 ảnh đầu tiên.`);
+        fileCount = maxFiles; // Chỉ lưu lại 10 ảnh đầu tiên
+    }
+
+    fileUploadInfo.textContent = `Thêm hình ảnh (${fileCount}/${maxFiles})`;
+
+    // Lọc chỉ lấy 10 file đầu tiên
+    var fileList = Array.from(fileInput.files).slice(0, maxFiles);
+    var dataTransfer = new DataTransfer();
+    fileList.forEach(function(file) {
+        dataTransfer.items.add(file);
     });
+    fileInput.files = dataTransfer.files; // Cập nhật input file với 10 file đầu tiên
+});
+
 
     const categorySelect = document.getElementById('categorySelect');
     if (categorySelect) {

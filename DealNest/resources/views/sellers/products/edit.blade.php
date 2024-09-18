@@ -143,6 +143,46 @@
     display: none;
     /* Ẩn input file */
   }
+  .file-upload-info {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .file-upload-info:hover {
+    color: #007bff;
+  }
+
+  /* Ảnh bìa preview */
+  #coverImagePreview {
+    display: block;
+    max-width: 70%;
+    max-height: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+    /* Đảm bảo ảnh không bị méo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Tạo bóng cho ảnh */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* margin-bottom: 10px; */
+  }
+
+  /* Hiệu ứng hover cho ảnh bìa */
+  #coverImagePreview:hover {
+    transform: scale(1.05);
+    /* Zoom nhẹ khi hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    /* Tăng độ bóng khi hover */
+  }
+
+  /* Thông báo nhỏ dưới ảnh */
+  .mt-2.text-muted {
+    font-size: 12px;
+    color: #6c757d;
+    text-align: center;
+  }
 </style>
 <div class="page-header">
   <h3 class="page-title">Chỉnh sửa </h3>
@@ -177,6 +217,18 @@
           enctype="multipart/form-data">
           @csrf
           @method('PUT')
+
+          <div class="form-group">
+            <label class="form-label">* Sửa ảnh bìa</label>
+            <div class="file-upload-container">
+              <label for="image" class="file-upload-info" id="fileUploadCoverInfo">Sửa hình ảnh (1/1)</label>
+              <input type="file" id="image" name="image" class="file-upload-default" accept="image/*">
+              <img id="coverImagePreview" src="{{asset('uploads/'.$product->image)}}" alt="" style="" />
+            </div>
+            <p class="mt-2 text-muted">
+              • Tải lên hình ảnh 1:1. Ảnh bìa sẽ được hiển thị tại các trang Kết quả tìm kiếm, Gợi ý hôm nay,...
+            </p>
+          </div>
 
           <!-- Cover Image Upload Section -->
           <div class="form-group">
@@ -390,7 +442,22 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // const uploadButtons = document.querySelectorAll('.file-upload-browse');
+    document.getElementById('image').addEventListener('change', function() {
+    var fileInput = this;
+    var fileCount = fileInput.files.length;
+    var fileUploadInfo = document.getElementById('fileUploadCoverInfo');
+    fileUploadInfo.textContent = `Thêm hình ảnh (${fileCount}/1)`;
+
+    if (fileCount > 0) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var coverImagePreview = document.getElementById('coverImagePreview');
+            coverImagePreview.src = e.target.result;
+            coverImagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+});
     
     
     const uploadButtons = document.querySelectorAll('.file-upload-browse');

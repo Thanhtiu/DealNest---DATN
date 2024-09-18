@@ -1,0 +1,12 @@
+.tab-content {
+    display: none;
+}
+
+/* Chỉ hiển thị tab content có lớp 'active' */
+.tab-content.active {
+    display: block;
+}
+.tabs a.active {
+    color: #0000ff;
+    border-bottom: 2px solid #0000ff;
+}
