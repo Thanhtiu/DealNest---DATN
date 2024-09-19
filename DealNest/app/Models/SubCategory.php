@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
+use App\Models\Product;
 
 class SubCategory extends Model
 {
@@ -21,11 +22,18 @@ class SubCategory extends Model
     ];
 
     protected $attributes = [
-        'status' => 'active', 
+        'status' => 'active',
     ];
 
-    public function category(){
-        return $this->belongsTo(Category::class, 'id');
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
-}
     
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'subcategory_id');
+    }
+    
+    
+}

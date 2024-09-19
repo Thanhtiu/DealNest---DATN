@@ -15,7 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
-    {{-- <link rel="stylesheet" href="{{asset('client/css/bootstrap.min.css')}}" type="text/css"> --}}
+    {{--
+    <link rel="stylesheet" href="{{asset('client/css/bootstrap.min.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('client/css/font-awesome.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('client/css/elegant-icons.css')}}" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -29,7 +30,8 @@
     {{--
     <link rel="stylesheet" href="{{asset('client/css/slicknav.min.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('client/css/style.css')}}" type="text/css">
-    {{-- <link rel="stylesheet" href="{{asset('client/css/spinner.css')}}" type="text/css"> --}}
+    {{--
+    <link rel="stylesheet" href="{{asset('client/css/spinner.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('client/css/header.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('client/css/home-product.css')}}" type="text/css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
@@ -53,8 +55,10 @@
                 </a>
 
                 <!-- Search form -->
-                <form class="d-flex mx-auto">
-                    <input class="form-control me-2" type="search" placeholder="100% hàng thật" aria-label="Search">
+                <form class="d-flex mx-auto" action="{{route('client.search')}}" method="POST">
+                    @csrf
+                    <input class="form-control me-2" type="text" placeholder="100% hàng thật" aria-label="Search"
+                        name="key">
                     <button class="btn btn-outline-primary" type="submit">Tìm kiếm</button>
                 </form>
 

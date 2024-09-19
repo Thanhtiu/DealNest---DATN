@@ -16,6 +16,7 @@ use App\Http\Controllers\Client\AddressController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Sellers\InfoController;
+use App\Http\Controllers\Client\SearchController;
 
 
 
@@ -31,6 +32,7 @@ Route::post('/the-loai', [CategoryController::class, 'getProductAddress'])->name
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::get('/cua-hang/{id}', [ShopController::class, 'index'])->name('client.shop');
+Route::post('/tim-kiem',[SearchController::class,'index'])->name('client.search');
 
 
 
