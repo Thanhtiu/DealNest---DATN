@@ -143,6 +143,46 @@
     display: none;
     /* Ẩn input file */
   }
+  .file-upload-info {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .file-upload-info:hover {
+    color: #007bff;
+  }
+
+  /* Ảnh bìa preview */
+  #coverImagePreview {
+    display: block;
+    max-width: 70%;
+    max-height: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+    /* Đảm bảo ảnh không bị méo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Tạo bóng cho ảnh */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* margin-bottom: 10px; */
+  }
+
+  /* Hiệu ứng hover cho ảnh bìa */
+  #coverImagePreview:hover {
+    transform: scale(1.05);
+    /* Zoom nhẹ khi hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    /* Tăng độ bóng khi hover */
+  }
+
+  /* Thông báo nhỏ dưới ảnh */
+  .mt-2.text-muted {
+    font-size: 12px;
+    color: #6c757d;
+    text-align: center;
+  }
 </style>
 <div class="page-header">
   <h3 class="page-title">Chỉnh sửa </h3>
@@ -154,7 +194,21 @@
   </nav>
 </div>
 <div class="row">
+  @if (session('success'))
+  <div class="alert alert-success">
+      {{ session('success') }}
+  </div>
+@endif
 
+@if ($errors->any())
+  <div class="alert alert-danger">
+      <ul>
+          @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+          @endforeach
+      </ul>
+  </div>
+@endif
   <div class="col-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
@@ -163,6 +217,18 @@
           enctype="multipart/form-data">
           @csrf
           @method('PUT')
+
+          <div class="form-group">
+            <label class="form-label">* Sửa ảnh bìa</label>
+            <div class="file-upload-container">
+              <label for="image" class="file-upload-info" id="fileUploadCoverInfo">Sửa hình ảnh (1/1)</label>
+              <input type="file" id="image" name="image" class="file-upload-default" accept="image/*">
+              <img id="coverImagePreview" src="{{asset('uploads/'.$product->image)}}" alt="" style="" />
+            </div>
+            <p class="mt-2 text-muted">
+              • Tải lên hình ảnh 1:1. Ảnh bìa sẽ được hiển thị tại các trang Kết quả tìm kiếm, Gợi ý hôm nay,...
+            </p>
+          </div>
 
           <!-- Cover Image Upload Section -->
           <div class="form-group">
@@ -250,7 +316,7 @@
           </div> --}}
           <div class="form-group">
             <label for="description">Mô tả</label>
-            <textarea name="description" class="form-control" id="description"
+            <textarea name="description" id="description" class="form-control" id="description"
               rows="4">{{$product->description}}</textarea>
           </div>
           <div class="col-md-12 grid-margin stretch-card">
@@ -275,40 +341,39 @@
                 </div>
                 <div class="container mt-4">
                   <div class="row">
-                    <div class="form-group col-12">
-                      <label>Thuộc tính sản phẩm</label>
-                      <div class="checkbox-container">
-                        @foreach($attribute as $item)
-                        <div class="form-check">
-                          <input type="checkbox" class="form-check-input" id="attribute-{{$item->id}}"
-                            data-id="{{$item->id}}" data-name="{{$item->name}}" name="attributes[{{$item->id}}]"
-                            value="{{$item->id}}" {{ $product->product_attribute->contains('attribute_id', $item->id) ?
-                          'checked' : '' }}>
-                          <label class="form-check-label" for="attribute-{{$item->id}}">
-                            {{$item->name}}
-                          </label>
-                        </div>
-                        @endforeach
+                      <div class="form-group col-12">
+                          <label>Thuộc tính sản phẩm</label>
+                          <div class="checkbox-container">
+                              @foreach($attribute as $item)
+                              <div class="form-check">
+                                  <input type="checkbox" class="form-check-input" id="attribute-{{$item->id}}"
+                                      data-id="{{$item->id}}" data-name="{{$item->name}}" name="attributes[{{$item->id}}]"
+                                      value="{{$item->id}}" {{ $product->product_attribute->contains('attribute_id', $item->id) ?
+                                  'checked' : '' }}>
+                                  <label class="form-check-label" for="attribute-{{$item->id}}">
+                                      {{$item->name}}
+                                  </label>
+                              </div>
+                              @endforeach
+                          </div>
                       </div>
-                    </div>
-                    <div class="attribute-inputs col-12">
-                      @foreach($product->product_attribute as $productAttribute)
-                      <div class="attribute-input-group">
-                        <label style="margin-top: 20px;">{{$productAttribute->attribute->name}}:</label>
-                        @foreach(explode(',', $productAttribute->value) as $value)
-                        <!-- Nếu giá trị lưu trữ dưới dạng chuỗi -->
-                        <div class="input-group">
-                          <input type="text" name="attributes[{{$productAttribute->attribute_id}}][]" value="{{$value}}"
-                            class="form-control" placeholder="Nhập giá trị {{$productAttribute->attribute->name}}">
-                          <button type="button" class="btn btn-danger btn-delete-value">Xóa</button>
-                        </div>
-                        @endforeach
+                      <div class="attribute-inputs col-12">
+                          @foreach($product->product_attribute as $productAttribute)
+                          <div class="attribute-input-group" data-id="{{$productAttribute->attribute_id}}">
+                              <label style="margin-top: 20px;">{{$productAttribute->attribute->name}}:</label>
+                              @foreach(explode(',', $productAttribute->value) as $value)
+                              <div class="input-group">
+                                  <input type="text" name="attributes[{{$productAttribute->attribute_id}}][]" value="{{$value}}"
+                                      class="form-control" placeholder="Nhập giá trị {{$productAttribute->attribute->name}}">
+                                  <button type="button" class="btn btn-danger btn-delete-value">Xóa</button>
+                              </div>
+                              @endforeach
+                          </div>
+                          @endforeach
                       </div>
-                      @endforeach
-                      {{-- <button type="button" class="btn btn-primary btn-add-value">Thêm</button> --}}
-                    </div>
                   </div>
-                </div>
+              </div>
+              
 
               </div>
             </div>
@@ -323,10 +388,77 @@
 
 </div>
 @endsection
+
+
+
 {{-- <script src="{{asset('sellers/assets/js/process-product-edit.js')}}"></script> --}}
+
+<script type="importmap">
+  {
+      "imports": {
+          "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.js",
+          "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.1.0/"
+      }
+  }
+</script>
+<script type="module">
+  import {
+      ClassicEditor,
+      Essentials,
+      Paragraph,
+      Bold,
+      Italic,
+      Font
+  } from 'ckeditor5';
+
+  ClassicEditor
+      .create( document.querySelector( '#description' ), {
+          plugins: [ Essentials, Paragraph, Bold, Italic, Font ],
+          toolbar: [
+  'undo', 'redo', '|', 'bold', 'italic', '|',
+  'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+          ]
+      } )
+      .then( editor => {
+          window.editor = editor;
+      } )
+      .catch( error => {
+          console.error( error );
+      } );
+</script>
+<!-- A friendly reminder to run on a server, remove this during the integration. -->
+<script>
+  window.onload = function() {
+      if ( window.location.protocol === "file:" ) {
+          alert( "This sample requires an HTTP server. Please serve this file with a web server." );
+      }
+  };
+</script>
+
+
+
+
+
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // const uploadButtons = document.querySelectorAll('.file-upload-browse');
+    document.getElementById('image').addEventListener('change', function() {
+    var fileInput = this;
+    var fileCount = fileInput.files.length;
+    var fileUploadInfo = document.getElementById('fileUploadCoverInfo');
+    fileUploadInfo.textContent = `Thêm hình ảnh (${fileCount}/1)`;
+
+    if (fileCount > 0) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var coverImagePreview = document.getElementById('coverImagePreview');
+            coverImagePreview.src = e.target.result;
+            coverImagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+});
+    
     
     const uploadButtons = document.querySelectorAll('.file-upload-browse');
   
@@ -349,7 +481,7 @@
           });
       });
   
-    // Category and Subcategory select functionality
+   
     const categorySelect = document.getElementById('categorySelect');
     const subCategorySelect = document.getElementById('subCategorySelect');
     const selectedCategoryId = categorySelect ? categorySelect.value : null; 
@@ -391,70 +523,101 @@
       });
     }
   
-    const checkboxContainer = document.querySelector('.checkbox-container');
-  const attributeInputs = document.querySelector('.attribute-inputs');
-  
-  checkboxContainer.addEventListener('change', function(event) {
-    if (event.target.type === 'checkbox') {
-      const checkbox = event.target;
-      const attributeId = checkbox.dataset.id;  
-      const attributeName = checkbox.dataset.name;  
-  
-      if (checkbox.checked) {
-        if (!document.querySelector(`.attribute-input-group[data-id="${attributeId}"]`)) {
-          const attributeDiv = document.createElement('div');
-          attributeDiv.className = 'attribute-input-group';
-          attributeDiv.dataset.id = attributeId;
-          attributeDiv.innerHTML = `
-            <label>${attributeName}:</label>
-            <input type="text" name="attributes[${attributeId}][]" placeholder="Nhập giá trị ${attributeName}" class="form-control">
-            <button type="button" class="btn btn-primary btn-add-value">Thêm</button>
-          `;
-          attributeInputs.appendChild(attributeDiv);
-  
-          // Add event listener for 'Add' button
-          attributeDiv.querySelector('.btn-add-value').addEventListener('click', function() {
-            const inputGroup = document.createElement('div');
-            inputGroup.className = 'input-group mt-2';
-  
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.name = `attributes[${attributeId}][]`;
-            input.className = 'form-control';
-            input.placeholder = `Nhập giá trị ${attributeName}`;
-            
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.textContent = 'Xóa';
-            deleteButton.className = 'btn btn-danger btn-delete-value';
-  
-            deleteButton.addEventListener('click', function() {
-              inputGroup.remove();
+    
+  });
+</script>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkboxContainer = document.querySelector('.checkbox-container');
+        const attributeInputs = document.querySelector('.attribute-inputs');
+
+        // Xử lý khi người dùng thay đổi checkbox
+        checkboxContainer.addEventListener('change', function(event) {
+            if (event.target.type === 'checkbox') {
+                const checkbox = event.target;
+                const attributeId = checkbox.dataset.id;
+                const attributeName = checkbox.dataset.name;
+
+                // Nếu checkbox được chọn
+                if (checkbox.checked) {
+                    if (!document.querySelector(`.attribute-input-group[data-id="${attributeId}"]`)) {
+                        const attributeDiv = document.createElement('div');
+                        attributeDiv.className = 'attribute-input-group';
+                        attributeDiv.dataset.id = attributeId;
+
+                        // Tạo input và nút "Thêm" chỉ khi người dùng chọn checkbox
+                        attributeDiv.innerHTML = `
+                            <label>${attributeName}:</label>
+                            <div class="input-group">
+                                <input type="text" name="attributes[${attributeId}][]" placeholder="Nhập giá trị ${attributeName}" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary btn-add-value">Thêm</button>
+                                </div>
+                            </div>
+                        `;
+
+                        attributeInputs.appendChild(attributeDiv);
+
+                        // Gán sự kiện cho nút "Thêm"
+                        setupInputListeners(attributeDiv, attributeId, attributeName);
+                    }
+                } else {
+                    // Xóa cả nhóm thuộc tính khi checkbox bị bỏ chọn
+                    const attributeGroup = document.querySelector(`.attribute-input-group[data-id="${attributeId}"]`);
+                    if (attributeGroup) {
+                        attributeGroup.remove();
+                    }
+                }
+            }
+        });
+
+        // Xử lý logic cho nút "Thêm" và "Xóa"
+        function setupInputListeners(attributeDiv, attributeId, attributeName) {
+            // Thêm giá trị mới khi bấm nút "Thêm"
+            attributeDiv.querySelector('.btn-add-value').addEventListener('click', function() {
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group mt-2';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = `attributes[${attributeId}][]`;
+                input.className = 'form-control';
+                input.placeholder = `Nhập giá trị ${attributeName}`;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.textContent = 'Xóa';
+                deleteButton.className = 'btn btn-danger btn-delete-value';
+
+                // Xóa input khi bấm nút "Xóa"
+                deleteButton.addEventListener('click', function() {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = `deleted_attributes[${attributeId}][]`;
+                    hiddenInput.value = input.value; // Lưu giá trị cần xóa để server biết cần xóa
+
+                    attributeInputs.appendChild(hiddenInput);
+                    inputGroup.remove();
+                });
+
+                inputGroup.appendChild(input);
+                inputGroup.appendChild(deleteButton);
+
+                // Thêm input mới vào trước nút "Thêm"
+                attributeDiv.insertBefore(inputGroup, this.parentElement.parentElement);
             });
-  
-            inputGroup.appendChild(input);
-            inputGroup.appendChild(deleteButton);
-  
-            attributeDiv.insertBefore(inputGroup, this);
-          });
         }
-      } else {
-        const attributeGroup = document.querySelector(`.attribute-input-group[data-id="${attributeId}"]`);
-        if (attributeGroup) {
-          attributeGroup.remove();
-        }
-      }
-    }
-  });
-  
-  
-  
-  attributeInputs.addEventListener('click', function(event) {
-    if (event.target.classList.contains('btn-delete-value')) {
-      event.target.previousElementSibling.remove(); 
-      event.target.remove(); 
-    }
-  });
-  
-  });
+
+        // Xử lý việc xóa giá trị hiện tại khi bấm nút "Xóa"
+        attributeInputs.addEventListener('click', function(event) {
+            if (event.target.classList.contains('btn-delete-value')) {
+                const inputGroup = event.target.closest('.input-group');
+                inputGroup.remove();
+            }
+        });
+    });
 </script>

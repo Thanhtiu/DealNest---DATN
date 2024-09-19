@@ -64,25 +64,77 @@
     color: #ff4d4f;
     font-weight: bold;
   }
+
   .checkbox-container {
-  display: flex;
-  flex-wrap: wrap; /* Để các checkbox xuống hàng mới nếu không đủ chỗ trên một hàng */
-  gap: 20px; /* Khoảng cách giữa các checkbox */
-}
+    display: flex;
+    flex-wrap: wrap;
+    /* Để các checkbox xuống hàng mới nếu không đủ chỗ trên một hàng */
+    gap: 20px;
+    /* Khoảng cách giữa các checkbox */
+  }
 
-.form-check {
-  display: flex;
-  align-items: center;
-  margin-right: 20px; /* Khoảng cách giữa các checkbox nếu cần */
-}
+  .form-check {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    /* Khoảng cách giữa các checkbox nếu cần */
+  }
 
-.form-check-input {
-  margin-right: 10px; /* Khoảng cách giữa checkbox và label */
-}
+  .form-check-input {
+    margin-right: 10px;
+    /* Khoảng cách giữa checkbox và label */
+  }
 
+  /* Container chính của ảnh bìa */
+  .file-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
 
+  /* Label hiển thị thông tin upload */
+  .file-upload-info {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
 
+  .file-upload-info:hover {
+    color: #007bff;
+  }
 
+  /* Ảnh bìa preview */
+  #coverImagePreview {
+    display: block;
+    max-width: 70%;
+    max-height: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+    /* Đảm bảo ảnh không bị méo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Tạo bóng cho ảnh */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* margin-bottom: 10px; */
+  }
+
+  /* Hiệu ứng hover cho ảnh bìa */
+  #coverImagePreview:hover {
+    transform: scale(1.05);
+    /* Zoom nhẹ khi hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    /* Tăng độ bóng khi hover */
+  }
+
+  /* Thông báo nhỏ dưới ảnh */
+  .mt-2.text-muted {
+    font-size: 12px;
+    color: #6c757d;
+    text-align: center;
+  }
 </style>
 <div class="page-header">
   <h3 class="page-title"> Form elements </h3>
@@ -94,7 +146,21 @@
   </nav>
 </div>
 <div class="row">
+  @if (session('success'))
+  <div class="alert alert-success">
+    {{ session('success') }}
+  </div>
+  @endif
 
+  @if ($errors->any())
+  <div class="alert alert-danger">
+    <ul>
+      @foreach ($errors->all() as $error)
+      <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+  @endif
   <div class="col-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
@@ -102,24 +168,34 @@
         <form class="forms-sample" action="{{route('seller.product.create')}}" method="POST"
           enctype="multipart/form-data">
           @csrf
-      
-          
-          <!-- Cover Image Upload Section -->
           <div class="form-group">
-            <label class="form-label">* Thêm hình ảnh</label>
+            <label class="form-label">* Thêm ảnh bìa</label>
             <div class="file-upload-container">
-              <label for="img" class="file-upload-info">Thêm hình ảnh (0/9)</label>
-              <input type="file" id="img" name="img[]" class="file-upload-default" multiple>
-              <img id="coverImagePreview" src="#" alt="Cover Image Preview" style="display: none; margin-top: 10px;" />
+              <label for="image" class="file-upload-info" id="fileUploadCoverInfo">Thêm hình ảnh (0/1)</label>
+              <input type="file" id="image" name="image" class="file-upload-default" accept="image/*">
+              <img id="coverImagePreview" src="#" alt="" style="display: none; margin-top: 10px;" />
             </div>
             <p class="mt-2 text-muted">
               • Tải lên hình ảnh 1:1. Ảnh bìa sẽ được hiển thị tại các trang Kết quả tìm kiếm, Gợi ý hôm nay,...
             </p>
           </div>
 
+          <!-- Section for multiple images without preview -->
+          <div class="form-group">
+            <label class="form-label">* Thêm hình ảnh</label>
+            <div class="file-upload-container">
+              <label for="img" class="file-upload-info" id="fileUploadInfo">Thêm hình ảnh (0/10)</label>
+              <input type="file" id="img" name="img[]" class="file-upload-default" multiple accept="image/*">
+            </div>
+          </div>
+
+
+
           <div class="form-group">
             <label for="name">Tên sản phẩm</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Tên sản phẩm">
+            <input type="text" name="name" class="form-control" id="name" placeholder="Tên sản phẩm"
+              value="{{ old('name') }}">
+
           </div>
 
           <div class="form-group">
@@ -155,7 +231,7 @@
           <div class="row">
             <div class="form-group">
               <label for="price">Giá</label>
-              <input type="text" class="form-control" name="price" id="price" placeholder="Giá">
+              <input type="text" class="form-control" name="price" id="price" placeholder="Giá" value={{old('price')}}>
             </div>
           </div>
 
@@ -171,8 +247,10 @@
           </div> --}}
           <div class="form-group">
             <label for="description">Mô tả</label>
-            <textarea name="description" class="form-control" id="description" rows="4"></textarea>
+            <textarea name="description" class="form-control" id="description"
+              rows="4">{{ old('description') }}</textarea>
           </div>
+
           <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
@@ -181,7 +259,7 @@
                 <div class="row">
                   <div class="form-group col-6">
                     <label for="quantity">Số lượng</label>
-                    <input type="text" class="form-control" id="quantity" name="quantity">
+                    <input type="text" class="form-control" id="quantity" name="quantity" value="{{old('quantity')}}">
                   </div>
                   <div class="form-group col-6">
                     <label for="brand">Xuất xứ</label>
@@ -198,20 +276,23 @@
                       <label>Thuộc tính sản phẩm</label>
                       <div class="checkbox-container">
                         @foreach($attribute as $item)
-                          <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="attribute-{{$item->id}}" data-id="{{$item->id}}" data-name="{{$item->name}}" name="attributes[{{$item->id}}]" value="{{$item->id}}">
-                            <label class="form-check-label" for="attribute-{{$item->id}}">
-                              {{$item->name}}
-                            </label>
-                          </div>
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" id="attribute-{{$item->id}}"
+                            data-id="{{$item->id}}" data-name="{{$item->name}}" name="attributes[{{$item->id}}][]"
+                            value="{{$item->id}}">
+                          <label class="form-check-label" for="attribute-{{$item->id}}">
+                            {{$item->name}}
+                          </label>
+                        </div>
                         @endforeach
                       </div>
                     </div>
                     <div class="attribute-inputs col-12">
-                      <!-- Inputs for attributes  -->
+                      <!-- Inputs for attributes will be dynamically generated here -->
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -225,8 +306,103 @@
 
 </div>
 @endsection
+
+
+<script type="importmap">
+  {
+      "imports": {
+          "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.js",
+          "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.1.0/"
+      }
+  }
+</script>
+<script type="module">
+  import {
+      ClassicEditor,
+      Essentials,
+      Paragraph,
+      Bold,
+      Italic,
+      Font
+  } from 'ckeditor5';
+
+  ClassicEditor
+      .create( document.querySelector( '#description' ), {
+          plugins: [ Essentials, Paragraph, Bold, Italic, Font ],
+          toolbar: [
+  'undo', 'redo', '|', 'bold', 'italic', '|',
+  'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+          ]
+      } )
+      .then( editor => {
+          window.editor = editor;
+      } )
+      .catch( error => {
+          console.error( error );
+      } );
+</script>
+<!-- A friendly reminder to run on a server, remove this during the integration. -->
+<script>
+  window.onload = function() {
+      if ( window.location.protocol === "file:" ) {
+          alert( "This sample requires an HTTP server. Please serve this file with a web server." );
+      }
+  };
+</script>
+
+
+
+
+
+
+
+
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+
+   // Hiển thị số lượng ảnh được chọn và ảnh preview cho ảnh bìa
+document.getElementById('image').addEventListener('change', function() {
+    var fileInput = this;
+    var fileCount = fileInput.files.length;
+    var fileUploadInfo = document.getElementById('fileUploadCoverInfo');
+    fileUploadInfo.textContent = `Thêm hình ảnh (${fileCount}/1)`;
+
+    if (fileCount > 0) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var coverImagePreview = document.getElementById('coverImagePreview');
+            coverImagePreview.src = e.target.result;
+            coverImagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+});
+
+// Cập nhật số lượng file cho phần nhiều hình ảnh mà không hiển thị preview
+document.getElementById('img').addEventListener('change', function() {
+    var fileInput = this;
+    var fileCount = fileInput.files.length;
+    var maxFiles = 10; // Giới hạn số lượng ảnh tối đa là 10
+    var fileUploadInfo = document.getElementById('fileUploadInfo');
+
+    if (fileCount > maxFiles) {
+        alert(`Bạn chỉ có thể chọn tối đa ${maxFiles} ảnh. Chúng tôi sẽ lưu 10 ảnh đầu tiên.`);
+        fileCount = maxFiles; // Chỉ lưu lại 10 ảnh đầu tiên
+    }
+
+    fileUploadInfo.textContent = `Thêm hình ảnh (${fileCount}/${maxFiles})`;
+
+    // Lọc chỉ lấy 10 file đầu tiên
+    var fileList = Array.from(fileInput.files).slice(0, maxFiles);
+    var dataTransfer = new DataTransfer();
+    fileList.forEach(function(file) {
+        dataTransfer.items.add(file);
+    });
+    fileInput.files = dataTransfer.files; // Cập nhật input file với 10 file đầu tiên
+});
+
+
     const categorySelect = document.getElementById('categorySelect');
     if (categorySelect) {
       categorySelect.addEventListener('change', function () {
@@ -255,68 +431,71 @@
     }
 
     
-    const checkboxContainer = document.querySelector('.checkbox-container');
-const attributeInputs = document.querySelector('.attribute-inputs');
-
-checkboxContainer.addEventListener('change', function(event) {
-  if (event.target.type === 'checkbox') {
-    const checkbox = event.target;
-    const attributeId = checkbox.dataset.id;  // Lấy ID của thuộc tính
-    const attributeName = checkbox.dataset.name;  // Lấy tên thuộc tính
-
-    if (checkbox.checked) {
-      // Tạo nhóm input mới cho thuộc tính
-      const attributeDiv = document.createElement('div');
-      attributeDiv.className = 'attribute-input-group';
-      attributeDiv.innerHTML = `
-        <label>${attributeName}:</label>
-        <input type="text" name="attributes[${attributeId}][]" placeholder="Nhập giá trị ${attributeName}" class="form-control">
-        <button type="button" class="btn btn-primary btn-add-value">Thêm</button>
-      `;
-      attributeInputs.appendChild(attributeDiv);
-
-      // Thêm sự kiện cho nút 'Thêm'
-      attributeDiv.querySelector('.btn-add-value').addEventListener('click', function() {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.name = `attributes[${attributeId}][]`;
-        input.className = 'form-control';
-        input.placeholder = `Nhập giá trị ${attributeName}`;
-        
-        // Tạo nút Xóa
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.textContent = 'Xóa';
-        deleteButton.className = 'btn btn-danger btn-delete-value';
-        
-        // Thêm sự kiện cho nút Xóa
-        deleteButton.addEventListener('click', function() {
-          input.remove();
-          deleteButton.remove();
-        });
-
-        // Thêm input và nút xóa vào nhóm thuộc tính
-        attributeDiv.insertBefore(input, this);
-        attributeDiv.insertBefore(deleteButton, this);
-      });
-    } else {
-      // Xóa nhóm input nếu checkbox bị bỏ chọn
-      const attributeGroups = document.querySelectorAll('.attribute-input-group');
-      attributeGroups.forEach(group => {
-        if (group.querySelector('label').textContent === `${attributeName}:`) {
-          group.remove();
-        }
-      });
-    }
-  }
-});
-
+    
 
   });
 
 
+</script>
 
- 
-  
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const checkboxContainer = document.querySelector('.checkbox-container');
+    const attributeInputs = document.querySelector('.attribute-inputs');
+
+    checkboxContainer.addEventListener('change', function(event) {
+        if (event.target.type === 'checkbox') {
+            const checkbox = event.target;
+            const attributeId = checkbox.dataset.id;
+            const attributeName = checkbox.dataset.name;
+            const attributeDivId = `attribute-group-${attributeId}`;
+
+            let attributeDiv = document.getElementById(attributeDivId);
+
+            if (checkbox.checked) {
+                if (!attributeDiv) {
+                    attributeDiv = document.createElement('div');
+                    attributeDiv.id = attributeDivId;
+                    attributeDiv.className = 'attribute-input-group';
+                    attributeDiv.innerHTML = `
+                        <label>${attributeName}:</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Nhập giá trị ${attributeName}" name="attributes[${attributeId}][]">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary btn-add-value" type="button">Thêm</button>
+                            </div>
+                        </div>
+                    `;
+                    attributeInputs.appendChild(attributeDiv);
+
+                    setupInputListeners(attributeDiv);
+                }
+            } else {
+                if (attributeDiv) {
+                    attributeDiv.remove();
+                }
+            }
+        }
+    });
+
+    function setupInputListeners(parentDiv) {
+        parentDiv.querySelector('.btn-add-value').addEventListener('click', function () {
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group mb-3';
+            inputGroup.innerHTML = `
+                <input type="text" class="form-control" placeholder="Nhập giá trị" name="attributes[${parentDiv.id.replace('attribute-group-', '')}][]">
+                <div class="input-group-append">
+                    <button class="btn btn-danger btn-remove-value" type="button">Xóa</button>
+                </div>
+            `;
+
+            parentDiv.appendChild(inputGroup);
+
+            inputGroup.querySelector('.btn-remove-value').addEventListener('click', function () {
+                inputGroup.remove();
+            });
+        });
+    }
+});
 
 </script>

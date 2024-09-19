@@ -31,7 +31,7 @@ class SubCategoryResource extends Resource
 
     protected static ?string $modelLabel = 'Thể loại';
 
-    protected static ?int $navigationSort = 2; // vị trí hiển thị
+    protected static ?int $navigationSort = 3; // vị trí hiển thị
 
     public static function form(Form $form): Form
 {

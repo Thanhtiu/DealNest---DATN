@@ -12,11 +12,13 @@ use Illuminate\Support\Facades\Hash;
 class AccountController extends Controller
 {
     //
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         return view('account.login');
     }
 
-    public function authenticate(Request $request){
+    public function authenticate(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255',
@@ -28,19 +30,25 @@ class AccountController extends Controller
             'password.required' => 'Mật khẩu là bắt buộc.',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
 
-            if(Auth::attempt(['email' => $request->email,'password' => $request->password])){
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
-                $check_active = User::where('email',$request->email)->first();
+                $check_active = User::where('email', $request->email)->first();
+                $user = User::where('email',$request->email)->first();
+                $userId = $check_active->id;
 
-                if($check_active->is_active == 1){
+                if ($check_active->is_active == 1) {
 
                     session()->put('userEmail', $request->email);
+                    session()->put('userId', $userId);
+                    session()->put('userFullName',$user->full_name);
                     
+
+
                     return redirect('/');
 
-                }else{
+                } else {
 
                     session()->put('userEmail', $request->email);
 
@@ -51,24 +59,26 @@ class AccountController extends Controller
 
                 }
 
-            }else{
+            } else {
                 return redirect()->route('account.login')
-                ->withInput()
-                ->with('login_error','Email hoặc mật khẩu không chính xác! Vui lòng thử lại');
+                    ->withInput()
+                    ->with('login_error', 'Email hoặc mật khẩu không chính xác! Vui lòng thử lại');
             }
 
-        }else{
+        } else {
             return redirect()->route('account.login')
-            ->withInput()
-            ->withErrors($validator);
+                ->withInput()
+                ->withErrors($validator);
         }
     }
 
-    public function register(){
+    public function register()
+    {
         return view('account.register');
     }
 
-    public function processRegister(Request $request){
+    public function processRegister(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255|unique:users',
@@ -85,22 +95,23 @@ class AccountController extends Controller
             'password.required' => 'Mật khẩu là bắt buộc.',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
 
             $user = new User();
             $user->name = $request->last_name;
             $user->email = $request->email;
             $user->phone = $request->phone;
-            $user->full_name = $request->first_name.$request->last_name;
+            $user->full_name = $request->first_name . $request->last_name;
             $user->password = Hash::make($request->password);
             $user->image = "default_avt.png";
             $user->role = 'buyer';
             if ($user->save()) {
-                
+
                 // Set Session cho việc gửi OTP
 
                 session()->put('userEmail', $user->email);
                 session()->put('userId', $user->id);
+
 
                 session()->flash('alertMessage', 'Đăng ký thành công!');
                 session()->flash('alertType', 'success');
@@ -109,7 +120,7 @@ class AccountController extends Controller
 
 
             } else {
-            
+
                 session()->flash('alertMessage', 'Đăng ký thất bại. Vui lòng thử lại!');
 
                 session()->flash('alertType', 'error');
@@ -117,22 +128,25 @@ class AccountController extends Controller
                 return redirect()->route('account.login');
 
             }
-            
-            
-        }else{
+
+
+        } else {
             return redirect()->route('account.register')
-            ->withInput()
-            ->withErrors($validator);
+                ->withInput()
+                ->withErrors($validator);
         }
 
 
     }
 
-    public function logout(){
+    public function logout()
+    {
 
         Auth::logout();
 
         session()->forget('userEmail');
+        session()->forget('userId');
+        session()->forget('userFullName');
 
         return redirect('/');
     }

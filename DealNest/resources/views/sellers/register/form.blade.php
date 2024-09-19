@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,15 +20,16 @@
             background-color: #fff;
             padding: 10px;
         }
+
         h2 {
             display: block;
-    font-size: 1.5em;
-    margin-block-start: 0.83em;
-    margin-block-end: 0.83em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    unicode-bidi: isolate;
+            font-size: 1.5em;
+            margin-block-start: 0.83em;
+            margin-block-end: 0.83em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            font-weight: bold;
+            unicode-bidi: isolate;
         }
 
         .container {
@@ -113,6 +115,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header-wrapper">
         <h2>Đăng ký trở thành Người bán DealNest</h2>
@@ -130,11 +133,21 @@
                 <div class="line"></div>
                 <div class="step">Hoàn tất</div>
             </div>
-            <form action="{{route('seller.register.store')}}" method="post">
+            <form action="{{route('seller.register.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
+                <div class="form-group">
+                    <label for="shop-name">Căn cước công dân*</label>
+                    <input type="text" id="shop-name" placeholder="Căn cước công dân" value="" name="cccd">
+                    @error('cccd')
+                    <p style="color: red;margin-top: 5px;">{{$message}}</p>
+                    @enderror
+                </div>
                 <div class="form-group">
                     <label for="shop-name">Tên Shop*</label>
                     <input type="text" id="shop-name" placeholder="Tên Shop" value="" name="store_name">
+                    @error('store_name')
+                    <p style="color: red;margin-top: 5px;">{{$message}}</p>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label for="address">Địa chỉ cửa hàng*</label>
@@ -159,34 +172,49 @@
                             </select>
                         </div>
                     </div>
-                
+
                     <div class="form-group" style="margin-top: 15px;">
                         <label for="email">Địa chỉ hiện tại của bạn là*</label>
                         <input type="text" name="string_address" id="string_address" readonly>
+                        @error('string_address')
+                        <p style="color: red;margin-top: 5px;">{{$message}}</p>
+                        @enderror
                     </div>
                     <div class="form-group" style="margin-top: 15px;">
                         <label for="street">Đường cụ thể</label>
                         <input type="text" name="street" id="street">
+                        @error('street')
+                        <p style="color: red;margin-top: 5px;">{{$message}}</p>
+                        @enderror
                     </div>
-                
-                <div class="form-group">
-                    <label for="email">Email*</label>
-                    <input type="email" id="email" placeholder="Email" value="{{ old('email', $user->email ?? '') }}" name="store_email">
-                </div>
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <label for="store_phone">Số điện thoại*</label>
-                    <input type="tel" id="store_phone" placeholder="Số điện thoại" value="{{old ('phone', $user->phone ?? '')}}" name="store_phone">
-                </div>
-                <div class="button-wrapper">
-                    <button type="submit" class="button button-primary">Tiếp theo</button>
-                </div>
+
+                    <div class="form-group">
+                        <label for="email">Email*</label>
+                        <input type="email" id="email" placeholder="Email"
+                            value="{{ old('email', $user->email ?? '') }}" name="store_email">
+                        @error('email')
+                        <p style="color: red;margin-top: 5px;">{{$message}}</p>
+                        @enderror
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="store_phone">Số điện thoại*</label>
+                        <input type="tel" id="store_phone" placeholder="Số điện thoại"
+                            value="{{old ('phone', $user->phone ?? '')}}" name="store_phone">
+                        @error('store_phone')
+                        <p style="color: red;margin-top: 5px;">{{$message}}</p>
+                        @enderror
+                    </div>
+                    <div class="button-wrapper">
+                        <button type="submit" class="button button-primary">Tiếp theo</button>
+                    </div>
             </form>
         </div>
     </div>
 
     <!-- Modal -->
     <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg"> <!-- Added modal-lg class for larger modal -->
+        <div class="modal-dialog modal-lg">
+            <!-- Added modal-lg class for larger modal -->
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Thêm Địa Chỉ Lấy Hàng</h5>
@@ -216,7 +244,7 @@
 
     <!-- Bootstrap JS -->
     <script>
-    // Function to update the string_address input
+        // Function to update the string_address input
     function updateAddress() {
         const provinceName = document.getElementById('province').selectedOptions[0].text;
         const districtName = document.getElementById('huyen').selectedOptions[0].text;
@@ -306,9 +334,10 @@
     document.getElementById('xa').addEventListener('change', function() {
         updateAddress();
     });
-</script>
+    </script>
 
 
 
 </body>
+
 </html>

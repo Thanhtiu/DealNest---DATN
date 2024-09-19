@@ -92,8 +92,9 @@
                         <tbody>
                             @foreach($productAll as $item)
                             <tr>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->subCategory->name}}</td>
+                                <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+
+                                <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
                                 <td>
                                     @if($item->product_image->isNotEmpty())
                                     <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt=""
@@ -103,9 +104,9 @@
                                 <td>{{$item->price}}</td>
                                 <td>{{$item->quantity}}</td>
                                 <td>
-                                    @if($item->status == 0)
-                                    <label class="badge badge-warning">Chờ duyệt</label>
-                                    @elseif($item->status == 1)
+                                    @if($item->status == 'Chờ phê duyệt')
+                                    <label class="badge badge-warning">Chờ phê duyệt</label>
+                                    @elseif($item->status == 'Đã phê duyệt')
                                     <label class="badge badge-success">Đang hoạt động</label>
                                     @else
                                     <label class="badge badge-danger">Không hoạt động</label>

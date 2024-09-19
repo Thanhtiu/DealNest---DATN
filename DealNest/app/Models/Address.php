@@ -16,6 +16,7 @@ class Address extends Model
         'ward_id',
         'street',
         'string_address',
+        'active',
     ];
     
     public function user(){

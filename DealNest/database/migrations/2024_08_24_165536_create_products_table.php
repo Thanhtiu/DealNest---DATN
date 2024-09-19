@@ -26,8 +26,7 @@ return new class extends Migration
             $table->integer('favourite')->nullable();
             $table->decimal('rating', 3, 2)->nullable();
             $table->integer('sales')->nullable();
-            $table->boolean('status')->default(0)->nullable(false);
-
+            $table->enum('status', ['Chờ phê duyệt', 'Đã phê duyệt', 'Từ chối'])->default('Chờ phê duyệt')->nullable(false);
             $table->timestamps();
         });
     }

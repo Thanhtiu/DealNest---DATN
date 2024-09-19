@@ -24,6 +24,9 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset('sellers/assets/images/favicon.png')}}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.css">
+
+
 
 </head>
 
@@ -308,9 +311,26 @@
                             </ul>
                         </div>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false"
+                            aria-controls="tables">
+                            <span class="menu-title">Quản lý shop</span>
+                            <i class="mdi mdi-table-large menu-icon"></i>
+                        </a>
+                        <div class="collapse" id="tables">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="pages/tables/basic-table.html">Hồ sơ shop</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="pages/tables/basic-table.html">Trang trí shop</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </nav>
-            
+
             <!-- partial -->
             <div class="main-panel">
                 <div class="loader" id="loader">
@@ -327,22 +347,24 @@
                             stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
                     </svg>
                 </div>
-            
+
                 <div class="content-wrapper">
                     @yield('content')
                 </div>
-            
+
                 <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright Â© 2023
-                            <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
-                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with
+                            <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights
+                            reserved.</span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made
+                            with
                             <i class="mdi mdi-heart text-danger"></i></span>
                     </div>
                 </footer>
             </div>
-            
-            
+
+
             <!-- main-panel ends -->
         </div>
         <!-- page-body-wrapper ends -->
@@ -351,49 +373,31 @@
 
 
     <!-- Include jQuery in your HTML -->
+
+
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script>
-        // Hiển thị loader khi trang đang tải
-        $(window).on('load', function() {
-            $('#loader').fadeOut('slow');
-        });
-    
-        // Hiển thị loader khi bắt đầu submit bất kỳ form nào
-        $(document).on('submit', 'form', function(e) {
-            // Ngăn chặn submit nhiều lần
-            $(this).find('button[type="submit"]').attr('disabled', 'disabled');
-            
-            // Hiển thị loader
-            $('#loader').fadeIn();
-        });
-    
-        // Hiển thị loader khi có yêu cầu Ajax
-        $(document).ajaxStart(function () {
-            $('#loader').fadeIn();
-        });
-    
-        // Ẩn loader sau khi yêu cầu Ajax hoàn thành
-        $(document).ajaxStop(function () {
-            $('#loader').fadeOut();
-        });
-    </script>
-    
+    <script src="{{asset('sellers/assets/js/spinner.js')}}"></script>
+
 
 
     <!-- plugins:js -->
     <script src="{{asset('sellers/assets/vendors/js/vendor.bundle.base.js')}}"></script>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script>
-    <script src="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
+    {{-- <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
+    --}}
     <!-- End plugin js for this page -->
     <!-- inject:js -->
-    <script src="{{asset('sellers/assets/js/off-canvas.js')}}"></script>
-    <script src="{{asset('sellers/assets/js/misc.js')}}"></script>
-    <script src="{{asset('sellers/assets/js/settings.js')}}"></script>
-    <script src="{{asset('sellers/assets/js/todolist.js')}}"></script>
-    <script src="{{asset('sellers/assets/js/jquery.cookie.js')}}"></script>
+    {{-- <script src="{{asset('sellers/assets/js/off-canvas.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/js/misc.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/js/settings.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/js/todolist.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/js/jquery.cookie.js')}}"></script> --}}
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="{{asset('sellers/assets/js/dashboard.js')}}"></script>

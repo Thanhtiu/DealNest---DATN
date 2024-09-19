@@ -27,16 +27,29 @@ class Product extends Model
         'rating',
         'sales',
         'status',
+        'note',
+        'image',
     ];
 
-    public function subCategory(){
+    public function subcategory(){
         return $this->belongsTo(SubCategory::class,'subcategory_id');
+    }   
+
+    public function category(){
+        return $this->belongsTo(Category::class,'category_id');
+    }   
+    public function brand(){
+        return $this->belongsTo(Brand::class,'brand_id');
     }   
     public function product_image(){
         return $this->hasMany(Product_image::class,'product_id');
     }
     public function product_attribute(){
         return $this->hasMany(Product_attribute::class,'product_id');
+    }
+
+    public function seller(){
+        return $this->belongsTo(Seller::class,'seller_id');
     }
    
 }
