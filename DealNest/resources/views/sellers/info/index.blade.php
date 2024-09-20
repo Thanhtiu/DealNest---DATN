@@ -1,4 +1,177 @@
 @extends('layouts.sellers.app')
+
 @section('content')
-<h1>profile </h1>
+<style>
+    /* Adjust main-container to remove margin and make it fit the available space */
+    .main-container {
+        display: flex;
+        flex-grow: 1;
+        margin: 0; /* Remove margins */
+        padding: 0; /* Remove padding */
+    }
+
+    /* Adjust form-content to take full width next to the sidebar */
+    .form-content {
+        flex-grow: 1;
+        margin: 0;
+        background-color: #f2edf3;
+    }
+
+    .tab-menu {
+        display: flex;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    .tab-menu a {
+        padding: 10px 20px;
+        text-decoration: none;
+        color: #333;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .tab-menu a.active {
+        color: #ff4b4b;
+        border-bottom: 3px solid #ff4b4b;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center; /* Vertically center the label and input */
+        justify-content: flex-start;
+    }
+
+    label {
+        width: 150px; /* Set width for the labels */
+        font-weight: 500;
+        margin-right: 20px; /* Space between label and input */
+    }
+
+    input[type="text"],
+    textarea {
+        width: 100%;
+        max-width: 600px; /* Set a max-width for inputs */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .input-counter {
+        position: absolute;
+        right: 10px;
+        bottom: -20px;
+        font-size: 12px;
+        color: #999;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .logo-container img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #ddd;
+        margin-right: 20px; /* Space between logo and details */
+    }
+
+    .logo-container button {
+        margin-left: 20px;
+        padding: 8px 16px;
+        background-color: #ddd;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .logo-container button:hover {
+        background-color: #ccc;
+    }
+
+    .logo-details {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .save-btn,
+    .cancel-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .save-btn {
+        background-color: #ff4b4b;
+        color: white;
+    }
+
+    .cancel-btn {
+        background-color:#ffffff;
+        color: #333;
+        margin-left: 10px;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: flex-start; /* Align buttons to the left */
+        margin-left: 170px; /* Align buttons with the inputs (same as label width) */
+        margin-top: 20px; /* Add some space above the buttons */
+    }
+
+    .button-group button {
+        margin-right: 10px; /* Add space between the buttons */
+    }
+</style>
+
+<div class="main-container">
+    <!-- Sidebar remains part of the layout -->
+    <div class="form-content">
+        <div class="tab-menu">
+            <a href="#" class="active">Thông tin cơ bản</a>
+            <a href="#">Thông tin Thuế</a>
+            <a href="#">Thông tin Định Danh</a>
+        </div>
+
+        <form action="#" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="shop-name">Tên Shop</label>
+                <input type="text" id="shop-name" name="shop-name" value="phngvynguynngc615" maxlength="30">
+                <div class="input-counter">17/30</div>
+            </div>
+
+            <div class="form-group">
+                <label for="shop-logo">Logo của Shop</label>
+                <div class="logo-container">
+                    <img src="https://via.placeholder.com/100" alt="Shop Logo">
+                    <button type="button">Sửa</button>
+                    <p class="logo-details">
+                        • Kích thước hình ảnh tiêu chuẩn: Chiều rộng 300px, Chiều cao 300px<br>
+                        • Dung lượng file tối đa: 2.0MB<br>
+                        • Định dạng file hỗ trợ: JPG, JPEG, PNG
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="shop-description">Mô tả Shop</label>
+                <textarea id="shop-description" name="shop-description" rows="4" maxlength="500" placeholder="Nhập mô tả hoặc thông tin về Shop của bạn tại đây"></textarea>
+                <div class="input-counter">0/500</div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="save-btn">Lưu</button>
+                <button type="button" class="cancel-btn">Hủy</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
