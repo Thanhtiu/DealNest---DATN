@@ -34,33 +34,84 @@
   .main-image img {
     width: 200%;
     /* Giữ tỷ lệ hình ảnh chính */
-    max-width: 500px;
+    max-width: 450px;
     /* Kích thước tối đa */
     height: auto;
   }
 
-  .thumbnail-images {
+  .thumbnail-slider-container {
+    position: relative;
     display: flex;
-    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    margin: 10px;
     margin-left: 30px;
-    /* Đưa hình thu nhỏ ra khỏi lề */
-  }
+}
 
-  .thumbnail-images img {
-    width: 80px;
-    /* Kích thước hình thu nhỏ */
+.thumbnail-images-slider {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+}
+
+.thumbnail-track {
+    display: flex;
+    transition: transform 0.3s ease;
+}
+
+.thumbnail-slide {
+    flex: 0 0 calc(20% - 20px); /* Mỗi slide chiếm khoảng 20% của slider, trừ đi khoảng cách */
+    box-sizing: border-box; /* Đảm bảo padding/margin không ảnh hưởng đến kích thước */
+    margin-right: 10px; /* Khoảng cách giữa các ảnh */
+}
+
+.thumbnail-slide img {
+    width: 100%;
     height: auto;
-    margin-right: 10px;
-    /* Khoảng cách giữa các hình thu nhỏ */
+    display: block; /* Đảm bảo không có khoảng trắng dưới ảnh */
+}
+
+.prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Nền trong suốt với màu đen */
+    color: #fff;
+    border: none;
+    padding: 10px;
     cursor: pointer;
-  }
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền */
+    z-index: 1; /* Đảm bảo các nút nằm trên các phần tử khác */
+}
+
+.prev-btn {
+    left: 0px; /* Đặt nút "trước" ở bên trái */
+}
+
+.next-btn {
+    right: 0px; /* Đặt nút "tiếp theo" ở bên phải */
+}
+
+.prev-btn:hover, .next-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Tăng độ đậm khi hover */
+}
+
+.prev-btn:disabled, .next-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
 
   .product-info {
     flex: 6;
     padding-left: 20px;
     display: flex;
     flex-direction: column;
-    margin-right: 80px;
+    margin-right: 50px;
+   
   }
 
   .product-info h1 {
@@ -592,17 +643,30 @@
   <div class="product-layout">
     <!-- Bên trái: Hình ảnh -->
     <div class="product-images">
-      <div class="main-image">
-        <img src="{{asset('uploads/'.$productDetail->product_image->first()->url)}}" alt="Giày PUMA"
-          class="img-responsive" id="main-product-image">
-      </div>
-      <div class="thumbnail-images">
-        @foreach($productDetail->product_image as $item)
-        <img src="{{asset('uploads/'.$item->url)}}" alt="Thumbnail 1">
-        @endforeach
-
-      </div>
+    <!-- Hình ảnh chính (ảnh lớn) -->
+    <div class="main-image">
+        <img src="{{ asset('uploads/'.$productDetail->product_image->first()->url) }}" alt="Giày PUMA"
+            class="img-responsive" id="main-product-image">
     </div>
+
+    <!-- Slider thumbnail -->
+    <div class="thumbnail-slider-container">
+        <button class="prev-btn">‹</button>
+
+        <div class="thumbnail-images-slider">
+            <div class="thumbnail-track">
+                @foreach($productDetail->product_image as $item)
+                <div class="thumbnail-slide">
+                    <img src="{{ asset('uploads/'.$item->url) }}" alt="Thumbnail {{ $loop->index }}">
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        <button class="next-btn">›</button>
+    </div>
+</div>
+
 
     <!-- Bên phải: Thông tin sản phẩm -->
     <div class="product-info">
@@ -1008,22 +1072,58 @@ document.getElementById("chatButton").addEventListener("click", function() {
 document.getElementById("closeChat").addEventListener("click", function() {
     document.getElementById("chatSection").style.display = "none";
 });
-// anh
-// Lấy danh sách các ảnh thumbnail
-const thumbnails = document.querySelectorAll('.thumbnail-images img');
-  
-  // Lấy hình ảnh chính
-  const mainImage = document.getElementById('main-product-image');
-  
-  // Lặp qua từng thumbnail và thêm sự kiện hover
-  thumbnails.forEach(thumbnail => {
-    thumbnail.addEventListener('mouseenter', function() {
-      // Khi rê chuột vào thumbnail, thay đổi src của hình ảnh chính
-      mainImage.src = this.src;
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const thumbnails = document.querySelectorAll('.thumbnail-slide img');
+    const mainImage = document.getElementById('main-product-image');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    const track = document.querySelector('.thumbnail-track');
+    const slides = document.querySelectorAll('.thumbnail-slide');
+
+    // Hover effect for changing main image
+    thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('mouseenter', function() {
+            mainImage.src = this.src;
+        });
     });
-  });
 
+    // Slider control
+    const visibleSlides = 5; // Number of thumbnails visible at once
+    let slideWidth = slides[0].getBoundingClientRect().width; // Width of each thumbnail slide
+    let currentIndex = 0;
 
+    function updateSliderPosition() {
+        slideWidth = slides[0].getBoundingClientRect().width; // Recalculate slide width
+        const totalSlidesWidth = slides.length * slideWidth + (slides.length - 1) * 10; // Total width including margins
+        const maxIndex = Math.max(0, slides.length - visibleSlides);
+        const maxTranslateX = totalSlidesWidth - (visibleSlides * slideWidth);
+        track.style.transform = `translateX(-${Math.min(currentIndex * slideWidth, maxTranslateX)}px)`;
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex >= maxIndex;
+    }
+
+    nextBtn.addEventListener('click', function () {
+        if (currentIndex < slides.length - visibleSlides) {
+            currentIndex++;
+            updateSliderPosition();
+        }
+    });
+
+    prevBtn.addEventListener('click', function () {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSliderPosition();
+        }
+    });
+
+    // Initial setup
+    updateSliderPosition();
+
+    // Optional: Handle window resize to adjust slideWidth
+    window.addEventListener('resize', updateSliderPosition);
+});
 
 </script>
 
