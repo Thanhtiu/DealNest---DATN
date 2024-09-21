@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::table('sellers', function (Blueprint $table) {
             Schema::table('sellers', function (Blueprint $table) {
                 $table->string('cccd', 12)->nullable();
-                
+                $table->string('logo', 255)->nullable();
+                $table->string('background', 255)->nullable();                
             });
         });
     }

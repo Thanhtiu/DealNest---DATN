@@ -828,7 +828,7 @@
           <div class="shop-info__header d-flex align-items-center">
             <!-- Shop Avatar -->
             <img
-              src="https://static.vecteezy.com/system/resources/previews/011/490/381/original/happy-smiling-young-man-avatar-3d-portrait-of-a-man-cartoon-character-people-illustration-isolated-on-white-background-vector.jpg"
+              src="{{asset('uploads/'.$seller->logo)}}"
               alt="Shop Avatar" class="shop-avatar">
             <div class="shop-name ml-3">
               <h5>{{$seller->store_name}}</h5>

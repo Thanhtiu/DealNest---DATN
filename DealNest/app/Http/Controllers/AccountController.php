@@ -147,6 +147,7 @@ class AccountController extends Controller
         session()->forget('userEmail');
         session()->forget('userId');
         session()->forget('userFullName');
+        session()->forget('sellerId');
 
         return redirect('/');
     }

@@ -32,7 +32,7 @@ Route::post('/the-loai', [CategoryController::class, 'getProductAddress'])->name
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::get('/cua-hang/{id}', [ShopController::class, 'index'])->name('client.shop');
-Route::post('/tim-kiem',[SearchController::class,'index'])->name('client.search');
+Route::post('/tim-kiem', [SearchController::class, 'index'])->name('client.search');
 
 
 
@@ -90,7 +90,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/xoa-san-pham/{id}', [ProductController::class, 'delete'])->name('seller.product.delete');
 
-        Route::get('/cua-hang',[InfoController::class,'index'])->name('seller.info');
+        Route::get('/cua-hang', [InfoController::class, 'index'])->name('seller.info');
+
+        Route::put('/cua-hang/cap-nhat',[InfoController::class,'update'])->name('seller.info.update');
 
     });
 

@@ -82,7 +82,6 @@ class CategoryController extends Controller
         $data = $request->all();
 
         
-
         return response()->json([
             'success' => true,
             'message' => 'OK',
