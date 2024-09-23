@@ -245,11 +245,11 @@
                         <a href="#">{{ $category->name }} </a>
                         <ul>
                             @foreach($listSubCategory as $item)
-                            <li><a href="/the-loai/{{ $category->slug }}/{{ $item->slug }}" style={{ ($item->slug ===
-                                    $subcategory_slug) ? "color:red" : "" }} href="#"
-                                    class="subcategory-link" data-id="{{ $item->id }}">
-                                    {{$item->name}} </a>
-                            </li>
+                                                    <li><a href="/the-loai/{{ $category->slug }}/{{ $item->slug }}" style={{ ($item->slug ===
+                                $subcategory_slug) ? "color:red" : "" }} href="#"
+                                                            class="subcategory-link" data-id="{{ $item->id }}">
+                                                            {{$item->name}} </a>
+                                                    </li>
                             @endforeach
                         </ul>
                     </li>
@@ -314,45 +314,45 @@
             <div class="product-list">
 
                 @foreach($productCategory as $item)
-                <div class="cardd">
-                    <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt="Product Image">
-                    <div class="discount">-92%</div>
-                    <div class="content">
-                        <h2 class="title"> {{$item->name}} </h2>
-                        <p class="price">₫ {{number_format($item->price, 0, ',', '.')}}</p>
-                    </div>
-                    <div class="sold">
-                        <span class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </span>
-                        Đã bán {{ $item->sales }}+
-                    </div>
-                    {{-- <span class="location">Hà Nội</span> --}}
-                    <span class="location">
-                        @php
+                                <div class="cardd">
+                                    <img src="{{asset('uploads/' . $item->product_image->first()->url)}}" alt="Product Image">
+                                    <div class="discount">-92%</div>
+                                    <div class="content">
+                                        <h2 class="title"> {{$item->name}} </h2>
+                                        <p class="price">₫ {{number_format($item->price, 0, ',', '.')}}</p>
+                                    </div>
+                                    <div class="sold">
+                                        <span class="rating">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </span>
+                                        Đã bán {{ $item->sales }}+
+                                    </div>
+                                    {{-- <span class="location">Hà Nội</span> --}}
+                                    <span class="location">
+                                        @php
 
-                        $string = $item->seller->address->string_address;
+                                            $string = $item->seller->address->string_address;
 
-                        $array = preg_split('/[\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
+                                            $array = preg_split('/[\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
 
-                        $lastTwoWords = array_slice($array, -2);
+                                            $lastTwoWords = array_slice($array, -2);
 
-                        $result = implode(' ', $lastTwoWords);
-
-
-                        @endphp
-
-                        {{ $result }}
-
-                    </span>
+                                            $result = implode(' ', $lastTwoWords);
 
 
+                                        @endphp
 
-                </div>
+                                        {{ $result }}
+
+                                    </span>
+
+
+
+                                </div>
                 @endforeach
 
 
