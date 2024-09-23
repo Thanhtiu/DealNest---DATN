@@ -19,13 +19,9 @@ class HomeController extends Controller
 
         $categories = Category::all();
 
-        $category_1 = $categories->slice(0,ceil($categories->count()/2));
-        
-        $category_2 = $categories->slice(ceil($categories->count()/2));
-
         $products = Product::with('product_image')->orderBy('sales','desc')->get();
         // return dd($products);
-        return view('index',compact('products','category_1','category_2'));
+        return view('index',compact('products','categories'));
     }
    
 
