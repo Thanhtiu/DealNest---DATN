@@ -17,6 +17,9 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Client\SearchController;
+use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\FacebookLoginController;
+
 
 
 
@@ -49,12 +52,23 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::get('/voucher', [HomeController::class, 'voucher']);
 
 });
+Route::middleware(['web'])->group(function () {
+
+    Route::get('login/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('login.google');
+    Route::get('auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback']);
+    Route::get('/auth/facebook', [FacebookLoginController::class, 'redirectToFacebook'])->name('login.facebook');
+    Route::get('/auth/facebook/callback', [FacebookLoginController::class, 'handleFacebookCallback']);
+});
+
+
+
 
 Route::group(['prefix' => 'tai-khoan'], function () {
     Route::get('/dang-nhap', [AccountController::class, 'index'])->name('account.login');
     Route::post('/dang-nhap/authenticate', [AccountController::class, 'authenticate'])->name('account.authenticate');
     Route::get('/dang-ky', [AccountController::class, 'register'])->name('account.register');
     Route::post('/dang-ky/processRegiter', [AccountController::class, 'processRegister'])->name('account.processRegister');
+
 
     // Route  Account
     Route::get('/xac-thuc', [OTPController::class, 'index'])->name('otp.index');
@@ -88,11 +102,17 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::put('/cap-nhat-san-pham/{id}', [ProductController::class, 'update'])->name('seller.product.update');
 
+        Route::get('/thung-rac', [ProductController::class, 'listTrashCan'])->name('seller.product.listTrashCan');
+
+        Route::get('/khoi-phuc/{id}', [ProductController::class, 'restore'])->name('seller.product.restore');
+
+        Route::get('/xoa-mem/{id}', [ProductController::class, 'softDelete'])->name('seller.product.softDelete');
+
         Route::get('/xoa-san-pham/{id}', [ProductController::class, 'delete'])->name('seller.product.delete');
 
         Route::get('/cua-hang', [InfoController::class, 'index'])->name('seller.info');
 
-        Route::put('/cua-hang/cap-nhat',[InfoController::class,'update'])->name('seller.info.update');
+        Route::put('/cua-hang/cap-nhat', [InfoController::class, 'update'])->name('seller.info.update');
 
     });
 

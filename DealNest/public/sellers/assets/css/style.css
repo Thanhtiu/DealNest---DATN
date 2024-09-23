@@ -25038,6 +25038,19 @@ dl li {
 .auth .brand-logo img {
   width: 150px;
 }
+
+.seller-logo-image{
+  min-width: 100px;
+  min-height: 100px;
+  object-fit: contain;
+}
+
+.dealnest-logo{
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+
 .auth form .form-group {
   margin-bottom: 1.5rem;
 }
@@ -26287,3 +26300,42 @@ dl li {
   flex-grow: 1;
 }
 /*# sourceMappingURL=maps/style.css.map */
+.pagination .page-link {
+  color: #333; /* Màu chữ ban đầu */
+  background-color: white; /* Nền trắng */
+  border: 1px solid #ddd; /* Đường viền xám nhạt */
+  padding: 8px 16px;
+  margin: 0 4px;
+  border-radius: 4px; /* Bo góc mềm mại */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  transition: all 0.3s ease; /* Hiệu ứng mượt */
+}
+
+.pagination .page-link:hover {
+  background-color: #b66dff; /* Màu nền khi hover */
+  color: white; /* Đổi màu chữ khi hover */
+  border-color: #b66dff; /* Đường viền khi hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng đậm hơn khi hover */
+  transform: translateY(-2px); /* Nhấn nút nhẹ khi hover */
+}
+
+.pagination .active .page-link {
+  background-color: #b66dff; /* Màu nền cho nút active */
+  border-color: #b66dff;
+  color: white; /* Màu chữ cho nút active */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng cho nút active */
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end; /* Đẩy phân trang sang phải */
+  padding-top: 20px; /* Khoảng cách phía trên */
+}
+
+.pagination .disabled .page-link {
+  background-color: #f0f0f0; /* Màu nền cho nút bị vô hiệu hóa */
+  color: #999; /* Màu chữ cho nút bị vô hiệu hóa */
+  border-color: #ddd; /* Đường viền cho nút bị vô hiệu hóa */
+  box-shadow: none; /* Không có đổ bóng */
+  cursor: not-allowed; /* Đổi con trỏ chuột */
+}

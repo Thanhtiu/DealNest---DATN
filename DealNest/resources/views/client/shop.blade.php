@@ -1,15 +1,12 @@
 @extends('layouts.client.app')
 @section('content')
 <link rel="stylesheet" href="{{asset('client/css/shop.css')}}" type="text/css">
-{{--
-<link rel="stylesheet" href="{{asset('client/css/tabindex.css')}}" type="text/css"> --}}
 
 <div class="shop-container">
     <div class="shop-header">
         <div class="logo" style="background-image: url('{{ asset('uploads/'.$shop->background) }}') !important;">
             <div class="shop-image">
-                <img src="{{asset('uploads/'.$shop->logo)}}"
-                    alt="Shop Logo">
+                <img src="{{asset('uploads/'.$shop->logo)}}" alt="Shop Logo">
                 <button class="favorite-btn">Yêu thích</button>
             </div>
             <div class="shop-info">
@@ -40,11 +37,12 @@
     </div>
     <div class="shop-categories tabs">
         <a href="{{ route('client.shop', ['id' => $shop->id]) }}" class="active">TẤT CẢ SẢN PHẨM</a>
-        <a href="{{ route('client.shop', ['id' => $shop->id, 'newProducts' => true]) }}">Sản phẩm mới nhất 30 ngày qua</a>
+        <a href="{{ route('client.shop', ['id' => $shop->id, 'newProducts' => true]) }}">Sản phẩm mới nhất 30 ngày
+            qua</a>
         @foreach($categories as $categoryId => $categoryName)
-            <a href="{{ route('client.shop', ['id' => $shop->id, 'category_id' => $categoryId]) }}">
-                {{ $categoryName }}
-            </a>
+        <a href="{{ route('client.shop', ['id' => $shop->id, 'category_id' => $categoryId]) }}">
+            {{ $categoryName }}
+        </a>
         @endforeach
     </div>
 
@@ -55,37 +53,36 @@
         <p class="title">Sản phẩm theo thể loại</p>
         <div class="product-container">
             @if(count($filteredProducts) > 0)
-                @foreach($filteredProducts as $item)
-                <div class="card">
-                    <a href="{{ route('client.productDetail', ['id' => $item->id]) }}">
-                        <div class="cardd">
-                            <img src="{{ asset('uploads/'.$item->image) }}" alt="Product Image">
-                            <div class="discount">-92%</div>
-                            <div class="content">
-                                <h2 class="title">{{ $item->name }}</h2>
-                                <p class="pricee">{{ number_format($item->price, 0, ',', '.') }}<span style="font-size: 12px; text-decoration: underline;">đ</span></p>
-                            </div>
-                            <div class="sold">
-                                <span class="rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </span>
-                                {{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) . ($item->sales >= 1000 ? 'k' : '') }} lượt bán
-                            </div>
+            @foreach($filteredProducts as $item)
+            <div class="card">
+                <a href="{{ route('client.productDetail', ['id' => $item->id]) }}">
+                    <div class="cardd">
+                        <img src="{{ asset('uploads/'.$item->image) }}" alt="Product Image">
+                        <div class="discount">-92%</div>
+                        <div class="content">
+                            <h2 class="title">{{ $item->name }}</h2>
+                            <p class="pricee">{{ number_format($item->price, 0, ',', '.') }}<span
+                                    style="font-size: 12px; text-decoration: underline;">đ</span></p>
                         </div>
-                    </a>
-                </div>
-                @endforeach
+                        <div class="sold">
+                            <span class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </span>
+                            {{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
+                            ($item->sales >= 1000 ? 'k' : '') }} lượt bán
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @endforeach
             @else
-                <p>Không có sản phẩm nào thuộc thể loại này.</p>
+            <p>Không có sản phẩm nào thuộc thể loại này.</p>
             @endif
         </div>
     </div>
 </div>
-
-{{-- <script src="{{asset('client/js/tabindex.js')}}"></script> --}}
-
 @endsection

@@ -17512,6 +17512,21 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
   border-top-left-radius: var(--bs-border-radius-pill) !important;
 }
 
+.login-social{
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.google-img, .facebook-img{
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 15px;
+
+}
+
 .visible {
   visibility: visible !important;
 }

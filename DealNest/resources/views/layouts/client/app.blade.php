@@ -49,9 +49,9 @@
             <div class="container-fluid">
                 <!-- Logo -->
                 <a class="navbar-brand" href="{{route('client.index')}}">
-                    <img src="https://salt.tikicdn.com/cache/w500/ts/upload/c0/8b/46/c3f0dc850dd93bfa7af7ada0cbd75dc0.png"
+                    <img src="{{asset('image/dealnest-logo.png')}}"
                         alt="Tiki Logo"> <!-- Replace with your logo -->
-                    Tốt & Nhanh
+                    Mua sắm & Trò truyện
                 </a>
 
                 <!-- Search form -->
@@ -122,7 +122,12 @@
 
                 <!-- addre -->
                 <span class="navbar-text">
-                    Giao đến: <a href="#">H. Giang Thành, X. Vĩnh Điều, Kiên Giang</a>
+                    @if(Session::has('stringAddress'))
+                    Giao đến: <a href="{{route('account.address.index')}}">{{ Session::get('stringAddress') }}</a>
+                    @else
+                    <a href="{{ route('account.address.index') }}">Cập nhật địa chỉ</a>
+                    @endif
+
                 </span>
             </div>
         </nav>

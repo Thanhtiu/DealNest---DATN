@@ -150,27 +150,34 @@ class ProductController extends Controller
 
         // Fetch products based on seller's ID
         $productAll = Product::where('seller_id', $sellerId)
+            ->where('trash_can', '!=', 0)
             ->with(['subCategory', 'product_image'])
-            ->get();
+            ->paginate(10);
+
         $productSuccess = Product::where('seller_id', $sellerId)
             ->where('status', 'Đã phê duyệt')
+            ->where('trash_can', '!=', 0)
             ->with('product_image')
-            ->get();
+            ->paginate(10);
+
         $productPending = Product::where('seller_id', $sellerId)
             ->where('status', 'Chờ phê duyệt')
+            ->where('trash_can', '!=', 0)
             ->with('product_image')
-            ->get();
+            ->paginate(10);
+
         $productFail = Product::where('seller_id', $sellerId)
             ->where('status', 'Từ chối')
+            ->where('trash_can', '!=', 0)
             ->with('product_image')
-            ->get();
+            ->paginate(10);
 
-        $countProductAll = $productAll->count();
-        $countProductSuccess = $productSuccess->count();
-        $countProductPending = $productPending->count();
-        $countProductFail = $productFail->count();
+        // Đếm tổng số lượng sản phẩm
+        $countProductAll = $productAll->total();
+        $countProductSuccess = $productSuccess->total();
+        $countProductPending = $productPending->total();
+        $countProductFail = $productFail->total();
 
-        // Pass the data to the view
         return view('sellers.products.list', compact(
             'productAll',
             'productSuccess',
@@ -182,6 +189,7 @@ class ProductController extends Controller
             'countProductFail'
         ));
     }
+
 
     public function edit($id)
     {
@@ -306,6 +314,32 @@ class ProductController extends Controller
     }
 
 
+    public function listTrashCan()
+    {
+        $sellerId = Session::get('sellerId');
+        $products = Product::where('seller_id', operator: $sellerId)
+            ->where('trash_can', 'false')->get();
+        return view('sellers.products.listTrashCan', compact('products'));
+    }
+
+    // xóa mềm
+    public function softDelete($id)
+    {
+        $product = Product::find($id);
+        $product->trash_can = 0;
+        $product->save();
+        return redirect()->back()->with('success', 'Xóa thành công!');
+
+    }
+
+    // khôi phục
+    public function restore($id)
+    {
+        $product = Product::find($id);
+        $product->trash_can = 1;
+        $product->save();
+        return redirect()->back()->with('success', 'Khôi phục thành công!');
+    }
 
 
     // xóa sản phẩm

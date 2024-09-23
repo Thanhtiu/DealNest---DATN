@@ -1916,6 +1916,23 @@ ol {
 	text-align: left;
 }
 
+.shoping_cart_item_checkbox{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 50px !important;
+	margin-top: 30px;
+	text-align: left;
+}
+
+.shoping_cart_item_checkbox_checkbox{
+	width: 25px;
+	height: 25px;
+	background-color: transparent transparent;
+	border: #636363;
+
+}
+
 .shoping__cart__table table tbody tr td.shoping__cart__item img {
 	display: inline-block;
 	margin-right: 25px;
@@ -2899,6 +2916,8 @@ ol {
 	font-size: 18px;
 	letter-spacing: 2px;
 }
+
+
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 

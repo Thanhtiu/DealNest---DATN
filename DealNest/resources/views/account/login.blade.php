@@ -60,6 +60,18 @@
                     class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"
                     href="../../index.html">Đăng nhập</button>
                 </div>
+               <div class="login-social">
+                  <div class="google">
+                    <a href="{{route('login.google')}}">
+                      <img src="{{asset('client/img/logo-google.png')}}" alt="" class="google-img">
+                    </a>
+                  </div>
+                  <div class="facebook">
+                    <a href="{{route('login.facebook')}}">
+                      <img src="{{asset('client/img/logo-facebook.png')}}" alt="" class="google-img">
+                    </a>
+                  </div>
+               </div>
                 {{-- <div class="my-2 d-flex justify-content-between align-items-center">
                   <div class="form-check">
                     <label class="form-check-label text-muted">

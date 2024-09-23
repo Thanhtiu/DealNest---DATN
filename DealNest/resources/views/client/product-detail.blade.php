@@ -690,10 +690,9 @@
         <a href="#" class="learn-more">Tìm hiểu thêm</a>
       </div> --}}
       <div class="shipping-section">
-        <span class="shipping-label">Vận Chuyển:</span>
         <span class="free-ship">Miễn phí vận chuyển</span>
         <div class="shipping-info">
-          <span>Vận Chuyển Tới: Xã Khánh Lâm, Huyện U Minh</span>
+          <span>Vận Chuyển Tới: {{$string_address}}</span>
           <span>Phí Vận Chuyển: 0₫</span>
         </div>
       </div>

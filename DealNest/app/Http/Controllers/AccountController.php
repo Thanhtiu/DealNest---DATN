@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Address;
 
 class AccountController extends Controller
 {
@@ -35,15 +36,24 @@ class AccountController extends Controller
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
                 $check_active = User::where('email', $request->email)->first();
-                $user = User::where('email',$request->email)->first();
+                $user = User::where('email', $request->email)->first();
                 $userId = $check_active->id;
 
                 if ($check_active->is_active == 1) {
 
                     session()->put('userEmail', $request->email);
                     session()->put('userId', $userId);
-                    session()->put('userFullName',$user->full_name);
-                    
+                    session()->put('userFullName', $user->full_name);
+                    $address = Address::where('user_id', $userId)
+                        ->where('active', 1)
+                        ->first();
+                    if ($address) {
+                        $string_address = $address->string_address;
+                        session()->put('stringAddress', $string_address);
+                    }
+
+
+
 
 
                     return redirect('/');
@@ -144,11 +154,7 @@ class AccountController extends Controller
 
         Auth::logout();
 
-        session()->forget('userEmail');
-        session()->forget('userId');
-        session()->forget('userFullName');
-        session()->forget('sellerId');
-
+        session()->invalidate();
         return redirect('/');
     }
 

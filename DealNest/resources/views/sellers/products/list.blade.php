@@ -69,216 +69,243 @@
 </div>
 
 <div class="tab-content active" id="tab-all">
-    @if($countProductAll <= 0)
-    <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
-    @else
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Thể loại</th>
-                                <th>Hình ảnh</th>
-                                <th>Giá</th>
-                                <th>Tồn kho</th>
-                                <th>Trang thái</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($productAll as $item)
-                            <tr>
-                                <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
 
-                                <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
-                                <td>
-                                    @if($item->product_image->isNotEmpty())
-                                    <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt=""
-                                        style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-                                    @endif
-                                </td>
-                                <td>{{$item->price}}</td>
-                                <td>{{$item->quantity}}</td>
-                                <td>
-                                    @if($item->status == 'Chờ phê duyệt')
-                                    <label class="badge badge-warning">Chờ phê duyệt</label>
-                                    @elseif($item->status == 'Đã phê duyệt')
-                                    <label class="badge badge-success">Đang hoạt động</label>
-                                    @else
-                                    <label class="badge badge-danger">Không hoạt động</label>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('seller.product.edit', ['id' => $item->id]) }}" class="btn btn-outline-secondary btn-icon-text">
-                                        <i class="bi bi-pen"></i> Sửa
-                                    </a>                                    
-                                    <a href="{{route('seller.product.delete',['id'=>$item->id])}}" class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i>
-                                        Xóa</a>
-                                </td>
-                            </tr>
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+    @if($countProductAll <= 0) <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
+        @else
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Tổng sản phẩm</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Thể loại</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Giá</th>
+                                    <th>Tồn kho</th>
+                                    <th>Trang thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($productAll as $item)
+                                <tr>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
 
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
+                                    <td>
+                                        @if($item->product_image->isNotEmpty())
+                                        <img src="{{asset('uploads/'.$item->image)}}" alt=""
+                                            style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
+                                        @endif
+                                    </td>
+                                    <td>{{$item->price}}</td>
+                                    <td>{{$item->quantity}}</td>
+                                    <td>
+                                        @if($item->status == 'Chờ phê duyệt')
+                                        <label class="badge badge-warning">Chờ phê duyệt</label>
+                                        @elseif($item->status == 'Đã phê duyệt')
+                                        <label class="badge badge-success">Đang hoạt động</label>
+                                        @else
+                                        <label class="badge badge-danger">Không hoạt động</label>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('seller.product.edit', ['id' => $item->id]) }}"
+                                            class="btn btn-outline-secondary btn-icon-text">
+                                            <i class="bi bi-pen"></i> Sửa
+                                        </a>
+                                        <a href="{{route('seller.product.softDelete',['id'=>$item->id])}}"
+                                            class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i>
+                                            Xóa</a>
+                                    </td>
+                                </tr>
+
+                                @endforeach
+                            </tbody>
+                            
+                        </table>
+                        {{ $productAll->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    @endif
+        @endif
 </div>
 <div class="tab-content" id="tab-active">
-    @if($countProductSuccess <= 0)
-        <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
-    @else
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Thể loại</th>
-                                <th>Hình ảnh</th>
-                                <th>Giá</th>
-                                <th>Tồn kho</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($productSuccess as $item)
-                            <tr>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->subCategory->name}}</td>
-                                <td>
-                                    @if($item->product_image->isNotEmpty())
-                                    <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt=""
-                                        style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-                                    @endif
-                                </td>
-                                <td>{{$item->price}}</td>
-                                <td>{{$item->quantity}}</td>
-                                <td>
-                                    <a href="" class="btn btn-outline-secondary btn-icon-text"><i class="bi bi-pen"></i>
-                                        Sửa</a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i>
-                                        Xóa</a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+    @if($countProductSuccess <= 0) <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
+        @else
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Tổng sản phẩm</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Thể loại</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Giá</th>
+                                    <th>Tồn kho</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($productSuccess as $item)
+                                <tr>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
+                                    <td>
+                                        @if($item->product_image->isNotEmpty())
+                                        <img src="{{asset('uploads/'.$item->image)}}" alt=""
+                                            style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
+                                        @endif
+                                    </td>
+                                    <td>{{$item->price}}</td>
+                                    <td>{{$item->quantity}}</td>
+                                    <td>
+                                        <a href="" class="btn btn-outline-secondary btn-icon-text"><i
+                                                class="bi bi-pen"></i>
+                                            Sửa</a>
+                                        <a href="" class="btn btn-outline-danger btn-icon-text"><i
+                                                class="bi bi-trash"></i>
+                                            Xóa</a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        {{ $countProductSuccess->links('pagination::bootstrap-4') }}
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    @endif
+        @endif
 </div>
 
 <div class="tab-content" id="tab-violations">
-    @if($countProductFail <=0)
-    <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
-    @else
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Thể loại</th>
-                                <th>Hình ảnh</th>
-                                <th>Giá</th>
-                                <th>Tồn kho</th>
-                                <th>Thao tác</th>
+    @if($countProductFail <=0) <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
+        @else
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Tổng sản phẩm</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Thể loại</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Giá</th>
+                                    <th>Tồn kho</th>
+                                    <th>Thao tác</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($productFail as $item)
-                            <tr>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->subCategory->name}}</td>
-                                <td>
-                                    @if($item->product_image->isNotEmpty())
-                                    <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt=""
-                                        style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-                                    @endif
-                                </td>
-                                <td>{{$item->price}}</td>
-                                <td>{{$item->quantity}}</td>
-                                <td>
-                                    <a href="" class="btn btn-outline-secondary btn-icon-text"><i class="bi bi-pen"></i>
-                                        Sửa</a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i>
-                                        Xóa</a>
-                                </td>
-                            </tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($productFail as $item)
+                                <tr>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
+                                    <td>
+                                        @if($item->product_image->isNotEmpty())
+                                        <img src="{{asset('uploads/'.$item->image)}}" alt=""
+                                            style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
+                                        @endif
+                                    </td>
+                                    <td>{{$item->price}}</td>
+                                    <td>{{$item->quantity}}</td>
+                                    <td>
+                                        <a href="" class="btn btn-outline-secondary btn-icon-text"><i
+                                                class="bi bi-pen"></i>
+                                            Sửa</a>
+                                        <a href="" class="btn btn-outline-danger btn-icon-text"><i
+                                                class="bi bi-trash"></i>
+                                            Xóa</a>
+                                    </td>
+                                </tr>
 
-                            @endforeach
-                        </tbody>
-                    </table>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        {{ $productFail->links('pagination::bootstrap-4') }}
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    @endif
+        @endif
 </div>
 <div class="tab-content" id="tab-pending">
-    @if($countProductPending <= 0)
-    <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
-    @else
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Thể loại</th>
-                                <th>Hình ảnh</th>
-                                <th>Giá</th>
-                                <th>Tồn kho</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($productPending as $item)
-                            <tr>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->subCategory->name}}</td>
-                                <td>
-                                    @if($item->product_image->isNotEmpty())
-                                    <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt=""
-                                        style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-                                    @endif
-                                </td>
-                                <td>{{$item->price}}</td>
-                                <td>{{$item->quantity}}</td>
-                                <td>
-                                    <a href="" class="btn btn-outline-secondary btn-icon-text"><i class="bi bi-pen"></i>
-                                        Sửa</a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i>
-                                        Xóa</a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+    @if($countProductPending <= 0) <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
+        @else
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Tổng sản phẩm</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Thể loại</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Giá</th>
+                                    <th>Tồn kho</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($productPending as $item)
+                                <tr>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
+                                    <td>
+                                        @if($item->product_image->isNotEmpty())
+                                        <img src="{{asset('uploads/'.$item->image)}}" alt=""
+                                            style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
+                                        @endif
+                                    </td>
+                                    <td>{{$item->price}}</td>
+                                    <td>{{$item->quantity}}</td>
+                                    <td>
+                                        <a href="" class="btn btn-outline-secondary btn-icon-text"><i
+                                                class="bi bi-pen"></i>
+                                            Sửa</a>
+                                        <a href="" class="btn btn-outline-danger btn-icon-text"><i
+                                                class="bi bi-trash"></i>
+                                            Xóa</a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        {{ $productPending->links('pagination::bootstrap-4') }}
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    @endif
+        @endif
 </div>
 
 

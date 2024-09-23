@@ -6,7 +6,9 @@
 
 /* Top navbar specific styles */
 .navbar-brand img {
-	height: 35px; /* Adjust logo size */
+	height: 80px; /* Adjust logo size */
+	width: 80px;
+	object-fit: contain;
 }
 
 .form-control {
@@ -75,3 +77,4 @@
 	font-size: 20px;
 	margin-right: 8px;
 }
+
