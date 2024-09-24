@@ -135,6 +135,17 @@
     color: #6c757d;
     text-align: center;
   }
+ 
+  .attribute-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  .attribute-actions .btn {
+      margin-right: 10px; /* Khoảng cách giữa các nút */
+  }
+
 </style>
 <div class="page-header">
   <h3 class="page-title"> Form elements </h3>
@@ -270,28 +281,17 @@
                     </select>
                   </div>
                 </div>
+
+
                 <div class="container mt-4">
                   <div class="row">
-                    <div class="form-group col-12">
-                      <label>Thuộc tính sản phẩm</label>
-                      <div class="checkbox-container">
-                        @foreach($attribute as $item)
-                        <div class="form-check">
-                          <input type="checkbox" class="form-check-input" id="attribute-{{$item->id}}"
-                            data-id="{{$item->id}}" data-name="{{$item->name}}" name="attributes[{{$item->id}}][]"
-                            value="{{$item->id}}">
-                          <label class="form-check-label" for="attribute-{{$item->id}}">
-                            {{$item->name}}
-                          </label>
-                        </div>
-                        @endforeach
+                      <div class="col-12">
+                          <h4 class="mb-3">Nhập biến thể sản phẩm</h4>
+                          <div id="attributeContainer"></div>
+                          <button class="btn btn-primary mt-2" id="addAttributeBtn" type="button">Thêm biến thể chính</button>
                       </div>
-                    </div>
-                    <div class="attribute-inputs col-12">
-                      <!-- Inputs for attributes will be dynamically generated here -->
-                    </div>
                   </div>
-                </div>
+              </div>
 
               </div>
             </div>
@@ -305,6 +305,177 @@
   </div>
 
 </div>
+<script>
+let currentPriceVariant = null; // Theo dõi biến thể chính chứa giá
+let attributeIndex = 0; // Đếm số lượng biến thể chính
+
+document.getElementById('addAttributeBtn').addEventListener('click', function() {
+    // Tạo phần tử biến thể chính
+    let attributeDiv = document.createElement('div');
+    attributeDiv.className = 'attribute mb-3';
+
+    let attributeHeader = document.createElement('h5');
+    attributeHeader.innerText = 'Biến thể chính';
+    attributeDiv.appendChild(attributeHeader);
+
+    // Input nhập tên biến thể chính
+    let attributeNameInput = document.createElement('input');
+    attributeNameInput.type = 'text';
+    attributeNameInput.name = `attributes[${attributeIndex}][name]`;
+    attributeNameInput.className = 'form-control mb-2';
+    attributeNameInput.placeholder = 'Nhập tên biến thể chính (VD: Kích thước)';
+    attributeNameInput.required = true;
+    attributeDiv.appendChild(attributeNameInput);
+
+    // Checkbox để chọn biến thể chính có giá
+    let priceCheckbox = document.createElement('input');
+    priceCheckbox.type = 'checkbox';
+    priceCheckbox.className = 'me-2';
+
+    let priceCheckboxLabel = document.createElement('label');
+    priceCheckboxLabel.innerText = 'Chọn biến thể này chứa giá';
+
+    priceCheckbox.addEventListener('change', function() {
+        if (priceCheckbox.checked) {
+            if (currentPriceVariant) {
+                clearPriceInputs(currentPriceVariant);
+                currentPriceVariant.querySelector('input[type="checkbox"]').checked = false; // Bỏ chọn checkbox cũ
+            }
+            currentPriceVariant = attributeDiv; // Cập nhật biến thể chính có giá
+            enablePriceInputs(attributeDiv);
+        } else {
+            clearPriceInputs(attributeDiv);
+            currentPriceVariant = null;
+        }
+    });
+
+    attributeDiv.appendChild(priceCheckbox);
+    attributeDiv.appendChild(priceCheckboxLabel);
+
+    // Nút thêm biến thể con
+    let addSubAttributeBtn = document.createElement('button');
+    addSubAttributeBtn.className = 'btn btn-secondary';
+    addSubAttributeBtn.type = 'button';
+    addSubAttributeBtn.innerText = 'Thêm biến thể con';
+
+    // Nút xóa biến thể chính
+    let removeAttributeBtn = document.createElement('button');
+    removeAttributeBtn.className = 'btn btn-danger';
+    removeAttributeBtn.type = 'button';
+    removeAttributeBtn.innerText = 'Xóa biến thể chính';
+
+    // Thêm các nút vào trong div actions
+    let actionsDiv = document.createElement('div');
+    actionsDiv.className = 'attribute-actions';
+    actionsDiv.appendChild(addSubAttributeBtn);
+    actionsDiv.appendChild(removeAttributeBtn);
+
+    // Container chứa các biến thể con
+    let subAttributeContainer = document.createElement('div');
+    subAttributeContainer.className = 'subAttributeContainer';
+    let subAttributeIndex = 0; // Đếm số lượng biến thể con
+
+    // Sự kiện khi nhấn nút thêm biến thể con
+    addSubAttributeBtn.addEventListener('click', function() {
+        let subAttributeDiv = document.createElement('div');
+        subAttributeDiv.className = 'subAttribute mb-2 d-flex align-items-center';
+
+        // Input tên biến thể con
+        let subAttributeInput = document.createElement('input');
+        subAttributeInput.type = 'text';
+        subAttributeInput.name = `attributes[${attributeIndex}][values][${subAttributeIndex}][value]`;
+        subAttributeInput.className = 'form-control me-2';
+        subAttributeInput.placeholder = 'Nhập tên biến thể con (VD: S, M, L)';
+        subAttributeInput.required = true;
+
+        // Input giá của biến thể con (bị ẩn theo mặc định)
+        let priceInput = document.createElement('input');
+        priceInput.type = 'number';
+        priceInput.name = `attributes[${attributeIndex}][values][${subAttributeIndex}][price]`;
+        priceInput.className = 'form-control me-2';
+        priceInput.placeholder = 'Nhập giá';
+        priceInput.style.display = 'none'; // Mặc định bị ẩn khi biến thể chính chưa được chọn
+
+        // Nút xóa biến thể con
+        let removeSubAttributeBtn = document.createElement('button');
+        removeSubAttributeBtn.className = 'btn btn-danger';
+        removeSubAttributeBtn.type = 'button';
+        removeSubAttributeBtn.innerText = 'Xóa';
+
+        removeSubAttributeBtn.addEventListener('click', function() {
+            subAttributeDiv.remove();
+        });
+
+        subAttributeDiv.appendChild(subAttributeInput);
+        subAttributeDiv.appendChild(priceInput);
+        subAttributeDiv.appendChild(removeSubAttributeBtn);
+
+        subAttributeContainer.appendChild(subAttributeDiv);
+
+        // Kiểm tra nếu biến thể chính này được chọn làm biến thể có giá
+        if (attributeDiv === currentPriceVariant) {
+            priceInput.style.display = 'inline-block'; // Hiển thị input giá nếu biến thể chính đã được chọn
+        }
+
+        subAttributeIndex++; // Tăng số lượng biến thể con
+    });
+
+    // Sự kiện xóa biến thể chính
+    removeAttributeBtn.addEventListener('click', function() {
+        if (attributeDiv === currentPriceVariant) {
+            currentPriceVariant = null; // Xóa biến thể chính hiện tại chứa giá
+        }
+        attributeDiv.remove();
+    });
+
+    attributeDiv.appendChild(subAttributeContainer);
+    attributeDiv.appendChild(actionsDiv);
+
+    document.getElementById('attributeContainer').appendChild(attributeDiv);
+    attributeIndex++; // Tăng số lượng biến thể chính
+});
+
+// Hàm để kích hoạt các input giá của biến thể chính được chọn
+function enablePriceInputs(attributeDiv) {
+    attributeDiv.querySelectorAll('.subAttribute input[type="number"]').forEach(function(input) {
+        input.style.display = 'inline-block'; // Hiển thị input giá
+    });
+}
+
+// Hàm để xóa các giá trị đã nhập trong input giá của biến thể cũ
+function clearPriceInputs(attributeDiv) {
+    attributeDiv.querySelectorAll('.subAttribute input[type="number"]').forEach(function(input) {
+        input.style.display = 'none'; // Ẩn input giá
+        input.value = ''; // Xóa giá trị
+    });
+}
+
+// Kiểm tra tên biến thể chính trước khi submit
+document.getElementById('attributeForm').addEventListener('submit', function(e) {
+    let invalid = false;
+
+    // Kiểm tra tất cả các trường `name` của biến thể chính
+    document.querySelectorAll('input[name^="attributes"][name$="[name]"]').forEach(function(input) {
+        if (input.value.trim() === '') {
+            invalid = true;
+            input.classList.add('is-invalid'); // Thêm lớp hiển thị lỗi
+        } else {
+            input.classList.remove('is-invalid'); // Xóa lớp hiển thị lỗi nếu hợp lệ
+        }
+    });
+
+    // Nếu có trường bị bỏ trống, không gửi form
+    if (invalid) {
+        e.preventDefault();
+        alert('Bạn phải nhập tên cho tất cả các biến thể chính. Vui lòng kiểm tra lại.'); // Thông báo cho người dùng
+    }
+});
+</script>
+
+
+
+
+  
 @endsection
 
 
@@ -349,6 +520,75 @@
       }
   };
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -435,67 +675,5 @@ document.getElementById('img').addEventListener('change', function() {
 
   });
 
-
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const checkboxContainer = document.querySelector('.checkbox-container');
-    const attributeInputs = document.querySelector('.attribute-inputs');
-
-    checkboxContainer.addEventListener('change', function(event) {
-        if (event.target.type === 'checkbox') {
-            const checkbox = event.target;
-            const attributeId = checkbox.dataset.id;
-            const attributeName = checkbox.dataset.name;
-            const attributeDivId = `attribute-group-${attributeId}`;
-
-            let attributeDiv = document.getElementById(attributeDivId);
-
-            if (checkbox.checked) {
-                if (!attributeDiv) {
-                    attributeDiv = document.createElement('div');
-                    attributeDiv.id = attributeDivId;
-                    attributeDiv.className = 'attribute-input-group';
-                    attributeDiv.innerHTML = `
-                        <label>${attributeName}:</label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Nhập giá trị ${attributeName}" name="attributes[${attributeId}][]">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary btn-add-value" type="button">Thêm</button>
-                            </div>
-                        </div>
-                    `;
-                    attributeInputs.appendChild(attributeDiv);
-
-                    setupInputListeners(attributeDiv);
-                }
-            } else {
-                if (attributeDiv) {
-                    attributeDiv.remove();
-                }
-            }
-        }
-    });
-
-    function setupInputListeners(parentDiv) {
-        parentDiv.querySelector('.btn-add-value').addEventListener('click', function () {
-            const inputGroup = document.createElement('div');
-            inputGroup.className = 'input-group mb-3';
-            inputGroup.innerHTML = `
-                <input type="text" class="form-control" placeholder="Nhập giá trị" name="attributes[${parentDiv.id.replace('attribute-group-', '')}][]">
-                <div class="input-group-append">
-                    <button class="btn btn-danger btn-remove-value" type="button">Xóa</button>
-                </div>
-            `;
-
-            parentDiv.appendChild(inputGroup);
-
-            inputGroup.querySelector('.btn-remove-value').addEventListener('click', function () {
-                inputGroup.remove();
-            });
-        });
-    }
-});
 
 </script>

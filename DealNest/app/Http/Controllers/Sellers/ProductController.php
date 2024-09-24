@@ -10,8 +10,8 @@ use App\Models\SubCategory;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Product_image;
-use App\Models\Attribute;
-use App\Models\Product_attribute;
+use App\Models\Variants;
+use App\Models\Variant_price;
 
 
 class ProductController extends Controller
@@ -26,8 +26,7 @@ class ProductController extends Controller
         // Lấy danh sách thể loại
         $category = Category::all();
         $brand = Brand::all();
-        $attribute = Attribute::all();
-        return view('sellers.products.create', compact('category', 'brand', 'attribute'));
+        return view('sellers.products.create', compact('category', 'brand'));
     }
 
     public function getSubCategory(Request $request)
@@ -39,6 +38,7 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         try {
+            return dd($request->all()); 
             $sellerId = Session::get('sellerId');
 
             // Validate request data
@@ -50,38 +50,24 @@ class ProductController extends Controller
                 'quantity' => 'required|integer|min:0',
                 'description' => 'nullable|string',
                 'brand_id' => 'required|integer|exists:brands,id',
-                'img' => 'required|array|min:5|max:10', // Validate the number of images
-                'img.*' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048', // Validate image files
-                'attributes' => 'required', // Ensure attributes are present
-
-                'attributes.*.*' => 'required|string|max:255', // Ensure each attribute value is a non-empty string
-            ], [
-                'name.required' => 'Tên sản phẩm không được để trống.',
-                'category_id.required' => 'Danh mục sản phẩm là bắt buộc.',
-                'subCategory_id.required' => 'Danh mục con là bắt buộc.',
-                'price.required' => 'Giá sản phẩm là bắt buộc.',
-                'quantity.required' => 'Số lượng sản phẩm là bắt buộc.',
-                'brand_id.required' => 'Thương hiệu là bắt buộc.',
-                'img.required' => 'Bạn phải tải lên từ 5 đến 10 hình ảnh.',
-                'img.array' => 'Hình ảnh phải được gửi dưới dạng mảng.',
-                'img.min' => 'Bạn phải tải lên ít nhất 5 hình ảnh.',
-                'img.max' => 'Bạn không thể tải lên quá 10 hình ảnh.',
-                'img.*.image' => 'Tệp ảnh không hợp lệ.',
-                'img.*.mimes' => 'Tệp ảnh phải có định dạng jpg, jpeg, webp,png hoặc gif.',
-                'img.*.max' => 'Tệp ảnh không được vượt quá 2MB.',
-                'attributes.required' => 'Bạn phải chọn ít nhất một thuộc tính.',
-                'attributes.*.*.required' => 'Giá trị thuộc tính không được để trống.',
-                'attributes.*.*.max' => 'Giá trị thuộc tính không được vượt quá 255 ký tự.',
+                'img' => 'required|array|min:5|max:10', // Validate số lượng ảnh
+                'img.*' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048', // Validate ảnh
+                'attributes' => 'required|array', // Validate biến thể chính
+                'attributes.*.name' => 'required|string|max:255', // Tên biến thể chính
+                'attributes.*.values' => 'required|array', // Các biến thể con
+                'attributes.*.values.*.value' => 'required|string|max:255', // Tên biến thể con
+                'attributes.*.values.*.price' => 'nullable|numeric|min:0', // Giá của từng biến thể con
             ]);
 
-
+            // Xử lý ảnh chính của sản phẩm
+            $imageName = null;
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = time() . '_' . $image->getClientOriginalName();
-                // Lưu ảnh vào thư mục 'public/products'
                 $image->move(public_path('uploads'), $imageName);
             }
-            // Create product
+
+            // Tạo sản phẩm
             $product = Product::create([
                 'seller_id' => $sellerId,
                 'name' => $request->name,
@@ -93,10 +79,32 @@ class ProductController extends Controller
                 'brand_id' => $request->brand_id,
                 'status' => 'Chờ phê duyệt',
                 'image' => $imageName,
-
             ]);
 
-            // Handle image uploads
+            // Xử lý biến thể (thêm biến thể chính và con)
+            foreach ($request->attributes as $attribute) {
+                // Lưu biến thể chính
+                $variant = Variants::create([
+                    'product_id' => $productId, // Thay đổi với ID sản phẩm thực tế
+                    'type' => $attribute['name'], // Tên biến thể chính
+                    'value' => null // Chưa có giá trị cụ thể
+                ]);
+        
+                // Kiểm tra nếu có giá trị con
+                if (isset($attribute['values'])) {
+                    foreach ($attribute['values'] as $value) {
+                        // Nếu giá không phải là null, lưu vào bảng variant_price
+                        if (!is_null($value['price'])) {
+                            Variant_price::create([
+                                'variant_id' => $variant->id,
+                                'price' => $value['price'],
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            // Xử lý ảnh phụ
             if ($request->hasFile('img')) {
                 $images = $request->file('img');
                 foreach ($images as $image) {
@@ -105,42 +113,21 @@ class ProductController extends Controller
 
                     Product_image::create([
                         'product_id' => $product->id,
-                        'url' => $imageName
+                        'url' => $imageName,
                     ]);
                 }
             }
 
-            // Handle attributes
-            if ($request->has('attributes')) {
-                $attributes = $request->input('attributes');
-                foreach ($attributes as $attributeId => $values) {
-                    foreach ($values as $value) {
-                        // Nếu giá trị là 1 hoặc 2, bỏ qua và không tạo bản ghi mới
-                        if ($value == 1 || $value == 2) {
-                            continue; // Bỏ qua giá trị này
-                        }
-
-                        // Tạo bản ghi mới nếu giá trị không phải là 1 hoặc 2
-                        Product_attribute::create([
-                            'product_id' => $product->id,
-                            'attribute_id' => $attributeId,
-                            'value' => $value
-                        ]);
-                    }
-                }
-            }
-
-
-            return redirect()->route('seller.product.list')->with('success', 'Thêm sản phẩn thành công.');
+            return redirect()->route('seller.product.list')->with('success', 'Thêm sản phẩm thành công.');
 
         } catch (\Exception $e) {
-            // Log the error message
             \Log::error('Error creating product: ' . $e->getMessage());
-
-            // Redirect back with error message
-            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            dd($e->getMessage());
         }
     }
+
+
+
 
 
 
@@ -195,13 +182,11 @@ class ProductController extends Controller
     {
         $category = Category::all();
         $brand = Brand::all();
-        $attribute = Attribute::all();
         $product = Product::with(['product_image', 'product_attribute.attribute'])->find($id);
         // return dd($product->product_attribute);
         return view('sellers.products.edit', compact(
             'category',
             'brand',
-            'attribute',
             'product'
         ));
     }
@@ -285,29 +270,6 @@ class ProductController extends Controller
             }
         }
 
-        // Handle attributes
-        if ($request->has('attributes')) {
-            $attributes = $request->input('attributes');
-
-            // Remove old attributes
-            Product_attribute::where('product_id', $product->id)->delete();
-
-            // Add new attributes
-            foreach ($attributes as $attributeId => $values) {
-                foreach ($values as $value) {
-                    if (!empty($value)) { // Kiểm tra giá trị không rỗng
-                        Product_attribute::create([
-                            'product_id' => $product->id,
-                            'attribute_id' => $attributeId,
-                            'value' => $value
-                        ]);
-                    }
-                }
-            }
-        } else {
-            return redirect()->back()->with('error', 'No attributes found.');
-        }
-
 
         // Redirect back with success message
         return redirect()->back()->with('success', 'Cập nhật sản phẩm thành công!');
@@ -358,9 +320,6 @@ class ProductController extends Controller
             // Xóa hình ảnh từ cơ sở dữ liệu
             $productImage->delete();
         }
-
-        // Xóa tất cả các thuộc tính liên quan đến sản phẩm
-        Product_attribute::where('product_id', $product->id)->delete();
 
         // Xóa sản phẩm
         $product->delete();

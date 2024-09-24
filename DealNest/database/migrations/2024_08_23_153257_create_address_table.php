@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('ward_id');
             $table->text('street');
             $table->text('string_address');
+            $table->integer('active')->default(0);
             $table->timestamps(); 
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
           

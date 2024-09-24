@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,12 +14,15 @@ return new class extends Migration
             $table->string('full_name', 255)->nullable();
             $table->string('phone', 255)->nullable();
             $table->string('image')->nullable();
-            $table->enum('role', ['admin', 'seller','buyer'])->default('buyer');
+            $table->enum('role', ['admin', 'seller', 'buyer'])->default('buyer');
             $table->boolean('is_active')->default(true);
             $table->string('google_id', 255)->nullable();
             $table->string('google_email', 255)->nullable();
             $table->string('google_image', 255)->nullable();
-            
+            $table->string('facebook_id', 255)->nullable();
+            $table->integer('otp')->nullable();
+
+
         });
     }
 
