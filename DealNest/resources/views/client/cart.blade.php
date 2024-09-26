@@ -84,6 +84,13 @@
     .purchase-button:hover {
         background-color: #e64a19;
     }
+    .click-code{
+        text-decoration: none;
+    }
+    .click-code:hover{
+        color: #0d6efd;
+    }
+
 </style>
 @section('content')
 
@@ -172,7 +179,7 @@
         <label for="voucher-checkbox">
             <span class="voucher-icon"></span> Shopee Voucher
         </label>
-        <a href="#">Chọn hoặc nhập mã</a>
+        <a class="click-code" href="#">Chọn hoặc nhập mã</a>
     </div>
     <div class="shopee-xu-row">
         <input type="checkbox" id="shopee-xu-checkbox" disabled>

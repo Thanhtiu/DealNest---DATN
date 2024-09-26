@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -17,6 +19,7 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Client\SearchController;
+use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\FacebookLoginController;
 
@@ -36,6 +39,7 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::get('/cua-hang/{id}', [ShopController::class, 'index'])->name('client.shop');
 Route::post('/tim-kiem', [SearchController::class, 'index'])->name('client.search');
+Route::get('/thanh-toan', [PaymentController::class, 'index'])->name('client.payment');
 
 
 
@@ -50,7 +54,6 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::get('/dia-chi/mac-dinh/{id}', [AddressController::class, 'setDefault'])->name('account.address.setDefault');
     Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order.index');
     Route::get('/voucher', [HomeController::class, 'voucher']);
-
 });
 Route::middleware(['web'])->group(function () {
 
@@ -113,7 +116,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/cua-hang', [InfoController::class, 'index'])->name('seller.info');
 
         Route::put('/cua-hang/cap-nhat', [InfoController::class, 'update'])->name('seller.info.update');
-
     });
 
     // End Seller Route
