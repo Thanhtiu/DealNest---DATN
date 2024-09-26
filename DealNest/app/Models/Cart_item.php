@@ -25,4 +25,5 @@ class Cart_item extends Model
     {
         return $this->belongsTo(Attribute::class);
     }
+    
 }

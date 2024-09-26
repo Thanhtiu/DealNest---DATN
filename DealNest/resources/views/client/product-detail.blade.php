@@ -699,28 +699,32 @@
       <form action="{{ route('cart.add') }}" method="POST">
         @csrf
         <div class="product-options">
-            @foreach ($productDetail->product_attribute->groupBy('attribute_id') as $attribute_id => $attributes)
-            <div class="option mb-3">
-                <label class="form-label">{{ strtoupper($attributes->first()->attribute->name) }}</label>
-                <select class="form-select attribute-select" name="attributes[{{ $attribute_id }}]" required>
-                    <option value="" selected>Chọn {{ strtolower($attributes->first()->attribute->name) }}</option>
-                    @foreach ($attributes as $attribute)
-                    <option value="{{ $attribute->value }}" data-attribute-id="{{ $attribute->attribute_id }}">
-                        {{ $attribute->value }}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
+    @foreach ($productDetail->attribute_values->groupBy('attribute_id') as $attribute_id => $attributes)
+    <div class="option mb-3">
+        <label class="form-label">{{ strtoupper($attributes->first()->attribute->name) }}</label>
+        <select class="form-select attribute-select" name="attributes[{{ $attribute_id }}]" required>
+            <option value="" selected>Chọn {{ strtolower($attributes->first()->attribute->name) }}</option>
+            @foreach ($attributes as $attribute)
+            <option value="{{ $attribute->value }}" data-attribute-id="{{ $attribute->attribute_id }}">
+                {{ $attribute->value }} 
+                @if ($attribute->price)
+                    - Giá: {{ number_format($attribute->price, 2) }} 
+                @endif
+            </option>
             @endforeach
-        </div>
+        </select>
+    </div>
+    @endforeach
+</div>
+
     
         <div class="quantity-selector">
-            <label for="quantity">Số Lượng</label>
-            <button type="button" class="decrease">-</button>
-            <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $productDetail->quantity }}">
-            <button type="button" class="increase">+</button>
-            <span>{{ $productDetail->quantity }} sản phẩm có sẵn</span>
-        </div>
+    <label for="quantity">Số Lượng</label>
+    <button type="button" class="decrease">-</button>
+    <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $productDetail->quantity }}">
+    <button type="button" class="increase">+</button>
+    <span>{{ $productDetail->quantity }} sản phẩm có sẵn</span>
+</div>
     
         <input type="hidden" name="product_id" value="{{ $productDetail->id }}">
     

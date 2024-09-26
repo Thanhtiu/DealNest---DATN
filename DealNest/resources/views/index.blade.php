@@ -32,7 +32,7 @@
     <div class="card">
         <a href="{{route('client.productDetail',['id'=>$item->id])}}">
             <div class="cardd">
-                <img src="{{asset('uploads/'.$item->product_image->first()->url)}}" alt="Product Image">
+                <img src="{{asset('uploads/'.$item->image)}}" alt="Product Image">
                 <div class="discount">-92%</div>
                 <div class="content">
                     <h2 class="title">{{$item->name}}</h2>

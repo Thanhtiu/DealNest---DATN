@@ -16,6 +16,7 @@ class Cart extends Model
         'product_id',
         'total_price',
         'quantity',
+        'discount',
     ];
 
     public function items()

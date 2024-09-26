@@ -19,7 +19,7 @@ class ProductDetailController extends Controller
 {
     public function index($id)
     {
-        $productDetail = Product::with(['subcategory', 'product_image', 'product_attribute'])->find($id);
+        $productDetail = Product::with(['subcategory', 'product_image', 'attribute_values.attribute'])->find($id);
         $product = Product::with('seller')->find($id);
 
         $seller = $product->seller;
@@ -30,13 +30,16 @@ class ProductDetailController extends Controller
         // Tính số ngày giữa 2 ngày
         $dateJoin = round($startDate->diffInDays($currentDate));
 
+        // return $productDetail;
         $string_address =  'Vui lòng cập nhật địa chỉ';
         $userId = Session::get('userId');
         if ($userId) {
             $addressId = Address::where('user_id', $userId)
                 ->where('active', 1)
                 ->first();
-            $string_address = $addressId->string_address;
+            if ($addressId) {
+                $string_address = $addressId->string_address;
+            }
         }
 
 

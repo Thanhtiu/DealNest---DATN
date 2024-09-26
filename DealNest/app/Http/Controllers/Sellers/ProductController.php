@@ -10,8 +10,8 @@ use App\Models\SubCategory;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Product_image;
-use App\Models\Variants;
-use App\Models\Variant_price;
+use App\Models\Attribute;
+use App\Models\attribute_value;
 
 
 class ProductController extends Controller
@@ -26,7 +26,8 @@ class ProductController extends Controller
         // Lấy danh sách thể loại
         $category = Category::all();
         $brand = Brand::all();
-        return view('sellers.products.create', compact('category', 'brand'));
+        $attribute = Attribute::all();
+        return view('sellers.products.create', compact('category', 'brand', 'attribute'));
     }
 
     public function getSubCategory(Request $request)
@@ -38,7 +39,8 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         try {
-            return dd($request->all()); 
+            // return dd($request->all());
+
             $sellerId = Session::get('sellerId');
 
             // Validate request data
@@ -52,11 +54,11 @@ class ProductController extends Controller
                 'brand_id' => 'required|integer|exists:brands,id',
                 'img' => 'required|array|min:5|max:10', // Validate số lượng ảnh
                 'img.*' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048', // Validate ảnh
-                'attributes' => 'required|array', // Validate biến thể chính
-                'attributes.*.name' => 'required|string|max:255', // Tên biến thể chính
-                'attributes.*.values' => 'required|array', // Các biến thể con
-                'attributes.*.values.*.value' => 'required|string|max:255', // Tên biến thể con
-                'attributes.*.values.*.price' => 'nullable|numeric|min:0', // Giá của từng biến thể con
+                // 'attributes' => 'required|array', // Validate biến thể chính
+                // 'attributes.*.name' => 'required|string|max:255', // Tên biến thể chính
+                // 'attributes.*.values' => 'required|array', // Các biến thể con
+                // 'attributes.*.values.*.value' => 'required|string|max:255', // Tên biến thể con
+                // 'attributes.*.values.*.price' => 'nullable|numeric|min:0', // Giá của từng biến thể con
             ]);
 
             // Xử lý ảnh chính của sản phẩm
@@ -79,30 +81,38 @@ class ProductController extends Controller
                 'brand_id' => $request->brand_id,
                 'status' => 'Chờ phê duyệt',
                 'image' => $imageName,
+                'trash_can' => 1
             ]);
 
-            // Xử lý biến thể (thêm biến thể chính và con)
-            foreach ($request->attributes as $attribute) {
-                // Lưu biến thể chính
-                $variant = Variants::create([
-                    'product_id' => $productId, // Thay đổi với ID sản phẩm thực tế
-                    'type' => $attribute['name'], // Tên biến thể chính
-                    'value' => null // Chưa có giá trị cụ thể
-                ]);
-        
-                // Kiểm tra nếu có giá trị con
-                if (isset($attribute['values'])) {
-                    foreach ($attribute['values'] as $value) {
-                        // Nếu giá không phải là null, lưu vào bảng variant_price
-                        if (!is_null($value['price'])) {
-                            Variant_price::create([
-                                'variant_id' => $variant->id,
-                                'price' => $value['price'],
-                            ]);
+            // Lấy dữ liệu attributes từ request
+
+
+            $attributes = $request->input('attributes');
+            if ($attributes) {
+                foreach ($attributes as $attributeId => $attributeData) {
+                    // Tìm thuộc tính chính (attribute) dựa trên ID có sẵn
+                    $attribute = Attribute::find($attributeId);
+
+                    // Kiểm tra nếu thuộc tính tồn tại
+                    if ($attribute) {
+                        // Duyệt qua các giá trị của thuộc tính (bao gồm value và price)
+                        foreach ($attributeData['values'] as $valueData) {
+                            if (isset($valueData['value'])) {
+                                // Tạo hoặc cập nhật giá trị của thuộc tính
+                                $attributeValue = attribute_value::create([
+                                    'attribute_id' => $attribute->id,
+                                    'value' => $valueData['value'],
+                                    'product_id' => $product->id,
+                                    'price' => $valueData['price'] ?? null, // Lưu price trực tiếp vào bảng attribute_value
+                                ]);
+                            }
                         }
                     }
                 }
             }
+
+
+
 
             // Xử lý ảnh phụ
             if ($request->hasFile('img')) {
@@ -119,9 +129,8 @@ class ProductController extends Controller
             }
 
             return redirect()->route('seller.product.list')->with('success', 'Thêm sản phẩm thành công.');
-
         } catch (\Exception $e) {
-            \Log::error('Error creating product: ' . $e->getMessage());
+            // \Log::error('Error creating product: ' . $e->getMessage());
             dd($e->getMessage());
         }
     }
@@ -180,16 +189,23 @@ class ProductController extends Controller
 
     public function edit($id)
     {
+        // Lấy danh mục, thương hiệu
         $category = Category::all();
         $brand = Brand::all();
-        $product = Product::with(['product_image', 'product_attribute.attribute'])->find($id);
-        // return dd($product->product_attribute);
-        return view('sellers.products.edit', compact(
-            'category',
-            'brand',
-            'product'
-        ));
+        $attribute = Attribute::all(); // Lấy các thuộc tính (ví dụ: Kích thước, Màu sắc)
+
+        // Lấy thông tin sản phẩm cùng với các thuộc tính và giá trị của chúng
+        $product = Product::with('attribute_values.attribute')->find($id);
+        // return $product;
+
+        // Trả về view cùng với dữ liệu cần thiết
+        return view('sellers.products.edit', compact('category', 'brand', 'product', 'attribute'));
     }
+
+
+
+
+
 
     public function update(Request $request, $id)
     {
@@ -201,20 +217,13 @@ class ProductController extends Controller
             'quantity' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'brand_id' => 'required|integer|exists:brands,id',
-
-            'attributes' => 'required|array', // Ensure attributes are present
-            'attributes.*.*' => 'required|string|max:255', // Ensure each attribute value is a non-empty string
         ], [
             'name.required' => 'Tên sản phẩm không được để trống.',
             'category_id.required' => 'Danh mục sản phẩm là bắt buộc.',
             'price.required' => 'Giá sản phẩm là bắt buộc.',
             'quantity.required' => 'Số lượng sản phẩm là bắt buộc.',
             'brand_id.required' => 'Thương hiệu là bắt buộc.',
-            'attributes.required' => 'Bạn phải chọn ít nhất một thuộc tính.',
-            'attributes.array' => 'Các thuộc tính phải là mảng.',
-            'attributes.*.*.required' => 'Giá trị thuộc tính không được để trống.',
-            'attributes.*.*.string' => 'Giá trị thuộc tính phải là chuỗi.',
-            'attributes.*.*.max' => 'Giá trị thuộc tính không được vượt quá 255 ký tự.',
+
         ]);
 
         // Find the product by ID
@@ -270,6 +279,46 @@ class ProductController extends Controller
             }
         }
 
+        $attributes = $request->input('attributes', []);
+
+        // Bước 1: Xóa tất cả các giá trị thuộc tính cũ liên quan đến sản phẩm hiện tại
+        attribute_value::where('product_id', $product->id)->delete(); // Chắc chắn rằng tất cả các bản ghi đã bị xóa
+
+        // Bước 2: Thêm lại tất cả các thuộc tính và giá trị từ request
+        foreach ($attributes as $attributeId => $attributeData) {
+            // Tìm thuộc tính chính (attribute) dựa trên ID có sẵn
+            $attribute = Attribute::find($attributeId);
+
+            // Kiểm tra nếu thuộc tính tồn tại
+            if ($attribute) {
+                // Duyệt qua các giá trị của thuộc tính (bao gồm value và price)
+                foreach ($attributeData['values'] as $valueData) {
+                    if (isset($valueData['value'])) {
+                        // Tạo mới giá trị của thuộc tính
+                        attribute_value::create([
+                            'attribute_id' => $attribute->id,
+                            'product_id' => $product->id,
+                            'value' => $valueData['value'],
+                            'price' => $valueData['price'] ?? null, // Lưu price trực tiếp vào bảng attribute_value
+                        ]);
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Redirect back with success message
         return redirect()->back()->with('success', 'Cập nhật sản phẩm thành công!');
@@ -291,7 +340,6 @@ class ProductController extends Controller
         $product->trash_can = 0;
         $product->save();
         return redirect()->back()->with('success', 'Xóa thành công!');
-
     }
 
     // khôi phục
@@ -326,8 +374,4 @@ class ProductController extends Controller
 
         return redirect()->route('seller.product.list')->with('success', 'Product deleted successfully!');
     }
-
-
-
 }
-

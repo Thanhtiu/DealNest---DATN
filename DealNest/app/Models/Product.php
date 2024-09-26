@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Brand;
 use App\Models\SubCategory;
 use App\Models\Product_image;
-use App\Models\Product_attribute;
+use App\Models\attribute_value;
+
 class Product extends Model
 {
     use HasFactory;
@@ -44,12 +45,13 @@ class Product extends Model
     public function product_image(){
         return $this->hasMany(Product_image::class,'product_id');
     }
-    public function product_attribute(){
-        return $this->hasMany(Product_attribute::class,'product_id');
-    }
 
     public function seller(){
         return $this->belongsTo(Seller::class,'seller_id');
     }
-   
+    public function attribute_values()
+{
+    return $this->hasMany(attribute_value::class, 'product_id');
+}
+
 }

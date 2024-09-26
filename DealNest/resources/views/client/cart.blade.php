@@ -33,8 +33,7 @@
                                 </td>
                                 <td class="shoping__cart__item">
                                     @if($item->product->product_image->isNotEmpty())
-                                    <img src="{{ asset('uploads/'.$item->product->product_image->first()->url) }}"
-                                        alt="Product Image"
+                                    <img src="{{ asset('uploads/'.$item->product->product_image->first()->url) }}" alt="Product Image"
                                         style="max-width: 100px; max-height: 140px; object-fit: cover;">
                                     @else
                                     <img src="{{ asset('client/img/no-image.png') }}" alt="No Image"
@@ -48,7 +47,9 @@
                                     @endforelse
                                 </td>
                                 <td class="shoping__cart__price" style="font-weight: 400;">
-                                    {{ number_format($item->product->price, 0, ',', '.') }}
+                                    
+                                    {{ number_format($item->discount) }}
+                                    
                                 </td>
                                 <td class="shoping__cart__quantity">
                                     <div class="quantity">
@@ -66,6 +67,8 @@
                             </tr>
                             @endforeach
                         </tbody>
+
+
                     </table>
                     @endif
                 </div>
