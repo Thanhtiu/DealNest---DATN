@@ -139,7 +139,7 @@
 
                                 @endforeach
                             </tbody>
-                            
+
                         </table>
                         {{ $productAll->links('pagination::bootstrap-4') }}
                     </div>
@@ -310,12 +310,12 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const tabs = document.querySelectorAll('.tab-item');
         const contents = document.querySelectorAll('.tab-content');
 
         tabs.forEach(tab => {
-            tab.addEventListener('click', function (event) {
+            tab.addEventListener('click', function(event) {
                 event.preventDefault();
 
                 // Remove active class from all tabs and content

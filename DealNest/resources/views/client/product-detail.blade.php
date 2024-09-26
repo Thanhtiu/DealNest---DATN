@@ -645,7 +645,7 @@
     <div class="product-images">
     <!-- Hình ảnh chính (ảnh lớn) -->
     <div class="main-image">
-        <img src="{{ asset('uploads/'.$productDetail->product_image->first()->url) }}" alt="Giày PUMA"
+        <img src="{{ asset('uploads/'.$productDetail->image) }}" alt="Giày PUMA"
             class="img-responsive" id="main-product-image">
     </div>
 

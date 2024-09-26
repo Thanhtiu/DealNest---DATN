@@ -125,7 +125,7 @@
                                 </td>
                                 <td class="shoping__cart__item">
                                     @if($item->product->product_image->isNotEmpty())
-                                    <img src="{{ asset('uploads/'.$item->product->product_image->first()->url) }}" alt="Product Image"
+                                    <img src="{{ asset('uploads/'.$item->product->image) }}" alt="Product Image"
                                         style="max-width: 100px; max-height: 140px; object-fit: cover;">
                                     @else
                                     <img src="{{ asset('client/img/no-image.png') }}" alt="No Image"
