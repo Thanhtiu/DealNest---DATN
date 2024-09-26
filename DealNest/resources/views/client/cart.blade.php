@@ -1,5 +1,90 @@
 @extends('layouts.client.app')
+<style>
+    .fixed-section {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 15px 20px;
+        box-shadow: -1px -1px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
 
+
+    .voucher-row,
+    .shopee-xu-row,
+    .bottom-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .voucher-row input,
+    .shopee-xu-row input,
+    .bottom-row input {
+        margin-right: 5px;
+    }
+
+    .voucher-row a,
+    .shopee-xu-row span {
+        color: #007bff;
+    }
+
+    .amount-deducted {
+        margin-left: auto;
+        color: #999;
+    }
+
+    .bottom-row input {
+        margin-right: 5px;
+    }
+
+    .bottom-row a {
+        color: #ff5722;
+        margin-right: 20px;
+    }
+
+    .save-section {
+        color: red;
+        margin-right: auto;
+    }
+
+    .total-payment {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+    }
+
+    .total-amount {
+        color: #ff5722;
+        font-size: 18px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    .savings {
+        color: #999;
+        margin-left: 5px;
+    }
+
+    .purchase-button {
+        background-color: #ff5722;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+    .purchase-button:hover {
+        background-color: #e64a19;
+    }
+</style>
 @section('content')
 
 <!-- Shoping Cart Section Begin -->
@@ -75,8 +160,43 @@
             </div>
         </div>
     </div>
+
+
+
 </section>
 <!-- Shoping Cart Section End -->
+<!-- dat hang -->
+<div class="fixed-section">
+    <div class="voucher-row">
+        <input type="checkbox" id="voucher-checkbox">
+        <label for="voucher-checkbox">
+            <span class="voucher-icon"></span> Shopee Voucher
+        </label>
+        <a href="#">Chọn hoặc nhập mã</a>
+    </div>
+    <div class="shopee-xu-row">
+        <input type="checkbox" id="shopee-xu-checkbox" disabled>
+        <label for="shopee-xu-checkbox">Shopee Xu</label>
+        <span>Bạn chưa có Shopee Xu</span>
+        <span class="amount-deducted">₫0</span>
+    </div>
+    <div class="bottom-row">
+        <input type="checkbox" id="select-all">
+        <label for="select-all">
+            <span class="checkmark"></span> Chọn Tất Cả (1)
+        </label>
+        <a href="#">Xóa</a>
+        <span class="save-section">Lưu vào mục Đã thích</span>
+        <div class="total-payment">
+            <span>Tổng thanh toán (1 Sản phẩm):</span>
+            <span class="total-amount">₫53.000</span>
+            <span class="savings">Tiết kiệm ₫43k</span>
+        </div>
+        <button class="purchase-button">Mua Hàng</button>
+    </div>
+</div>
+
+<!--end dat hang -->
 
 
 
