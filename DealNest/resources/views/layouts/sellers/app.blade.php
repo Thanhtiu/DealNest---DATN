@@ -6,6 +6,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Purple Admin</title>
+    <!-- Bootstrap 4 CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- DataTables Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap 4 JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <!-- DataTables Bootstrap 4 JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+
+
+    <!-- DataTables Bootstrap 5 JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{asset('sellers/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('sellers/assets/vendors/ti-icons/css/themify-icons.css')}}">
@@ -25,11 +48,62 @@
     <link rel="shortcut icon" href="{{asset('sellers/assets/images/favicon.png')}}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.css">
-
+    <!-- Bootstrap 5 CSS -->
 
 
 </head>
+<style>
+    /* Style cho dropdown chọn số lượng mục */
+.dataTables_length select {
+    padding: 5px 20px;
+    border: 2px solid #ff5722;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border 0.3s ease;
+    outline: none;
+}
 
+.dataTables_length select:focus {
+    border: 2px solid #ff8a50;
+}
+
+.dataTables_length label {
+    font-weight: bold;
+    color: #333;
+}
+/* Style cho input tìm kiếm */
+.dataTables_filter input {
+    border: 2px solid #ff5722;
+    border-radius: 25px;
+    padding: 8px 15px 8px 35px;  /* Tạo không gian cho icon */
+    width: 300px;
+    font-size: 14px;
+    transition: border 0.3s ease;
+    outline: none;
+    background: url('https://cdn-icons-png.flaticon.com/512/622/622669.png') no-repeat scroll 10px 8px;
+    background-size: 20px 20px;
+}
+
+.dataTables_filter input:focus {
+    border: 1px solid #ff5722;
+}
+
+.dataTables_filter label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+
+</style>
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
@@ -37,7 +111,7 @@
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <div class="dealnest-logo">
                     <a class="navbar-brand brand-logo" href="index.html"><img class="seller-logo-image"
-                        src="{{asset('image/dealnest-logo.png')}}" alt="logo" /></a>
+                            src="{{asset('image/dealnest-logo.png')}}" alt="logo" /></a>
                 </div>
                 <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg"
                         alt="logo" /></a>
@@ -338,7 +412,7 @@
 
             <!-- partial -->
             <div class="main-panel">
-                <div class="loader" id="loader">
+                <!-- <div class="loader" id="loader">
                     <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
                         <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000"
                             stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round">
@@ -351,7 +425,7 @@
                         <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000"
                             stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
                     </svg>
-                </div>
+                </div> -->
 
                 <div class="content-wrapper">
                     @yield('content')
@@ -380,17 +454,72 @@
     <!-- Include jQuery in your HTML -->
 
 
+    <script>
+        $(document).ready(function() {
+            // Hàm khởi tạo DataTable
+            function initializeDataTable(tableId) {
+                $(tableId).DataTable({
+                    "paging": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "lengthMenu": [5, 10, 25, 50],
+                    "pageLength": 5,
+                    "language": {
+                        "paginate": {
+                            "previous": "<i class='bi bi-arrow-left'></i>",
+                            "next": "<i class='bi bi-arrow-right'></i>"
+                        },
+                        "search": "Tìm kiếm:",
+                        "lengthMenu": "Hiển thị _MENU_ mục",
+                        "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục"
+                    },
+                    "dom": '<"row"<"col-md-6"l><"col-md-6"f>>' +
+                        '<"row"<"col-sm-12"tr>>' +
+                        '<"row"<"col-md-5"i><"col-md-7"p>>',
+                    "columnDefs": [{
+                        "targets": 3, // Cột giá
+                        "render": $.fn.dataTable.render.number(',', '.', 0, '', ' VND')
+                    }]
+                });
+            }
+
+            // Khởi tạo DataTable cho bảng đầu tiên khi load trang
+            initializeDataTable('#productTableAll');
+
+            // Khởi tạo DataTable khi chuyển tab
+            $('.tab-item').on('click', function() {
+                var tabId = $(this).data('tab');
+                $('.tab-item').removeClass('active');
+                $(this).addClass('active');
+                $('.tab-content').removeClass('active');
+                $('#tab-' + tabId).addClass('active');
+
+                var tableId = '#productTable' + capitalizeFirstLetter(tabId);
+
+                // Chỉ khởi tạo DataTable nếu nó chưa được khởi tạo
+                if (!$.fn.DataTable.isDataTable(tableId)) {
+                    initializeDataTable(tableId);
+                }
+            });
+
+            // Hàm hỗ trợ viết hoa chữ cái đầu tiên
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+        });
+    </script>
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script src="{{asset('sellers/assets/js/spinner.js')}}"></script>
-
+    <!-- <script src="{{asset('sellers/assets/js/spinner.js')}}"></script> -->
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
     <!-- plugins:js -->
-    <script src="{{asset('sellers/assets/vendors/js/vendor.bundle.base.js')}}"></script>
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> -->
     <!-- endinject -->
     <!-- Plugin js for this page -->
     {{-- <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script> --}}
@@ -405,7 +534,8 @@
     {{-- <script src="{{asset('sellers/assets/js/jquery.cookie.js')}}"></script> --}}
     <!-- endinject -->
     <!-- Custom js for this page -->
-    <script src="{{asset('sellers/assets/js/dashboard.js')}}"></script>
+    <!-- <script src="{{asset('sellers/assets/js/dashboard.js')}}"></script> -->
+    <!-- <script src="{{asset('sellers/assets/vendors/js/vendor.bundle.base.js')}}"></script> -->
 
     <!-- End custom js for this page -->
 </body>

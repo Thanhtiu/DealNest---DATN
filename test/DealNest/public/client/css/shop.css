@@ -1,0 +1,155 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+
+}
+
+.shop-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.shop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 40%;
+    /* background-image: url('https://shardaproduction.com.np/wp-content/uploads/2024/02/Logo-Designing.jpg'); */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.shop-image {
+    text-align: center;
+    position: relative;
+}
+
+.shop-image img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ddd;
+}
+
+.favorite-btn {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 4px 15px;
+    font-size: 13px;
+
+
+}
+
+.shop-info {
+    margin-left: 20px;
+    color: #fff;
+}
+
+.shop-info h1 {
+    margin: 0;
+    font-size: 1.8em;
+    color: #fff;
+}
+
+.shop-info p {
+    margin: 5px 0;
+    color: #fff;
+}
+
+.follow-btn {
+    background-color: blue;
+    color: #fff;
+    border: 2px solid blue;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.shop-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    font-size: 15px;
+    color: #666;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.stat-item i {
+    margin-right: 10px;
+    font-size: 20px;
+    color: #666;
+}
+
+.highlight {
+    color: red;
+    font-weight: bold;
+}
+
+.shop-categories {
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px solid #ddd;
+    padding-top: 10px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.shop-categories span {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.shop-categories span.active {
+    color: red;
+    border-bottom: 2px solid red;
+}
+
+.shop-categories span:hover {
+    color: red;
+    border-bottom: 2px solid red;
+}
+.title{
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 18px;
+    color: rgba(0, 0, 0, .54);
+    display: block;
+    margin-top: 30px;
+}
+
+.shop-categories a{
+    text-decoration: none;
+    color: #000;
+}
+
+.content{
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+

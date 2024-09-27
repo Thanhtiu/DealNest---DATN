@@ -21,8 +21,8 @@
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
-                    <table class="table">
+                    <h4 class="card-title">Danh sách sản phẩm đã xóa</h4>
+                    <table class="table" id="productTableAll">
                         <thead>
                             <tr>
                                 <th>Tên sản phẩm</th>
@@ -67,7 +67,6 @@
                                         Xóa</a>
                                 </td>
                             </tr>
-
                             @endforeach
                         </tbody>
                     </table>

@@ -26312,7 +26312,7 @@ dl li {
 }
 
 .pagination .page-link:hover {
-  background-color: #b66dff; /* Màu nền khi hover */
+  background-color: #ff5722; /* Màu nền khi hover */
   color: white; /* Đổi màu chữ khi hover */
   border-color: #b66dff; /* Đường viền khi hover */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng đậm hơn khi hover */
@@ -26320,7 +26320,7 @@ dl li {
 }
 
 .pagination .active .page-link {
-  background-color: #b66dff; /* Màu nền cho nút active */
+  background-color: #ff5722; /* Màu nền cho nút active */
   border-color: #b66dff;
   color: white; /* Màu chữ cho nút active */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng cho nút active */

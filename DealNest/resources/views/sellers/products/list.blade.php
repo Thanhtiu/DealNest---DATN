@@ -1,10 +1,6 @@
 @extends('layouts.sellers.app')
 @section('content')
-<style>
-    body {
-        font-family: Arial, sans-serif;
-    }
-
+<style>  
     .tabs {
         display: flex;
         border-bottom: 2px solid #f0f0f0;
@@ -15,12 +11,20 @@
         padding: 10px 20px;
         cursor: pointer;
         color: #333;
-        text-decoration: none;
+        text-decoration: none;  /* Loại bỏ gạch chân */
     }
 
+    /* Khi tab được active */
     .tab-item.active {
         color: #ff5722;
         border-bottom: 2px solid #ff5722;
+    }
+
+    /* Loại bỏ gạch chân khi hover và focus */
+    .tab-item:hover,
+    .tab-item:focus {
+        color: #ff5722;  /* Màu cam khi hover */
+        text-decoration: none;  /* Loại bỏ gạch chân */
     }
 
     .btn-container {
@@ -39,12 +43,12 @@
         color: white;
         border-radius: 4px;
         font-weight: bold;
-        text-decoration: none;
+        text-decoration: none;  /* Loại bỏ gạch chân */
     }
 
-    .btn-container button.dropdown {
-        background-color: #f0f0f0;
-        color: #333;
+    .btn-container a:hover,
+    .btn-container a:focus {
+        text-decoration: none;  /* Loại bỏ gạch chân khi hover */
     }
 
     .tab-content {
@@ -57,8 +61,7 @@
 </style>
 
 <div class="btn-container">
-
-    <a href="{{route('seller.product.store')}}">+ Thêm 1 sản phẩm mới</button>
+    <a href="{{ route('seller.product.store') }}">+ Thêm 1 sản phẩm mới</a>
 </div>
 
 <div class="tabs" role="tablist">
@@ -69,29 +72,15 @@
 </div>
 
 <div class="tab-content active" id="tab-all">
-    @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-    @endif
-
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
-    @if($countProductAll <= 0) <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
+    @if($countProductAll <= 0)
+        <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
         @else
         <div class="row">
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Tổng sản phẩm</h4>
-                        <table class="table">
+                        <table id="productTableAll" class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Tên sản phẩm</th>
@@ -107,7 +96,6 @@
                                 @foreach($productAll as $item)
                                 <tr>
                                     <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
-
                                     <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
                                     <td>
                                         @if($item->product_image->isNotEmpty())
@@ -115,7 +103,7 @@
                                             style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
                                         @endif
                                     </td>
-                                    <td>{{$item->price}}</td>
+                                    <td data-order="{{$item->price}}">{{$item->price}}</td>
                                     <td>{{$item->quantity}}</td>
                                     <td>
                                         @if($item->status == 'Chờ phê duyệt')
@@ -136,12 +124,9 @@
                                             Xóa</a>
                                     </td>
                                 </tr>
-
                                 @endforeach
                             </tbody>
-
                         </table>
-                        {{ $productAll->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
             </div>
@@ -156,7 +141,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Tổng sản phẩm</h4>
-                        <table class="table">
+                        <table class="table" id="productTableActive">
                             <thead>
                                 <tr>
                                     <th>Tên sản phẩm</th>
@@ -209,7 +194,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Tổng sản phẩm</h4>
-                        <table class="table">
+                        <table class="table" id="productTableViolations">
                             <thead>
                                 <tr>
                                     <th>Tên sản phẩm</th>
@@ -263,7 +248,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Tổng sản phẩm</h4>
-                        <table class="table">
+                        <table class="table" id="productTablePending">
                             <thead>
                                 <tr>
                                     <th>Tên sản phẩm</th>
@@ -309,27 +294,5 @@
 </div>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tabs = document.querySelectorAll('.tab-item');
-        const contents = document.querySelectorAll('.tab-content');
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function(event) {
-                event.preventDefault();
-
-                // Remove active class from all tabs and content
-                tabs.forEach(t => t.classList.remove('active'));
-                contents.forEach(content => content.classList.remove('active'));
-
-                // Add active class to clicked tab
-                tab.classList.add('active');
-
-                // Show the corresponding content
-                const targetTab = tab.getAttribute('data-tab');
-                document.getElementById(`tab-${targetTab}`).classList.add('active');
-            });
-        });
-    });
-</script>
 @endsection

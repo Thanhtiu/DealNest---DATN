@@ -1,0 +1,80 @@
+   /* General navbar style */
+   .navbar {
+	padding: 0.5rem 1rem;
+	font-size: 14px;
+}
+
+/* Top navbar specific styles */
+.navbar-brand img {
+	height: 80px; /* Adjust logo size */
+	width: 80px;
+	object-fit: contain;
+}
+
+.form-control {
+	width: 400px; /* Adjust search bar width */
+}
+
+.navbar-nav .nav-link {
+	color: #555;
+}
+
+/* Secondary navbar styles */
+.secondary-nav {
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+}
+
+.secondary-nav .nav-link {
+	padding-left: 15px;
+	padding-right: 15px;
+	color: #333;
+}
+
+/* Commitment Icons Section */
+.commitment-icons {
+	padding-top: 0.5rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.commitment-icons .nav-link {
+	color: #1a73e8;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+}
+
+.commitment-icons .nav-link i {
+	margin-right: 5px;
+	font-size: 20px;
+}
+
+/* Link hover effects */
+.navbar-nav .nav-link:hover {
+	text-decoration: underline;
+}
+/* Commitment Icons Section */
+.commitment-section {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px 0;
+}
+
+.commitment-item {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	color: #333;
+}
+
+.commitment-item i {
+	color: #007bff;
+	font-size: 20px;
+	margin-right: 8px;
+}
+
