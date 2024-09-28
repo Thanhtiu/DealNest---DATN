@@ -10,7 +10,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Ogani | Template</title>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
@@ -267,8 +268,8 @@
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
-    <script src="{{asset('client/js/jquery-3.3.1.min.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script src="{{asset('client/js/jquery-3.3.1.min.js')}}"></script> -->
+    
     {{-- <script src="{{asset('client/js/spinner.js')}}"></script> --}}
     <script src="{{asset('client/js/cart-delete.js')}}"></script>
     <script src="{{asset('client/js/cart-create.js')}}"></script>

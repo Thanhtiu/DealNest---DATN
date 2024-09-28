@@ -2,10 +2,11 @@
 @section('content')
 <!-- Product Details Section Begin -->
 <style>
-  .col-lg-12{
+  .col-lg-12 {
     max-width: 1200px;
     margin: 0 auto;
   }
+
   .product-section {
     padding: 20px;
     background-color: #f9f9f9;
@@ -48,60 +49,73 @@
     overflow: hidden;
     margin: 10px;
     margin-left: 30px;
-}
+  }
 
-.thumbnail-images-slider {
+  .thumbnail-images-slider {
     display: flex;
     overflow: hidden;
     width: 100%;
-}
+  }
 
-.thumbnail-track {
+  .thumbnail-track {
     display: flex;
     transition: transform 0.3s ease;
-}
+  }
 
-.thumbnail-slide {
-    flex: 0 0 calc(20% - 20px); /* Mỗi slide chiếm khoảng 20% của slider, trừ đi khoảng cách */
-    box-sizing: border-box; /* Đảm bảo padding/margin không ảnh hưởng đến kích thước */
-    margin-right: 10px; /* Khoảng cách giữa các ảnh */
-}
+  .thumbnail-slide {
+    flex: 0 0 calc(20% - 20px);
+    /* Mỗi slide chiếm khoảng 20% của slider, trừ đi khoảng cách */
+    box-sizing: border-box;
+    /* Đảm bảo padding/margin không ảnh hưởng đến kích thước */
+    margin-right: 10px;
+    /* Khoảng cách giữa các ảnh */
+  }
 
-.thumbnail-slide img {
+  .thumbnail-slide img {
     width: 100%;
     height: auto;
-    display: block; /* Đảm bảo không có khoảng trắng dưới ảnh */
-}
+    display: block;
+    /* Đảm bảo không có khoảng trắng dưới ảnh */
+  }
 
-.prev-btn, .next-btn {
+  .prev-btn,
+  .next-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5); /* Nền trong suốt với màu đen */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Nền trong suốt với màu đen */
     color: #fff;
     border: none;
     padding: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền */
-    z-index: 1; /* Đảm bảo các nút nằm trên các phần tử khác */
-}
+    transition: background-color 0.3s ease;
+    /* Hiệu ứng chuyển màu nền */
+    z-index: 1;
+    /* Đảm bảo các nút nằm trên các phần tử khác */
+  }
 
-.prev-btn {
-    left: 0px; /* Đặt nút "trước" ở bên trái */
-}
+  .prev-btn {
+    left: 0px;
+    /* Đặt nút "trước" ở bên trái */
+  }
 
-.next-btn {
-    right: 0px; /* Đặt nút "tiếp theo" ở bên phải */
-}
+  .next-btn {
+    right: 0px;
+    /* Đặt nút "tiếp theo" ở bên phải */
+  }
 
-.prev-btn:hover, .next-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8); /* Tăng độ đậm khi hover */
-}
+  .prev-btn:hover,
+  .next-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Tăng độ đậm khi hover */
+  }
 
-.prev-btn:disabled, .next-btn:disabled {
+  .prev-btn:disabled,
+  .next-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
+  }
 
 
 
@@ -111,7 +125,7 @@
     display: flex;
     flex-direction: column;
     margin-right: 50px;
-   
+
   }
 
   .product-info h1 {
@@ -635,37 +649,44 @@
   .chat-message>span {
     font-weight: bold;
   }
-  .text-shop{
-    color:red;
+
+  .text-shop {
+    color: red;
+  }
+
+  .favourite i {
+    color: red;
+    font-weight: bold;
+    font-size: 30px;
   }
 </style>
 <section class="product-section">
   <div class="product-layout">
     <!-- Bên trái: Hình ảnh -->
     <div class="product-images">
-    <!-- Hình ảnh chính (ảnh lớn) -->
-    <div class="main-image">
+      <!-- Hình ảnh chính (ảnh lớn) -->
+      <div class="main-image">
         <img src="{{ asset('uploads/'.$productDetail->image) }}" alt="Giày PUMA"
-            class="img-responsive" id="main-product-image">
-    </div>
+          class="img-responsive" id="main-product-image">
+      </div>
 
-    <!-- Slider thumbnail -->
-    <div class="thumbnail-slider-container">
+      <!-- Slider thumbnail -->
+      <div class="thumbnail-slider-container">
         <button class="prev-btn">‹</button>
 
         <div class="thumbnail-images-slider">
-            <div class="thumbnail-track">
-                @foreach($productDetail->product_image as $item)
-                <div class="thumbnail-slide">
-                    <img src="{{ asset('uploads/'.$item->url) }}" alt="Thumbnail {{ $loop->index }}">
-                </div>
-                @endforeach
+          <div class="thumbnail-track">
+            @foreach($productDetail->product_image as $item)
+            <div class="thumbnail-slide">
+              <img src="{{ asset('uploads/'.$item->url) }}" alt="Thumbnail {{ $loop->index }}">
             </div>
+            @endforeach
+          </div>
         </div>
 
         <button class="next-btn">›</button>
+      </div>
     </div>
-</div>
 
 
     <!-- Bên phải: Thông tin sản phẩm -->
@@ -694,49 +715,66 @@
         <div class="shipping-info">
           <span>Vận Chuyển Tới: {{$string_address}}</span>
           <span>Phí Vận Chuyển: 0₫</span>
+          <p class="favourite" data-id="{{ $productDetail->id }}">
+            <i class="bi {{ $isFavourited ? 'bi-heart-fill text-danger' : 'bi-heart' }}"></i>
+            <span class="favourite-count">{{ $productDetail->favourite }} lượt thích</span>
+          </p>
+
+
+
         </div>
       </div>
       <form action="{{ route('cart.add') }}" method="POST">
         @csrf
         <div class="product-options">
-    @foreach ($productDetail->attribute_values->groupBy('attribute_id') as $attribute_id => $attributes)
-    <div class="option mb-3">
-        <label class="form-label">{{ strtoupper($attributes->first()->attribute->name) }}</label>
-        <select class="form-select attribute-select" name="attributes[{{ $attribute_id }}]" required>
-            <option value="" selected>Chọn {{ strtolower($attributes->first()->attribute->name) }}</option>
-            @foreach ($attributes as $attribute)
-            <option value="{{ $attribute->value }}" data-attribute-id="{{ $attribute->attribute_id }}">
-                {{ $attribute->value }} 
+          @foreach ($productDetail->attribute_values->groupBy('attribute_id') as $attribute_id => $attributes)
+          <div class="option mb-3">
+            <label class="form-label">{{ strtoupper($attributes->first()->attribute->name) }}</label>
+            <select class="form-select attribute-select" name="attributes[{{ $attribute_id }}]" required>
+              @foreach ($attributes as $attribute)
+              {{-- Hiển thị giá trị thuộc tính con đầu tiên --}}
+              @if ($loop->first)
+              <option value="{{ $attribute->value }}" selected>
+                {{ $attribute->value }}
                 @if ($attribute->price)
-                    - Giá: {{ number_format($attribute->price, 2) }} 
+                - Giá: {{ number_format($attribute->price, 2) }}
                 @endif
-            </option>
-            @endforeach
-        </select>
-    </div>
-    @endforeach
-</div>
+              </option>
+              @else
+              <option value="{{ $attribute->value }}">
+                {{ $attribute->value }}
+                @if ($attribute->price)
+                - Giá: {{ number_format($attribute->price, 2) }}
+                @endif
+              </option>
+              @endif
+              @endforeach
+            </select>
+          </div>
+          @endforeach
 
-    
-        <div class="quantity-selector">
-    <label for="quantity">Số Lượng</label>
-    <button type="button" class="decrease">-</button>
-    <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $productDetail->quantity }}">
-    <button type="button" class="increase">+</button>
-    <span>{{ $productDetail->quantity }} sản phẩm có sẵn</span>
-</div>
-    
-        <input type="hidden" name="product_id" value="{{ $productDetail->id }}">
-    
-        <div class="product-actions">
-            @if(Session::get('userId'))
-            <button type="submit" class="add-to-cart">Thêm Vào Giỏ Hàng</button>
-            @else
-            <a href="{{ route('account.login') }}" style="color: red;">Bạn cần phải đăng nhập</a>
-            @endif
         </div>
-    </form>
-  
+
+
+        <div class="quantity-selector">
+          <label for="quantity">Số Lượng</label>
+          <button type="button" class="decrease">-</button>
+          <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $productDetail->quantity }}">
+          <button type="button" class="increase">+</button>
+          <span>{{ $productDetail->quantity }} sản phẩm có sẵn</span>
+        </div>
+
+        <input type="hidden" name="product_id" value="{{ $productDetail->id }}">
+
+        <div class="product-actions">
+          @if(Session::get('userId'))
+          <button type="submit" class="add-to-cart">Thêm Vào Giỏ Hàng</button>
+          @else
+          <a href="{{ route('account.login') }}" style="color: red;">Bạn cần phải đăng nhập</a>
+          @endif
+        </div>
+      </form>
+
       <div class="guarantees">
         <span>Đổi ý miễn phí 15 ngày</span>
         <span>Hàng chính hãng 100%</span>
@@ -749,69 +787,69 @@
 
 <div class="col-lg-12">
   <div class="product__details__tab">
-      <ul class="nav nav-tabs" role="tablist">
-          <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-                  aria-selected="true">Mô tả</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
-                  aria-selected="false">Thông tin liên quan</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                  aria-selected="false">Đánh giá <span>(1)</span></a>
-          </li>
-      </ul>
-      <div class="tab-content">
-          <div class="tab-pane active" id="tabs-1" role="tabpanel">
-              <div class="product__details__tab__desc">
-                  <h6>Mô tả sản phẩm {{$productDetail->name}}</h6>
-                  {!! $productDetail->description !!}
-              </div>
-          </div>
-          <div class="tab-pane" id="tabs-2" role="tabpanel">
-              <div class="product__details__tab__desc">
-                  <h6>Products Infomation</h6>
-                  <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
-                      Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
-                      Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
-                      sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
-                      eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
-                      Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
-                      sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
-                      diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
-                      ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                      Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
-                      Proin eget tortor risus.</p>
-                  <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
-                      ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
-                      elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
-                      porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
-                      nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.</p>
-              </div>
-          </div>
-          <div class="tab-pane" id="tabs-3" role="tabpanel">
-              <div class="product__details__tab__desc">
-                  <!-- Đánh giá sản phẩm -->
-    <section class="product-details spad" style="padding: 0px;">
-      <div class="container mt-4" >
-          <div class="border p-3 ">
-              <h4>ĐÁNH GIÁ SẢN PHẨM</h4>
-              <div class="d-flex align-items-center">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+          aria-selected="true">Mô tả</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+          aria-selected="false">Thông tin liên quan</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+          aria-selected="false">Đánh giá <span>(1)</span></a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="tabs-1" role="tabpanel">
+        <div class="product__details__tab__desc">
+          <h6>Mô tả sản phẩm {{$productDetail->name}}</h6>
+          {!! $productDetail->description !!}
+        </div>
+      </div>
+      <div class="tab-pane" id="tabs-2" role="tabpanel">
+        <div class="product__details__tab__desc">
+          <h6>Products Infomation</h6>
+          <p>Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
+            Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
+            Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
+            sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
+            eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
+            Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
+            sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
+            diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
+            ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+            Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
+            Proin eget tortor risus.</p>
+          <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
+            ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
+            elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
+            porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
+            nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.</p>
+        </div>
+      </div>
+      <div class="tab-pane" id="tabs-3" role="tabpanel">
+        <div class="product__details__tab__desc">
+          <!-- Đánh giá sản phẩm -->
+          <section class="product-details spad" style="padding: 0px;">
+            <div class="container mt-4">
+              <div class="border p-3 ">
+                <h4>ĐÁNH GIÁ SẢN PHẨM</h4>
+                <div class="d-flex align-items-center">
                   <h3 class="mb-0">4.5</h3>
                   <span class="ms-2 text-muted">trên 5</span>
                   <div class="ms-3">
-                      <div class="d-flex">
-                          <span class="text-warning">★</span>
-                          <span class="text-warning">★</span>
-                          <span class="text-warning">★</span>
-                          <span class="text-warning">★</span>
-                          <span class="text-warning">★</span>
-                      </div>
+                    <div class="d-flex">
+                      <span class="text-warning">★</span>
+                      <span class="text-warning">★</span>
+                      <span class="text-warning">★</span>
+                      <span class="text-warning">★</span>
+                      <span class="text-warning">★</span>
+                    </div>
                   </div>
-              </div>
-              <div class="mt-2">
+                </div>
+                <div class="mt-2">
                   <button class="btn btn-outline-secondary btn-sm">Tất Cả</button>
                   <button class="btn btn-outline-secondary btn-sm">5 Sao (453)</button>
                   <button class="btn btn-outline-secondary btn-sm">4 Sao (70)</button>
@@ -820,66 +858,66 @@
                   <button class="btn btn-outline-secondary btn-sm">1 Sao (26)</button>
                   <button class="btn btn-outline-secondary btn-sm">Có Bình Luận (179)</button>
                   <button class="btn btn-outline-secondary btn-sm">Có Hình Ảnh / Video (64)</button>
+                </div>
               </div>
-          </div>
-      
-          <div class="mt-4">
-              <div class="border-bottom pb-3 mb-3">
+
+              <div class="mt-4">
+                <div class="border-bottom pb-3 mb-3">
                   <div class="d-flex align-items-start">
-                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s" alt="User" class="rounded-circle me-3" style="width: 40px;">
-                      <div>
-                          <h6 class="mb-1">dosen98</h6>
-                          <p class="mb-1 text-muted">2023-08-02 15:38 | Phân loại hàng: COOL,M(30-45KG)</p>
-                          <div class="d-flex align-items-center">
-                              <span class="text-warning">★</span>
-                              <span class="text-warning">★</span>
-                              <span class="text-warning">★</span>
-                              <span class="text-warning">★</span>
-                              <span class="text-warning">★</span>
-                          </div>
-                          <p class="mt-2 mb-2">Đúng với mô tả: chất đẹp ,vừa tiền giao đúng. Shop tư vấn nhiệt tình, giao nhanh.</p>
-                          <div class="d-flex " >
-                              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" class="mr-2 " style="width: 100px;">
-                              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" style="width: 100px;">
-                          </div>
-                          <div class="mt-2">
-                              <span class="text-muted">12  <i class="icon_like mr-2" ></i></span>
-                          </div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s" alt="User" class="rounded-circle me-3" style="width: 40px;">
+                    <div>
+                      <h6 class="mb-1">dosen98</h6>
+                      <p class="mb-1 text-muted">2023-08-02 15:38 | Phân loại hàng: COOL,M(30-45KG)</p>
+                      <div class="d-flex align-items-center">
+                        <span class="text-warning">★</span>
+                        <span class="text-warning">★</span>
+                        <span class="text-warning">★</span>
+                        <span class="text-warning">★</span>
+                        <span class="text-warning">★</span>
                       </div>
+                      <p class="mt-2 mb-2">Đúng với mô tả: chất đẹp ,vừa tiền giao đúng. Shop tư vấn nhiệt tình, giao nhanh.</p>
+                      <div class="d-flex ">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" class="mr-2 " style="width: 100px;">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" style="width: 100px;">
+                      </div>
+                      <div class="mt-2">
+                        <span class="text-muted">12 <i class="icon_like mr-2"></i></span>
+                      </div>
+                    </div>
                   </div>
-              </div>
-      
-              <div>
+                </div>
+
+                <div>
                   <div class="d-flex align-items-start">
-                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s" alt="User" class="rounded-circle me-3" style="width: 40px;">
-                      <div>
-                          <h6 class="mb-1">trannhicherry1997</h6>
-                          <p class="mb-1 text-muted">2024-06-23 11:52 | Phân loại hàng: UNIQUE HỒNG,M(30-45KG)</p>
-                          <div class="d-flex align-items-center">
-                              <span class="text-warning">★</span>
-                              <span class="text-warning">★</span>
-                              <span class="text-warning">★</span>
-                              <span class="text-warning">★</span>
-                              <span class="text-muted">★</span>
-                          </div>
-                          <p class="mt-2 mb-2">Giao hàng nhanh, đóng gói bao bì cẩn thận, sản phẩm rất đẹp vải mát không bị nóng đâu.</p>
-                          <div class="d-flex " >
-                              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" class="mr-2 " style="width: 100px;">
-                              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" style="width: 100px;">
-                          </div>
-                          <div class="mt-2">
-                              <span class="text-muted">12  <i class="icon_like mr-2" ></i></span>
-                          </div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s" alt="User" class="rounded-circle me-3" style="width: 40px;">
+                    <div>
+                      <h6 class="mb-1">trannhicherry1997</h6>
+                      <p class="mb-1 text-muted">2024-06-23 11:52 | Phân loại hàng: UNIQUE HỒNG,M(30-45KG)</p>
+                      <div class="d-flex align-items-center">
+                        <span class="text-warning">★</span>
+                        <span class="text-warning">★</span>
+                        <span class="text-warning">★</span>
+                        <span class="text-warning">★</span>
+                        <span class="text-muted">★</span>
                       </div>
+                      <p class="mt-2 mb-2">Giao hàng nhanh, đóng gói bao bì cẩn thận, sản phẩm rất đẹp vải mát không bị nóng đâu.</p>
+                      <div class="d-flex ">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" class="mr-2 " style="width: 100px;">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" style="width: 100px;">
+                      </div>
+                      <div class="mt-2">
+                        <span class="text-muted">12 <i class="icon_like mr-2"></i></span>
+                      </div>
+                    </div>
                   </div>
+                </div>
               </div>
-          </div>
+            </div>
+          </section>
+          <!-- END Đánh giá sản phẩm -->
+        </div>
       </div>
-  </section>
-       <!-- END Đánh giá sản phẩm -->
-              </div>
-          </div>
-      </div>
+    </div>
   </div>
 </div>
 
@@ -921,7 +959,7 @@
         </div>
       </div>
 
-      
+
 
       <!-- Followers and Products -->
       <div class="col-lg-3 col-md-6">
@@ -997,6 +1035,43 @@
 
 
 
+<!-- xử lí thêm sản phẩm yêu thích -->
+<script>
+  $(document).ready(function() {
+    $('.favourite').on('click', function() {
+      var productId = $(this).data('id');
+      var favouriteIcon = $(this).find('i');
+      var favouriteCountElement = $(this).find('.favourite-count');
+
+      $.ajax({
+        url: '/san-pham/yeu-thich/' + productId,
+        type: 'POST',
+        data: {
+          _token: '{{ csrf_token() }}' // Laravel CSRF protection
+        },
+        success: function(response) {
+          if (response.success) {
+            // Cập nhật biểu tượng yêu thích
+            if (response.status === 'added') {
+              favouriteIcon.removeClass('bi-heart').addClass('bi-heart-fill text-danger');
+            } else if (response.status === 'removed') {
+              favouriteIcon.removeClass('bi-heart-fill text-danger').addClass('bi-heart');
+            }
+
+            // Cập nhật số lượt thích và text "lượt thích" cùng lúc
+            favouriteCountElement.text(response.favourite + ' lượt thích');
+          }
+        },
+        error: function(error) {
+          console.log('Error:', error);
+        }
+      });
+    });
+  });
+</script>
+
+
+
 
 
 
@@ -1004,38 +1079,38 @@
 
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-      const decreaseButton = document.querySelector('.decrease');
-      const increaseButton = document.querySelector('.increase');
-      const quantityInput = document.getElementById('quantity');
-      const maxQuantity = parseInt("{{$productDetail->quantity}}"); // Số lượng sản phẩm tối đa có sẵn
+  document.addEventListener('DOMContentLoaded', function() {
+    const decreaseButton = document.querySelector('.decrease');
+    const increaseButton = document.querySelector('.increase');
+    const quantityInput = document.getElementById('quantity');
+    const maxQuantity = parseInt("{{$productDetail->quantity}}"); // Số lượng sản phẩm tối đa có sẵn
 
-      // Xử lý khi nhấn nút giảm
-      decreaseButton.addEventListener('click', function () {
-          let currentQuantity = parseInt(quantityInput.value);
-          if (currentQuantity > 1) {
-              quantityInput.value = currentQuantity - 1;
-          }
-      });
+    // Xử lý khi nhấn nút giảm
+    decreaseButton.addEventListener('click', function() {
+      let currentQuantity = parseInt(quantityInput.value);
+      if (currentQuantity > 1) {
+        quantityInput.value = currentQuantity - 1;
+      }
+    });
 
-      // Xử lý khi nhấn nút tăng
-      increaseButton.addEventListener('click', function () {
-          let currentQuantity = parseInt(quantityInput.value);
-          if (currentQuantity < maxQuantity) {
-              quantityInput.value = currentQuantity + 1;
-          }
-      });
+    // Xử lý khi nhấn nút tăng
+    increaseButton.addEventListener('click', function() {
+      let currentQuantity = parseInt(quantityInput.value);
+      if (currentQuantity < maxQuantity) {
+        quantityInput.value = currentQuantity + 1;
+      }
+    });
 
-      // Giới hạn khi người dùng tự nhập số lượng
-      quantityInput.addEventListener('input', function () {
-          let currentQuantity = parseInt(quantityInput.value);
+    // Giới hạn khi người dùng tự nhập số lượng
+    quantityInput.addEventListener('input', function() {
+      let currentQuantity = parseInt(quantityInput.value);
 
-          if (currentQuantity > maxQuantity) {
-              quantityInput.value = maxQuantity;
-          } else if (currentQuantity < 1 || isNaN(currentQuantity)) {
-              quantityInput.value = 1;
-          }
-      });
+      if (currentQuantity > maxQuantity) {
+        quantityInput.value = maxQuantity;
+      } else if (currentQuantity < 1 || isNaN(currentQuantity)) {
+        quantityInput.value = 1;
+      }
+    });
   });
 </script>
 
@@ -1043,8 +1118,8 @@
 <script>
   // JavaScript to handle chat box toggle
 
-// Function to select a chat and show chat history
-function selectChat(user) {
+  // Function to select a chat and show chat history
+  function selectChat(user) {
     const chatContent = document.getElementById('chatContent');
     chatContent.innerHTML = `
         <div class="chat-message">Người mua: Sản phẩm của bạn có sẵn không?</div>
@@ -1053,31 +1128,31 @@ function selectChat(user) {
         <div class="chat-message">Người bán: Cảm ơn bạn! Tôi sẽ xử lý đơn hàng ngay lập tức.</div>
         <div class="chat-message">Người mua: Cảm ơn bạn đã hỗ trợ!</div>
     `;
-}
+  }
 
-document.querySelector('.btn-primary').addEventListener('click', function() {
+  document.querySelector('.btn-primary').addEventListener('click', function() {
     const input = document.querySelector('.chat-input');
     const newMessage = input.value.trim();
 
     if (newMessage) {
-        const chatContent = document.getElementById('chatContent');
-        chatContent.innerHTML += `<div class="chat-message">Bạn: ${newMessage}</div>`;
-        input.value = ''; 
+      const chatContent = document.getElementById('chatContent');
+      chatContent.innerHTML += `<div class="chat-message">Bạn: ${newMessage}</div>`;
+      input.value = '';
     }
-});
+  });
 
 
-document.getElementById("chatButton").addEventListener("click", function() {
+  document.getElementById("chatButton").addEventListener("click", function() {
     document.getElementById("chatSection").style.display = "block";
-});
+  });
 
 
-document.getElementById("closeChat").addEventListener("click", function() {
+  document.getElementById("closeChat").addEventListener("click", function() {
     document.getElementById("chatSection").style.display = "none";
-});
+  });
 
 
-document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
     const thumbnails = document.querySelectorAll('.thumbnail-slide img');
     const mainImage = document.getElementById('main-product-image');
     const prevBtn = document.querySelector('.prev-btn');
@@ -1087,9 +1162,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Hover effect for changing main image
     thumbnails.forEach(thumbnail => {
-        thumbnail.addEventListener('mouseenter', function() {
-            mainImage.src = this.src;
-        });
+      thumbnail.addEventListener('mouseenter', function() {
+        mainImage.src = this.src;
+      });
     });
 
     // Slider control
@@ -1098,27 +1173,27 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentIndex = 0;
 
     function updateSliderPosition() {
-        slideWidth = slides[0].getBoundingClientRect().width; // Recalculate slide width
-        const totalSlidesWidth = slides.length * slideWidth + (slides.length - 1) * 10; // Total width including margins
-        const maxIndex = Math.max(0, slides.length - visibleSlides);
-        const maxTranslateX = totalSlidesWidth - (visibleSlides * slideWidth);
-        track.style.transform = `translateX(-${Math.min(currentIndex * slideWidth, maxTranslateX)}px)`;
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex >= maxIndex;
+      slideWidth = slides[0].getBoundingClientRect().width; // Recalculate slide width
+      const totalSlidesWidth = slides.length * slideWidth + (slides.length - 1) * 10; // Total width including margins
+      const maxIndex = Math.max(0, slides.length - visibleSlides);
+      const maxTranslateX = totalSlidesWidth - (visibleSlides * slideWidth);
+      track.style.transform = `translateX(-${Math.min(currentIndex * slideWidth, maxTranslateX)}px)`;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex >= maxIndex;
     }
 
-    nextBtn.addEventListener('click', function () {
-        if (currentIndex < slides.length - visibleSlides) {
-            currentIndex++;
-            updateSliderPosition();
-        }
+    nextBtn.addEventListener('click', function() {
+      if (currentIndex < slides.length - visibleSlides) {
+        currentIndex++;
+        updateSliderPosition();
+      }
     });
 
-    prevBtn.addEventListener('click', function () {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateSliderPosition();
-        }
+    prevBtn.addEventListener('click', function() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateSliderPosition();
+      }
     });
 
     // Initial setup
@@ -1126,8 +1201,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Optional: Handle window resize to adjust slideWidth
     window.addEventListener('resize', updateSliderPosition);
-});
-
+  });
 </script>
 
 @endsection

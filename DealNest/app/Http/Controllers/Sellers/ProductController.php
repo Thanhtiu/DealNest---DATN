@@ -81,12 +81,11 @@ class ProductController extends Controller
                 'brand_id' => $request->brand_id,
                 'status' => 'Chờ phê duyệt',
                 'image' => $imageName,
-                'trash_can' => 1
+                'trash_can' => 1,
+                'favourite' => 0,
             ]);
 
             // Lấy dữ liệu attributes từ request
-
-
             $attributes = $request->input('attributes');
             if ($attributes) {
                 foreach ($attributes as $attributeId => $attributeData) {
@@ -130,8 +129,8 @@ class ProductController extends Controller
 
             return redirect()->route('seller.product.list')->with('success', 'Thêm sản phẩm thành công.');
         } catch (\Exception $e) {
-            // \Log::error('Error creating product: ' . $e->getMessage());
-            dd($e->getMessage());
+            \Log::error('Error creating product: ' . $e->getMessage());
+            // dd($e->getMessage());
         }
     }
 
@@ -189,16 +188,11 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        // Lấy danh mục, thương hiệu
         $category = Category::all();
         $brand = Brand::all();
-        $attribute = Attribute::all(); // Lấy các thuộc tính (ví dụ: Kích thước, Màu sắc)
-
-        // Lấy thông tin sản phẩm cùng với các thuộc tính và giá trị của chúng
+        $attribute = Attribute::all();
         $product = Product::with('attribute_values.attribute')->find($id);
-        // return $product;
 
-        // Trả về view cùng với dữ liệu cần thiết
         return view('sellers.products.edit', compact('category', 'brand', 'product', 'attribute'));
     }
 
@@ -225,8 +219,6 @@ class ProductController extends Controller
             'brand_id.required' => 'Thương hiệu là bắt buộc.',
 
         ]);
-
-        // Find the product by ID
         $product = Product::findOrFail($id);
 
         if ($request->hasFile('image')) {
@@ -270,7 +262,6 @@ class ProductController extends Controller
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $file->move(public_path('uploads'), $fileName);
 
-                // Update image record
                 if ($productImage) {
                     $productImage->update([
                         'url' => $fileName
@@ -281,10 +272,10 @@ class ProductController extends Controller
 
         $attributes = $request->input('attributes', []);
 
-        // Bước 1: Xóa tất cả các giá trị thuộc tính cũ liên quan đến sản phẩm hiện tại
-        attribute_value::where('product_id', $product->id)->delete(); // Chắc chắn rằng tất cả các bản ghi đã bị xóa
+        // Xóa tất cả các giá trị thuộc tính cũ liên quan đến sản phẩm hiện tại
+        attribute_value::where('product_id', $product->id)->delete();
 
-        // Bước 2: Thêm lại tất cả các thuộc tính và giá trị từ request
+        // Thêm lại tất cả các thuộc tính và giá trị từ request
         foreach ($attributes as $attributeId => $attributeData) {
             // Tìm thuộc tính chính (attribute) dựa trên ID có sẵn
             $attribute = Attribute::find($attributeId);
@@ -299,28 +290,12 @@ class ProductController extends Controller
                             'attribute_id' => $attribute->id,
                             'product_id' => $product->id,
                             'value' => $valueData['value'],
-                            'price' => $valueData['price'] ?? null, // Lưu price trực tiếp vào bảng attribute_value
+                            'price' => $valueData['price'] ?? null,
                         ]);
                     }
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // Redirect back with success message
         return redirect()->back()->with('success', 'Cập nhật sản phẩm thành công!');
     }
 
@@ -369,9 +344,7 @@ class ProductController extends Controller
             $productImage->delete();
         }
 
-        // Xóa sản phẩm
         $product->delete();
-
         return redirect()->route('seller.product.list')->with('success', 'Product deleted successfully!');
     }
 }

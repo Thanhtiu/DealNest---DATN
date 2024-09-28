@@ -20,6 +20,7 @@ use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Client\PaymentController;
+use App\Http\Controllers\Client\WishListController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\FacebookLoginController;
 
@@ -40,7 +41,9 @@ Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.dest
 Route::get('/cua-hang/{id}', [ShopController::class, 'index'])->name('client.shop');
 Route::post('/tim-kiem', [SearchController::class, 'index'])->name('client.search');
 Route::get('/thanh-toan', [PaymentController::class, 'index'])->name('client.payment');
-
+Route::post('/san-pham/yeu-thich/{id}', [WishListController::class, 'create'])->middleware('auth');
+Route::get('/san-pham-yeu-thich', [WishListController::class, 'index'])->name('client.favourite');
+Route::get('/san-pham-yeu-thich/xoa/{id}',[WishListController::class,'destroy'])->name('client.wishList.destroy');
 
 
 Route::prefix('/tai-khoan-cua-toi')->group(function () {

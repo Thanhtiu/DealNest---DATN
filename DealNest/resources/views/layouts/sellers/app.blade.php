@@ -31,13 +31,13 @@
 
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{asset('sellers/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
-    <link rel="stylesheet" href="{{asset('sellers/assets/vendors/ti-icons/css/themify-icons.css')}}">
-    <link rel="stylesheet" href="{{asset('sellers/assets/vendors/css/vendor.bundle.base.css')}}">
-    <link rel="stylesheet" href="{{asset('sellers/assets/vendors/font-awesome/css/font-awesome.min.css')}}">
+    <!-- <link rel="stylesheet" href="{{asset('sellers/assets/vendors/ti-icons/css/themify-icons.css')}}"> -->
+    <!-- <link rel="stylesheet" href="{{asset('sellers/assets/vendors/css/vendor.bundle.base.css')}}"> -->
+    <!-- <link rel="stylesheet" href="{{asset('sellers/assets/vendors/font-awesome/css/font-awesome.min.css')}}"> -->
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="{{asset('sellers/assets/vendors/font-awesome/css/font-awesome.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}">
+    <!-- <link rel="stylesheet" href="{{asset('sellers/assets/vendors/font-awesome/css/font-awesome.min.css')}}" /> -->
+    <!-- <link rel="stylesheet" href="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}"> -->
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
@@ -48,7 +48,6 @@
     <link rel="shortcut icon" href="{{asset('sellers/assets/images/favicon.png')}}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.css">
-    <!-- Bootstrap 5 CSS -->
 
 
 </head>
