@@ -9,5 +9,6 @@ class VoucherController extends Controller
 {
     public function index(){
         return view('sellers.voucher.index');
+        
     }
 }
