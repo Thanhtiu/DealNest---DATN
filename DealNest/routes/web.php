@@ -18,6 +18,7 @@ use App\Http\Controllers\Client\AddressController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Sellers\InfoController;
+use App\Http\Controllers\Sellers\VoucherController;
 use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\WishListController;
@@ -119,6 +120,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/cua-hang', [InfoController::class, 'index'])->name('seller.info');
 
         Route::put('/cua-hang/cap-nhat', [InfoController::class, 'update'])->name('seller.info.update');
+
+        Route::get('/danh-sach/voucher', [VoucherController::class, 'index'])->name('seller.voucher');
     });
 
     // End Seller Route
