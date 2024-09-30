@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade')->after('attribute_id');
             $table->string('value');
             $table->decimal('price', 10, 2)->nullable();
-            
+
             $table->timestamps();
         });
     }

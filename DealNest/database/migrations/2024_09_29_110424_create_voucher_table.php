@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id(); // Tự động tạo khóa chính với auto-increment
+            $table->foreignId('subcategory_id')->constrained('subcategories')->onDelete('cascade');
+            $table->foreignId('seller_id')->constrained('sellers')->onDelete('cascade');
             $table->string('name', 255)->notNullable(); // Tên promotion
             $table->string('code', 50)->unique()->notNullable(); // Mã code giảm độ dài xuống còn 50 ký tự, thêm unique
-            $table->text('descriptions')->nullable(); // Cho phép mô tả dài hơn và có thể null
             $table->enum('type', ['percentage', 'fixed'])->notNullable(); // Loại giảm giá (theo phần trăm hoặc cố định)
             $table->decimal('value', 10, 2)->notNullable(); // Giá trị giảm giá (số tiền hoặc phần trăm)
             $table->dateTime('start_date')->notNullable(); // Thời gian bắt đầu

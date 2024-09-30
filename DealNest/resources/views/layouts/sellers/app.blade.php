@@ -25,9 +25,7 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
 
-    <!-- DataTables Bootstrap 5 JS -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
 
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{asset('sellers/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
@@ -53,56 +51,57 @@
 </head>
 <style>
     /* Style cho dropdown chọn số lượng mục */
-.dataTables_length select {
-    padding: 5px 20px;
-    border: 2px solid #ff5722;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #333;
-    background-color: #fff;
-    cursor: pointer;
-    transition: border 0.3s ease;
-    outline: none;
-}
+    .dataTables_length select {
+        padding: 5px 20px;
+        border: 2px solid #ff5722;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #333;
+        background-color: #fff;
+        cursor: pointer;
+        transition: border 0.3s ease;
+        outline: none;
+    }
 
-.dataTables_length select:focus {
-    border: 2px solid #ff8a50;
-}
+    .dataTables_length select:focus {
+        border: 2px solid #ff8a50;
+    }
 
-.dataTables_length label {
-    font-weight: bold;
-    color: #333;
-}
-/* Style cho input tìm kiếm */
-.dataTables_filter input {
-    border: 2px solid #ff5722;
-    border-radius: 25px;
-    padding: 8px 15px 8px 35px;  /* Tạo không gian cho icon */
-    width: 300px;
-    font-size: 14px;
-    transition: border 0.3s ease;
-    outline: none;
-    background: url('https://cdn-icons-png.flaticon.com/512/622/622669.png') no-repeat scroll 10px 8px;
-    background-size: 20px 20px;
-}
+    .dataTables_length label {
+        font-weight: bold;
+        color: #333;
+    }
 
-.dataTables_filter input:focus {
-    border: 1px solid #ff5722;
-}
+    /* Style cho input tìm kiếm */
+    .dataTables_filter input {
+        border: 2px solid #ff5722;
+        border-radius: 25px;
+        padding: 8px 15px 8px 35px;
+        /* Tạo không gian cho icon */
+        width: 300px;
+        font-size: 14px;
+        transition: border 0.3s ease;
+        outline: none;
+        background: url('https://cdn-icons-png.flaticon.com/512/622/622669.png') no-repeat scroll 10px 8px;
+        background-size: 20px 20px;
+    }
 
-.dataTables_filter label {
-    font-weight: bold;
-    color: #333;
-    margin-right: 10px;
-}
+    .dataTables_filter input:focus {
+        border: 1px solid #ff5722;
+    }
 
-.dataTables_wrapper .dataTables_filter input::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
+    .dataTables_filter label {
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
 
-
+    .dataTables_wrapper .dataTables_filter input::placeholder {
+        color: #aaa;
+        font-style: italic;
+    }
 </style>
+
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
@@ -302,12 +301,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false"
-                            aria-controls="forms">
+                        <a class="nav-link" data-toggle="collapse" href="#orderMenu" aria-expanded="false" aria-controls="orderMenu">
                             <span class="menu-title">Quản lý đơn hàng</span>
                             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                         </a>
-                        <div class="collapse" id="forms">
+                        <div class="collapse" id="orderMenu">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
                                     <a class="nav-link" href="pages/forms/basic_elements.html">Tất cả</a>
@@ -318,30 +316,27 @@
                             </ul>
                         </div>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
-                            aria-controls="ui-basic">
+                        <a class="nav-link" data-toggle="collapse" href="#userMenu" aria-expanded="false" aria-controls="userMenu">
                             <span class="menu-title">Quản lý người dùng</span>
-                            <i class="menu-arrow"></i>
                             <i class="mdi mdi-lock menu-icon"></i>
                         </a>
-                        <div class="collapse" id="ui-basic">
+                        <div class="collapse" id="userMenu">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/ui-features/buttons.html">Xem thông tin tài
-                                        khoản</a>
+                                    <a class="nav-link" href="pages/ui-features/buttons.html">Xem thông tin tài khoản</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false"
-                            aria-controls="forms">
+                        <a class="nav-link" data-toggle="collapse" href="#productMenu" aria-expanded="false" aria-controls="productMenu">
                             <span class="menu-title">Quản lý sản phẩm</span>
                             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                         </a>
-                        <div class="collapse" id="forms">
+                        <div class="collapse" id="productMenu">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{route('seller.product.list')}}">Danh sách sản phẩm</a>
@@ -356,46 +351,25 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false"
-                            aria-controls="charts">
-                            <span class="menu-title">Quản lý đánh giá</span>
+                        <a class="nav-link" data-toggle="collapse" href="#voucherMenu" aria-expanded="false" aria-controls="voucherMenu">
+                            <span class="menu-title">Quản lý voucher</span>
                             <i class="mdi mdi-chart-bar menu-icon"></i>
                         </a>
-                        <div class="collapse" id="charts">
+                        <div class="collapse" id="voucherMenu">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh gián sản phẩm</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh gián cửa hàng</a>
+                                    <a class="nav-link" href="{{route('seller.voucher')}}">Danh sách voucher</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="" aria-expanded="false"
-                            aria-controls="tables">
-                            <span class="menu-title">Quản lý voucher</span>
-                            <i class="mdi mdi-table-large menu-icon"></i>
-                        </a>
-                        <div class="collapse" id="tables">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="">Danh sách voucher</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="">Thêm voucher</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false"
-                            aria-controls="tables">
+                        <a class="nav-link" data-toggle="collapse" href="#shopMenu" aria-expanded="false" aria-controls="shopMenu">
                             <span class="menu-title">Quản lý shop</span>
                             <i class="mdi mdi-table-large menu-icon"></i>
                         </a>
-                        <div class="collapse" id="tables">
+                        <div class="collapse" id="shopMenu">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
                                     <a class="nav-link" href="pages/tables/basic-table.html">Hồ sơ shop</a>
@@ -513,7 +487,7 @@
 
     <!-- <script src="{{asset('sellers/assets/js/spinner.js')}}"></script> -->
     <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> -->
 
 
     <!-- plugins:js -->

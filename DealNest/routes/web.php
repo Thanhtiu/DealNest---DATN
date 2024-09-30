@@ -44,7 +44,7 @@ Route::post('/tim-kiem', [SearchController::class, 'index'])->name('client.searc
 Route::get('/thanh-toan', [PaymentController::class, 'index'])->name('client.payment');
 Route::post('/san-pham/yeu-thich/{id}', [WishListController::class, 'create'])->middleware('auth');
 Route::get('/san-pham-yeu-thich', [WishListController::class, 'index'])->name('client.favourite');
-Route::get('/san-pham-yeu-thich/xoa/{id}',[WishListController::class,'destroy'])->name('client.wishList.destroy');
+Route::get('/san-pham-yeu-thich/xoa/{id}', [WishListController::class, 'destroy'])->name('client.wishList.destroy');
 
 
 Route::prefix('/tai-khoan-cua-toi')->group(function () {
@@ -122,6 +122,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/cua-hang/cap-nhat', [InfoController::class, 'update'])->name('seller.info.update');
 
         Route::get('/danh-sach/voucher', [VoucherController::class, 'index'])->name('seller.voucher');
+
+        Route::post('/them-voucher', [VoucherController::class, 'create'])->name('seller.voucher.create');
+
+        Route::post('/cap-nhat/voucher/{id}', [VoucherController::class, 'update'])->name('seller.voucher.update');
+
+        Route::get('/cap-nhat/voucher/{id}', [VoucherController::class, 'edit'])->name('seller.voucher.edit');
+
+        Route::get('/voucher/xoa/{id}', [VoucherController::class, 'destroy'])->name('seller.voucher.destroy');
     });
 
     // End Seller Route
