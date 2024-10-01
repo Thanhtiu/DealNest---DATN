@@ -75,3 +75,19 @@
 	font-size: 20px;
 	margin-right: 8px;
 }
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+}
+
+footer {
+    background-color: #f8f8f8; /* Màu nền footer */
+    padding: 20px; /* Khoảng cách bên trong footer */
+    text-align: center; /* Căn giữa nội dung */
+}
+
+.footer-images img {
+    width: 50px; 
+    height: auto; 
+    margin: 0 10px;
+}

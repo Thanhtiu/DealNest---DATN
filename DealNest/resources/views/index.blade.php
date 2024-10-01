@@ -59,3 +59,8 @@
 <script src="{{asset('client/js/index.js')}}"></script>
 
 @endsection
+
+
+
+
+
