@@ -659,6 +659,16 @@
     font-weight: bold;
     font-size: 30px;
   }
+  a {
+     /* Màu chữ mặc định cho thẻ a */
+    text-decoration: none; /* Loại bỏ gạch chân mặc định */
+}
+
+a:hover {
+    color: #000; /* Đảm bảo màu sắc khi hover không bị chuyển thành màu trắng */
+    text-decoration: underline; /* Hiệu ứng khi hover nếu cần */
+}
+
 </style>
 <section class="product-section">
   <div class="product-layout">
@@ -713,7 +723,13 @@
       <div class="shipping-section">
         <span class="free-ship">Miễn phí vận chuyển</span>
         <div class="shipping-info">
-          <span>Vận Chuyển Tới: {{$string_address}}</span>
+          <span>Vận Chuyển Tới:
+            @if($string_address == 'Vui lòng cập nhật địa chỉ')
+            <a href="{{route('account.address.index')}}">{{$string_address}}</a>
+            @else
+            {{$string_address}} <i class="bi bi-chevron-down"></i>
+            @endif
+          </span>
           <span>Phí Vận Chuyển: 0₫</span>
           <p class="favourite" data-id="{{ $productDetail->id }}">
             <i class="bi {{ $isFavourited ? 'bi-heart-fill text-danger' : 'bi-heart' }}"></i>

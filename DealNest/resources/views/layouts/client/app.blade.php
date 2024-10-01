@@ -65,11 +65,14 @@
 
                 <!-- Right Side Menu -->
                 <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                        <a class="nav-link" href="{{route('client.cart')}}"><i class="bi bi-cart" style="font-size: 20px;"></i></a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('seller.index')}}">Kênh người bán</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Trang chủ</a>
+                        <a class="nav-link" href="{{route('client.index')}}">Trang chủ</a>
                     </li>
                     <li class="nav-item">
                         @if(Auth::check())
@@ -79,10 +82,7 @@
                         @endif
                     </li>
 
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-cart" style="font-size: 20px;"></i></a>
-                    </li>
+                    
                 </ul>
             </div>
         </nav>

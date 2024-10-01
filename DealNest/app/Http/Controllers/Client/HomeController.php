@@ -19,7 +19,7 @@ class HomeController extends Controller
 
         $categories = Category::all();
 
-        $products = Product::with('product_image')->orderBy('sales','desc')->get();
+        $products = Product::with('product_image')->orderBy('sales', 'desc')->paginate(6);
         // return dd($products);
         return view('index',compact('products','categories'));
     }

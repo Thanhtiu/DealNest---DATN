@@ -2,6 +2,33 @@
 @section('content')
 <link rel="stylesheet" href="{{asset('client/css/product.css')}}" type="text/css">
 
+<style>
+    .custom-pagination .page-item {
+  margin: 0 8px; /* Khoảng cách giữa các phần tử */
+}
+
+.custom-pagination .page-item.active .page-link {
+  background-color: #0d6efd; /* Màu nền cam */
+  border-color: #f05440;
+  color: white;
+}
+
+.custom-pagination .page-link {
+  color: #6c757d; /* Màu xám */
+  border: none;  /* Loại bỏ viền */
+  padding: 10px 15px; /* Tăng kích thước padding để khoảng cách lớn hơn */
+}
+
+.custom-pagination .page-item.disabled .page-link {
+  color: #6c757d; /* Màu xám cho disabled */
+}
+
+.custom-pagination .page-item .page-link:hover {
+  color: #f05440; /* Màu cam khi hover */
+}
+
+
+</style>
 
 <section class="category-section">
     <h2>DANH MỤC</h2>
@@ -55,6 +82,39 @@
     </div>
     @endforeach
 </div>
+<!-- Phân trang -->
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center custom-pagination">
+    <!-- Nút Previous -->
+    <li class="page-item {{ $products->onFirstPage() ? 'disabled' : '' }}">
+      <a class="page-link" href="{{ $products->previousPageUrl() }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+
+    <!-- Số trang -->
+    @for ($i = 1; $i <= $products->lastPage(); $i++)
+      <li class="page-item {{ $i == $products->currentPage() ? 'active' : '' }}">
+        <a class="page-link" href="{{ $products->url($i) }}">{{ $i }}</a>
+      </li>
+    @endfor
+
+    <!-- Dấu ... nếu có nhiều trang -->
+    @if ($products->lastPage() > 5)
+      <li class="page-item disabled">
+        <span class="page-link">...</span>
+      </li>
+    @endif
+
+    <!-- Nút Next -->
+    <li class="page-item {{ $products->hasMorePages() ? '' : 'disabled' }}">
+      <a class="page-link" href="{{ $products->nextPageUrl() }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
 
 <script src="{{asset('client/js/index.js')}}"></script>
 

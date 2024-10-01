@@ -56,8 +56,7 @@ class AccountController extends Controller
 
 
 
-                    return redirect('/');
-
+                    return redirect('/')->with('success', 'Đăng nhập thành công!');
                 } else {
 
                     session()->put('userEmail', $request->email);
@@ -66,15 +65,12 @@ class AccountController extends Controller
                     session()->flash('alertType', 'error');
 
                     return redirect()->back();
-
                 }
-
             } else {
                 return redirect()->route('account.login')
                     ->withInput()
                     ->with('login_error', 'Email hoặc mật khẩu không chính xác! Vui lòng thử lại');
             }
-
         } else {
             return redirect()->route('account.login')
                 ->withInput()
@@ -127,8 +123,6 @@ class AccountController extends Controller
                 session()->flash('alertType', 'success');
 
                 return redirect()->route('otp.sendOTP');
-
-
             } else {
 
                 session()->flash('alertMessage', 'Đăng ký thất bại. Vui lòng thử lại!');
@@ -136,17 +130,12 @@ class AccountController extends Controller
                 session()->flash('alertType', 'error');
 
                 return redirect()->route('account.login');
-
             }
-
-
         } else {
             return redirect()->route('account.register')
                 ->withInput()
                 ->withErrors($validator);
         }
-
-
     }
 
     public function logout()
@@ -155,7 +144,6 @@ class AccountController extends Controller
         Auth::logout();
 
         session()->invalidate();
-        return redirect('/');
+        return redirect('/')->with('success', 'Đăng xuất thành công!');
     }
-
 }

@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Address;
+
 class AddressController extends Controller
 {
     public function index()
     {
-        
+
         $userId = auth()->id();
         $address = Address::where('user_id', auth()->id())
             ->with('user')
@@ -19,6 +20,15 @@ class AddressController extends Controller
     }
     public function create(Request $request)
     {
+        // Kiểm tra xem có địa chỉ nào có `active = 1` cho người dùng hiện tại hay không
+        $existingActiveAddress = Address::where('user_id', auth()->user()->id)
+            ->where('active', 1)
+            ->first();
+
+        // Nếu đã có địa chỉ `active = 1`, thì gán giá trị `active = 2` cho địa chỉ mới
+        $activeValue = $existingActiveAddress ? 2 : 1;
+
+        // Tạo địa chỉ mới
         $address = Address::create([
             'user_id' => auth()->user()->id,
             'province_id' => $request->input('province'),
@@ -26,10 +36,12 @@ class AddressController extends Controller
             'ward_id' => $request->input('ward'),
             'street' => $request->input('street'),
             'string_address' => $request->input('string_address'),
-            'active' => 1
+            'active' => $activeValue // Gán giá trị active tùy theo điều kiện
         ]);
+
         return redirect()->route('account.address.index')->with('success', 'Địa chỉ đã được thêm thành công');
     }
+
 
     public function edit($id)
     {
@@ -95,5 +107,4 @@ class AddressController extends Controller
 
         return redirect()->back()->with('success', 'Địa chỉ đã được thiết lập mặc định');
     }
-
 }

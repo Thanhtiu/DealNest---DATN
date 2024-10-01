@@ -304,6 +304,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{route('seller.productStatistics')}}">
+                            <span class="menu-title">Thống kê sản phẩm</span>
+                            <i class="mdi mdi-home menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#orderMenu" aria-expanded="false" aria-controls="orderMenu">
                             <span class="menu-title">Quản lý đơn hàng</span>
                             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
@@ -498,7 +504,7 @@
     <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> -->
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    {{-- <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script> --}}
+    {{-- <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script>
     {{-- <script src="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
     --}}
     <!-- End plugin js for this page -->
