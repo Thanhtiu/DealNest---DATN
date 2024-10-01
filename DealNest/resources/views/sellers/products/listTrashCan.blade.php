@@ -15,7 +15,11 @@
     </ul>
 </div>
 @endif
-@if($products->count() <= 0) <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
+@if($products->count() <= 0)
+    <div class="text-center">
+    <img class="no-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+    <p class="text-center mt-3">Chưa có sản phẩm nào được xóa</p>
+    </div>
     @else
     <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">

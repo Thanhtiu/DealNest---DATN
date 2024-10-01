@@ -24,7 +24,6 @@ return new class extends Migration {
             $table->integer('favourite')->nullable();
             $table->decimal('rating', 3, 2)->nullable();
             $table->integer('sales')->nullable();
-            $table->boolean('trash_can')->default(true);
             $table->enum('status', ['Chờ phê duyệt', 'Đã phê duyệt', 'Từ chối'])->default('Chờ phê duyệt')->nullable(false);
             $table->string('note')->nullable();
             $table->boolean('has_variants')->default(false);

@@ -100,6 +100,9 @@
         color: #aaa;
         font-style: italic;
     }
+    .no-data-image{
+        margin-top: 5%;
+    }
 </style>
 
 <body>
@@ -108,7 +111,7 @@
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <div class="dealnest-logo">
-                    <a class="navbar-brand brand-logo" href="index.html"><img class="seller-logo-image"
+                    <a class="navbar-brand brand-logo" href="{{route('seller.index')}}"><img class="seller-logo-image"
                             src="{{asset('image/dealnest-logo.png')}}" alt="logo" /></a>
                 </div>
                 <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg"

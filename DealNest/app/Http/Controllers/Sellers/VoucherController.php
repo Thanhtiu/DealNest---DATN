@@ -18,7 +18,7 @@ class VoucherController extends Controller
         $userId = Session::get('userId');
         $seller = Seller::where('user_id', $userId)->first();
         $products = Product::where('seller_id', $seller->id)->with('subcategory')->get();
-        $vouchers = Voucher::where('seller_id', $seller->id)->get();
+        $vouchers = Voucher::where('seller_id', $seller->id)->with('subcategory')->get();
 
         // Lấy ra tất cả các subcategories từ các sản phẩm và loại bỏ subcategory trùng id
         $subcategories = $products->map(function ($product) {
@@ -31,53 +31,53 @@ class VoucherController extends Controller
 
 
     public function create(Request $request)
-{
-    // Validate input
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'code' => 'required|string|max:255|unique:vouchers,code',
-        'type' => 'required|in:fixed,percentage',
-        'end_date' => 'required|date|after_or_equal:today',
-        'subcategory_id' => 'required|exists:subcategories,id',
-        // Validate giá trị tùy theo loại giảm giá
-        'value_amount' => $request->type == 'fixed' ? 'required|numeric|min:0' : 'nullable',
-        'value_percent' => $request->type == 'percentage' ? 'required|numeric|min:0|max:100' : 'nullable',
-    ], [
-        'name.required' => 'Tên voucher là bắt buộc.',
-        'code.required' => 'Mã voucher là bắt buộc.',
-        'code.unique' => 'Mã voucher đã tồn tại.',
-        'type.required' => 'Loại voucher là bắt buộc.',
-        'value_amount.required' => 'Giá trị giảm giá bằng tiền là bắt buộc.',
-        'value_percent.required' => 'Giá trị giảm giá theo phần trăm là bắt buộc.',
-        'value_percent.max' => 'Giá trị phần trăm giảm giá không được vượt quá 100%.', 
-        'end_date.required' => 'Ngày kết thúc là bắt buộc.',
-        'end_date.after_or_equal' => 'Ngày kết thúc phải từ hôm nay trở đi.',
-        'subcategory_id.required' => 'Danh mục con là bắt buộc.',
-        'subcategory_id.exists' => 'Danh mục con không tồn tại.'
-    ]);
+    {
+        // Validate input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:255|unique:vouchers,code',
+            'type' => 'required|in:fixed,percentage',
+            'end_date' => 'required|date|after_or_equal:today',
+            'subcategory_id' => 'required|exists:subcategories,id',
+            // Validate giá trị tùy theo loại giảm giá
+            'value_amount' => $request->type == 'fixed' ? 'required|numeric|min:0' : 'nullable',
+            'value_percent' => $request->type == 'percentage' ? 'required|numeric|min:0|max:100' : 'nullable',
+        ], [
+            'name.required' => 'Tên voucher là bắt buộc.',
+            'code.required' => 'Mã voucher là bắt buộc.',
+            'code.unique' => 'Mã voucher đã tồn tại.',
+            'type.required' => 'Loại voucher là bắt buộc.',
+            'value_amount.required' => 'Giá trị giảm giá bằng tiền là bắt buộc.',
+            'value_percent.required' => 'Giá trị giảm giá theo phần trăm là bắt buộc.',
+            'value_percent.max' => 'Giá trị phần trăm giảm giá không được vượt quá 100%.',
+            'end_date.required' => 'Ngày kết thúc là bắt buộc.',
+            'end_date.after_or_equal' => 'Ngày kết thúc phải từ hôm nay trở đi.',
+            'subcategory_id.required' => 'Danh mục con là bắt buộc.',
+            'subcategory_id.exists' => 'Danh mục con không tồn tại.'
+        ]);
 
-    // Tạo voucher mới
-    $voucher = new Voucher();
-    $voucher->name = $request->name;
-    $voucher->code = $request->code;
-    $voucher->type = $request->type;
+        // Tạo voucher mới
+        $voucher = new Voucher();
+        $voucher->name = $request->name;
+        $voucher->code = $request->code;
+        $voucher->type = $request->type;
 
-    // Kiểm tra loại giảm giá và gán giá trị cho cột `value`
-    if ($request->type == 'fixed') {
-        $voucher->value = $request->value_amount;
-    } else if ($request->type == 'percentage') {
-        $voucher->value = $request->value_percent;
+        // Kiểm tra loại giảm giá và gán giá trị cho cột `value`
+        if ($request->type == 'fixed') {
+            $voucher->value = $request->value_amount;
+        } else if ($request->type == 'percentage') {
+            $voucher->value = $request->value_percent;
+        }
+
+        $voucher->end_date = $request->end_date;
+        $voucher->subcategory_id = $request->subcategory_id;
+        $voucher->seller_id = $request->seller_id;
+        $voucher->start_date = now();
+
+        $voucher->save();
+
+        return redirect()->route('seller.voucher')->with('success', 'Tạo voucher thành công!');
     }
-
-    $voucher->end_date = $request->end_date;
-    $voucher->subcategory_id = $request->subcategory_id;
-    $voucher->seller_id = $request->seller_id;
-    $voucher->start_date = now();
-
-    $voucher->save();
-
-    return redirect()->route('seller.voucher')->with('success', 'Tạo voucher thành công!');
-}
 
 
     public function edit($id)
@@ -142,8 +142,12 @@ class VoucherController extends Controller
         return redirect()->route('seller.voucher')->with('success', 'Cập nhật voucher thành công');
     }
 
-    public function destroy($id){
-        return $id;
-        
+    public function destroy($id)
+    {
+        $voucher = Voucher::find($id);
+        if ($voucher) { 
+            $voucher->delete();
+            return redirect()->back()->with('success', 'Xóa voucher thành công!');
+        }
     }
 }

@@ -191,96 +191,94 @@
   </nav>
 </div>
 <div class="row">
-  @if (session('success'))
-  <div class="alert alert-success">
-    {{ session('success') }}
-  </div>
-  @endif
 
-  @if ($errors->any())
+  
+{{-- Hiển thị lỗi từ Exception --}}
+@if (session('error')) {{-- Kiểm tra lỗi từ session 'error' --}}
   <div class="alert alert-danger">
-    <ul>
-      @foreach ($errors->all() as $error)
-      <li>{{ $error }}</li>
-      @endforeach
-    </ul>
+    {{ session('error') }}
   </div>
-  @endif
-  <div class="col-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Thông tin cơ bản</h4>
-        <form class="forms-sample" action="{{route('seller.product.create')}}" method="POST"
-          enctype="multipart/form-data">
-          @csrf
-          <div class="form-group">
-            <label class="form-label">* Thêm ảnh bìa</label>
-            <div class="file-upload-container">
-              <label for="image" class="file-upload-info" id="fileUploadCoverInfo">Thêm hình ảnh (0/1)</label>
-              <input type="file" id="image" name="image" class="file-upload-default" accept="image/*">
-              <img id="coverImagePreview" src="#" alt="" style="display: none; margin-top: 10px;" />
-            </div>
-            <p class="mt-2 text-muted">
-              • Tải lên hình ảnh 1:1. Ảnh bìa sẽ được hiển thị tại các trang Kết quả tìm kiếm, Gợi ý hôm nay,...
-            </p>
+@endif
+
+
+
+
+
+<div class="col-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Thông tin cơ bản</h4>
+      <form class="forms-sample" action="{{route('seller.product.create')}}" method="POST"
+        enctype="multipart/form-data">
+        @csrf
+        <div class="form-group">
+          <label class="form-label">* Thêm ảnh bìa</label>
+          <div class="file-upload-container">
+            <label for="image" class="file-upload-info" id="fileUploadCoverInfo">Thêm hình ảnh (0/1)</label>
+            <input type="file" id="image" name="image" class="file-upload-default" accept="image/*">
+            <img id="coverImagePreview" src="#" alt="" style="display: none; margin-top: 10px;" />
           </div>
+          <p class="mt-2 text-muted">
+            • Tải lên hình ảnh 1:1. Ảnh bìa sẽ được hiển thị tại các trang Kết quả tìm kiếm, Gợi ý hôm nay,...
+          </p>
+        </div>
 
-          <!-- Section for multiple images without preview -->
-          <div class="form-group">
-            <label class="form-label">* Thêm hình ảnh</label>
-            <div class="file-upload-container">
-              <label for="img" class="file-upload-info" id="fileUploadInfo">Thêm hình ảnh (0/10)</label>
-              <input type="file" id="img" name="img[]" class="file-upload-default" multiple accept="image/*">
-            </div>
+        <!-- Section for multiple images without preview -->
+        <div class="form-group">
+          <label class="form-label">* Thêm hình ảnh</label>
+          <div class="file-upload-container">
+            <label for="img" class="file-upload-info" id="fileUploadInfo">Thêm hình ảnh (0/10)</label>
+            <input type="file" id="img" name="img[]" class="file-upload-default" multiple accept="image/*" {{ old('img') }}>
           </div>
+        </div>
 
 
 
-          <div class="form-group">
-            <label for="name">Tên sản phẩm</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Tên sản phẩm"
-              value="{{ old('name') }}">
+        <div class="form-group">
+          <label for="name">Tên sản phẩm</label>
+          <input type="text" name="name" class="form-control" id="name" placeholder="Tên sản phẩm"
+            value="{{ old('name') }}">
 
-          </div>
+        </div>
 
-          <div class="form-group">
-            <label for="categorySelect" class="form-label">Thể loại</label>
-            <select class="form-select" id="categorySelect" name="category_id">
-              @foreach ($category as $item)
-              <option value="{{$item->id}}">{{$item->name}}</option>
-              @endforeach
-            </select>
-          </div>
+        <div class="form-group">
+          <label for="categorySelect" class="form-label">Thể loại</label>
+          <select class="form-select" id="categorySelect" name="category_id">
+            @foreach ($category as $item)
+            <option value="{{$item->id}}">{{$item->name}}</option>
+            @endforeach
+          </select>
+        </div>
 
-          <div class="col-md-6 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Thể loại con</h4>
-                <p class="card-description"></p>
-                <div>
-                  <div class="row">
-                    <!-- Select Thể loại con -->
-                    <div class="form-group">
-                      <label for="subCategorySelect" class="form-label">Thể loại con</label>
-                      <select class="form-select" id="subCategorySelect" name="subCategory_id">
-                        <option value="">Chọn thể loại con</option>
-                        <!-- Thể loại con sẽ được thêm tự động bởi JavaScript -->
-                      </select>
-                    </div>
+        <div class="col-md-6 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Thể loại con</h4>
+              <p class="card-description"></p>
+              <div>
+                <div class="row">
+                  <!-- Select Thể loại con -->
+                  <div class="form-group">
+                    <label for="subCategorySelect" class="form-label">Thể loại con</label>
+                    <select class="form-select" id="subCategorySelect" name="subCategory_id">
+                      <option value="">Chọn thể loại con</option>
+                      <!-- Thể loại con sẽ được thêm tự động bởi JavaScript -->
+                    </select>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="row">
-            <div class="form-group">
-              <label for="price">Giá</label>
-              <input type="text" class="form-control" name="price" id="price" placeholder="Giá" value={{old('price')}}>
-            </div>
+        <div class="row">
+          <div class="form-group">
+            <label for="price">Giá</label>
+            <input type="text" class="form-control" name="price" id="price" placeholder="Giá" value={{old('price')}}>
           </div>
+        </div>
 
-          {{-- <div class="form-group">
+        {{-- <div class="form-group">
             <label>File upload</label>
             <input type="file" name="img[]" class="file-upload-default">
             <div class="input-group col-xs-12">
@@ -290,72 +288,72 @@
               </span>
             </div>
           </div> --}}
-          <div class="form-group">
-            <label for="description">Mô tả</label>
-            <textarea name="description" class="form-control" id="description"
-              rows="4">{{ old('description') }}</textarea>
-          </div>
+        <div class="form-group">
+          <label for="description">Mô tả</label>
+          <textarea name="description" class="form-control" id="description"
+            rows="4">{{ old('description') }}</textarea>
+        </div>
 
-          <div class="col-md-12 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Thông tin chi tiết</h4>
-                <p class="card-description"> Hoàn thành: Thông tin thuộc tính để tăng mức độ hiển thị cho sản phẩm</p>
-                <div class="row">
-                  <div class="form-group col-6">
-                    <label for="quantity">Số lượng</label>
-                    <input type="text" class="form-control" id="quantity" name="quantity" value="{{old('quantity')}}">
-                  </div>
-                  <div class="form-group col-6">
-                    <label for="brand">Xuất xứ</label>
-                    <select class="form-select form-select-lg" id="brand" name="brand_id">
-                      @foreach($brand as $item)
-                      <option value="{{$item->id}}">{{$item->name}}</option>
-                      @endforeach
-                    </select>
-                  </div>
+        <div class="col-md-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Thông tin chi tiết</h4>
+              <p class="card-description"> Hoàn thành: Thông tin thuộc tính để tăng mức độ hiển thị cho sản phẩm</p>
+              <div class="row">
+                <div class="form-group col-6">
+                  <label for="quantity">Số lượng</label>
+                  <input type="text" class="form-control" id="quantity" name="quantity" value="{{old('quantity')}}">
                 </div>
+                <div class="form-group col-6">
+                  <label for="brand">Xuất xứ</label>
+                  <select class="form-select form-select-lg" id="brand" name="brand_id">
+                    @foreach($brand as $item)
+                    <option value="{{$item->id}}">{{$item->name}}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
 
 
-                <div class="container mt-5">
-                  <h2>Chọn Thuộc Tính Sản Phẩm</h2>
+              <div class="container mt-5">
+                <h2>Chọn Thuộc Tính Sản Phẩm</h2>
 
-                  <!-- Thuộc tính chính: Kích thước -->
-                  @foreach($attribute as $item)
-                  <div class="row attribute-block">
-                    <div class="col-12">
-                      <label class="form-check-label" for="attribute-{{$item->id}}">{{$item->name}}</label>
-                      <div class="form-inline-row">
-                        <!-- Checkbox để chọn thuộc tính -->
-                        <input type="checkbox" class="form-check-input attribute-checkbox" id="attribute-{{$item->id}}" value="{{$item->name}}" data-id="{{$item->id}}" data-name="{{$item->name}}">
-                      </div>
-                      <div class="price-checkbox">
-                        <input type="checkbox" class="form-check-input price-checkbox" id="attribute-price-{{$item->id}}" data-id="{{$item->id}}" value="attribute-price-{{$item->id}}" data-name="Giá {{$item->name}}">
-                        <label class="form-check-label" for="attribute-price-{{$item->id}}">Chọn Giá</label>
-                      </div>
-                      <div id="attribute-{{$item->id}}-forms"></div> <!-- Container thuộc tính con -->
-                      <button type="button" id="add-attribute-{{$item->id}}-form" class="btn btn-success add-attribute-btn" style="display: none;">Thêm thuộc tính con</button>
+                <!-- Thuộc tính chính: Kích thước -->
+                @foreach($attribute as $item)
+                <div class="row attribute-block">
+                  <div class="col-12">
+                    <label class="form-check-label" for="attribute-{{$item->id}}">{{$item->name}}</label>
+                    <div class="form-inline-row">
+                      <!-- Checkbox để chọn thuộc tính -->
+                      <input type="checkbox" class="form-check-input attribute-checkbox" id="attribute-{{$item->id}}" value="{{$item->name}}" data-id="{{$item->id}}" data-name="{{$item->name}}">
                     </div>
+                    <div class="price-checkbox">
+                      <input type="checkbox" class="form-check-input price-checkbox" id="attribute-price-{{$item->id}}" data-id="{{$item->id}}" value="attribute-price-{{$item->id}}" data-name="Giá {{$item->name}}">
+                      <label class="form-check-label" for="attribute-price-{{$item->id}}">Chọn Giá</label>
+                    </div>
+                    <div id="attribute-{{$item->id}}-forms"></div> <!-- Container thuộc tính con -->
+                    <button type="button" id="add-attribute-{{$item->id}}-form" class="btn btn-success add-attribute-btn" style="display: none;">Thêm thuộc tính con</button>
                   </div>
-                  @endforeach
-
-
-
-
-
-
                 </div>
+                @endforeach
+
+
+
+
+
 
               </div>
+
             </div>
           </div>
-          <button type="submit" class="btn btn-gradient-primary me-2">Thêm</button>
-          <button class="btn btn-light" type="reset">Hủy bỏ</button>
-        </form>
-      </div>
+        </div>
+        <button type="submit" class="btn btn-gradient-primary me-2">Thêm</button>
+        <button class="btn btn-light" type="reset">Hủy bỏ</button>
+      </form>
     </div>
-
   </div>
+
+</div>
 
 </div>
 

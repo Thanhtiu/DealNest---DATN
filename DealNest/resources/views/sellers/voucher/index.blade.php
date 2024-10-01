@@ -37,6 +37,11 @@
         color: #28a745;
     }
 
+    .text-success {
+        color: #28a745 !important;
+
+    }
+
     .voucher-status {
         margin-top: 10px;
         font-size: 0.9rem;
@@ -78,6 +83,10 @@
     .voucher-header h2 {
         margin: 0;
     }
+
+    .voucher-status {
+        color: #6c757d;
+    }
 </style>
 
 <div class="container voucher-list">
@@ -88,45 +97,72 @@
     </div>
 
     <div class="row">
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
         <!-- Voucher 1 -->
-        @foreach($vouchers as $item)
-        <div class="col-12 col-md-6 col-lg-4 mb-4">
-            <div class="voucher-card">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="voucher-name">{{$item->name}}</span>
-                    <span class="voucher-code">{{$item->code}}</span>
-                </div>
-                <p class="voucher-type">Loại: Giảm giá theo
-                    @if($item->type == 'percentage')
-                    phần trăm
-                    @else
-                    VNĐ
-                    @endif
-                </p>
+        @if($vouchers->count() <= 0)
+            <div class="text-center">
+            <img class="no-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+            <p class="text-center mt-3">Chưa có sản phẩm nào chờ duyệt</p>
+    </div>
+    @else
+    @foreach($vouchers as $item)
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="voucher-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="voucher-name">{{$item->name}}</span>
+                <span class="voucher-code">{{$item->code}}</span>
+            </div>
+            <p class="voucher-type">Giảm giá theo
+                @if($item->subcategory_id !== null)
+                Thể loại: {{$item->subcategory->name}}
+                @endif
+            </p>
+            <p class="voucher-type">Loại: Giảm giá theo
+                @if($item->type == 'percentage')
+                phần trăm
+                @else
+                VNĐ
+                @endif
+            </p>
 
-                <p class="voucher-value">Giảm:
-                    @if($item->type == 'percentage')
-                    {{ intval($item->value) }}%
-                    @else
-                    {{ number_format($item->value, 0, ',', '.') }} VNĐ
-                    @endif
-                </p>
+            <p class="voucher-value">Giảm:
+                @if($item->type == 'percentage')
+                {{ intval($item->value) }}%
+                @else
+                {{ number_format($item->value, 0, ',', '.') }} VNĐ
+                @endif
+            </p>
 
-                <p class="voucher-status active">Trạng thái: Có hiệu lực</p>
-                <p class="voucher-dates">Thời gian: 01/06/2024 - 31/08/2024</p>
+            <p class="voucher-status">Trạng thái:
+                <span class="{{ \Carbon\Carbon::parse($item->end_date)->isPast() ? 'text-danger' : 'text-success' }}">
+                    {{ \Carbon\Carbon::parse($item->end_date)->isPast() ? 'Hết hạn' : 'Có hiệu lực' }}
+                </span>
 
-                <!-- Nút Edit và Xóa -->
-                <div class="voucher-actions">
-                    <button class="btn btn-primary btn-edit-voucher" data-id="{{ $item->id }}" data-toggle="modal" data-target="#editVoucherModal">
-                        Chỉnh sửa
-                    </button>
-                    <a href="{{route('seller.voucher.destroy',['id'=>$item->id])}}" class="btn btn-danger">Xóa</a>
-                </div>
+            </p>
+
+            <p class="voucher-dates">Thời gian:
+                {{ \Carbon\Carbon::parse($item->start_date)->format('d/m/Y') }} -
+                {{ \Carbon\Carbon::parse($item->end_date)->format('d/m/Y') }}
+            </p>
+
+
+            <!-- Nút Edit và Xóa -->
+            <div class="voucher-actions">
+                <button class="btn btn-primary btn-edit-voucher" data-id="{{ $item->id }}" data-toggle="modal" data-target="#editVoucherModal">
+                    Chỉnh sửa
+                </button>
+                <a href="{{route('seller.voucher.destroy',['id'=>$item->id])}}" class="btn btn-danger">Xóa</a>
             </div>
         </div>
-        @endforeach
-        <!-- Các voucher khác... -->
     </div>
+    @endforeach
+    @endif
+    <!-- Các voucher khác... -->
+</div>
 </div>
 
 <!-- Modal để tạo mới voucher -->
