@@ -19,6 +19,7 @@ use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Sellers\VoucherController;
+use App\Http\Controllers\Sellers\ProdcutStatisticsController;
 use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\WishListController;
@@ -121,6 +122,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/cua-hang/cap-nhat', [InfoController::class, 'update'])->name('seller.info.update');
 
         Route::get('/danh-sach/voucher', [VoucherController::class, 'index'])->name('seller.voucher');
+
+        Route::get('/thong-ke/san-pham-ban-chay',[ProdcutStatisticsController::class, 'index'])->name('seller.productStatistics');
     });
     // End Seller Route
     // Cart Route
