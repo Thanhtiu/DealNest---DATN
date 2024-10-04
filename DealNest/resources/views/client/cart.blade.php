@@ -152,7 +152,7 @@
                                     <td class="shoping__cart__quantity">{{ $item->quantity }}</td>
                                     <td class="shoping__cart__total">{{ number_format($item->total_price, 0, ',', '.')
                                         }}</td>
-                                        
+                                        <!-- comment -->
                                 </tr>
                                 @php
                                 $totalPriceSum += $item->total_price; // Cộng dồn total_price vào biến totalPriceSum
