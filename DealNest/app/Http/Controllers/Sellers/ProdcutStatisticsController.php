@@ -19,7 +19,7 @@ class ProdcutStatisticsController extends Controller
         // Lấy tất cả các cột từ bảng products
         $bestSeller = Product::where('seller_id', $sellerId)
             ->orderBy('sales', 'desc')
-            ->take(2)
+            ->take(3)
             ->get();
 
         $countSales = $bestSeller->sum('sales');

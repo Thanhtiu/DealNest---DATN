@@ -429,13 +429,13 @@
 
                 // Gửi yêu cầu AJAX để lấy thông tin voucher từ server
                 $.ajax({
-                    url: `/kenh-nguoi-ban/cap-nhat/voucher/${voucherId}`,
+                    url: `/kenh-nguoi-ban/voucher/edit/${voucherId}`,
                     method: 'GET',
                     success: function(response) {
                         const voucher = response.voucher;
 
                         // Điền dữ liệu vào modal
-                        document.querySelector('#editVoucherForm').setAttribute('action', `/kenh-nguoi-ban/cap-nhat/voucher/${voucher.id}`);
+                        document.querySelector('#editVoucherForm').setAttribute('action', `/kenh-nguoi-ban/voucher/cap-nhat/${voucher.id}`);
                         document.querySelector('#editVoucherModal input[name="edit_name"]').value = voucher.name;
                         document.querySelector('#editVoucherModal input[name="edit_code"]').value = voucher.code;
                         document.querySelector('#editVoucherModal input[name="edit_end_date"]').value = voucher.end_date;

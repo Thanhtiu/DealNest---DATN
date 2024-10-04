@@ -447,17 +447,83 @@
         <p>Không có sản phẩm nào được chọn.</p>
         @endif
 
-
-
-
-
-
         <!-- Voucher Section -->
         <div class="voucher">
             <span><i class="bi bi-ticket-fill"></i> Voucher của Shop</span>
             <span>-₫15.000</span>
-            <a href="#"><i class="bi bi-chevron-right"></i> Chọn Voucher Khác</a>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                Chọn Voucher
+            </button>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="voucherModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="voucherModalLabel">Chọn Shopee Voucher</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Tab navigation -->
+                        <ul class="nav nav-tabs" id="voucherTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="shop-voucher-tab" data-bs-toggle="tab" data-bs-target="#shop-voucher" type="button" role="tab" aria-controls="shop-voucher" aria-selected="true">Mã Voucher</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="shopee-voucher-tab" data-bs-toggle="tab" data-bs-target="#shopee-voucher" type="button" role="tab" aria-controls="shopee-voucher" aria-selected="false">Mã Shopee Voucher</button>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <!-- Shopee Voucher List -->
+                            <div class="tab-pane fade show active" id="shop-voucher" role="tabpanel" aria-labelledby="shop-voucher-tab">
+                                <div class="voucher-list">
+                                    <div class="voucher-item">
+                                        <div class="voucher-info">
+                                            <img src="https://via.placeholder.com/50" alt="Voucher Image">
+                                            <div class="voucher-details">
+                                                <h6>Mã Miễn Phí Vận Chuyển</h6>
+                                                <p>Giảm tối đa ₫20k - Đơn Tối Thiểu ₫0</p>
+                                                <small>HSD: 09.10.2024</small>
+                                            </div>
+                                        </div>
+                                        <div class="voucher-select">
+                                            <input type="radio" name="voucher" value="1">
+                                        </div>
+                                    </div>
+                                    <div class="voucher-item">
+                                        <div class="voucher-info">
+                                            <img src="https://via.placeholder.com/50" alt="Voucher Image">
+                                            <div class="voucher-details">
+                                                <h6>Mã Giảm Giá 300k</h6>
+                                                <p>Giảm tối đa ₫300k - Đơn Tối Thiểu ₫100k</p>
+                                                <small>HSD: 09.10.2024</small>
+                                            </div>
+                                        </div>
+                                        <div class="voucher-select">
+                                            <input type="radio" name="voucher" value="2">
+                                        </div>
+                                    </div>
+                                    <!-- Add more vouchers as needed -->
+                                </div>
+                            </div>
+                            <!-- Shopee Voucher List -->
+                            <div class="tab-pane fade" id="shopee-voucher" role="tabpanel" aria-labelledby="shopee-voucher-tab">
+                                <p>Danh sách Shopee Voucher của bạn</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Trở Lại</button>
+                        <button type="button" class="btn btn-primary">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
         <!-- Shipping Section -->
         <div class="shipping">
@@ -548,23 +614,23 @@
 </div>
 <script>
     const changeMethodLink = document.getElementById('change-method');
-        const paymentOptions = document.getElementById('payment-options');
-        const selectedMethod = document.getElementById('selected-method');
-        const paymentButtons = document.querySelectorAll('.payment-method-button');
+    const paymentOptions = document.getElementById('payment-options');
+    const selectedMethod = document.getElementById('selected-method');
+    const paymentButtons = document.querySelectorAll('.payment-method-button');
 
-        changeMethodLink.addEventListener('click', function() {
-            if (paymentOptions.style.display === 'none') {
-                paymentOptions.style.display = 'block';
-            } else {
-                paymentOptions.style.display = 'none';
-            }
-        });
+    changeMethodLink.addEventListener('click', function() {
+        if (paymentOptions.style.display === 'none') {
+            paymentOptions.style.display = 'block';
+        } else {
+            paymentOptions.style.display = 'none';
+        }
+    });
 
-        paymentButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                selectedMethod.textContent = this.textContent;
-                paymentOptions.style.display = 'none';
-            });
+    paymentButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            selectedMethod.textContent = this.textContent;
+            paymentOptions.style.display = 'none';
         });
+    });
 </script>
 @endsection

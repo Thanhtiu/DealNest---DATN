@@ -25,6 +25,8 @@ return new class extends Migration {
             $table->decimal('rating', 3, 2)->nullable();
             $table->integer('sales')->nullable();
             $table->enum('status', ['Chờ phê duyệt', 'Đã phê duyệt', 'Từ chối'])->default('Chờ phê duyệt')->nullable(false);
+            $table->boolean('trash_can')->default(1);
+
             $table->string('note')->nullable();
             $table->boolean('has_variants')->default(false);
             $table->timestamps();

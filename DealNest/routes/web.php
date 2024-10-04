@@ -58,6 +58,7 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::get('/dia-chi/mac-dinh/{id}', [AddressController::class, 'setDefault'])->name('account.address.setDefault');
     Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order.index');
     Route::get('/voucher', [HomeController::class, 'voucher']);
+
 });
 Route::middleware(['web'])->group(function () {
 
@@ -123,7 +124,17 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/danh-sach/voucher', [VoucherController::class, 'index'])->name('seller.voucher');
 
+        Route::post('/voucher/them',[VoucherController::class,'create'])->name('seller.voucher.create');
+
+        Route::get('/voucher/edit/{id}', [VoucherController::class, 'edit'])->name('seller.voucher.edit');
+
+        Route::get('/voucher/xoa/{id}',[VoucherController::class,'destroy'])->name('seller.voucher.destroy');
+
+        Route::post('/voucher/cap-nhat/{id}',[VoucherController::class,'update'])->name('seller.voucher.update');
+
         Route::get('/thong-ke/san-pham-ban-chay',[ProdcutStatisticsController::class, 'index'])->name('seller.productStatistics');
+
+        Route::get('/san-pham-ban-chay/chi-tiet/{id}',[ProdcutStatisticsController::class,'detail'])->name('seller.productStatistics.detail');
     });
     // End Seller Route
     // Cart Route
@@ -133,3 +144,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/cart/submit', [CartController::class, 'submit'])->name('cart.submit');
     Route::get('/thanh-toan', [PaymentController::class, 'index'])->name('checkout');
 });
+
+
