@@ -602,23 +602,29 @@
                         <!-- Tab navigation -->
                         <ul class="nav nav-tabs" id="voucherTab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="shop-voucher-tab" data-bs-toggle="tab" data-bs-target="#shop-voucher" type="button" role="tab" aria-controls="shop-voucher" aria-selected="true">Mã Voucher</button>
+                                <button class="nav-link active" id="shop-voucher-tab" data-bs-toggle="tab"
+                                    data-bs-target="#shop-voucher" type="button" role="tab" aria-controls="shop-voucher"
+                                    aria-selected="true">Mã Voucher</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="shopee-voucher-tab" data-bs-toggle="tab" data-bs-target="#shopee-voucher" type="button" role="tab" aria-controls="shopee-voucher" aria-selected="false">Mã Shopee Voucher</button>
+                                <button class="nav-link" id="shopee-voucher-tab" data-bs-toggle="tab"
+                                    data-bs-target="#shopee-voucher" type="button" role="tab"
+                                    aria-controls="shopee-voucher" aria-selected="false">Mã Shopee Voucher</button>
                             </li>
                         </ul>
 
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <!-- Shopee Voucher List -->
-                            <div class="tab-pane fade show active" id="shop-voucher" role="tabpanel" aria-labelledby="shop-voucher-tab">
+                            <div class="tab-pane fade show active" id="shop-voucher" role="tabpanel"
+                                aria-labelledby="shop-voucher-tab">
                                 <div class="voucher-list">
                                     <!-- Vòng lặp hiển thị voucher cho từng sản phẩm -->
                                     @foreach($groupedProducts as $sellerId => $products)
                                     @php
                                     // Kiểm tra có voucher hay không
-                                    $hasVoucher = isset($sellerVouchers[$sellerId]) && $sellerVouchers[$sellerId]->count() > 0;
+                                    $hasVoucher = isset($sellerVouchers[$sellerId]) &&
+                                    $sellerVouchers[$sellerId]->count() > 0;
                                     @endphp
 
                                     <!-- Chỉ hiển thị sản phẩm và voucher nếu có voucher -->
@@ -629,7 +635,8 @@
                                             @foreach($products as $product)
                                             <div class="product-item">
                                                 <p>{{ $product->name }}</p>
-                                                <p>Giá: <span style="color: red;">{{ number_format($product->price, 0, ',', '.') }} vnđ</span></p>
+                                                <p>Giá: <span style="color: red;">{{ number_format($product->price, 0,
+                                                        ',', '.') }} vnđ</span></p>
                                             </div>
                                             @endforeach
                                         </div>
@@ -641,14 +648,26 @@
                                                 @foreach($sellerVouchers[$sellerId] as $voucher)
                                                 <div class="voucher-item col-md-6">
                                                     <div class="voucher-info">
-                                                        <img src="https://st4.depositphotos.com/27867620/30555/v/1600/depositphotos_305556988-stock-illustration-voucher-web-icon-simple-design.jpg" alt="Voucher Image" class="voucher-image">
+                                                        <img src="https://st4.depositphotos.com/27867620/30555/v/1600/depositphotos_305556988-stock-illustration-voucher-web-icon-simple-design.jpg"
+                                                            alt="Voucher Image" class="voucher-image">
                                                         <div class="voucher-details">
                                                             <h6>{{ $voucher->name }}</h6>
-                                                            <p>Giảm: {{ $voucher->type == 'percentage' ? $voucher->value . '%' : '₫' . number_format($voucher->value, 0, ',', '.') }}</p>
-                                                            <small>HSD: {{ \Carbon\Carbon::parse($voucher->start_date)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</small>
+                                                            <p>Giảm: {{ $voucher->type == 'percentage' ? $voucher->value
+                                                                . '%' : '₫' . number_format($voucher->value, 0, ',',
+                                                                '.') }}</p>
+                                                            <small>HSD: {{
+                                                                \Carbon\Carbon::parse($voucher->start_date)->format('d/m/Y')
+                                                                }} - {{
+                                                                \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y')
+                                                                }}</small>
                                                         </div>
                                                         <div class="voucher-select">
-                                                            <input type="radio" name="voucher_{{ $sellerId }}" value="{{ $voucher->id }}" data-value="{{ $voucher->value }}" data-type="{{ $voucher->type }}" data-product-name="{{ $products->first()->name }}" class="form-check-input voucher-radio">
+                                                            <input type="radio" name="voucher_{{ $sellerId }}"
+                                                                value="{{ $voucher->id }}"
+                                                                data-value="{{ $voucher->value }}"
+                                                                data-type="{{ $voucher->type }}"
+                                                                data-product-name="{{ $products->first()->name }}"
+                                                                class="form-check-input voucher-radio">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -656,13 +675,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @endif <!-- Kết thúc kiểm tra voucher -->
+                                    @endif
+                                    <!-- Kết thúc kiểm tra voucher -->
                                     @endforeach
                                 </div>
                             </div>
 
                             <!-- Shopee Voucher List -->
-                            <div class="tab-pane fade" id="shopee-voucher" role="tabpanel" aria-labelledby="shopee-voucher-tab">
+                            <div class="tab-pane fade" id="shopee-voucher" role="tabpanel"
+                                aria-labelledby="shopee-voucher-tab">
                                 <p>Danh sách Shopee Voucher của bạn</p>
                             </div>
                         </div>
@@ -705,7 +726,7 @@
             <!-- Danh sách phương thức thanh toán (Ẩn mặc định) -->
             <div id="payment-options" style="display: none; margin-top: 10px;">
                 <div class="payment-method-button" data-method="ShopeePay" style="cursor: pointer;">Ví ShopeePay</div>
-                <div class="payment-method-button" data-method="GooglePay" style="cursor: pointer;">Google Pay</div>
+                <div class="payment-method-button" data-method="GooglePay" style="cursor: pointer;">VNPay</div>
                 <div class="payment-method-button" data-method="CreditCard" style="cursor: pointer;">Thẻ Tín dụng/Ghi nợ
                 </div>
                 <div class="payment-method-button" data-method="COD" style="cursor: pointer;">Thanh toán khi nhận hàng
@@ -737,7 +758,7 @@
 
         <!-- Place Order Button -->
         <div class="place-order">
-            <button><i class="bi bi-bag-check-fill"></i> Đặt hàng</button>
+            <button id="order-button"><i class="bi bi-bag-check-fill"></i> Đặt hàng</button>
             <p>Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo <a href="#"><i
                         class="bi bi-exclamation-triangle"></i> Điều khoản Shopee</a></p>
         </div>
@@ -856,6 +877,102 @@
         // Gọi hàm để tính toán và cập nhật khi trang tải lần đầu
         updateTotalPayment();
     });
+
+
+
+// CheckOutProcressing 
+
+// $(document).ready(function() {
+//     $('#order-button').on('click', function() {
+//         // Lấy giá trị từ span
+//         var totalAmount = $('#total-payment').text();
+        
+//         // Lấy HTML từ p
+//         var selectedMethod = $('#selected-method').html();
+
+//         // Gửi dữ liệu đến route processingPayment
+//         $.ajax({
+//             url: "{{ route('checkout.processing') }}", // Thay đổi đường dẫn nếu cần
+//             type: 'POST', // Hoặc 'GET' tùy theo yêu cầu
+//             data: {
+//                 total_amount: totalAmount,
+//                 payment_method: selectedMethod, // Gửi phương thức thanh toán
+//                 _token: '{{ csrf_token() }}' // Thêm token CSRF nếu sử dụng Laravel
+//             },
+//             success: function(response) {
+//                 // Hiển thị thông báo với dữ liệu đã gửi
+//                 alert('Dữ liệu đã gửi thành công! Tổng số tiền: ' + response.total_amount + ', Phương thức thanh toán: ' + response.payment_method);
+//             },
+//             error: function(xhr, status, error) {
+//                 // Lấy thông điệp lỗi từ phản hồi JSON
+//                 var errorMessage = xhr.responseJSON && xhr.responseJSON.message 
+//                                     ? xhr.responseJSON.message 
+//                                     : 'Có lỗi xảy ra.';
+
+//                 // Hiển thị thông báo lỗi
+//                 alert('Lỗi: ' + errorMessage);
+//                 console.error(error);
+//             }
+//         });
+//     });
+// });
+
+
+$(document).ready(function() {
+    $('#order-button').on('click', function() {
+        // Lấy giá trị từ span
+        var totalAmount = $('#total-payment').text();
+        
+        // Lấy HTML từ p
+        var selectedMethod = $('#selected-method').html();
+
+        // Gửi dữ liệu đến route processingPayment
+        $.ajax({
+            url: "{{ route('checkout.processing') }}", // Thay đổi đường dẫn nếu cần
+            type: 'POST', // Hoặc 'GET' tùy theo yêu cầu
+            data: {
+                total_amount: totalAmount,
+                payment_method: selectedMethod, // Gửi phương thức thanh toán
+                _token: '{{ csrf_token() }}' // Thêm token CSRF nếu sử dụng Laravel
+            },
+            success: function(response) {
+                // Chuyển hướng đến route vnpay_payment
+                window.location.href = response.redirect_url;
+            },
+            error: function(xhr, status, error) {
+                // Xử lý lỗi nếu có
+                console.error(error);
+            }
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
+
+
+
+
+
+
 
 @endsection

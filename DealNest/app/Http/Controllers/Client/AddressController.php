@@ -41,7 +41,6 @@ class AddressController extends Controller
 
         return redirect()->route('account.address.index')->with('success', 'Địa chỉ đã được thêm thành công');
     }
-
     public function edit($id)
     {
         $address = Address::find($id);
