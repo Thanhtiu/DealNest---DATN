@@ -179,7 +179,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $countProductSuccess->links('pagination::bootstrap-4') }}
+                       
 
                     </div>
                 </div>
@@ -234,7 +234,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $productFail->links('pagination::bootstrap-4') }}
+                       
 
                     </div>
                 </div>
@@ -286,7 +286,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $productPending->links('pagination::bootstrap-4') }}
+                       
 
                     </div>
                 </div>
