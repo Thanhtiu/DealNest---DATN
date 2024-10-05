@@ -61,7 +61,7 @@
 
   .file-upload-container label {
     cursor: pointer;
-    color: #ff4d4f;
+    color: #0d6efd;
     font-weight: bold;
   }
 
@@ -386,70 +386,64 @@
                   </div>
                 </div>
                 @foreach($attribute as $item)
-    @php
-    // Lấy tất cả các giá trị của thuộc tính từ cơ sở dữ liệu
-    $selectedValues = $product->attribute_values->where('attribute_id', $item->id);
-    @endphp
-    <div class="row attribute-block">
-        <div class="col-12">
-            <label class="form-check-label" for="attribute-{{$item->id}}">{{$item->name}}</label>
-            <div class="form-inline-row">
-                <!-- Checkbox để chọn thuộc tính -->
-                <input type="checkbox" class="form-check-input attribute-checkbox"
-                    id="attribute-{{$item->id}}"
-                    value="{{$item->name}}"
-                    data-id="{{$item->id}}"
-                    data-name="{{$item->name}}"
-                    {{ $selectedValues->isNotEmpty() ? 'checked' : '' }}>
-            </div>
+                @php
+                // Lấy tất cả các giá trị của thuộc tính từ cơ sở dữ liệu
+                $selectedValues = $product->attribute_values->where('attribute_id', $item->id);
+                @endphp
+                <div class="row attribute-block">
+                  <div class="col-12">
+                    <label class="form-check-label" for="attribute-{{$item->id}}">{{$item->name}}</label>
+                    <div class="form-inline-row">
+                      <!-- Checkbox để chọn thuộc tính -->
+                      <input type="checkbox" class="form-check-input attribute-checkbox"
+                        id="attribute-{{$item->id}}"
+                        value="{{$item->name}}"
+                        data-id="{{$item->id}}"
+                        data-name="{{$item->name}}"
+                        {{ $selectedValues->isNotEmpty() ? 'checked' : '' }}>
+                    </div>
 
-            <!-- Checkbox chọn giá cho thuộc tính -->
-            <div class="price-checkbox">
-                <input type="checkbox" class="form-check-input price-checkbox"
-                    id="attribute-price-{{$item->id}}"
-                    data-id="{{$item->id}}"
-                    value="attribute-price-{{$item->id}}"
-                    data-name="Giá {{$item->name}}"
-                    {{ $selectedValues->first() && $selectedValues->first()->price ? 'checked' : '' }}>
-                <label class="form-check-label" for="attribute-price-{{$item->id}}">Chọn Giá</label>
-            </div>
+                    <!-- Checkbox chọn giá cho thuộc tính -->
+                    <div class="price-checkbox">
+                      <input type="checkbox" class="form-check-input price-checkbox"
+                        id="attribute-price-{{$item->id}}"
+                        data-id="{{$item->id}}"
+                        value="attribute-price-{{$item->id}}"
+                        data-name="Giá {{$item->name}}"
+                        {{ $selectedValues->first() && $selectedValues->first()->price ? 'checked' : '' }}>
+                      <label class="form-check-label" for="attribute-price-{{$item->id}}">Chọn Giá</label>
+                    </div>
 
-            <!-- Hiển thị các giá trị của thuộc tính -->
-            <div id="attribute-{{$item->id}}-forms">
-                @foreach($selectedValues as $index => $value)
-                <div class="form-row">
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Tên {{$item->name}}"
+                    <!-- Hiển thị các giá trị của thuộc tính -->
+                    <div id="attribute-{{$item->id}}-forms">
+                      @foreach($selectedValues as $index => $value)
+                      <div class="form-row">
+                        <div class="col">
+                          <input type="text" class="form-control" placeholder="Tên {{$item->name}}"
                             name="attributes[{{$item->id}}][values][{{$index}}][value]"
                             value="{{ $value->value }}">
-                    </div>
-                    <div class="col price-input" style="{{ $value->price ? 'display:block' : 'display:none' }}">
-                        <input type="number" class="form-control" placeholder="Nhập giá"
+                        </div>
+                        <div class="col price-input" style="{{ $value->price ? 'display:block' : 'display:none' }}">
+                          <input type="number" class="form-control" placeholder="Nhập giá"
                             name="attributes[{{$item->id}}][values][{{$index}}][price]"
                             value="{{ $value->price }}">
+                        </div>
+                        <div class="col-auto">
+                          <button type="button" class="btn btn-danger remove-button">Xóa</button>
+                        </div>
+                      </div>
+                      @endforeach
                     </div>
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-danger remove-button">Xóa</button>
-                    </div>
+
+                    <!-- Nút thêm thuộc tính con -->
+                    <button type="button" id="add-attribute-{{$item->id}}-form" class="btn btn-success add-attribute-btn" style="display: block;">Thêm thuộc tính con</button>
+                  </div>
                 </div>
                 @endforeach
-            </div>
-
-            <!-- Nút thêm thuộc tính con -->
-            <button type="button" id="add-attribute-{{$item->id}}-form" class="btn btn-success add-attribute-btn" style="display: block;">Thêm thuộc tính con</button>
-        </div>
-    </div>
-@endforeach
-
-
-
-
-
-
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-gradient-primary me-2">Cập nhật</button>
+          <button type="submit" class="btn btn-primary">Cập nhật</button>
           <button class="btn btn-light" type="reset">Hủy bỏ</button>
         </form>
       </div>
@@ -470,46 +464,46 @@
 
 
 <script>
-    let selectedAttributeWithPrice = null;
+  let selectedAttributeWithPrice = null;
 
-    // Xử lý checkbox chọn thuộc tính
-    document.querySelectorAll('.attribute-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            let attributeId = this.dataset.id;
-            let attributeName = this.dataset.name;
-            let addButton = document.getElementById(`add-attribute-${attributeId}-form`);
-            let container = document.getElementById(`attribute-${attributeId}-forms`);
+  // Xử lý checkbox chọn thuộc tính
+  document.querySelectorAll('.attribute-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      let attributeId = this.dataset.id;
+      let attributeName = this.dataset.name;
+      let addButton = document.getElementById(`add-attribute-${attributeId}-form`);
+      let container = document.getElementById(`attribute-${attributeId}-forms`);
 
-            if (this.checked) {
-                // Hiển thị nút "Thêm thuộc tính con"
-                addButton.style.display = 'block';
-                container.innerHTML = ''; // Xóa nội dung cũ nếu có
+      if (this.checked) {
+        // Hiển thị nút "Thêm thuộc tính con"
+        addButton.style.display = 'block';
+        container.innerHTML = ''; // Xóa nội dung cũ nếu có
 
-                // Thêm input ẩn để lưu tên thuộc tính vào form
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = `attributes[${attributeId}][name]`;
-                hiddenInput.value = attributeName;
-                container.appendChild(hiddenInput);
-            } else {
-                addButton.style.display = 'none'; // Ẩn nút nếu checkbox bị bỏ chọn
-                container.innerHTML = ''; // Xóa toàn bộ form nếu bỏ chọn checkbox thuộc tính chính
-            }
-        });
+        // Thêm input ẩn để lưu tên thuộc tính vào form
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = `attributes[${attributeId}][name]`;
+        hiddenInput.value = attributeName;
+        container.appendChild(hiddenInput);
+      } else {
+        addButton.style.display = 'none'; // Ẩn nút nếu checkbox bị bỏ chọn
+        container.innerHTML = ''; // Xóa toàn bộ form nếu bỏ chọn checkbox thuộc tính chính
+      }
     });
+  });
 
-    // Đăng ký sự kiện click cho tất cả các nút "Thêm thuộc tính con"
-    document.querySelectorAll('.add-attribute-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            let attributeId = this.id.split('-')[2]; // Lấy ID của thuộc tính từ ID của nút
-            let container = document.getElementById(`attribute-${attributeId}-forms`);
-            let attributeName = document.querySelector(`#attribute-${attributeId}`).dataset.name;
-            let index = container.children.length - 1; // Đếm số lượng phần tử con trừ đi input ẩn
+  // Đăng ký sự kiện click cho tất cả các nút "Thêm thuộc tính con"
+  document.querySelectorAll('.add-attribute-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      let attributeId = this.id.split('-')[2]; // Lấy ID của thuộc tính từ ID của nút
+      let container = document.getElementById(`attribute-${attributeId}-forms`);
+      let attributeName = document.querySelector(`#attribute-${attributeId}`).dataset.name;
+      let index = container.children.length - 1; // Đếm số lượng phần tử con trừ đi input ẩn
 
-            // Tạo form mới cho thuộc tính con
-            let newFormGroup = document.createElement('div');
-            newFormGroup.classList.add('attribute-form');
-            newFormGroup.innerHTML = `
+      // Tạo form mới cho thuộc tính con
+      let newFormGroup = document.createElement('div');
+      newFormGroup.classList.add('attribute-form');
+      newFormGroup.innerHTML = `
                 <div class="form-row">
                     <div class="col">
                         <input type="text" class="form-control" placeholder="Tên ${attributeName}" name="attributes[${attributeId}][values][${index}][value]">
@@ -522,78 +516,78 @@
                     </div>
                 </div>
             `;
-            container.appendChild(newFormGroup);
+      container.appendChild(newFormGroup);
 
-            // Kiểm tra nếu checkbox giá đã được chọn
-            if (selectedAttributeWithPrice && selectedAttributeWithPrice.dataset.id === attributeId) {
-                newFormGroup.querySelector('.price-input').style.display = 'block';
-            } else {
-                newFormGroup.querySelector('.price-input').style.display = 'none';
-            }
-        });
+      // Kiểm tra nếu checkbox giá đã được chọn
+      if (selectedAttributeWithPrice && selectedAttributeWithPrice.dataset.id === attributeId) {
+        newFormGroup.querySelector('.price-input').style.display = 'block';
+      } else {
+        newFormGroup.querySelector('.price-input').style.display = 'none';
+      }
     });
+  });
 
-    // Xử lý checkbox "Chọn Giá"
-    document.querySelectorAll('.price-checkbox').forEach(priceCheckbox => {
-        priceCheckbox.addEventListener('change', function() {
-            let attributeId = this.dataset.id;
-            let priceContainers = document.querySelectorAll(`#attribute-${attributeId}-forms .price-input`);
+  // Xử lý checkbox "Chọn Giá"
+  document.querySelectorAll('.price-checkbox').forEach(priceCheckbox => {
+    priceCheckbox.addEventListener('change', function() {
+      let attributeId = this.dataset.id;
+      let priceContainers = document.querySelectorAll(`#attribute-${attributeId}-forms .price-input`);
 
-            if (this.checked) {
-                if (selectedAttributeWithPrice) {
-                    alert('Bạn đã chọn giá cho một thuộc tính rồi, không thể thay đổi!');
-                    this.checked = false;
-                    return;
-                }
-
-                // Ghi nhận thuộc tính chính đang được nhập giá
-                selectedAttributeWithPrice = this;
-
-                // Hiển thị tất cả các input giá của thuộc tính này
-                priceContainers.forEach(container => container.style.display = 'block');
-
-                // Vô hiệu hóa các checkbox khác
-                document.querySelectorAll('.price-checkbox').forEach(cb => {
-                    if (cb !== this) {
-                        cb.disabled = true;
-                    }
-                });
-            } else {
-                this.checked = true; // Không cho phép bỏ chọn
-            }
-        });
-    });
-
-    // Sử dụng event delegation để xóa thuộc tính con
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('remove-button')) {
-            let formRow = event.target.closest('.form-row');
-            if (formRow) {
-                formRow.remove(); // Xóa thuộc tính con
-            }
+      if (this.checked) {
+        if (selectedAttributeWithPrice) {
+          alert('Bạn đã chọn giá cho một thuộc tính rồi, không thể thay đổi!');
+          this.checked = false;
+          return;
         }
-    });
 
-    // Kiểm tra nếu có checkbox nào đã được chọn giá khi trang tải lại
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.price-checkbox').forEach(priceCheckbox => {
-            let attributeId = priceCheckbox.dataset.id;
-            let priceContainers = document.querySelectorAll(`#attribute-${attributeId}-forms .price-input`);
+        // Ghi nhận thuộc tính chính đang được nhập giá
+        selectedAttributeWithPrice = this;
 
-            if (priceCheckbox.checked) {
-                // Nếu checkbox giá đã được chọn, hiển thị các input giá tương ứng
-                selectedAttributeWithPrice = priceCheckbox;
-                priceContainers.forEach(container => container.style.display = 'block');
+        // Hiển thị tất cả các input giá của thuộc tính này
+        priceContainers.forEach(container => container.style.display = 'block');
 
-                // Vô hiệu hóa các checkbox khác
-                document.querySelectorAll('.price-checkbox').forEach(cb => {
-                    if (cb !== priceCheckbox) {
-                        cb.disabled = true;
-                    }
-                });
-            }
+        // Vô hiệu hóa các checkbox khác
+        document.querySelectorAll('.price-checkbox').forEach(cb => {
+          if (cb !== this) {
+            cb.disabled = true;
+          }
         });
+      } else {
+        this.checked = true; // Không cho phép bỏ chọn
+      }
     });
+  });
+
+  // Sử dụng event delegation để xóa thuộc tính con
+  document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('remove-button')) {
+      let formRow = event.target.closest('.form-row');
+      if (formRow) {
+        formRow.remove(); // Xóa thuộc tính con
+      }
+    }
+  });
+
+  // Kiểm tra nếu có checkbox nào đã được chọn giá khi trang tải lại
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.price-checkbox').forEach(priceCheckbox => {
+      let attributeId = priceCheckbox.dataset.id;
+      let priceContainers = document.querySelectorAll(`#attribute-${attributeId}-forms .price-input`);
+
+      if (priceCheckbox.checked) {
+        // Nếu checkbox giá đã được chọn, hiển thị các input giá tương ứng
+        selectedAttributeWithPrice = priceCheckbox;
+        priceContainers.forEach(container => container.style.display = 'block');
+
+        // Vô hiệu hóa các checkbox khác
+        document.querySelectorAll('.price-checkbox').forEach(cb => {
+          if (cb !== priceCheckbox) {
+            cb.disabled = true;
+          }
+        });
+      }
+    });
+  });
 </script>
 
 @endsection

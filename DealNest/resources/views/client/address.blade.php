@@ -96,27 +96,27 @@
                     <button class="add-new-btn mb-3" data-bs-toggle="modal" data-bs-target="#addAddressModal">+ Thêm địa
                         chỉ mới</button>
                     @foreach ($address as $item)
-                        <div class="address-card">
-                            <div class="address-info">
-                                <p><strong>{{$item->user->full_name}}</strong> | {{$item->user->id}}</p>
-                                <p>{{$item->string_address}}</p>
-                                <p>{{$item->street}}</p>
-                                @if($item->active === 1)
-                                    <p class="default">Mặc định</p>
-                                @endif
-                            </div>
-                            <div class="address-actions">
-                                <button class="update-btn" data-id="{{ $item->id }}" data-bs-toggle="modal"
-                                    data-bs-target="#updateAddressModal">Cập nhật</button>
-
-                                <a href="{{ route('account.address.delete', ['id' => $item->id]) }}"
-                                    class="delete-btn">Xóa</a>
-
-                                <a class="set-default-btn"
-                                    href="{{route('account.address.setDefault', ['id' => $item->id])}}">Thiết lập mặc định</a>
-                            </div>
-
+                    <div class="address-card">
+                        <div class="address-info">
+                            <p><strong>{{$item->user->full_name}}</strong> | {{$item->user->id}}</p>
+                            <p>{{$item->string_address}}</p>
+                            <p>{{$item->street}}</p>
+                            @if($item->active === 1)
+                            <p class="default">Mặc định</p>
+                            @endif
                         </div>
+                        <div class="address-actions">
+                            <button class="update-btn" data-id="{{ $item->id }}" data-bs-toggle="modal"
+                                data-bs-target="#updateAddressModal">Cập nhật</button>
+
+                            <a href="{{ route('account.address.delete', ['id' => $item->id]) }}"
+                                class="delete-btn">Xóa</a>
+
+                            <a class="set-default-btn"
+                                href="{{route('account.address.setDefault', ['id' => $item->id])}}">Thiết lập mặc định</a>
+                        </div>
+
+                    </div>
                     @endforeach
                 </div>
             </div>
@@ -138,6 +138,15 @@
                 <!-- Form for adding a new address -->
                 <form id="addAddressForm" action="{{route('account.address.create')}}" method="POST">
                     @csrf
+                    <div class="col-6 col-6-ml">
+                        <label for="name" class="form-label">Tên người nhận</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                    <div class="col-6">
+                        <label for="phone" class="form-label">Số điện thoại người nhận</label>
+                        <input type="text" class="form-control" id="phone" name="phone">
+                    </div>
+
                     <div class="mb-3">
                         <label for="province" class="form-label">Tỉnh/Thành phố</label>
                         <select id="province" name="province" class="form-select" required>
@@ -188,6 +197,14 @@
                     @method('PUT')
                     <input type="hidden" id="updateAddressId" name="address_id" value="">
                     <!-- Các trường input như tỉnh, huyện, xã và địa chỉ -->
+                    <div class="col-6 col-6-ml">
+                        <label for="update_name" class="form-label">Tên người nhận</label>
+                        <input type="text" class="form-control" id="update_name" name="name">
+                    </div>
+                    <div class="col-6">
+                        <label for="update_phone" class="form-label">Số điện thoại người nhận</label>
+                        <input type="text" class="form-control" id="update_phone" name="phone">
+                    </div>
                     <div class="mb-3">
                         <label for="updateProvince" class="form-label">Tỉnh/Thành phố</label>
                         <select id="updateProvince" name="province" class="form-select" required>
@@ -225,9 +242,9 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function (e) {
+            button.addEventListener('click', function(e) {
                 e.preventDefault();
                 const deleteUrl = this.href;
 
@@ -253,15 +270,9 @@
 
 
 
-
-
-
-
-
-
 <script>
     document.querySelectorAll('.update-btn').forEach(button => {
-        button.addEventListener('click', function () {
+        button.addEventListener('click', function() {
             const addressId = this.getAttribute('data-id');
             document.getElementById('updateAddressId').value = addressId;
             const updateForm = document.getElementById('updateAddressForm');
@@ -288,12 +299,15 @@
                     // Set the address and street values
                     document.getElementById('update_string_address').value = data.string_address;
                     document.getElementById('updateStreet').value = data.street;
+                    document.getElementById('update_name').value = data.name;
+                    document.getElementById('update_phone').value = data.phone;
+
                 })
                 .catch(error => console.error('Error fetching address:', error));
         });
     });
 
-    function updateProvinces(selectedProvinceId = null, callback = () => { }) {
+    function updateProvinces(selectedProvinceId = null, callback = () => {}) {
         fetch('https://esgoo.net/api-tinhthanh/1/0.htm')
             .then(response => response.json())
             .then(data => {
@@ -314,7 +328,7 @@
             .catch(error => console.error('Error fetching provinces:', error));
     }
 
-    function updateDistricts(selectedDistrictId = null, callback = () => { }) {
+    function updateDistricts(selectedDistrictId = null, callback = () => {}) {
         const provinceId = document.getElementById('updateProvince').value;
         if (provinceId) {
             fetch(`https://esgoo.net/api-tinhthanh/2/${provinceId}.htm`)
@@ -379,17 +393,17 @@
     }
 
     // Event listeners for dropdown changes
-    document.getElementById('updateProvince').addEventListener('change', function () {
+    document.getElementById('updateProvince').addEventListener('change', function() {
         updateDistricts(() => {
             updateStringAddress();
         });
     });
 
-    document.getElementById('updateDistrict').addEventListener('change', function () {
+    document.getElementById('updateDistrict').addEventListener('change', function() {
         updateWards();
     });
 
-    document.getElementById('updateWard').addEventListener('change', function () {
+    document.getElementById('updateWard').addEventListener('change', function() {
         updateStringAddress();
     });
 
@@ -443,7 +457,7 @@
         .catch(error => console.error('Error fetching provinces:', error));
 
     // Handle province change
-    document.getElementById('province').addEventListener('change', function () {
+    document.getElementById('province').addEventListener('change', function() {
         const provinceId = this.value;
 
         if (provinceId) {
@@ -473,7 +487,7 @@
     });
 
     // Handle district change
-    document.getElementById('huyen').addEventListener('change', function () {
+    document.getElementById('huyen').addEventListener('change', function() {
         const districtId = this.value;
 
         if (districtId) {
@@ -501,7 +515,7 @@
     });
 
     // Handle ward change
-    document.getElementById('xa').addEventListener('change', function () {
+    document.getElementById('xa').addEventListener('change', function() {
         updateAddress();
     });
 </script>

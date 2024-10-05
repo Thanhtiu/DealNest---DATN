@@ -43,13 +43,13 @@
         }
 
         .logo img {
-            width: 30px;
+            width: 80px;
             margin-right: 10px;
         }
 
         .logo h1 {
             font-size: 1.5rem;
-            color: #ff3333;
+            color: #0d6efd;
             margin: 0;
         }
 
@@ -71,7 +71,7 @@
         .button {
             display: block;
             width: 100%;
-            background-color: #ff3333;
+            background-color: #0d6efd;
             color: #fff;
             padding: 15px 20px;
             border: none;
@@ -90,8 +90,8 @@
     <div class="container">
         <div class="card">
             <div class="logo">
-                <img src="https://www.shopee.vn/favicon.ico" alt="Shopee Logo">
-                <h1>Shoppe</h1>
+                <img src="{{asset('image/dealnest-logo.png')}}" alt="Shopee Logo">
+                <h1>DealNest</h1>
             </div>
             <div class="illustration">
                 <img src="https://deo.shopeesz.com/shopee/pap-admin-live-sg/upload/upload_9dab85081088531ee6d1aa958a90f55e.png"

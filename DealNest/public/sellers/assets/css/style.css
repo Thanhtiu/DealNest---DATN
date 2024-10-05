@@ -8382,7 +8382,7 @@
   --bs-gray-700: #495057;
   --bs-gray-800: #343a40;
   --bs-gray-900: #212529;
-  --bs-primary: #b66dff;
+  --bs-primary: #0d6efd;
   --bs-secondary: #c3bdbd;
   --bs-success: #1bcfb4;
   --bs-info: #198ae3;
@@ -11428,19 +11428,19 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
 
 .btn-primary {
   --bs-btn-color: #000;
-  --bs-btn-bg: #b66dff;
-  --bs-btn-border-color: #b66dff;
+  --bs-btn-bg: #0d6efd;
+  --bs-btn-border-color: #0d6efd;
   --bs-btn-hover-color: #000;
-  --bs-btn-hover-bg: #c183ff;
-  --bs-btn-hover-border-color: #bd7cff;
+  --bs-btn-hover-bg: #0d6efd;
+  --bs-btn-hover-border-color: #0d6efd;
   --bs-btn-focus-shadow-rgb: 155, 93, 217;
   --bs-btn-active-color: #000;
-  --bs-btn-active-bg: #c58aff;
-  --bs-btn-active-border-color: #bd7cff;
+  --bs-btn-active-bg: #0d6efd;
+  --bs-btn-active-border-color: #0d6efd;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #000;
-  --bs-btn-disabled-bg: #b66dff;
-  --bs-btn-disabled-border-color: #b66dff;
+  --bs-btn-disabled-bg: #0d6efd;
+  --bs-btn-disabled-border-color: #0d6efd;
 }
 
 .btn-secondary {
@@ -26320,7 +26320,7 @@ dl li {
 }
 
 .pagination .active .page-link {
-  background-color: #ff5722; /* Màu nền cho nút active */
+  background-color: #0d6efd; /* Màu nền cho nút active */
   border-color: #b66dff;
   color: white; /* Màu chữ cho nút active */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng cho nút active */

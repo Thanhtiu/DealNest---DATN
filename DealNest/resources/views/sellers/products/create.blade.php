@@ -61,7 +61,7 @@
 
   .file-upload-container label {
     cursor: pointer;
-    color: #ff4d4f;
+    color: #0d6efd;
     font-weight: bold;
   }
 
@@ -347,7 +347,7 @@
             </div>
           </div>
         </div>
-        <button type="submit" class="btn btn-gradient-primary me-2">Thêm</button>
+        <button type="submit" class="btn btn-primary">Thêm</button>
         <button class="btn btn-light" type="reset">Hủy bỏ</button>
       </form>
     </div>

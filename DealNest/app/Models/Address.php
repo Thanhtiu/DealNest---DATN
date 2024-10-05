@@ -17,6 +17,8 @@ class Address extends Model
         'street',
         'string_address',
         'active',
+        'phone',
+        'name',
     ];
     
     public function user(){

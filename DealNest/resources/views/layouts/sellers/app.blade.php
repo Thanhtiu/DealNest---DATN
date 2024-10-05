@@ -53,7 +53,7 @@
     /* Style cho dropdown chọn số lượng mục */
     .dataTables_length select {
         padding: 5px 20px;
-        border: 2px solid #ff5722;
+        border: 2px solid #0d6efd;
         border-radius: 8px;
         font-size: 14px;
         color: #333;
@@ -74,7 +74,7 @@
 
     /* Style cho input tìm kiếm */
     .dataTables_filter input {
-        border: 2px solid #ff5722;
+        border: 2px solid #0d6efd;
         border-radius: 25px;
         padding: 8px 15px 8px 35px;
         /* Tạo không gian cho icon */
@@ -374,20 +374,10 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#shopMenu" aria-expanded="false" aria-controls="shopMenu">
-                            <span class="menu-title">Quản lý shop</span>
-                            <i class="mdi mdi-table-large menu-icon"></i>
+                        <a class="nav-link" href="{{route('seller.info')}}">
+                            <span class="menu-title">Thông tin cửa hàng</span>
+                            <i class="mdi mdi-home menu-icon"></i>
                         </a>
-                        <div class="collapse" id="shopMenu">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="pages/tables/basic-table.html">Hồ sơ shop</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="pages/tables/basic-table.html">Trang trí shop</a>
-                                </li>
-                            </ul>
-                        </div>
                     </li>
                 </ul>
             </nav>

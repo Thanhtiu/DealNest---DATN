@@ -7,34 +7,48 @@ use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Voucher;
+use App\Models\User;
+use App\Models\Address;
 
 class PaymentController extends Controller
 {
     public function index()
     {
-        // Kiểm tra xem có giá trị total_amount và selected_items trong session không
+        $userId =  auth()->id();
+        $userAddress = Address::where('user_id', $userId)->where('active', 1)->first();
+        
+
         if (!session()->has('total_amount') || !session()->has('selected_items')) {
             return redirect()->route('client.cart');
         }
-    
-        // Lấy dữ liệu từ session
+
         $totalAmount = session('total_amount');
-        $selectedItems = session('selected_items'); // Đây là mảng đa chiều chứa product_id, product_name, quantity, và total_price
-    
-        // Trích xuất danh sách product_id từ selectedItems
+        $selectedItems = session('selected_items');
         $productIds = array_column($selectedItems, 'product_id');
-    
-        // Truy vấn bảng products để lấy thông tin sản phẩm theo product_id
+
+        // Lấy thông tin các sản phẩm từ cơ sở dữ liệu
         $products = Product::whereIn('id', $productIds)->get();
-    
-        // Lấy danh sách subcategory_id từ các sản phẩm đã chọn
-        $subcategoryIds = $products->pluck('subcategory_id')->toArray();
-    
-        // Truy vấn danh sách các voucher có cùng subcategory_id với sản phẩm
-        $vouchers = Voucher::whereIn('subcategory_id', $subcategoryIds)->get();
-        // return $vouchers;
-    
-        // Trả về view checkout và truyền dữ liệu
-        return view('client.checkout', compact('totalAmount', 'selectedItems', 'products', 'vouchers'));
+
+        // Nhóm sản phẩm theo seller để hiển thị voucher theo từng người bán
+        $groupedProducts = $products->groupBy('seller_id');
+
+        // Khởi tạo mảng để chứa voucher của từng seller
+        $sellerVouchers = [];
+
+        // Lấy voucher theo seller và danh mục con
+        foreach ($groupedProducts as $sellerId => $sellerProducts) {
+            $subcategoryIds = $sellerProducts->pluck('subcategory_id')->toArray();
+
+            // Lấy voucher cho mỗi seller
+            $vouchers = Voucher::whereIn('subcategory_id', $subcategoryIds)
+                ->where('seller_id', $sellerId)
+                ->get();
+
+            // Gán voucher vào mảng sellerVouchers
+            $sellerVouchers[$sellerId] = $vouchers;
+        }
+
+        // Trả về view với dữ liệu
+        return view('client.checkout', compact('totalAmount', 'selectedItems', 'groupedProducts', 'sellerVouchers', 'products','userAddress'));
     }
 }

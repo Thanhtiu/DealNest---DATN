@@ -105,6 +105,8 @@ class RegisterTrationController extends Controller
             'ward_id' => $request->input('ward'),
             'street' => $request->input('street'),
             'string_address' => $request->input('string_address'),
+            'phone' => $request->$user->phone,
+            'name'=> $request->$user->full_name,
         ]);
 
         // Create seller record

@@ -36,7 +36,9 @@ class AddressController extends Controller
             'ward_id' => $request->input('ward'),
             'street' => $request->input('street'),
             'string_address' => $request->input('string_address'),
-            'active' => $activeValue // Gán giá trị active tùy theo điều kiện
+            'active' => $activeValue,
+            'name' => $request->name,
+            'phone' => $request->phone,
         ]);
 
         return redirect()->route('account.address.index')->with('success', 'Địa chỉ đã được thêm thành công');
@@ -56,6 +58,8 @@ class AddressController extends Controller
             'ward' => $address->ward_id,
             'street' => $address->street,
             'string_address' => $address->string_address,
+            'phone' => $address->phone,
+            'name' => $address->name,
         ], 200);
     }
 
