@@ -120,7 +120,7 @@
                         </thead>
                         <tbody>
                             @php
-                            $totalPriceSum = 0; 
+                            $totalPriceSum = 0; // Khởi tạo biến để tính tổng
                             @endphp
 
                             <form id="cartForm">
@@ -223,20 +223,18 @@
         let form = document.getElementById('cartForm');
         let formData = new FormData(form);
 
-        fetch('{{ route('
-                cart.submit ') }}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('input[name=_token]').value
-                    },
-                    body: formData
-                })
+        fetch('{{ route('cart.submit') }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name=_token]').value
+                },
+                body: formData
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     // Chuyển hướng đến route checkout
-                    window.location.href = '{{ route('
-                    checkout ') }}';
+                    window.location.href = '{{ route('checkout') }}';
                 } else {
                     alert('Vui lòng chọn ít nhất một sản phẩm!');
                 }
@@ -296,11 +294,10 @@
         });
 
         // Gửi Ajax request để xóa các mục đã chọn
-        fetch('{{ route('
-                cart.destroy ') }}', {
-                    method: 'POST',
-                    body: formData
-                })
+        fetch('{{ route('cart.destroy') }}', {
+                method: 'POST',
+                body: formData
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
