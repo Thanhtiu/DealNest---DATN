@@ -147,4 +147,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/cart', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::post('/cart/submit', [CartController::class, 'submit'])->name('cart.submit');
     Route::get('/thanh-toan', [PaymentController::class, 'index'])->name('checkout');
+
+    // Checkout Processing
+    Route::post('/checkout/processing', [PaymentController::class, 'checkoutProcessing'])->name('checkout.processing');
+
+    // VNpay payment
+    Route::get('/vnpay_payment',[vnPayController::class,'vnpay_payment'])->name('vnpay_payment');
+    Route::get('success',[vnPayController::class,'success'])->name('success');
+
+
 });
