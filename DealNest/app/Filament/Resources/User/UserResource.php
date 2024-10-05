@@ -40,7 +40,7 @@ class UserResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([    
+        ->schema([
             Grid::make(2)
                 ->schema([
                 TextInput::make('name')
@@ -51,7 +51,7 @@ class UserResource extends Resource
                     ->image()
                     ->directory('users')
                     ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                        
+
                         if (empty($get('image'))) {
                             $set('image', 'default_avt.png');
                         }
@@ -68,9 +68,9 @@ class UserResource extends Resource
                     ->dehydrated(fn($state) => filled($state))
                     ->required(fn($livewire) => $livewire instanceof CreateUser)
             ]),
-        
-            Grid::make(2) 
-                ->schema([ 
+
+            Grid::make(2)
+                ->schema([
                     TextInput::make('phone')
                         ->maxLength(15)
                         ->required()
@@ -83,7 +83,7 @@ class UserResource extends Resource
                             'seller' => "Người bán hàng",
                             'buyer' => "Người mua hàng"
                         ])
-                        ->default('buyer') 
+                        ->default('buyer')
                         ->label('Vai trò'),
                     Toggle::make('is_active')
                         ->label('Kích hoạt tài khoản')
@@ -100,7 +100,7 @@ class UserResource extends Resource
             TextColumn::make('email')->label('Email')->sortable()->searchable(),
             TextColumn::make('role')->label('Chức vụ')->sortable()->searchable(),
             ImageColumn::make('image')->label('Hình ảnh'),
-            
+
         ])
             ->filters([
                 //
@@ -147,7 +147,7 @@ class UserResource extends Resource
 
     public static function getBreadcrumb(): string
     {
-        return 'Quản lý tài khoản'; 
+        return 'Quản lý tài khoản';
     }
 
 }

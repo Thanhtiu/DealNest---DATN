@@ -52,25 +52,14 @@ class ProductController extends Controller
                 'quantity' => 'required|integer|min:0',
                 'description' => 'nullable|string',
                 'brand_id' => 'required|integer|exists:brands,id',
-                'img' => 'required|array|min:5|max:10',
-                'img.*' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
-            ], [
-                'name.required' => 'Tên sản phẩm là bắt buộc.',
-                'category_id.required' => 'Thể loại là bắt buộc.',
-                'subCategory_id.required' => 'Thể loại con là bắt buộc.',
-                'price.required' => 'Giá là bắt buộc.',
-                'price.numeric' => 'Giá phải là số.',
-                'quantity.required' => 'Số lượng là bắt buộc.',
-                'quantity.integer' => 'Số lượng phải là số nguyên.',
-                'brand_id.required' => 'Thương hiệu là bắt buộc.',
-                'img.required' => 'Vui lòng tải lên ít nhất 5 hình ảnh.',
-                'img.min' => 'Bạn phải tải lên ít nhất 5 hình ảnh.',
-                'img.max' => 'Bạn chỉ được tải tối đa 10 hình ảnh.',
-                'img.*.image' => 'Tập tin tải lên phải là hình ảnh.',
-                'img.*.mimes' => 'Hình ảnh phải có định dạng jpg, jpeg, png, gif, hoặc webp.',
-                'img.*.max' => 'Hình ảnh phải nhỏ hơn 2MB.',
+                'img' => 'required|array|min:5|max:10', // Validate số lượng ảnh
+                'img.*' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048', // Validate ảnh
+                // 'attributes' => 'required|array', // Validate biến thể chính
+                // 'attributes.*.name' => 'required|string|max:255', // Tên biến thể chính
+                // 'attributes.*.values' => 'required|array', // Các biến thể con
+                // 'attributes.*.values.*.value' => 'required|string|max:255', // Tên biến thể con
+                // 'attributes.*.values.*.price' => 'nullable|numeric|min:0', // Giá của từng biến thể con
             ]);
-            
 
             // Xử lý ảnh chính của sản phẩm
             $imageName = null;
@@ -140,7 +129,8 @@ class ProductController extends Controller
 
             return redirect()->route('seller.product.list')->with('success', 'Thêm sản phẩm thành công.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage())->withInput();
+            \Log::error('Error creating product: ' . $e->getMessage());
+            // dd($e->getMessage());
         }
     }
 

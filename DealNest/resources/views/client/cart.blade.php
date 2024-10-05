@@ -152,7 +152,6 @@
                                     <td class="shoping__cart__quantity">{{ $item->quantity }}</td>
                                     <td class="shoping__cart__total">{{ number_format($item->total_price, 0, ',', '.')
                                         }}</td>
-                                        <!-- comment -->
                                 </tr>
                                 @php
                                 $totalPriceSum += $item->total_price; // Cộng dồn total_price vào biến totalPriceSum
@@ -247,7 +246,7 @@ document.querySelector('.purchase-button').addEventListener('click', function (e
 
     checkboxes.forEach(function(checkbox) {
         checkbox.checked = document.getElementById('select-all').checked;
-
+        
         // Nếu checkbox được chọn, tính tổng giá trị
         if (checkbox.checked) {
             let totalPrice = parseFloat(checkbox.getAttribute('data-total-price')); // Lấy giá trị total_price từ thuộc tính data-total-price

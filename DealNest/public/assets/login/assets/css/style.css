@@ -26302,3 +26302,17 @@ dl li {
   flex-grow: 1;
 }
 /*# sourceMappingURL=maps/style.css.map */
+
+
+.subcategory-link {
+  color: black; /* Màu chữ đen */
+  text-decoration: none; /* Bỏ gạch dưới */
+}
+
+.subcategory-link:hover,
+.subcategory-link:focus {
+  color: black; /* Giữ nguyên màu đen khi hover hoặc focus */
+  text-decoration: none; /* Không gạch dưới khi hover hoặc focus */
+  outline: none; /* Bỏ viền bao quanh khi focus */
+}
+
