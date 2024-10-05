@@ -31,6 +31,9 @@
     .card-body {
         position: relative;
     }
+    .tab-index{
+        margin-bottom: 30px;
+    }
 </style>
 
 <div class="tab-index" role="tab_list">
@@ -108,7 +111,8 @@
                             <tr>
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->category->name}}</td>
-                                <td></td>
+                                <td></td>  
+                                
                             </tr>
                             @endforeach
                         </tbody>

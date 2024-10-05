@@ -12,7 +12,7 @@
             <div class="shop-info">
                 <h1>{{$shop->store_name}}</h1>
                 <p>Online 2 phút trước</p>
-                <button class="follow-btn">ĐANG THEO</button>
+                <button class="follow-btn">Theo dỗi</button>
             </div>
         </div>
         <div class="shop-stats">

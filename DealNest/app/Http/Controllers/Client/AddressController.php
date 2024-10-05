@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Address;
+
 class AddressController extends Controller
 {
     public function index()
     {
-        
+
         $userId = auth()->id();
         $address = Address::where('user_id', auth()->id())
             ->with('user')
@@ -19,6 +20,13 @@ class AddressController extends Controller
     }
     public function create(Request $request)
     {
+        
+        $existingActiveAddress = Address::where('user_id', auth()->user()->id)
+            ->where('active', 1)
+            ->exists();
+
+        $activeValue = $existingActiveAddress ? 0 : 1;
+
         $address = Address::create([
             'user_id' => auth()->user()->id,
             'province_id' => $request->input('province'),
@@ -26,10 +34,11 @@ class AddressController extends Controller
             'ward_id' => $request->input('ward'),
             'street' => $request->input('street'),
             'string_address' => $request->input('string_address'),
-            'active' => $activeValue,
+            'active' => $activeValue, 
             'name' => $request->name,
             'phone' => $request->phone,
         ]);
+
         return redirect()->route('account.address.index')->with('success', 'Địa chỉ đã được thêm thành công');
     }
 
@@ -99,5 +108,4 @@ class AddressController extends Controller
 
         return redirect()->back()->with('success', 'Địa chỉ đã được thiết lập mặc định');
     }
-
 }
