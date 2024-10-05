@@ -575,6 +575,11 @@
         <p>Không có sản phẩm nào được chọn.</p>
         @endif
 
+
+
+
+
+
         <!-- Voucher Section -->
         <div class="voucher">
             <span><i class="bi bi-ticket-fill"></i> Voucher của Shop</span>
@@ -745,24 +750,24 @@
 </div>
 <script>
     const changeMethodLink = document.getElementById('change-method');
-    const paymentOptions = document.getElementById('payment-options');
-    const selectedMethod = document.getElementById('selected-method');
-    const paymentButtons = document.querySelectorAll('.payment-method-button');
+        const paymentOptions = document.getElementById('payment-options');
+        const selectedMethod = document.getElementById('selected-method');
+        const paymentButtons = document.querySelectorAll('.payment-method-button');
 
-    changeMethodLink.addEventListener('click', function() {
-        if (paymentOptions.style.display === 'none') {
-            paymentOptions.style.display = 'block';
-        } else {
-            paymentOptions.style.display = 'none';
-        }
-    });
-
-    paymentButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            selectedMethod.textContent = this.textContent;
-            paymentOptions.style.display = 'none';
+        changeMethodLink.addEventListener('click', function() {
+            if (paymentOptions.style.display === 'none') {
+                paymentOptions.style.display = 'block';
+            } else {
+                paymentOptions.style.display = 'none';
+            }
         });
-    });
+
+        paymentButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                selectedMethod.textContent = this.textContent;
+                paymentOptions.style.display = 'none';
+            });
+        });
 </script>
 
 <script>

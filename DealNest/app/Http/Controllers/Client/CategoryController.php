@@ -47,7 +47,7 @@ class CategoryController extends Controller
 
         $productCategory = Product::with('product_image')
         ->where('category_id', $category->id)
-        ->where('status','Đã phê duyệt')
+        // ->where('status','Đã phê duyệt')
         ->orderBy($column,$sort)
         ->get();
         if(is_null($category)){

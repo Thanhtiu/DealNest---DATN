@@ -172,7 +172,7 @@ class CartController extends Controller
     return response()->json(['success' => true, 'total_amount' => $totalAmount, 'selected_items' => $selectedItems]);
 }
 
-
+    
 
 
 

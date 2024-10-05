@@ -25,7 +25,9 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
 
-
+    <!-- DataTables Bootstrap 5 JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{asset('sellers/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
@@ -63,14 +65,26 @@
         outline: none;
     }
 
-    .dataTables_length select:focus {
-        border: 2px solid #ff8a50;
-    }
+.dataTables_length select:focus {
+    border: 2px solid #ff8a50;
+}
 
-    .dataTables_length label {
-        font-weight: bold;
-        color: #333;
-    }
+.dataTables_length label {
+    font-weight: bold;
+    color: #333;
+}
+/* Style cho input tìm kiếm */
+.dataTables_filter input {
+    border: 2px solid #ff5722;
+    border-radius: 25px;
+    padding: 8px 15px 8px 35px;  /* Tạo không gian cho icon */
+    width: 300px;
+    font-size: 14px;
+    transition: border 0.3s ease;
+    outline: none;
+    background: url('https://cdn-icons-png.flaticon.com/512/622/622669.png') no-repeat scroll 10px 8px;
+    background-size: 20px 20px;
+}
 
     /* Style cho input tìm kiếm */
     .dataTables_filter input {
@@ -86,32 +100,26 @@
         background-size: 20px 20px;
     }
 
-    .dataTables_filter input:focus {
-        border: 1px solid #ff5722;
-    }
+.dataTables_filter label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
 
-    .dataTables_filter label {
-        font-weight: bold;
-        color: #333;
-        margin-right: 10px;
-    }
+.dataTables_wrapper .dataTables_filter input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
 
-    .dataTables_wrapper .dataTables_filter input::placeholder {
-        color: #aaa;
-        font-style: italic;
-    }
-    .no-data-image{
-        margin-top: 5%;
-    }
+
 </style>
-
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <div class="dealnest-logo">
-                    <a class="navbar-brand brand-logo" href="{{route('seller.index')}}"><img class="seller-logo-image"
+                    <a class="navbar-brand brand-logo" href="index.html"><img class="seller-logo-image"
                             src="{{asset('image/dealnest-logo.png')}}" alt="logo" /></a>
                 </div>
                 <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg"
@@ -304,17 +312,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('seller.productStatistics')}}">
-                            <span class="menu-title">Thống kê sản phẩm</span>
-                            <i class="mdi mdi-home menu-icon"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#orderMenu" aria-expanded="false" aria-controls="orderMenu">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false"
+                            aria-controls="forms">
                             <span class="menu-title">Quản lý đơn hàng</span>
                             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                         </a>
-                        <div class="collapse" id="orderMenu">
+                        <div class="collapse" id="forms">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
                                     <a class="nav-link" href="pages/forms/basic_elements.html">Tất cả</a>
@@ -325,27 +328,30 @@
                             </ul>
                         </div>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#userMenu" aria-expanded="false" aria-controls="userMenu">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
+                            aria-controls="ui-basic">
                             <span class="menu-title">Quản lý người dùng</span>
+                            <i class="menu-arrow"></i>
                             <i class="mdi mdi-lock menu-icon"></i>
                         </a>
-                        <div class="collapse" id="userMenu">
+                        <div class="collapse" id="ui-basic">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/ui-features/buttons.html">Xem thông tin tài khoản</a>
+                                    <a class="nav-link" href="pages/ui-features/buttons.html">Xem thông tin tài
+                                        khoản</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#productMenu" aria-expanded="false" aria-controls="productMenu">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false"
+                            aria-controls="forms">
                             <span class="menu-title">Quản lý sản phẩm</span>
                             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                         </a>
-                        <div class="collapse" id="productMenu">
+                        <div class="collapse" id="forms">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{route('seller.product.list')}}">Danh sách sản phẩm</a>
@@ -360,19 +366,22 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#voucherMenu" aria-expanded="false" aria-controls="voucherMenu">
-                            <span class="menu-title">Quản lý voucher</span>
+                        <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false"
+                            aria-controls="charts">
+                            <span class="menu-title">Quản lý đánh giá</span>
                             <i class="mdi mdi-chart-bar menu-icon"></i>
                         </a>
-                        <div class="collapse" id="voucherMenu">
+                        <div class="collapse" id="charts">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('seller.voucher')}}">Danh sách voucher</a>
+                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh gián sản phẩm</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh gián cửa hàng</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('seller.info')}}">
                             <span class="menu-title">Thông tin cửa hàng</span>
@@ -486,7 +495,7 @@
 
     <!-- <script src="{{asset('sellers/assets/js/spinner.js')}}"></script> -->
     <!-- Bootstrap 5 JS -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
     <!-- plugins:js -->
@@ -494,7 +503,7 @@
     <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> -->
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    {{-- <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script>
+    {{-- <script src="{{asset('sellers/assets/vendors/chart.js/chart.umd.js')}}"></script> --}}
     {{-- <script src="{{asset('sellers/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
     --}}
     <!-- End plugin js for this page -->

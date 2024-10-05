@@ -27,6 +27,7 @@ class User extends Authenticatable implements FilamentUser
         'full_name',
         'phone',
         'image',
+        'cccd',
         'role',
         'is_active',
         'google_id',

@@ -60,7 +60,6 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::get('/dia-chi/mac-dinh/{id}', [AddressController::class, 'setDefault'])->name('account.address.setDefault');
     Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order.index');
     Route::get('/voucher', [HomeController::class, 'voucher']);
-
 });
 Route::middleware(['web'])->group(function () {
 
@@ -149,5 +148,3 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/cart/submit', [CartController::class, 'submit'])->name('cart.submit');
     Route::get('/thanh-toan', [PaymentController::class, 'index'])->name('checkout');
 });
-
-
