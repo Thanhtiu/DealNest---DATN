@@ -724,7 +724,7 @@
                 </div>
                 <div class="breakdown-item total">
                     <span>Tổng thanh toán</span>
-                    <span id="total-payment" class="total-amount">₫172.700</span>
+                    <span id="total-payment" class="total-amount">0</span>
                 </div>
             </div>
         </div>
@@ -801,9 +801,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const selectedItems = {
-            !!json_encode($selectedItems) !!
-        }; // Lấy dữ liệu từ backend
+        // Đảm bảo selectedItems là một mảng đúng từ backend
+        const selectedItems = @json($selectedItems); // Lấy dữ liệu từ backend dưới dạng JSON
+
         const shippingFee = 15000; // Phí vận chuyển cố định
         let voucherDiscount = 0; // Giảm giá voucher, mặc định là 0 nếu chưa chọn
 
@@ -852,4 +852,5 @@
         updateTotalPayment();
     });
 </script>
+
 @endsection
