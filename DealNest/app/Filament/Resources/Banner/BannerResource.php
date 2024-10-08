@@ -44,8 +44,10 @@ class BannerResource extends Resource
                         ->required()
                         ->live(onBlur: true)
                         ->label('Tên banner'),
-                    FileUpload::make('image')
+                    FileUpload::make('image')   
+ 
                         ->label('Hình ảnh')
+                        
                 ]),
         
             Grid::make(2) 
