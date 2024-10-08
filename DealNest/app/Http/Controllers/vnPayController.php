@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class vnPayController extends Controller
 {
@@ -103,38 +106,60 @@ class vnPayController extends Controller
 
 
     public function success() {
-            // Lấy id đơn hàng từ session
-            $orderId = session('order_id');
+        // Lấy id đơn hàng từ session
+        $orderId = session('order_id');
+        
+        if (is_null($orderId)) {
+            echo 'Không tìm thấy đơn hàng.';
+            return;
+        }
     
-            if (is_null($orderId)) {
-                echo 'Không tìm thấy đơn hàng.';
-                return;
-            }
+        // Cập nhật trạng thái thanh toán cho đơn hàng
+        $order = Order::find($orderId);
+        
+        if ($order) {
+            echo 'Trạng thái hiện tại: ' . $order->payment_status; // Kiểm tra trạng thái hiện tại
+            $order->payment_status = 'paid'; // Cập nhật payment_status
     
-            // Cập nhật trạng thái thanh toán cho đơn hàng
-            $order = Order::find($orderId);
-    
-            if ($order) {
-                echo 'Trạng thái hiện tại: ' . $order->payment_status; // Kiểm tra trạng thái hiện tại
-                $order->payment_status = 'paid'; // Cập nhật payment_status
+            // Kiểm tra xem lưu có thành công hay không
+            if ($order->save()) {
+                // Lấy danh sách product_id từ session
+                $addedProductIds = session('added_product_ids', []);
                 
-                // Kiểm tra xem lưu có thành công hay không
-                if ($order->save()) {
+                // Lấy userId từ Auth
+                $userId = Auth::id();
+    
+                // Sử dụng dd() để kiểm tra các giá trị
+
+    
+                if (!empty($addedProductIds) && !is_null($userId)) {
+                    // Xóa các sản phẩm trong cart dựa trên user_id và product_id
+                    DB::table('carts') // Sử dụng DB
+                        ->where('user_id', $userId)
+                        ->whereIn('product_id', $addedProductIds)
+                        ->delete();
+    
+                    // Xóa session order_id và added_product_ids
                     session()->forget('order_id');
-                    echo 'Thanh toán thành công!';
+                    session()->forget('added_product_ids'); // Unset session added_product_ids
+                    session()->forget('total_amount'); // Unset session total_amount
+                    session()->forget('selected_items'); // Unset session selected_items
+    
+                    echo 'Thanh toán thành công và giỏ hàng đã được làm trống!';
                 } else {
-                    echo 'Không thể cập nhật trạng thái thanh toán.';
+                    echo 'Không có sản phẩm để xóa trong giỏ hàng.';
                 }
             } else {
-                echo 'Đơn hàng không tồn tại.';
-            }       
+                echo 'Không thể cập nhật trạng thái thanh toán.';
+            }
+        } else {
+            echo 'Đơn hàng không tồn tại.';
+        }       
     }
     
     
     
-
-
     
-    
+
     
 }
