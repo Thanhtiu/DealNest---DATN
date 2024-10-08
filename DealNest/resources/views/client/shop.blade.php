@@ -6,13 +6,19 @@
     <div class="shop-header">
         <div class="logo" style="background-image: url('{{ asset('uploads/'.$shop->background) }}') !important;">
             <div class="shop-image">
-                <img src="{{asset('uploads/'.$shop->logo)}}" alt="Shop Logo">
+                <img src="{{ asset('uploads/' . ($shop->logo === null ? 'logo-default-seller.png' : $shop->logo)) }}" alt="Shop Logo">
                 <button class="favorite-btn">Yêu thích</button>
             </div>
             <div class="shop-info">
                 <h1>{{$shop->store_name}}</h1>
                 <p>Online 2 phút trước</p>
-                <button class="follow-btn">Theo dỗi</button>
+                <<button class="follow-btn" data-seller-id="{{ $shop->id }}"
+                    style="background: {{ $isFollowing ? 'red' : '#0d6efd' }};
+               border: {{ $isFollowing ? 'red' : '#00bcd4' }};">
+                    {{ $isFollowing ? 'Hủy Theo Dõi' : 'Theo dõi' }}
+                    </button>
+
+
             </div>
         </div>
         <div class="shop-stats">
@@ -85,4 +91,43 @@
         </div>
     </div>
 </div>
+<script>
+    $('.follow-btn').on('click', function() {
+        var sellerId = $(this).data('seller-id');
+        var button = $(this);
+
+        $.ajax({
+            url: '/theo-doi/cua-hang',
+            method: 'POST',
+            data: {
+                seller_id: sellerId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    if (response.status == 'added') {
+                        // Khi theo dõi thành công, đổi nút thành "Hủy Theo Dõi"
+                        button.text('Hủy Theo Dõi');
+                        button.css('background', 'red');
+                        button.css('border', 'red');
+                        toastr.success(response.message);
+                    } else if (response.status == 'removed') {
+                        // Khi hủy theo dõi thành công, đổi nút thành "Theo dõi"
+                        button.text('Theo dõi');
+                        button.css('background', '#0d6efd');
+                        button.css('border', '#0d6efd');
+                        toastr.success(response.message);
+                    }
+                } else {
+                    toastr.error('Có lỗi xảy ra!');
+                }
+            },
+            error: function(xhr) {
+                toastr.error('Lỗi: ' + xhr.responseText);
+            }
+        });
+    });
+</script>
+
+
 @endsection

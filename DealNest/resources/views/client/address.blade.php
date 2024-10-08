@@ -1,88 +1,158 @@
 @extends('layouts/client.app')
 @section('content')
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 20px;
-    }
+   
 
-    .address-container {
-        width: 100%;
-        margin: 0 auto;
-        background-color: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 5px;
-        padding: 20px;
-    }
+   .address-container {
+    width: 100%;
+    margin: 0 auto;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
-    h2 {
-        margin-top: 3px;
-        margin-bottom: 16px;
-        font-size: 30px;
-    }
+h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+}
 
-    .address-card {
-        padding: 15px;
-        border: 1px solid #e0e0e0;
-        border-radius: 5px;
-        margin-bottom: 10px;
-    }
+.address-card {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    background-color: #f9f9f9;
+}
 
-    .address-info p {
-        margin: 5px 0;
-        font-size: 14px;
-    }
+.address-info p {
+    margin: 0;
+    padding: 5px 0;
+    font-size: 15px;
+}
 
-    .default {
-        color: red;
-        font-size: 13px;
-    }
+.address-info p strong {
+    font-size: 16px;
+    color: #333;
+}
 
-    .address-actions {
-        margin-top: 10px;
-    }
 
-    button {
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-right: 5px;
-        font-size: 14px;
-    }
 
-    .update-btn {
-        background-color: #007bff;
-        color: white;
-    }
+.address-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
 
-    .delete-btn {
-        background-color: #dc3545;
-        color: white;
-        padding: 11px;
-        border-radius: 5px;
-        text-decoration: none;
+button, .delete-btn, .set-default-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
 
-    }
+.update-btn {
+    background-color: #007bff;
+    color: white;
+}
 
-    .set-default-btn {
-        background-color: #6c757d;
-        color: white;
-        cursor: pointer;
-        padding: 11px;
-        border-radius: 5px;
-        text-decoration: none;
-    }
+.update-btn:hover {
+    background-color: #0056b3;
+}
 
-    .add-new-btn {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        font-size: 14px;
-        border-radius: 5px;
-    }
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.set-default-btn {
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+}
+
+.set-default-btn:hover {
+    background-color: #5a6268;
+}
+
+.add-new-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-new-btn:hover {
+    background-color: #0056b3;
+}
+
+.modal-header {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-header .modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-body label {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.modal-body input, .modal-body select {
+    padding: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.modal-footer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+.default {
+    font-size: 14px;
+    font-weight: bold;
+}
+
 </style>
 <section class="py-5">
     <div class="container">

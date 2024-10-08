@@ -2,69 +2,92 @@
 
 @section('content')
 <style>
-    /* Adjust main-container to remove margin and make it fit the available space */
+    /* General styles */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f7f7f7;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
     .main-container {
         display: flex;
         flex-grow: 1;
-        margin: 0;
-        /* Remove margins */
-        padding: 0;
-        /* Remove padding */
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ lớn hơn */
+        border-radius: 12px; /* Bo góc mềm mại hơn */
+        max-width: 1200px;
     }
 
-    /* Adjust form-content to take full width next to the sidebar */
     .form-content {
         flex-grow: 1;
-        margin: 0;
-        background-color: #f2edf3;
+        background-color: #f2f2f5;
+        padding: 20px;
+        border-radius: 12px;
     }
 
     .tab-menu {
         display: flex;
         border-bottom: 2px solid #ddd;
         margin-bottom: 20px;
+        justify-content: space-around;
     }
 
     .tab-menu a {
         padding: 10px 20px;
         text-decoration: none;
         color: #333;
+        font-weight: bold;
+        transition: color 0.3s ease, border-bottom 0.3s ease;
         border-bottom: 3px solid transparent;
-        transition: all 0.3s ease;
     }
 
     .tab-menu a.active {
-        color: #ff4b4b;
-        border-bottom: 3px solid #ff4b4b;
+        color: var(--primary-color);
+        border-bottom: 3px solid var(--primary-color); /* Màu chủ đạo */
     }
 
+    .tab-menu a:hover {
+        color: var(--primary-color);
+    }
+
+    /* Form groups */
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         display: flex;
         align-items: center;
-        /* Vertically center the label and input */
         justify-content: flex-start;
     }
 
     label {
-        width: 150px;
-        /* Set width for the labels */
-        font-weight: 500;
+        width: 180px;
+        font-weight: 600;
         margin-right: 20px;
-        /* Space between label and input */
     }
 
     input[type="text"],
     textarea {
         width: 100%;
-        max-width: 600px;
-        /* Set a max-width for inputs */
-        padding: 10px;
+        max-width: 650px;
+        padding: 12px;
         border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 14px;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
+    input[type="text"]:focus,
+    textarea:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng khi focus */
+        outline: none;
+    }
+
+    /* Input counter */
     .input-counter {
         position: absolute;
         right: 10px;
@@ -73,51 +96,62 @@
         color: #999;
     }
 
-    .logo-container {
+    /* Logo and background container */
+    .logo-container,
+    .bg-container {
         display: flex;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
 
-    .logo-container img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
+    .logo-container img,
+    .bg-container img {
+        width: 110px;
+        height: 110px;
+        border-radius: 8px;
         background-color: #ddd;
         margin-right: 20px;
-        /* Space between logo and details */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ cho ảnh */
     }
 
-    .logo-container button {
-        margin-left: 20px;
-        padding: 8px 16px;
-        background-color: #ddd;
+    .logo-container button,
+    .bg-container button {
+        padding: 10px 20px;
+        background-color: #0d6efd; 
+        color: #fff;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
+        font-weight: bold;
         cursor: pointer;
+        transition: background-color 0.3s ease, opacity 0.3s ease;
+        margin-right: 15px;
     }
 
-    .logo-container button:hover {
-        background-color: #ccc;
+    .logo-container button:hover,
+    .bg-container button:hover,
+    .save-btn:hover {
+        opacity: 0.85; /* Giảm opacity khi hover */
     }
 
     .logo-details {
-        font-size: 12px;
-        color: #999;
-        margin-left: 15px;
+        font-size: 13px;
+        color: #777;
     }
 
+    /* Buttons */
     .save-btn,
     .cancel-btn {
-        padding: 10px 20px;
+        padding: 12px 24px;
         border: none;
-        border-radius: 5px;
-        font-size: 14px;
+        border-radius: 8px;
+        font-size: 16px;
         cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease, opacity 0.3s ease;
     }
 
     .save-btn {
-        background-color: #ff4b4b;
+        background-color: #0d6efd;
         color: white;
     }
 
@@ -125,36 +159,29 @@
         background-color: #ffffff;
         color: #333;
         margin-left: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .cancel-btn:hover {
+        opacity: 0.85; /* Giảm opacity khi hover */
     }
 
     .button-group {
         display: flex;
         justify-content: flex-start;
-        /* Align buttons to the left */
-        margin-left: 170px;
-        /* Align buttons with the inputs (same as label width) */
-        margin-top: 20px;
-        /* Add some space above the buttons */
+        margin-left: 180px;
+        margin-top: 30px;
     }
 
     .button-group button {
-        margin-right: 10px;
-        /* Add space between the buttons */
-    }
-
-    .bg-container button {
-        margin-left: 20px;
-        padding: 8px 16px;
-        background-color: #ddd;
-        border: none;
-        border-radius: 5px;
+        margin-right: 15px;
     }
 
     .bg-container .bg-image {
-        min-width: 600px;
-        min-height: 200px;
+        min-width: 650px;
+        min-height: 250px;
         object-fit: cover;
-
+        border-radius: 12px;
     }
 </style>
 
@@ -163,8 +190,6 @@
     <div class="form-content">
         <div class="tab-menu">
             <a href="#" class="active">Thông tin cơ bản</a>
-            <a href="#">Thông tin Thuế</a>
-            <a href="#">Thông tin Định Danh</a>
         </div>
         @if (session('success'))
         <div class="alert alert-success">
@@ -229,7 +254,6 @@
                 <label for="shop-description">Mô tả Shop</label>
                 <textarea id="shop-description" name="store_description" rows="4" maxlength="500"
                     placeholder="Nhập mô tả hoặc thông tin về Shop của bạn tại đây">{{$seller->store_description}}</textarea>
-                <div class="input-counter">0/500</div>
             </div>
 
             <div class="button-group">

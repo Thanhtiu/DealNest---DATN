@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Buyer;
 use Carbon\Carbon;
 
 class ShopController extends Controller
@@ -51,6 +52,16 @@ class ShopController extends Controller
             $filteredProducts = Product::where('seller_id', $id)->get();
         }
 
+        // Kiểm tra nếu người dùng đã đăng nhập
+        $isFollowing = false;
+        if (auth()->check()) {
+            $userId = auth()->id();
+            $isFollowing = Buyer::where('user_id', $userId)
+                ->where('seller_follow_id', $shop->id)
+                ->exists();
+        }
+
+
 
         return view('client.shop', compact(
             'shop',
@@ -59,11 +70,8 @@ class ShopController extends Controller
             'newProducts',
             'categories',
             'filteredProducts',
-            'countProduct'
+            'countProduct',
+            'isFollowing'
         ));
     }
 }
-
-
-
-

@@ -427,9 +427,9 @@
     font-size: 14px;
     border-radius: 5px;
     text-align: center;
-    color: #000;
+    color: #0d6efd;
     background-color: transparent;
-    border: 2px solid #000;
+    border: 2px solid #0d6efd;
     transition: background-color 0.3s, color 0.3s;
   }
 
@@ -658,6 +658,10 @@
     color: red;
     font-weight: bold;
     font-size: 30px;
+  }
+  .shop-logo{
+    width: 60px;
+    
   }
 </style>
 <section class="product-section">
@@ -921,7 +925,7 @@
   </div>
 </div>
 
-<!-- Shop Info Section Begin -->
+
 <!-- Shop Info Section -->
 <section class="shop-info spad">
   <div class="container">
@@ -932,9 +936,7 @@
           <!-- Header with Avatar and Shop Name -->
           <div class="shop-info__header d-flex align-items-center">
             <!-- Shop Avatar -->
-            <img
-              src="{{asset('uploads/'.$seller->logo)}}"
-              alt="Shop Avatar" class="shop-avatar">
+            <img src="{{ asset('uploads/' . ($seller->logo === null ? 'logo-default-seller.png' : $seller->logo)) }}" alt="Shop Logo" class="shop-logo">
             <div class="shop-name ml-3">
               <h5>{{$seller->store_name}}</h5>
               <p class="text-shop">Online 1 giờ trước</p>

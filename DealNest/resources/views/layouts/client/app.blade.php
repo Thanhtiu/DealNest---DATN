@@ -65,7 +65,7 @@
 
                 <!-- Right Side Menu -->
                 <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{route('client.cart')}}"><i class="bi bi-cart" style="font-size: 20px;"></i></a>
                     </li>
                     <li class="nav-item">
@@ -82,7 +82,7 @@
                         @endif
                     </li>
 
-                    
+
                 </ul>
             </div>
         </nav>
@@ -227,7 +227,7 @@
                 <div class="col-md-3">
                     <div class="footer__widget">
                         <h6>THANH TOÁN</h6>
-                        <img src="{{asset('client/img/footer/jcb.jpg')}}"  style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/jcb.jpg')}}" style="width: 50px; margin: 0 10px;">
                         <img src="{{asset('client/img/footer/mastercard.jpg')}}" alt="Image 2" style="width: 50px; margin: 0 10px;">
                         <img src="{{asset('client/img/footer/mbbank.jpg')}}" alt="Image 3" style="width: 50px; margin: 0 10px;">
                         <img src="{{asset('client/img/footer/shoppepay.png')}}" alt="Image 4" style="width: 50px; margin: 0 10px;">
@@ -245,27 +245,27 @@
                         <img src="{{asset('client/img/footer/shoppeexpress.png')}}" alt="Image 3" style="width: 50px; margin: 0 10px;">
                         <img src="{{asset('client/img/footer/vnpost.png')}}" alt="Image 3" style="width: 50px; margin: 0 10px;">
                     </div>
-              
-            </div>
-            <div class="col-md-3">
-                <div class="footer__widget">
-                    <h6>THEO DÕI CHÚNG TÔI TRÊN </h6>
-                    <div class="footer__widget__social">
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-instagram"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-pinterest"></i></a>
-                    </div>
 
                 </div>
+                <div class="col-md-3">
+                    <div class="footer__widget">
+                        <h6>THEO DÕI CHÚNG TÔI TRÊN </h6>
+                        <div class="footer__widget__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-        </div>
     </footer>
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
     <!-- <script src="{{asset('client/js/jquery-3.3.1.min.js')}}"></script> -->
-    
+
     {{-- <script src="{{asset('client/js/spinner.js')}}"></script> --}}
     <script src="{{asset('client/js/cart-delete.js')}}"></script>
     <script src="{{asset('client/js/cart-create.js')}}"></script>
@@ -281,11 +281,17 @@
     {{-- <script src="{{asset('client/js/mixitup.min.js')}}"></script> --}}
     {{-- <script src="{{asset('client/js/owl.carousel.min.js')}}"></script> --}}
     <script src="{{asset('client/js/main.js')}}"></script>
+    @if(Session::has('success'))
     <script>
-        @if(Session::has('success'))
-            toastr.success("{{ Session::get('success') }}");
-        @endif
+        toastr.success("{{ Session::get('success') }}");
     </script>
+    @endif
+
+    @if(Session::has('error'))    
+    <script>
+        toastr.error("{{ Session::get('error') }}");
+    </script>
+    @endif
 
     {{-- Category Ajax --}}
     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
@@ -304,60 +310,56 @@
         // Onchange Select 
         $('#sort-category').change(function() {
 
-        const selectedValue = $(this).val(); 
+            const selectedValue = $(this).val();
 
-        var url = "{{ url()->current() }}?";
+            var url = "{{ url()->current() }}?";
 
-        window.location.href = url + "sortby=" + selectedValue;
-    });
-
-    // Checkbox Adress
-
-    $(".province").change(function(){
-        apply_filters();
-    });
-
-    function apply_filters(){
-
-        var province = [];
-
-        $('.province').each(function(){
-            if($(this).is(":checked") == true){
-
-                province.push($(this).val());   
-            }
+            window.location.href = url + "sortby=" + selectedValue;
         });
 
-        $.ajax({
-            url: "{{ route('category.productAddress') }}", 
-            type: "POST", 
-            data: {
-                _token: "{{ csrf_token() }}", 
-                province: province,
-            },
-            success: function(response) {
-                // Xử lý kết quả khi gửi thành công
-                if(response.success){
-                    $.each(response.data,function(key,value){
+        // Checkbox Adress
 
-                        console.log('key ' + key + "value " + value);
+        $(".province").change(function() {
+            apply_filters();
+        });
 
-                        
-                    })
+        function apply_filters() {
+
+            var province = [];
+
+            $('.province').each(function() {
+                if ($(this).is(":checked") == true) {
+
+                    province.push($(this).val());
                 }
-                console.log(response.message);
-            },
-            error: function(xhr) {
+            });
 
-                console.log(xhr.responseText);
-            }
-        });
+            $.ajax({
+                url: "{{ route('category.productAddress') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    province: province,
+                },
+                success: function(response) {
+                    // Xử lý kết quả khi gửi thành công
+                    if (response.success) {
+                        $.each(response.data, function(key, value) {
 
-    }
+                            console.log('key ' + key + "value " + value);
 
 
+                        })
+                    }
+                    console.log(response.message);
+                },
+                error: function(xhr) {
 
+                    console.log(xhr.responseText);
+                }
+            });
 
+        }
     </script>
 
 </body>

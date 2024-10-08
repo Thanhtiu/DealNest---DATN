@@ -66,12 +66,12 @@ body {
 .shop-info h1 {
     margin: 0;
     font-size: 1.8em;
-    color: #fff;
+    color: #000;
 }
 
 .shop-info p {
     margin: 5px 0;
-    color: #fff;
+    color: #000;
 }
 
 .follow-btn {

@@ -316,7 +316,7 @@
                     <div class="tabs-container">
                         <div class="tabs">
                             <a href="#" class="active">Tất cả</a>
-                            <a href="#">Chờ thanh toán</a>
+                            <a href="#">Chờ xác nhận</a>
                             <a href="#">Vận chuyển</a>
                             <a href="#">Chờ giao hàng</a>
                             <a href="#">Hoàn thành</a>
@@ -335,10 +335,7 @@
                     <div class="order-header">
                         <div class="order-header-left">
                         </div>
-                        <!-- Added Bootstrap Icon for success -->
-                        <div class="order-header-right">
-                            <i class="bi bi-check-circle-fill"></i> Đã giao hàng thành công
-                        </div>
+                        
                     </div>
                     
                     <div class="tab-content active" id="1">
@@ -365,10 +362,14 @@
                         <!-- Separator between products -->
                         <div class="order-item-separator"></div>
     
-                        <div class="order-item">
+                       
+                    </div>
+
+                    <div id="tab-2" class="tab-content">
+                    <div class="order-item">
                             <div class="order-item-info">
                                 <div class="order-item-image">
-                                    <img src="https://th.bing.com/th/id/R.03450f28db97b2b1106e14c9d1d86405?rik=euCOdYwSJvFrqQ&riu=http%3a%2f%2fimages6.fanpop.com%2fimage%2fphotos%2f42100000%2fJungkook-jungkook-bts-42110838-1080-1344.jpg&ehk=rDJd4RdvFJIVNTtx5yI5LPTq4cnRym3KIDRrc4KhkXk%3d&risl=&pid=ImgRaw&r=0" alt="Product Image">
+                                    <img src="" alt="Product Image">
                                 </div>
                                 <div class="order-item-details">
                                     <p>Balo nam nữ đi học đựng laptop 15.6 inch</p>
@@ -380,15 +381,13 @@
                                 <p><s>₫220.000</s></p>
                             </div>
                         </div>
-                        
                         <div class="order-actions">
                             <button class="secondary-button">Yêu Cầu Trả Hàng/Hoàn Tiền</button>
                             <button>Mua Lại</button>
                         </div>
-                    </div>
-
-                    <div id="tab-2" class="tab-content">
-                        <p>Tab nội dung Chờ thanh toán</p>
+    
+                        <!-- Separator between products -->
+                        <div class="order-item-separator"></div>
                     </div>
                     
                     <div id="tab-3" class="tab-content">

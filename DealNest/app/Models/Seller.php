@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Adress;
+
 class Seller extends Model
 {
     use HasFactory;
@@ -23,5 +24,13 @@ class Seller extends Model
     public function address()
     {
         return $this->belongsTo(Address::class);
+    }
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'seller_id');
+    }
+    public function totalSales()
+    {
+        return $this->products()->sum('sales');
     }
 }
