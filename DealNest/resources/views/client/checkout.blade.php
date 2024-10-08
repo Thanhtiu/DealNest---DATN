@@ -547,7 +547,7 @@
         // Lấy thông tin sản phẩm từ danh sách products
         $product = $products->firstWhere('id', $item['product_id']);
         @endphp
-        <div class="product">
+        <div class="product" data-product-id="{{ $product->id }}">
             <img src="{{ asset('/uploads/'.$product->image) }}" alt="{{ $product->name }}">
             <div class="product-info">
                 <p>{{ $product->name }}</p>
@@ -561,7 +561,6 @@
                 @else
                 <p>Không có thuộc tính</p>
                 @endif
-
                 <p class="return-policy"><i class="bi bi-arrow-repeat"></i> Đổi ý miễn phí 15 ngày</p>
             </div>
             <div class="price-info">
@@ -882,42 +881,6 @@
 
 // CheckOutProcressing 
 
-// $(document).ready(function() {
-//     $('#order-button').on('click', function() {
-//         // Lấy giá trị từ span
-//         var totalAmount = $('#total-payment').text();
-        
-//         // Lấy HTML từ p
-//         var selectedMethod = $('#selected-method').html();
-
-//         // Gửi dữ liệu đến route processingPayment
-//         $.ajax({
-//             url: "{{ route('checkout.processing') }}", // Thay đổi đường dẫn nếu cần
-//             type: 'POST', // Hoặc 'GET' tùy theo yêu cầu
-//             data: {
-//                 total_amount: totalAmount,
-//                 payment_method: selectedMethod, // Gửi phương thức thanh toán
-//                 _token: '{{ csrf_token() }}' // Thêm token CSRF nếu sử dụng Laravel
-//             },
-//             success: function(response) {
-//                 // Hiển thị thông báo với dữ liệu đã gửi
-//                 alert('Dữ liệu đã gửi thành công! Tổng số tiền: ' + response.total_amount + ', Phương thức thanh toán: ' + response.payment_method);
-//             },
-//             error: function(xhr, status, error) {
-//                 // Lấy thông điệp lỗi từ phản hồi JSON
-//                 var errorMessage = xhr.responseJSON && xhr.responseJSON.message 
-//                                     ? xhr.responseJSON.message 
-//                                     : 'Có lỗi xảy ra.';
-
-//                 // Hiển thị thông báo lỗi
-//                 alert('Lỗi: ' + errorMessage);
-//                 console.error(error);
-//             }
-//         });
-//     });
-// });
-
-
 $(document).ready(function() {
     $('#order-button').on('click', function() {
         // Lấy giá trị từ span
@@ -926,6 +889,21 @@ $(document).ready(function() {
         // Lấy HTML từ p
         var selectedMethod = $('#selected-method').html();
 
+        // Lấy thông tin sản phẩm (product_id, quantity, total_price)
+        var productsData = [];
+        $('.product').each(function() {
+            var productId = $(this).data('product-id');
+            var quantity = $(this).find('.price-info p:nth-child(2)').text().replace('Số lượng: ', ''); // Lấy số lượng
+            var totalPrice = $(this).find('.price-info p:nth-child(3)').text().replace('Thành tiền: ₫', '').replace(/\./g, ''); // Lấy total_price (bỏ ký hiệu và định dạng)
+            
+            // Thêm vào mảng productsData
+            productsData.push({
+                product_id: productId,
+                quantity: quantity,
+                total_price: totalPrice
+            });
+        });
+
         // Gửi dữ liệu đến route processingPayment
         $.ajax({
             url: "{{ route('checkout.processing') }}", // Thay đổi đường dẫn nếu cần
@@ -933,6 +911,7 @@ $(document).ready(function() {
             data: {
                 total_amount: totalAmount,
                 payment_method: selectedMethod, // Gửi phương thức thanh toán
+                products: productsData, // Gửi thông tin các sản phẩm
                 _token: '{{ csrf_token() }}' // Thêm token CSRF nếu sử dụng Laravel
             },
             success: function(response) {
@@ -946,6 +925,8 @@ $(document).ready(function() {
         });
     });
 });
+
+
 
 
 

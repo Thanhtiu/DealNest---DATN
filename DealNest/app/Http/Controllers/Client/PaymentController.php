@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\Voucher;
 use App\Models\User;
 use App\Models\Address;
-use App\Models\Order; 
+use App\Models\Order;
+use App\Models\OrderItem;
 use Carbon\Carbon; 
 use Illuminate\Support\Facades\Auth;
 
@@ -63,9 +64,10 @@ class PaymentController extends Controller
             // Lấy dữ liệu từ request
             $totalAmount = $request->input('total_amount');
             $paymentMethod = $request->input('payment_method');
+            $products = $request->input('products'); // Lấy danh sách sản phẩm từ request
     
             // Kiểm tra dữ liệu
-            if (is_null($totalAmount) || is_null($paymentMethod)) {
+            if (is_null($totalAmount) || is_null($paymentMethod) || empty($products)) {
                 return response()->json(['message' => 'Dữ liệu không hợp lệ.'], 400);
             }
     
@@ -98,8 +100,25 @@ class PaymentController extends Controller
                 'status' => 'pending',
             ]);
     
-            // Lưu id của đơn hàng vào session
+            // Tạo một mảng để lưu các product_id
+            $addedProductIds = [];
+    
+            // Lưu sản phẩm vào bảng order_items
+            foreach ($products as $product) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product['product_id'], // Lấy product_id từ dữ liệu sản phẩm
+                    'quantity' => $product['quantity'], // Lấy quantity từ dữ liệu sản phẩm
+                    'price' => $product['total_price'], // Lưu giá sản phẩm
+                ]);
+    
+                // Thêm product_id vào mảng
+                $addedProductIds[] = $product['product_id'];
+            }
+    
+            // Lưu id của đơn hàng và danh sách product_id vào session
             session(['order_id' => $order->id]);
+            session(['added_product_ids' => $addedProductIds]);
     
             // Trả về phản hồi với URL chuyển hướng
             return response()->json([
@@ -117,6 +136,8 @@ class PaymentController extends Controller
     
     
    
+    
+    
     
     
     
