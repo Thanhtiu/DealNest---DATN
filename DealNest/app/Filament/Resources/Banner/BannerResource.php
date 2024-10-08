@@ -54,7 +54,7 @@ class BannerResource extends Resource
                 ->schema([
                     Toggle::make('status')
                         ->label('Hiển thị')
-                        ->default(true),
+                        ->default(false),
                 ]),
         ]);
     }
