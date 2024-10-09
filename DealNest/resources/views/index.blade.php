@@ -145,7 +145,8 @@
 <section class="banner-section">
     <button class="banner-scroll-button prev">&lt;</button>
     <div class="banner-wrapper">
-        <div class="slider-container"> <!-- Thêm thẻ div bao quanh slider -->
+        <div class="slider-container">
+            <!-- Thêm thẻ div bao quanh slider -->
             <div class="banner-slider">
                 <div class="banner-item">
                     <img src="{{asset('https://i.ytimg.com/vi/4CCGI83vOVo/maxresdefault.jpg')}}" alt="Banner 2">
@@ -184,7 +185,8 @@
                 @foreach($categories as $item)
                 <div class="category-item">
                     <a href="/the-loai/{{ $item->slug }}">
-                        <img src="https://down-vn.img.susercontent.com/file/ce8f8abc726cafff671d0e5311caa684@resize_w320_nl.webp" alt="{{ $item->name }}"> </a>
+                        <img src="https://down-vn.img.susercontent.com/file/ce8f8abc726cafff671d0e5311caa684@resize_w320_nl.webp"
+                            alt="{{ $item->name }}"> </a>
 
                     <span><a href="/the-loai/{{ $item->slug }}">
                             {{$item->name}} </a></span>
@@ -206,7 +208,8 @@
                 <div class="discount">-92%</div>
                 <div class="content">
                     <h2 class="title">{{ $item->name }}</h2>
-                    <p class="pricee">{{ number_format($item->price, 0, ',', '.') }}<span style="font-size: 12px; text-decoration: underline;">đ</span></p>
+                    <p class="pricee">{{ number_format($item->price, 0, ',', '.') }}<span
+                            style="font-size: 12px; text-decoration: underline;">đ</span></p>
                 </div>
                 <div class="sold"><span class="rating">
                         <i class="fas fa-star"></i>
@@ -214,7 +217,8 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="far fa-star"></i>
-                    </span>{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) . ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
+                    </span>{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
+                    ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
             </div>
         </a>
     </div>
@@ -249,6 +253,11 @@
             </li>
     </ul>
 </nav>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('alertMessage'))
+<x-sweet-alert :message="session('alertMessage')" :type="session('alertType')" />
+@endif
+
 
 <script>
     const bannerSlider = document.querySelector('.banner-slider');
