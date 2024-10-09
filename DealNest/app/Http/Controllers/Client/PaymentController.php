@@ -100,26 +100,36 @@ class PaymentController extends Controller
                 'status' => 'pending',
             ]);
     
-            // Tạo một mảng để lưu các product_id
-            $addedProductIds = [];
-    
-            // Lưu sản phẩm vào bảng order_items
-            foreach ($products as $product) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $product['product_id'], // Lấy product_id từ dữ liệu sản phẩm
-                    'quantity' => $product['quantity'], // Lấy quantity từ dữ liệu sản phẩm
-                    'price' => $product['total_price'], // Lưu giá sản phẩm
-                ]);
-    
-                // Thêm product_id vào mảng
-                $addedProductIds[] = $product['product_id'];
-            }
-    
-            // Lưu id của đơn hàng và danh sách product_id vào session
-            session(['order_id' => $order->id]);
-            session(['added_product_ids' => $addedProductIds]);
-    
+       // Tạo một mảng để lưu các product_id và seller_id
+$addedProductIds = [];
+$sellerIds = [];
+
+// Lưu sản phẩm vào bảng order_items
+foreach ($products as $product) {
+    // Lấy product_id từ dữ liệu sản phẩm
+    $productModel = Product::find($product['product_id']); // Tìm sản phẩm dựa trên product_id
+
+    if ($productModel) {
+        // Kiểm tra xem sản phẩm có tồn tại không
+        OrderItem::create([
+            'order_id' => $order->id,
+            'product_id' => $product['product_id'], // Lấy product_id từ dữ liệu sản phẩm
+            'quantity' => $product['quantity'], // Lấy quantity từ dữ liệu sản phẩm
+            'price' => $product['total_price'], // Lưu giá sản phẩm
+            'seller_id' => $productModel->seller_id, // Lưu seller_id từ sản phẩm
+        ]);
+
+        // Thêm product_id vào mảng
+        $addedProductIds[] = $product['product_id'];
+        // Lấy seller_id và thêm vào mảng sellerIds
+        $sellerIds[] = $productModel->seller_id;
+    }
+}
+
+// Lưu id của đơn hàng và danh sách product_id vào session
+session(['order_id' => $order->id]);
+session(['added_product_ids' => $addedProductIds]);
+
             // Trả về phản hồi với URL chuyển hướng
             return response()->json([
                 'message' => 'Đơn hàng đã được tạo thành công!',
