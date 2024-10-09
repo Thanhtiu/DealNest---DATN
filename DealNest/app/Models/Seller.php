@@ -20,6 +20,8 @@ class Seller extends Model
         'store_phone',
         'store_email',
         'address_id',
+        'status',
+        'note'
     ];
     public function address()
     {
