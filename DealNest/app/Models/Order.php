@@ -14,10 +14,15 @@ class Order extends Model
     // Danh sách các trường có thể được gán giá trị
     protected $fillable = [
         'user_id',
+        'seller_id',
         'status',
         'total',
         'delivery_date',
         'payment_method',
         'payment_status',
     ];
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }

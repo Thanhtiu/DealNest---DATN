@@ -20,6 +20,7 @@ use App\Http\Controllers\Client\BuyerController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Sellers\VoucherController;
+use App\Http\Controllers\Sellers\OrderSellerController;
 use App\Http\Controllers\Sellers\ProdcutStatisticsController;
 use App\Http\Controllers\Sellers\CategoryAndSubcategoryController; 
 use App\Http\Controllers\Sellers\Categor;
@@ -61,7 +62,7 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::put('/dia-chi/cap-nhat/{id}', [AddressController::class, 'update'])->name('account.address.update');
     Route::get('/dia-chi/xoa/{id}', [AddressController::class, 'delete'])->name('account.address.delete');
     Route::get('/dia-chi/mac-dinh/{id}', [AddressController::class, 'setDefault'])->name('account.address.setDefault');
-    Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order.index');
+    Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order');
     Route::get('/voucher', [HomeController::class, 'voucher']);
 });
 Route::middleware(['web'])->group(function () {
@@ -141,6 +142,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/san-pham-ban-chay/chi-tiet/{id}',[ProdcutStatisticsController::class,'detail'])->name('seller.productStatistics.detail');
 
         Route::get('/danh-muc',[CategoryAndSubcategoryController::class, 'index'])->name('seller.categoryAndSubcategory');
+
+        Route::get('/don-hang',[OrderSellerController::class, 'index'])->name('seller.order');
+        
        
     });
     // End Seller Route

@@ -18,7 +18,7 @@
     <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-lock"></i> Đổi Mật
         Khẩu</a>
 
-    <a href="{{route('client.order.index')}}" class="list-group-item list-group-item-action"><i class="fa fa-shopping-cart"></i> Đơn
+    <a href="{{route('client.order')}}" class="list-group-item list-group-item-action"><i class="fa fa-shopping-cart"></i> Đơn
         Mua</a>
     <a href="{{route('client.favourite')}}" class="list-group-item list-group-item-action"> <i class="bi bi-heart-fill bi-hear"></i> Yêu Thích</a>
 

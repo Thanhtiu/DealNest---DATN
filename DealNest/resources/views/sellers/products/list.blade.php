@@ -1,4 +1,5 @@
 @extends('layouts.sellers.app')
+
 @section('content')
 <style>  
    .tabs {
@@ -422,6 +423,59 @@ tr:hover {
         @endif
 </div>
 
+<script>
+        $(document).ready(function() {
+            // Hàm khởi tạo DataTable
+            function initializeDataTable(tableId) {
+                $(tableId).DataTable({
+                    "paging": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "lengthMenu": [5, 10, 25, 50],
+                    "pageLength": 5,
+                    "language": {
+                        "paginate": {
+                            "previous": "<i class='bi bi-arrow-left'></i>",
+                            "next": "<i class='bi bi-arrow-right'></i>"
+                        },
+                        "search": "Tìm kiếm:",
+                        "lengthMenu": "Hiển thị _MENU_ mục",
+                        "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục"
+                    },
+                    "dom": '<"row"<"col-md-6"l><"col-md-6"f>>' +
+                        '<"row"<"col-sm-12"tr>>' +
+                        '<"row"<"col-md-5"i><"col-md-7"p>>',
+                    "columnDefs": [{
+                        "targets": 3, // Cột giá
+                        "render": $.fn.dataTable.render.number(',', '.', 0, '', ' VND')
+                    }]
+                });
+            }
 
+            // Khởi tạo DataTable cho bảng đầu tiên khi load trang
+            initializeDataTable('#productTableAll');
 
+            // Khởi tạo DataTable khi chuyển tab
+            $('.tab-item').on('click', function() {
+                var tabId = $(this).data('tab');
+                $('.tab-item').removeClass('active');
+                $(this).addClass('active');
+                $('.tab-content').removeClass('active');
+                $('#tab-' + tabId).addClass('active');
+
+                var tableId = '#productTable' + capitalizeFirstLetter(tabId);
+
+                // Chỉ khởi tạo DataTable nếu nó chưa được khởi tạo
+                if (!$.fn.DataTable.isDataTable(tableId)) {
+                    initializeDataTable(tableId);
+                }
+            });
+
+            // Hàm hỗ trợ viết hoa chữ cái đầu tiên
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+        });
+    </script>
 @endsection
