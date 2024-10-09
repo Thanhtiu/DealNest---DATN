@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('buyers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('seller_follow_id')->constrained('sellers')->onDelete('cascade'); 
+            $table->foreignId('address_id')->constrained('address')->onDelete('cascade'); 
             $table->timestamps();
         });
-
     }
 
     /**
