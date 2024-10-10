@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::table('order_items', function (Blueprint $table) {
             $table->unsignedBigInteger('seller_id')->after('product_id'); // Thêm cột seller_id
+            $table->date('delivery_date')->nullable();
+            $table->string('attribute')->nullable();
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('name')->nullable();
         });
     }
 

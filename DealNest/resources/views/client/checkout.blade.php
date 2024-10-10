@@ -880,7 +880,6 @@
 
 
 // CheckOutProcressing 
-
 $(document).ready(function() {
     $('#order-button').on('click', function() {
         // Lấy giá trị từ span
@@ -889,6 +888,11 @@ $(document).ready(function() {
         // Lấy HTML từ p
         var selectedMethod = $('#selected-method').html();
 
+        // Lấy thông tin địa chỉ
+        var userName = $('.shipping-info .name').text().split('|')[0].trim(); // Lấy tên
+        var userPhone = $('.shipping-info .name').text().split('|')[1].trim(); // Lấy số điện thoại
+        var userAddress = $('.shipping-info .address').text(); // Lấy địa chỉ
+
         // Lấy thông tin sản phẩm (product_id, quantity, total_price)
         var productsData = [];
         $('.product').each(function() {
@@ -896,11 +900,23 @@ $(document).ready(function() {
             var quantity = $(this).find('.price-info p:nth-child(2)').text().replace('Số lượng: ', ''); // Lấy số lượng
             var totalPrice = $(this).find('.price-info p:nth-child(3)').text().replace('Thành tiền: ₫', '').replace(/\./g, ''); // Lấy total_price (bỏ ký hiệu và định dạng)
             
+            // Lấy thuộc tính sản phẩm
+            var attributes = [];
+            $(this).find('ul li').each(function() {
+                var attributeName = $(this).text().split(': ')[0]; // Tên thuộc tính
+                var attributeValue = $(this).text().split(': ')[1]; // Giá trị thuộc tính
+                attributes.push({
+                    name: attributeName,
+                    value: attributeValue
+                });
+            });
+
             // Thêm vào mảng productsData
             productsData.push({
                 product_id: productId,
                 quantity: quantity,
-                total_price: totalPrice
+                total_price: totalPrice,
+                attributes: attributes // Gửi thuộc tính sản phẩm
             });
         });
 
@@ -912,6 +928,9 @@ $(document).ready(function() {
                 total_amount: totalAmount,
                 payment_method: selectedMethod, // Gửi phương thức thanh toán
                 products: productsData, // Gửi thông tin các sản phẩm
+                user_name: userName, // Gửi tên người dùng
+                user_phone: userPhone, // Gửi số điện thoại
+                user_address: userAddress, // Gửi địa chỉ
                 _token: '{{ csrf_token() }}' // Thêm token CSRF nếu sử dụng Laravel
             },
             success: function(response) {
