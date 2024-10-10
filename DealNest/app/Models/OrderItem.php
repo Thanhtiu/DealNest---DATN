@@ -16,7 +16,7 @@ class OrderItem extends Model
         'product_id',
         'quantity',
         'price',
-        'seller_id', // Thêm seller_id vào đây
+        'seller_id', 
     ];
 
     public function order()

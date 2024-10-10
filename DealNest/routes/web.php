@@ -144,6 +144,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/danh-muc',[CategoryAndSubcategoryController::class, 'index'])->name('seller.categoryAndSubcategory');
 
         Route::get('/don-hang',[OrderSellerController::class, 'index'])->name('seller.order');
+
+        Route::get('/don-hang/chi-tiet/{id}',[OrderSellerController::class,'detail'])->name('seller.order.detail');
         
        
     });

@@ -191,7 +191,7 @@
 </style>
 
 <div class="tabs" role="tablist">
-    <a href="#" class="tab-item active" data-tab="all">Tất cả ()</a>
+    <a href="#" class="tab-item active" data-tab="all">Tất cả x</a>
     <a href="#" class="tab-item" data-tab="pending">Đơn chờ duyệt ()</a>
     <a href="#" class="tab-item" data-tab="waiting_for_delivery">Đang giao ()</a>
     <a href="#" class="tab-item" data-tab="success">Hoàn thành ()</a>
@@ -200,59 +200,63 @@
 <div class="tab-content active" id="tab-all">
     <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
+            @if($orders->isEmpty())
+            <div class="text-center">
+                <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+                <p class="text-center mt-3">Chưa có đơn hàng nào</p>
+            </div>
+            @else
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
+                    <h4 class="card-title">Tất cả đơn hàng</h4>
                     <table id="productTableAll" class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Thể loại</th>
-                                <th>Hình ảnh</th>
-                                <th>Giá</th>
-                                <th>Tồn kho</th>
-                                <th>Trang thái</th>
+                                <th>Mã đơn hàng</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Ngày đặt</th>
+                                <th>PT thanh toán</th>
+                                <th>Số lượng</th>
+                                <th>Trạng thái</th>
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($orders as $item)
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-
-                                    <img src="" alt=""
-                                        style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-
-                                </td>
-                                <td data-order=""></td>
-                                <td></td>
-                                <td>
-
+                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->user->name }}</td>
+                                <td>{{ number_format($item->total, 0, ',', '.') }} vnđ</td>
+                                <td>{{$item->delivery_date}}</td>
+                                <td>{{$item->payment_method}}</td>
+                                <td>{{ $item->orderItems->sum('quantity') }}</td>
+                                <td> @if($item->status == 'pending')
                                     <label class="badge badge-warning">Chờ phê duyệt</label>
-
-                                    <label class="badge badge-success">Đang hoạt động</label>
-                                    <label class="badge badge-danger">Không hoạt động</label>
+                                    @elseif($item->status == 'completed')
+                                    <label class="badge badge-success">Đã phê duyệt</label>
+                                    @else
+                                    <label class="badge badge-danger">Từ chối đơn</label>
+                                    @endif
                                 </td>
-                                <td>
-                                    <a href=""
-                                        class="btn btn-outline-secondary btn-icon-text">
-                                        <i class="bi bi-pen"></i> Sửa
-                                    </a>
-                                    <a href=""
-                                        class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i>
+                                <td> <a href="{{route('seller.order.detail',['id'=>$item->id])}}" class="btn btn-outline-secondary btn-icon-text"><i
+                                            class="bi bi-pen"></i>
+                                        Chi tiết</a>
+                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i
+                                            class="bi bi-trash"></i>
                                         Xóa</a>
                                 </td>
                             </tr>
-
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
+            @endif
         </div>
     </div>
-
 </div>
+
 <div class="tab-content" id="tab-active">
     <!-- <img src="{{asset('sellers/assets/images/no-product-found.png')}}"> -->
     <div class="row">
