@@ -51,11 +51,6 @@ class AccountController extends Controller
                         $string_address = $address->string_address;
                         session()->put('stringAddress', $string_address);
                     }
-
-
-
-
-
                     return redirect('/');
 
                 } else {
@@ -157,5 +152,57 @@ class AccountController extends Controller
         session()->invalidate();
         return redirect('/');
     }
+
+
+    public function forgotPassword(Request $request){
+
+        return view('account.forgotPassword');
+
+    }
+
+
+public function checkEmail(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email|max:255',
+    ], [
+        'email.email' => 'Email không đúng định dạng.',
+        'email.required' => 'Email không được bỏ trống.',
+    ]);
+
+    if ($validator->passes()) {
+
+        $emailExists = User::where('email', $request->email)->exists();
+
+        if ($emailExists) {
+
+            session()->put('userEmail', $request->email);
+            
+            session()->put('forgotPassword', true);
+
+            return redirect()->route('otp.sendOTP');
+
+        } else {
+
+            return redirect()->route('account.forgotPassword')
+                ->withInput()
+                ->with('email_error', 'Email không tồn tại trong hệ thống.');
+        }
+    } else {
+  
+        return redirect()->route('account.forgotPassword')
+            ->withInput()
+            ->withErrors($validator);
+    }
+}
+
+    
+
+
+
+
+
+
+
 
 }

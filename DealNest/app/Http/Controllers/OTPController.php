@@ -83,15 +83,22 @@ class OTPController extends Controller
 
                 if($checkUser->otp == $otp){
 
-                    $checkUser->is_active = 1;
+                    if(session()->has('forgotPassword')){
 
-                    $checkUser->save();
+                        // code tiep o day nè
 
-                    session()->flash('alertMessage', 'Xác thực tài khoản thành công!');
-                    session()->flash('alertType', 'success');
+                    }else{
+
+                        $checkUser->is_active = 1;
+
+                        $checkUser->save();
+    
+                        session()->flash('alertMessage', 'Xác thực tài khoản thành công!');
+                        session()->flash('alertType', 'success');
+                        return redirect()->route('account.login');
+                    }
+
                     
-
-                    return redirect()->route('account.login');
                 }else{
 
                     session()->flash('otp_error','Mã xác thực không chính xác vui lòng thử lại!');

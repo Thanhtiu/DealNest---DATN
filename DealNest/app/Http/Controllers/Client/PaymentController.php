@@ -58,13 +58,13 @@ class PaymentController extends Controller
 
 
 
-
     public function checkoutProcessing(Request $request) {
         try {
             // Lấy dữ liệu từ request
             $totalAmount = $request->input('total_amount');
             $paymentMethod = $request->input('payment_method');
             $products = $request->input('products'); // Lấy danh sách sản phẩm từ request
+            $shippingFee = $request->input('shipping_fee'); // Lấy phí vận chuyển từ request
     
             // Kiểm tra dữ liệu
             if (is_null($totalAmount) || is_null($paymentMethod) || empty($products)) {
@@ -90,61 +90,75 @@ class PaymentController extends Controller
             // Tính toán delivery_date
             $deliveryDate = Carbon::now()->addDays(5);
     
-            // Lưu thông tin đơn hàng vào cơ sở dữ liệu
-            $order = Order::create([
-                'user_id' => $userId,
-                'total' => $totalAmount,
-                'delivery_date' => $deliveryDate,
-                'payment_method' => $paymentMethod,
-                'payment_status' => 'pending',
-                'status' => 'pending',
-            ]);
+            // Nhóm các sản phẩm theo seller_id
+            $productsBySeller = collect($products)->groupBy(function ($product) {
+                $productModel = Product::find($product['product_id']);
+                return $productModel ? $productModel->seller_id : null;
+            });
     
-            // Tạo một mảng để lưu các product_id và seller_id
-            $addedProductIds = [];
-            $sellerIds = [];
+            // Kiểm tra xem có sản phẩm không tìm được seller_id không
+            if ($productsBySeller->has(null)) {
+                return response()->json(['message' => 'Một số sản phẩm không hợp lệ.'], 400);
+            }
     
-            // Lưu sản phẩm vào bảng order_items
-            foreach ($products as $product) {
-                // Lấy product_id từ dữ liệu sản phẩm
-                $productModel = Product::find($product['product_id']); // Tìm sản phẩm dựa trên product_id
+            // Tạo một mảng để lưu các order_id
+            $orderIds = [];
     
-                if ($productModel) {
-                    // Tạo chuỗi thuộc tính từ mảng attributes
-                    $attributes = [];
-                    foreach ($product['attributes'] as $attribute) {
-                        $attributes[] = $attribute['name'] . ': ' . $attribute['value'];
+            // Duyệt qua từng nhóm sản phẩm theo seller_id
+            foreach ($productsBySeller as $sellerId => $productsGroup) {
+                // Tính tổng giá trị cho từng nhóm sản phẩm của seller
+                $groupTotalAmount = collect($productsGroup)->sum('total_price');
+    
+                // Lưu thông tin đơn hàng vào cơ sở dữ liệu cho mỗi seller
+                $order = Order::create([
+                    'user_id' => $userId,
+                    'total' => $groupTotalAmount,
+                    'delivery_date' => $deliveryDate,
+                    'payment_method' => $paymentMethod,
+                    'payment_status' => 'pending',
+                    'status' => 'pending',
+                    'seller_id' => $sellerId, // Lưu seller_id vào đơn hàng
+                ]);
+    
+                // Lưu order_id vào mảng
+                $orderIds[] = $order->id;
+    
+                // Lưu sản phẩm vào bảng order_items
+                foreach ($productsGroup as $product) {
+                    // Lấy product_id từ dữ liệu sản phẩm
+                    $productModel = Product::find($product['product_id']);
+    
+                    if ($productModel) {
+                        // Tạo chuỗi thuộc tính từ mảng attributes
+                        $attributes = [];
+                        foreach ($product['attributes'] as $attribute) {
+                            $attributes[] = $attribute['name'] . ': ' . $attribute['value'];
+                        }
+                        $attributesString = implode(', ', $attributes); // Tạo chuỗi cách nhau bằng dấu phẩy
+    
+                        // Lưu sản phẩm vào order_items
+                        OrderItem::create([
+                            'order_id' => $order->id,
+                            'product_id' => $product['product_id'],
+                            'quantity' => $product['quantity'],
+                            'price' => $product['total_price'],
+                            'seller_id' => $productModel->seller_id,
+                            'name' => $request->input('user_name'),
+                            'phone' => $request->input('user_phone'),
+                            'address' => $request->input('user_address'),
+                            'attribute' => $attributesString,
+                        ]);
                     }
-                    $attributesString = implode(', ', $attributes); // Tạo chuỗi cách nhau bằng dấu phẩy
-    
-                    // Lưu sản phẩm vào order_items
-                    OrderItem::create([
-                        'order_id' => $order->id,
-                        'product_id' => $product['product_id'], // Lấy product_id từ dữ liệu sản phẩm
-                        'quantity' => $product['quantity'], // Lấy quantity từ dữ liệu sản phẩm
-                        'price' => $product['total_price'], // Lưu giá sản phẩm
-                        'seller_id' => $productModel->seller_id, // Lưu seller_id từ sản phẩm
-                        'name' => $request->input('user_name'), // Lưu tên người dùng
-                        'phone' => $request->input('user_phone'), // Lưu số điện thoại
-                        'address' => $request->input('user_address'), // Lưu địa chỉ
-                        'attribute' => $attributesString, // Lưu thuộc tính ở dạng chuỗi
-                    ]);
-    
-                    // Thêm product_id vào mảng
-                    $addedProductIds[] = $product['product_id'];
-                    // Lấy seller_id và thêm vào mảng sellerIds
-                    $sellerIds[] = $productModel->seller_id;
                 }
             }
     
-            // Lưu id của đơn hàng và danh sách product_id vào session
-            session(['order_id' => $order->id]);
-            session(['added_product_ids' => $addedProductIds]);
+            // Lưu id của đơn hàng và phí vận chuyển vào session
+            session(['order_ids' => $orderIds, 'shipping_fee' => $shippingFee]);
     
             // Trả về phản hồi với URL chuyển hướng
             return response()->json([
                 'message' => 'Đơn hàng đã được tạo thành công!',
-                'redirect_url' => route('vnpay_payment'), // Trả về URL chuyển hướng
+                'redirect_url' => route('vnpay_payment'),
             ]);
     
         } catch (\Exception $e) {
@@ -153,6 +167,8 @@ class PaymentController extends Controller
             return response()->json(['message' => 'Đã xảy ra lỗi: ' . $e->getMessage()], 500);
         }
     }
+    
+    
     
     
     

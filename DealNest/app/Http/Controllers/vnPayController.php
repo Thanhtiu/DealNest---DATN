@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,29 +13,53 @@ class vnPayController extends Controller
 {
     public function vnpay_payment() {
         try {
-            // Lấy order_id từ session
-            $orderId = session('order_id');
-    
-            // Kiểm tra xem order_id có tồn tại không
-            if (is_null($orderId)) {
-                return response()->json(['message' => 'Đơn hàng không được tìm thấy trong session.'], 404);
-            }
-    
-            // Truy vấn đến bảng orders để lấy thông tin đơn hàng
-            $order = Order::find($orderId);
-    
-            // Kiểm tra xem đơn hàng có tồn tại không
-            if (!$order) {
-                return response()->json(['message' => 'Đơn hàng không tồn tại.'], 404);
-            }
-    
-            // Lấy các giá trị cần thiết
-            $id = $order->id;
-            $total = $order->total;
-            $paymentMethod = $order->payment_method;
-    
-            // Thực hiện các thao tác thanh toán tại đây (VD: gọi API VNPay)
-    
+
+           // Lấy order_ids từ session
+           $orderIds = session('order_ids');
+
+           // Kiểm tra xem order_ids có tồn tại không
+           if (is_null($orderIds)) {
+               return response()->json(['message' => 'Đơn hàng không được tìm thấy trong session.'], 404);
+           }
+           
+           // Kiểm tra xem order_ids có phải là một mảng hay không, nếu không thì biến thành mảng
+           if (!is_array($orderIds)) {
+               $orderIds = [$orderIds]; // Chuyển thành mảng nếu chỉ có một order_id
+           }
+           
+           // Biến các order_ids thành một chuỗi, cách nhau bằng dấu phẩy
+           $orderIdsString = implode(',', $orderIds);
+           
+           // Lấy tất cả đơn hàng dựa vào order_ids
+           $orders = Order::whereIn('id', $orderIds)->get();
+           
+           // Kiểm tra xem có đơn hàng nào không
+           if ($orders->isEmpty()) {
+               return response()->json(['message' => 'Không tìm thấy đơn hàng nào.'], 404);
+           }
+           
+           // Khởi tạo biến tổng `total_amount`
+           $totalAmount = 0;
+           
+           // Lấy phí vận chuyển từ session
+           $shippingFee = session('shipping_fee', 0); // Nếu không có giá trị, mặc định là 0
+           
+           // Lấy các giá trị cần thiết cho từng đơn hàng và tính tổng
+           foreach ($orders as $order) {
+               $id = $order->id;
+               $total = $order->total;
+               $paymentMethod = $order->payment_method;
+           
+               // Cộng dồn giá trị `total` vào `totalAmount`
+               $totalAmount += $total;
+           }
+           
+           // Cộng phí vận chuyển vào tổng
+           $totalAmount += $shippingFee;
+           
+           // Tiếp tục các thao tác thanh toán tại đây (VD: gọi API VNPay)
+           // ...
+           
            
         // call API
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
@@ -42,11 +67,11 @@ class vnPayController extends Controller
         $vnp_TmnCode = "43MQAL12";//Mã website tại VNPAY 
         $vnp_HashSecret = "KAA3D57BUMB4IGKSKD470IUAEYD3MNDF"; //Chuỗi bí mật
         
-        $vnp_TxnRef = $id; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này 
+        $vnp_TxnRef = $orderIdsString; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này 
         $vnp_OrderInfo = "Thanh toán VNPAY";
         $vnp_OrderType = $paymentMethod;
         // $vnp_Amount = 100000 * 100;
-        $vnp_Amount = $total * 100;
+        $vnp_Amount = $totalAmount * 100;
         $vnp_Locale = "VN";
         $vnp_BankCode = "NCB";
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
@@ -107,55 +132,65 @@ class vnPayController extends Controller
 
     public function success() {
         // Lấy id đơn hàng từ session
-        $orderId = session('order_id');
-        
-        if (is_null($orderId)) {
+        $orderIds = session('order_ids');
+    
+        if (is_null($orderIds)) {
             echo 'Không tìm thấy đơn hàng.';
             return;
         }
     
-        // Cập nhật trạng thái thanh toán cho đơn hàng
-        $order = Order::find($orderId);
-        
-        if ($order) {
-            echo 'Trạng thái hiện tại: ' . $order->payment_status; // Kiểm tra trạng thái hiện tại
-            $order->payment_status = 'paid'; // Cập nhật payment_status
+        // Kiểm tra xem order_ids có phải là mảng không
+        if (!is_array($orderIds)) {
+            $orderIds = [$orderIds]; // Chuyển thành mảng nếu chỉ có một order_id
+        }
     
-            // Kiểm tra xem lưu có thành công hay không
-            if ($order->save()) {
-                // Lấy danh sách product_id từ session
-                $addedProductIds = session('added_product_ids', []);
-                
-                // Lấy userId từ Auth
-                $userId = Auth::id();
+        // Khởi tạo biến để lưu thông báo
+        $successMessage = '';
+        $errorMessage = '';
     
-                // Sử dụng dd() để kiểm tra các giá trị
-
+        // Lặp qua tất cả các order_id để cập nhật trạng thái
+        foreach ($orderIds as $orderId) {
+            // Cập nhật trạng thái thanh toán cho đơn hàng
+            $order = Order::find($orderId);
+            
+            if ($order) {
+                $successMessage .= 'Đơn hàng ID ' . $orderId . ': Trạng thái hiện tại: ' . $order->payment_status . '. '; // Kiểm tra trạng thái hiện tại
+                $order->payment_status = 'paid'; // Cập nhật payment_status
     
-                if (!empty($addedProductIds) && !is_null($userId)) {
-                    // Xóa các sản phẩm trong cart dựa trên user_id và product_id
-                    DB::table('carts') // Sử dụng DB
-                        ->where('user_id', $userId)
-                        ->whereIn('product_id', $addedProductIds)
-                        ->delete();
+                // Kiểm tra xem lưu có thành công hay không
+                if ($order->save()) {
+                    // Lấy danh sách product_id từ bảng order_items dựa trên order_id
+                    $productIds = OrderItem::where('order_id', $orderId)->pluck('product_id')->toArray();
+                    
+                    // Lấy userId từ Auth
+                    $userId = Auth::id();
     
-                    // Xóa session order_id và added_product_ids
-                    session()->forget('order_id');
-                    session()->forget('added_product_ids'); // Unset session added_product_ids
-                    session()->forget('total_amount'); // Unset session total_amount
-                    session()->forget('selected_items'); // Unset session selected_items
+                    if (!empty($productIds) && !is_null($userId)) {
+                        // Xóa các sản phẩm trong cart dựa trên user_id và product_id
+                        DB::table('carts') // Sử dụng DB
+                            ->where('user_id', $userId)
+                            ->whereIn('product_id', $productIds)
+                            ->delete();
     
-                    echo 'Thanh toán thành công và giỏ hàng đã được làm trống!';
+                        $successMessage .= 'Thanh toán thành công và giỏ hàng đã được làm trống cho đơn hàng ID ' . $orderId . '! ';
+                    } else {
+                        $errorMessage .= 'Không có sản phẩm để xóa trong giỏ hàng cho đơn hàng ID ' . $orderId . '. ';
+                    }
                 } else {
-                    echo 'Không có sản phẩm để xóa trong giỏ hàng.';
+                    $errorMessage .= 'Không thể cập nhật trạng thái thanh toán cho đơn hàng ID ' . $orderId . '. ';
                 }
             } else {
-                echo 'Không thể cập nhật trạng thái thanh toán.';
+                $errorMessage .= 'Đơn hàng ID ' . $orderId . ' không tồn tại. ';
             }
-        } else {
-            echo 'Đơn hàng không tồn tại.';
-        }       
+        }
+    
+        // Xóa session order_ids
+        session()->forget('order_ids');
+    
+        // Hiển thị thông báo
+        echo $successMessage ?: $errorMessage;
     }
+    
     
     
     

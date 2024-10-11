@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('order_items', function (Blueprint $table) {
+        Schema::table('order_items', function (Blueprint $table) { 
             $table->unsignedBigInteger('seller_id')->after('product_id'); 
             $table->date('delivery_date')->nullable();
             $table->string('attribute')->nullable();

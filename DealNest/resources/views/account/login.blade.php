@@ -60,7 +60,7 @@
                     class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"
                     href="../../index.html">Đăng nhập</button>
                 </div>
-               <div class="login-social">
+                <div class="login-social">
                   <div class="google">
                     <a href="{{route('login.google')}}">
                       <img src="{{asset('client/img/logo-google.png')}}" alt="" class="google-img">
@@ -71,7 +71,7 @@
                       <img src="{{asset('client/img/logo-facebook.png')}}" alt="" class="google-img">
                     </a>
                   </div>
-               </div>
+                </div>
                 {{-- <div class="my-2 d-flex justify-content-between align-items-center">
                   <div class="form-check">
                     <label class="form-check-label text-muted">
@@ -84,7 +84,8 @@
                     <i class="mdi mdi-facebook me-2"></i>Connect using facebook </button>
                 </div> --}}
                 <div class="text-center mt-4 font-weight-light"> Bạn mới biết đến DealNest?
-                  <a href="{{ route('account.register') }}" class="text-primary">Đăng ký?</a>
+                  <a href="{{ route('account.register') }}" class="text-primary">Đăng ký?</a><br>
+                  <a href="{{ route('account.forgotPassword') }}" class="text-primary">Quên mật khẩu?</a>
                 </div>
               </form>
             </div>
