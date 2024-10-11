@@ -57,7 +57,6 @@ class PaymentController extends Controller
     }
 
 
-
     public function checkoutProcessing(Request $request) {
         try {
             // Lấy dữ liệu từ request
@@ -118,6 +117,9 @@ class PaymentController extends Controller
                     'payment_status' => 'pending',
                     'status' => 'pending',
                     'seller_id' => $sellerId, // Lưu seller_id vào đơn hàng
+                    'name' => $request->input('user_name'), // Lưu thông tin name vào orders
+                    'phone' => $request->input('user_phone'), // Lưu thông tin phone vào orders
+                    'address' => $request->input('user_address'), // Lưu thông tin address vào orders
                 ]);
     
                 // Lưu order_id vào mảng
@@ -143,9 +145,6 @@ class PaymentController extends Controller
                             'quantity' => $product['quantity'],
                             'price' => $product['total_price'],
                             'seller_id' => $productModel->seller_id,
-                            'name' => $request->input('user_name'),
-                            'phone' => $request->input('user_phone'),
-                            'address' => $request->input('user_address'),
                             'attribute' => $attributesString,
                         ]);
                     }

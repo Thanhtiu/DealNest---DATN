@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->unsignedBigInteger('seller_id')->nullable()->after('user_id');
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('name')->nullable();
         });
     }
 

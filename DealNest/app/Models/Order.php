@@ -20,6 +20,7 @@ class Order extends Model
         'delivery_date',
         'payment_method',
         'payment_status',
+        'name','phone','address',
     ];
     public function orderItems()
     {

@@ -15,9 +15,6 @@ return new class extends Migration
             $table->unsignedBigInteger('seller_id')->after('product_id'); 
             $table->date('delivery_date')->nullable();
             $table->string('attribute')->nullable();
-            $table->string('address')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('name')->nullable();
         });
     }
 
