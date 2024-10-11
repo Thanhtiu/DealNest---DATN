@@ -145,8 +145,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/don-hang',[OrderSellerController::class, 'index'])->name('seller.order');
 
-        Route::get('/don-hang/chi-tiet/{id}',[OrderSellerController::class,'detail'])->name('seller.order.detail');
+        Route::get('/don-hang/chi-tiet/{id}/{status?}', [OrderSellerController::class, 'detail'])->name('seller.order.detail');
         
+        Route::post('/don-hang/xac-nhan/{id}',[OrderSellerController::class,'confirm'])->name('seller.order.confirm');
        
     });
     // End Seller Route

@@ -3,50 +3,27 @@
 <style>
     .tabs {
         display: flex;
-        border-bottom: 2px solid #f0f0f0;
-        margin-bottom: 20px;
         justify-content: space-around;
         background-color: #ffffff;
         padding: 15px;
+        border-bottom: 2px solid #f0f0f0;
         border-radius: 8px 8px 0 0;
+        margin-bottom: 20px;
     }
 
     .tab-item {
-        padding: 12px 20px;
+        padding: 10px 15px;
         cursor: pointer;
         font-size: 16px;
         font-weight: 500;
         color: #0d6efd;
         text-decoration: none;
-        position: relative;
-        transition: color 0.3s ease, background-color 0.3s ease;
+        transition: color 0.3s ease;
     }
 
     .tab-item.active {
         color: #0d6efd;
         border-bottom: 3px solid #0d6efd;
-
-    }
-
-    .tab-item::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 0;
-        height: 3px;
-        background-color: var(--primary-color);
-        transition: width 0.3s ease;
-    }
-
-    .tab-item:hover::after {
-        width: 100%;
-        text-align: none;
-    }
-
-    .tab-item:hover {
-        opacity: 0.5;
-        text-decoration: none;
     }
 
     .tab-content {
@@ -60,31 +37,7 @@
         padding: 20px;
     }
 
-    .btn-container {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 20px;
-    }
-
-    .btn-container a {
-        padding: 12px 24px;
-        background-color: var(--primary-color);
-        color: white;
-        border-radius: 8px;
-        font-weight: 500;
-        text-decoration: none;
-        font-size: 14px;
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-container a:hover {
-        background-color: #0056b3;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        text-decoration: none;
-    }
-
-    table {
+    .table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
@@ -94,122 +47,71 @@
 
     th,
     td {
-        text-align: left;
-        padding: 15px 10px;
+        padding: 10px;
         border-bottom: 1px solid #f0f0f0;
+        text-align: left;
         color: #333;
     }
 
     th {
         background-color: #f9f9f9;
         font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    td {
-        vertical-align: middle;
-    }
-
-    td img {
-        border-radius: 5px;
-        object-fit: cover;
-    }
-
-    tr:hover {
-        background-color: #f9f9f9;
-        transition: background-color 0.3s ease;
-    }
-
-    .badge {
-        padding: 6px 12px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: 500;
-        text-transform: uppercase;
     }
 
     .badge-warning {
         background-color: #ffc107;
         color: #fff;
-    }
-
-    .badge-success {
-        background-color: #28a745;
-        color: #fff;
-    }
-
-    .badge-danger {
-        background-color: #dc3545;
-        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
     }
 
     .btn-icon-text {
-        padding: 8px 14px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
         display: inline-flex;
         align-items: center;
+        padding: 5px 10px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        transition: background-color 0.3s ease;
         text-decoration: none;
-        transition: all 0.3s ease;
-        color: #333;
-        background-color: white;
-        font-size: 14px;
-        font-weight: 500;
     }
 
     .btn-icon-text i {
-        margin-right: 8px;
-        font-size: 16px;
+        margin-right: 5px;
     }
 
     .btn-icon-text:hover {
         background-color: #f0f0f0;
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-    }
-
-    .btn-outline-danger {
-        border-color: #dc3545;
-        color: #dc3545;
-    }
-
-    .btn-outline-danger:hover {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .btn-outline-secondary {
-        border-color: #6c757d;
-        color: #6c757d;
-    }
-
-    .btn-outline-secondary:hover {
-        background-color: #6c757d;
-        color: white;
+        color: #0d6efd;
     }
 </style>
 
 <div class="tabs" role="tablist">
-    <a href="#" class="tab-item active" data-tab="all">Tất cả x</a>
-    <a href="#" class="tab-item" data-tab="pending">Đơn chờ duyệt ()</a>
-    <a href="#" class="tab-item" data-tab="waiting_for_delivery">Đang giao ()</a>
-    <a href="#" class="tab-item" data-tab="success">Hoàn thành ()</a>
+    <a href="#" class="tab-item active" data-tab="all">Tất cả đơn hàng </a>
+    <a href="#" class="tab-item" data-tab="pending">Đơn chờ duyệt </a>
+    <a href="#" class="tab-item" data-tab="waiting">Đang giao </a>
+    <a href="#" class="tab-item" data-tab="false">Đơn hủy </a>
+    <a href="#" class="tab-item" data-tab="completed">Hoàn thành </a>
 </div>
 
 <div class="tab-content active" id="tab-all">
+
+</div>
+
+<!-- Tab Content for Pending Orders -->
+<div class="tab-content" id="tab-pending">
+    @if($orderPending->isEmpty())
+    <div class="text-center no-data">
+        <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+        <p class="text-center mt-3">Chưa có đơn hàng nào</p>
+    </div>
+    @else
     <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
-            @if($orders->isEmpty())
-            <div class="text-center">
-                <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
-                <p class="text-center mt-3">Chưa có đơn hàng nào</p>
-            </div>
-            @else
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Tất cả đơn hàng</h4>
-                    <table id="productTableAll" class="table table-striped">
+                    <table id="orderTableAll" class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Mã đơn hàng</th>
@@ -223,28 +125,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($orders as $item)
+                            @foreach($orderPending as $order)
                             <tr>
-                                <td>{{ $item->id }}</td>
-                                <td>{{ $item->user->name }}</td>
-                                <td>{{ number_format($item->total, 0, ',', '.') }} vnđ</td>
-                                <td>{{$item->delivery_date}}</td>
-                                <td>{{$item->payment_method}}</td>
-                                <td>{{ $item->orderItems->sum('quantity') }}</td>
-                                <td> @if($item->status == 'pending')
+                                <td>{{ $order->id }}</td>
+                                <td>{{ $order->user->name }}</td>
+                                <td>{{ number_format($order->total, 0, ',', '.') }} vnđ</td>
+                                <td>{{ $order->delivery_date }}</td>
+                                <td>{{ $order->payment_method }}</td>
+                                <td>{{ $order->orderItems->where('status', 'pending')->sum('quantity') }}</td>
+                                <td>
                                     <label class="badge badge-warning">Chờ phê duyệt</label>
-                                    @elseif($item->status == 'completed')
-                                    <label class="badge badge-success">Đã phê duyệt</label>
-                                    @else
-                                    <label class="badge badge-danger">Từ chối đơn</label>
-                                    @endif
                                 </td>
-                                <td> <a href="{{route('seller.order.detail',['id'=>$item->id])}}" class="btn btn-outline-secondary btn-icon-text"><i
-                                            class="bi bi-pen"></i>
-                                        Chi tiết</a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i
-                                            class="bi bi-trash"></i>
-                                        Xóa</a>
+                                <td>
+                                    <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'pending']) }}" class="btn btn-outline-secondary btn-icon-text">
+                                        <i class="bi bi-eye"></i> Chi tiết
+                                    </a>
+                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i> Xóa</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -252,163 +148,127 @@
                     </table>
                 </div>
             </div>
-            @endif
         </div>
     </div>
+    @endif
 </div>
 
-<div class="tab-content" id="tab-active">
-    <!-- <img src="{{asset('sellers/assets/images/no-product-found.png')}}"> -->
+<!-- Tab Content for Waiting Orders -->
+<div class="tab-content" id="tab-waiting">
+    @if($orderWaitingDelivery->isEmpty())
+    <div class="text-center no-data">
+        <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+        <p class="text-center mt-3">Chưa có đơn hàng nào</p>
+    </div>
+    @else
     <div class="row">
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
-                    <table class="table" id="productTableActive">
+                    <h4 class="card-title">Tất cả đơn hàng</h4>
+                    <table id="orderTableAll" class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Thể loại</th>
-                                <th>Hình ảnh</th>
-                                <th>Giá</th>
-                                <th>Tồn kho</th>
+                                <th>Mã đơn hàng</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Ngày đặt</th>
+                                <th>PT thanh toán</th>
+                                <th>Số lượng</th>
+                                <th>Trạng thái</th>
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($orderWaitingDelivery as $order)
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td>{{ $order->id }}</td>
+                                <td>{{ $order->user->name }}</td>
+                                <td>{{ number_format($order->total, 0, ',', '.') }} vnđ</td>
+                                <td>{{ $order->delivery_date }}</td>
+                                <td>{{ $order->payment_method }}</td>
+                                <td>{{ $order->orderItems->where('status', 'waiting_for_delivery')->sum('quantity') }}</td>
                                 <td>
-
-                                    <img src="" alt=""
-                                        style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-
+                                    <label class="badge badge-success">Đã xử lí</label>
                                 </td>
-                                <td></td>
-                                <td></td>
                                 <td>
-                                    <a href="" class="btn btn-outline-secondary btn-icon-text"><i
-                                            class="bi bi-pen"></i>
-                                        Sửa</a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i
-                                            class="bi bi-trash"></i>
-                                        Xóa</a>
+                                    <a href="{{ route('seller.order.detail', ['id' => $order->id,'status' => 'waiting_for_delivery']) }}" class="btn btn-outline-secondary btn-icon-text"><i class="bi bi-eye"></i> Chi tiết</a>
+                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i> Xóa</a>
                                 </td>
                             </tr>
-
-                        </tbody>
-                    </table>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<div class="tab-content" id="tab-violations">
-    <!-- <img src="{{asset('sellers/assets/images/no-product-found.png')}}"> -->
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
-                    <table class="table" id="productTableViolations">
-                        <thead>
-                            <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Thể loại</th>
-                                <th>Hình ảnh</th>
-                                <th>Giá</th>
-                                <th>Tồn kho</th>
-                                <th>Thao tác</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-
-                                    <img src="" alt=""
-                                        style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <a href="" class="btn btn-outline-secondary btn-icon-text"><i
-                                            class="bi bi-pen"></i>
-                                        Sửa</a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i
-                                            class="bi bi-trash"></i>
-                                        Xóa</a>
-                                </td>
-                            </tr>
-
-
-                        </tbody>
-                    </table>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-<div class="tab-content" id="tab-pending">
-    <!-- <img src="{{asset('sellers/assets/images/no-product-found.png')}}"> -->
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
-                    <table class="table" id="productTablePending">
-                        <thead>
-                            <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Thể loại</th>
-                                <th>Hình ảnh</th>
-                                <th>Giá</th>
-                                <th>Tồn kho</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-
-                                    <img src="" alt=""
-                                        style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <a href="" class="btn btn-outline-secondary btn-icon-text"><i
-                                            class="bi bi-pen"></i>
-                                        Sửa</a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i
-                                            class="bi bi-trash"></i>
-                                        Xóa</a>
-                                </td>
-                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
+    @endif
 </div>
 
+<!-- Tab Content for fales Orders -->
+<div class="tab-content" id="tab-false">
+    <!-- Nội dung tương tự, cập nhật lại id và các thông tin liên quan -->
+</div>
 
+<!-- Tab Content for Completed Orders -->
+<div class="tab-content" id="tab-completed">
+    <!-- Nội dung tương tự, cập nhật lại id và các thông tin liên quan -->
+</div>
 
+<script>
+    $(document).ready(function() {
+        // Hàm khởi tạo DataTable
+        function initializeDataTable(tableId) {
+            $(tableId).DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50],
+                "pageLength": 5,
+                "language": {
+                    "paginate": {
+                        "previous": "<i class='bi bi-arrow-left'></i>",
+                        "next": "<i class='bi bi-arrow-right'></i>"
+                    },
+                    "search": "Tìm kiếm:",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục"
+                },
+                "dom": '<"row"<"col-md-6"l><"col-md-6"f>>' +
+                    '<"row"<"col-sm-12"tr>>' +
+                    '<"row"<"col-md-5"i><"col-md-7"p>>',
+                "columnDefs": [{
+                    "targets": 2, // Cột tổng tiền
+                    "render": $.fn.dataTable.render.number(',', '.', 0, '', ' VND')
+                }]
+            });
+        }
+
+        // Khởi tạo DataTable cho bảng đầu tiên khi load trang
+        initializeDataTable('#orderTableAll');
+
+        // Khởi tạo DataTable khi chuyển tab
+        $('.tab-item').on('click', function() {
+            var tabId = $(this).data('tab');
+            $('.tab-item').removeClass('active');
+            $(this).addClass('active');
+            $('.tab-content').removeClass('active');
+            $('#tab-' + tabId).addClass('active');
+
+            var tableId = '#orderTable' + capitalizeFirstLetter(tabId);
+
+            // Chỉ khởi tạo DataTable nếu nó chưa được khởi tạo
+            if (!$.fn.DataTable.isDataTable(tableId)) {
+                initializeDataTable(tableId);
+            }
+        });
+
+        // Hàm hỗ trợ viết hoa chữ cái đầu tiên
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    });
+</script>
 @endsection
