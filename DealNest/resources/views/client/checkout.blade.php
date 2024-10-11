@@ -893,6 +893,9 @@ $(document).ready(function() {
         var userPhone = $('.shipping-info .name').text().split('|')[1].trim(); // Lấy số điện thoại
         var userAddress = $('.shipping-info .address').text(); // Lấy địa chỉ
 
+        // Lấy phí vận chuyển (shipping_fee) và chuyển thành số
+        var shippingFee = $('#shipping-fee').text().replace(' vnđ', '').replace(/\./g, ''); // Loại bỏ ' vnđ' và định dạng
+
         // Lấy thông tin sản phẩm (product_id, quantity, total_price)
         var productsData = [];
         $('.product').each(function() {
@@ -931,6 +934,7 @@ $(document).ready(function() {
                 user_name: userName, // Gửi tên người dùng
                 user_phone: userPhone, // Gửi số điện thoại
                 user_address: userAddress, // Gửi địa chỉ
+                shipping_fee: shippingFee, // Gửi phí vận chuyển
                 _token: '{{ csrf_token() }}' // Thêm token CSRF nếu sử dụng Laravel
             },
             success: function(response) {
@@ -944,6 +948,7 @@ $(document).ready(function() {
         });
     });
 });
+
 
 
 

@@ -88,6 +88,9 @@ Route::group(['prefix' => 'tai-khoan'], function () {
     Route::get('/xac-thuc/send-otp', [OTPController::class, 'sendOTP'])->name('otp.sendOTP');
     Route::post('/xac-thuc/otp', [OTPController::class, 'verifyOTP'])->name('otp.verifyOTP');
     // End Route Account
+    // Password 
+    Route::get('/quen-mat-khau',[AccountController::class,'forgotPassword'])->name('account.forgotPassword');
+    Route::post('/checkEmail',[AccountController::class,'checkEmail'])->name('account.checkEmail');
 });
 
 // Middleware
