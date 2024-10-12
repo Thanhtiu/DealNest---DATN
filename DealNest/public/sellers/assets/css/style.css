@@ -21796,13 +21796,13 @@ code {
 
 /*Badge variations*/
 .badge-primary {
-  border: 1px solid #b66dff;
+  border: 1px solid #007bff;
   color: #ffffff;
-  background: #b66dff;
+  background: #007bff;
 }
 
 .badge-secondary {
-  border: 1px solid #c3bdbd;
+  border: 1px solid #007bff;
   color: #ffffff;
   background: #c3bdbd;
 }

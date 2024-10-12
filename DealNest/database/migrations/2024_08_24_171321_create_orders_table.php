@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'completed', 'cancelled','partial','waiting_for_delivery'])->default('pending');
             $table->decimal('total', 10, 2)->notNullable();
             $table->date('delivery_date')->notNullable();
             $table->enum('payment_method', ['cod', 'momo', 'vnpay'])->default('cod');

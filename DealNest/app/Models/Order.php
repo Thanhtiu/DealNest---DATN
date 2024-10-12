@@ -20,7 +20,9 @@ class Order extends Model
         'delivery_date',
         'payment_method',
         'payment_status',
-        'name','phone','address',
+        'name',
+        'phone',
+        'address',
     ];
     public function orderItems()
     {
@@ -29,5 +31,9 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+    public function order_items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
 }

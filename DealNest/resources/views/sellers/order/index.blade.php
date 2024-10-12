@@ -110,8 +110,8 @@
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tất cả đơn hàng</h4>
-                    <table id="orderTableAll" class="table table-striped">
+                    <h4 class="card-title">Tất cả đơn hàng chờ duyệt</h4>
+                    <table id="orderTablePending" class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Mã đơn hàng</th>
@@ -128,19 +128,36 @@
                             @foreach($orderPending as $order)
                             <tr>
                                 <td>{{ $order->id }}</td>
-                                <td>{{ $order->user->name }}</td>
-                                <td>{{ number_format($order->total, 0, ',', '.') }} vnđ</td>
+                                <td>{{ $order->user->full_name }}</td>
+                                <td>
+                                    {{ number_format($order->orderItems->filter(function($item) {return $item->status === 'pending';})->sum('price'), 
+        0, ',', '.') }} vnđ
+                                </td>
+
                                 <td>{{ $order->delivery_date }}</td>
                                 <td>{{ $order->payment_method }}</td>
-                                <td>{{ $order->orderItems->where('status', 'pending')->sum('quantity') }}</td>
+                                <td>{{ $order->order_items ? $order->order_items->where('status', 'pending')->sum('quantity') : 0 }}</td>
                                 <td>
-                                    <label class="badge badge-warning">Chờ phê duyệt</label>
+                                    @if($order->status === 'waiting_for_delivery')
+                                    <label class="badge badge-info">Đang giao</label>
+                                    @elseif($order->status === 'partial')
+                                    <label class="badge badge-primary">Xử lý một phần</label>
+                                    @elseif($order->status === 'pending')
+                                    <label class="badge badge-warning">Chờ duyệt</label>
+                                    @elseif($order->status === 'cancelled')
+                                    <label class="badge badge-danger">Đã hủy</label>
+                                    @else
+                                    <label class="badge badge-success">Hoàn thành</label>
+                                    @endif
+
                                 </td>
                                 <td>
                                     <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'pending']) }}" class="btn btn-outline-secondary btn-icon-text">
                                         <i class="bi bi-eye"></i> Chi tiết
                                     </a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i> Xóa</a>
+                                    <a href="" class="btn btn-outline-danger btn-icon-text">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
@@ -152,6 +169,7 @@
     </div>
     @endif
 </div>
+
 
 <!-- Tab Content for Waiting Orders -->
 <div class="tab-content" id="tab-waiting">
@@ -165,8 +183,8 @@
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tất cả đơn hàng</h4>
-                    <table id="orderTableAll" class="table table-striped">
+                    <h4 class="card-title">Tất cả đơn hàng chờ duyệt</h4>
+                    <table id="orderTablePending" class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Mã đơn hàng</th>
@@ -183,17 +201,36 @@
                             @foreach($orderWaitingDelivery as $order)
                             <tr>
                                 <td>{{ $order->id }}</td>
-                                <td>{{ $order->user->name }}</td>
-                                <td>{{ number_format($order->total, 0, ',', '.') }} vnđ</td>
+                                <td>{{ $order->user->full_name }}</td>
+                                <td>
+                                    {{ number_format($order->order_items->filter(function($item) {return $item->status === 'waiting_for_delivery';})->sum('price'), 
+        0, ',', '.') }} vnđ
+                                </td>
                                 <td>{{ $order->delivery_date }}</td>
                                 <td>{{ $order->payment_method }}</td>
-                                <td>{{ $order->orderItems->where('status', 'waiting_for_delivery')->sum('quantity') }}</td>
+                                <td>{{ $order->order_items ? $order->order_items->where('status', 'waiting_for_delivery')->sum('quantity') : 0 }}</td>
                                 <td>
-                                    <label class="badge badge-success">Đã xử lí</label>
+
+                                    @if($order->status === 'waiting_for_delivery')
+                                    <label class="badge badge-info">Đang giao</label>
+                                    @elseif($order->status === 'partial')
+                                    <label class="badge badge-primary">Xử lý một phần</label>
+                                    @elseif($order->status === 'pending')
+                                    <label class="badge badge-warning">Chờ duyệt</label>
+                                    @elseif($order->status === 'cancelled')
+                                    <label class="badge badge-danger">Đã hủy</label>
+                                    @else
+                                    <label class="badge badge-success">Hoàn thành</label>
+                                    @endif
+
                                 </td>
                                 <td>
-                                    <a href="{{ route('seller.order.detail', ['id' => $order->id,'status' => 'waiting_for_delivery']) }}" class="btn btn-outline-secondary btn-icon-text"><i class="bi bi-eye"></i> Chi tiết</a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i> Xóa</a>
+                                    <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'waiting_for_delivery']) }}" class="btn btn-outline-secondary btn-icon-text">
+                                        <i class="bi bi-eye"></i> Chi tiết
+                                    </a>
+                                    <a href="" class="btn btn-outline-danger btn-icon-text">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
@@ -208,7 +245,72 @@
 
 <!-- Tab Content for fales Orders -->
 <div class="tab-content" id="tab-false">
-    <!-- Nội dung tương tự, cập nhật lại id và các thông tin liên quan -->
+    @if($orderCancel->isEmpty())
+    <div class="text-center no-data">
+        <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+        <p class="text-center mt-3">Chưa có đơn hàng nào</p>
+    </div>
+    @else
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Tất cả đơn hàng chờ duyệt</h4>
+                    <table id="orderTablePending" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn hàng</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Ngày đặt</th>
+                                <th>PT thanh toán</th>
+                                <th>Số lượng</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($orderCancel as $order)
+                            <tr>
+                                <td>{{ $order->id }}</td>
+                                <td>{{ $order->user->full_name }}</td>
+                                <td>
+                                    {{ number_format($order->order_items->filter(function($item) {return $item->status === 'cancel';})->sum('price'), 
+        0, ',', '.') }} vnđ
+                                </td>
+                                <td>{{ $order->delivery_date }}</td>
+                                <td>{{ $order->payment_method }}</td>
+                                <td>{{ $order->order_items ? $order->order_items->where('status', 'cancel')->sum('quantity') : 0 }}</td>
+                                <td>
+                                    @if($order->status === 'waiting_for_delivery')
+                                    <label class="badge badge-info">Đang giao</label>
+                                    @elseif($order->status === 'partial')
+                                    <label class="badge badge-primary">Xử lý một phần</label>
+                                    @elseif($order->status === 'pending')
+                                    <label class="badge badge-warning">Chờ duyệt</label>
+                                    @elseif($order->status === 'cancelled')
+                                    <label class="badge badge-danger">Đã hủy</label>
+                                    @else
+                                    <label class="badge badge-success">Hoàn thành</label>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'cancel']) }}" class="btn btn-outline-secondary btn-icon-text">
+                                        <i class="bi bi-eye"></i> Chi tiết
+                                    </a>
+                                    <a href="" class="btn btn-outline-danger btn-icon-text">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
 
 <!-- Tab Content for Completed Orders -->

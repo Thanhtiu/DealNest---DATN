@@ -108,8 +108,10 @@
                     <p><strong>Trạng thái:</strong>
                         @if($orderDetail->status == 'pending')
                         <label class="badge badge-warning">Chờ phê duyệt</label>
-                        @elseif($orderDetail->status == 'completed')
-                        <label class="badge badge-success">Đã phê duyệt</label>
+                        @elseif($orderDetail->status === 'waiting_for_delivery')
+                        <label class="badge badge-primary">Đã phê duyệt</label>
+                        @elseif($orderDetail->status === 'completed')
+                        <label class="badge badge-success">Hoàn thành</label>
                         @else
                         <label class="badge badge-danger">Từ chối đơn</label>
                         @endif
@@ -119,9 +121,9 @@
             <div class="col-md-6">
                 <div class="customer-info">
                     <h5>Thông tin người nhận hàng</h5>
-                    <p><strong>Tên:</strong> {{ $orderDetail->orderItems->first()->name }}</p>
-                    <p><strong>Địa chỉ:</strong> {{$orderDetail->orderItems->first()->address}} </p>
-                    <p><strong>Số điện thoại:</strong> {{$orderDetail->orderItems->first()->phone}}</p>
+                    <p><strong>Tên:</strong> {{ $orderDetail->name }}</p>
+                    <p><strong>Địa chỉ:</strong> {{$orderDetail->address}} </p>
+                    <p><strong>Số điện thoại:</strong> {{$orderDetail->phone}}</p>
                 </div>
             </div>
         </div>
@@ -164,8 +166,10 @@
                         <input type="hidden" name="items[{{ $item->id }}][id]" value="{{ $item->id }}">
                         <select class="form-control order-status-select" name="items[{{ $item->id }}][status]">
                             @if(isset($status) && $status === 'waiting_for_delivery')
+                            <!-- Chỉ hiển thị tùy chọn duyệt khi trạng thái là 'waiting_for_delivery' -->
                             <option value="waiting_for_delivery" {{ $item->status == 'waiting_for_delivery' ? 'selected' : '' }}>✔️ Duyệt</option>
                             @else
+                            <!-- Hiển thị tất cả các tùy chọn khi không có điều kiện 'waiting_for_delivery' -->
                             <option value="pending" {{ $item->status == 'pending' ? 'selected' : '' }}>⏳ Chờ duyệt</option>
                             <option value="waiting_for_delivery" {{ $item->status == 'waiting_for_delivery' ? 'selected' : '' }}>✔️ Duyệt</option>
                             <option value="out_of_stock" {{ $item->status == 'out_of_stock' ? 'selected' : '' }}>❌ Hết hàng</option>
@@ -179,13 +183,13 @@
             </tbody>
         </table>
         <div class="order-actions">
-        @if(isset($status) && $status === 'pending')
+            @if(isset($status) && $status === 'pending')
             <button type="submit" class="btn btn-primary">Cập nhật trạng thái</button>
             <button type="button" class="btn btn-secondary">In đơn hàng</button>
 
-        @else
+            @else
             <button type="button" class="btn btn-secondary">In đơn hàng</button>
-        @endif
+            @endif
         </div>
     </form>
 
