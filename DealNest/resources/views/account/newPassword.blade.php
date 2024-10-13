@@ -38,7 +38,7 @@
               </div>
               @endif
               <h4>Tạo mật khẩu mới</h4>
-              <form class="pt-3" method="POST" action=" {{route('account.changePasswordProcessing')}} ">
+              <form class="pt-3" method="POST" action=" {{route('account.newPasswordProcessing')}} ">
                 @csrf
                 <div class="form-group">
                   <input type="password" name="password" class="form-control form-control-lg" id="exampleInputPassword1"
