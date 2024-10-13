@@ -1072,14 +1072,6 @@
   });
 </script>
 
-
-
-
-
-
-
-
-
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const decreaseButton = document.querySelector('.decrease');

@@ -90,7 +90,8 @@
     <a href="#" class="tab-item active" data-tab="all">Tất cả đơn hàng </a>
     <a href="#" class="tab-item" data-tab="pending">Đơn chờ duyệt </a>
     <a href="#" class="tab-item" data-tab="waiting">Đang giao </a>
-    <a href="#" class="tab-item" data-tab="false">Đơn hủy </a>
+    <a href="#" class="tab-item" data-tab="cancel">Đơn từ chối </a>
+    <a href="#" class="tab-item" data-tab="buyer_cancel">Đơn hủy </a>
     <a href="#" class="tab-item" data-tab="completed">Hoàn thành </a>
 </div>
 
@@ -244,7 +245,7 @@
 </div>
 
 <!-- Tab Content for fales Orders -->
-<div class="tab-content" id="tab-false">
+<div class="tab-content" id="tab-cancel">
     @if($orderCancel->isEmpty())
     <div class="text-center no-data">
         <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
@@ -313,9 +314,128 @@
     @endif
 </div>
 
+<!-- Tab Content for buyercancel Orders -->
+<div class="tab-content" id="tab-buyer_cancel">
+    @if($orderBuyerCancel->isEmpty())
+    <div class="text-center no-data">
+        <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+        <p class="text-center mt-3">Chưa có đơn hàng nào</p>
+    </div>
+    @else
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Tất cả đơn hàng chờ duyệt</h4>
+                    <table id="orderTablePending" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn hàng</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Ngày đặt</th>
+                                <th>PT thanh toán</th>
+                                <th>Số lượng</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($orderBuyerCancel as $order)
+                            <tr>
+                                <td>{{ $order->id }}</td>
+                                <td>{{ $order->user->full_name }}</td>
+                                <td>
+                                    {{ number_format($order->order_items->filter(function($item) {return $item->status === 'cancel';})->sum('price'), 
+        0, ',', '.') }} vnđ
+                                </td>
+                                <td>{{ $order->delivery_date }}</td>
+                                <td>{{ $order->payment_method }}</td>
+                                <td>{{ $order->order_items ? $order->order_items->where('status', 'buyer_cancel')->sum('quantity') : 0 }}</td>
+                                <td>
+
+                                    <label class="badge badge-danger">Đơn hủy</label>
+
+                                </td>
+                                <td>
+                                    <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'buyer_cancel']) }}" class="btn btn-outline-secondary btn-icon-text">
+                                        <i class="bi bi-eye"></i> Chi tiết
+                                    </a>
+                                    <a href="" class="btn btn-outline-danger btn-icon-text">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+</div>
+
+
+
 <!-- Tab Content for Completed Orders -->
 <div class="tab-content" id="tab-completed">
-    <!-- Nội dung tương tự, cập nhật lại id và các thông tin liên quan -->
+    @if($orderSuccess->isEmpty())
+    <div class="text-center no-data">
+        <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+        <p class="text-center mt-3">Chưa có đơn hàng nào</p>
+    </div>
+    @else
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Tất cả đơn hàng chờ duyệt</h4>
+                    <table id="orderTablePending" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn hàng</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Ngày đặt</th>
+                                <th>PT thanh toán</th>
+                                <th>Số lượng</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($orderSuccess as $order)
+                            <tr>
+                                <td>{{ $order->id }}</td>
+                                <td>{{ $order->user->full_name }}</td>
+                                <td>
+                                    {{ number_format($order->order_items->filter(function($item) {return $item->status === 'cancel';})->sum('price'), 
+        0, ',', '.') }} vnđ
+                                </td>
+                                <td>{{ $order->delivery_date }}</td>
+                                <td>{{ $order->payment_method }}</td>
+                                <td>{{ $order->order_items ? $order->order_items->where('status', 'success')->sum('quantity') : 0 }}</td>
+                                <td>
+                                    <label class="badge badge-success">Hoàn thành</label>
+                                </td>
+                                <td>
+                                    <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'success']) }}" class="btn btn-outline-secondary btn-icon-text">
+                                        <i class="bi bi-eye"></i> Chi tiết
+                                    </a>
+                                    <a href="" class="btn btn-outline-danger btn-icon-text">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
 
 <script>

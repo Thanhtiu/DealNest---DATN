@@ -63,7 +63,37 @@ class OrderSellerController extends Controller
             ->with(['orderItems.product', 'user'])
             ->get();
 
-        return view('sellers.order.index', compact('orderPending', 'orderWaitingDelivery', 'orderCancel'));
+        $orderBuyerCancel = Order::where('seller_id', $sellerId)
+            ->whereIn('status', ['cancelled', 'partial'])
+            ->whereHas('orderItems', function ($query) {
+                $query->whereIn('status', ['buyer_cancel']);
+            })
+            ->where(function ($query) {
+                $query->where('payment_method', 'cod')
+                    ->orWhere(function ($query) {
+                        $query->where('payment_method', '!=', 'cod')
+                            ->where('payment_status', 'paid');
+                    });
+            })
+            ->with(['orderItems.product', 'user'])
+            ->get();
+
+        $orderSuccess = Order::where('seller_id', $sellerId)
+            ->whereIn('status', ['cancelled', 'partial'])
+            ->whereHas('orderItems', function ($query) {
+                $query->whereIn('status', ['success']);
+            })
+            ->where(function ($query) {
+                $query->where('payment_method', 'cod')
+                    ->orWhere(function ($query) {
+                        $query->where('payment_method', '!=', 'cod')
+                            ->where('payment_status', 'paid');
+                    });
+            })
+            ->with(['orderItems.product', 'user'])
+            ->get();
+
+        return view('sellers.order.index', compact('orderSuccess', 'orderBuyerCancel', 'orderPending', 'orderWaitingDelivery', 'orderCancel'));
     }
 
 

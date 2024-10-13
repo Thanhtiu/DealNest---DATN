@@ -1,191 +1,167 @@
 @extends('layouts.client.app')
 @section('content')
 <style>
-    /* Wishlist Section */
+    /* General Container */
     .wishlist-container {
-        background-color: #fff;
+        background-color: #f9f9f9;
         border: 1px solid #e1e1e1;
-        padding: 15px;
+        border-radius: 10px;
+        padding: 20px;
         margin-bottom: 20px;
-        border-radius: 4px;
     }
 
+    /* Wishlist Header */
     .wishlist-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #e1e1e1;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-    }
-
-    .wishlist-header-left {
+        font-size: 22px;
         font-weight: bold;
-        color: #f53d2d;
-    }
-
-    .wishlist-header-right {
-        color: #9e9e9e;
-    }
-
-    /* Separator between wishlist items */
-    .wishlist-item-separator {
+        color: #555;
+        margin-bottom: 20px;
+        text-align: center;
         border-bottom: 1px solid #e1e1e1;
-        margin: 20px 0;
+        padding-bottom: 15px;
+        background-color: #fff;
+        border-radius: 10px 10px 0 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
+    /* Wishlist Item */
     .wishlist-item {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        padding: 15px;
+        background-color: #fff;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: background-color 0.3s ease;
     }
 
-    .wishlist-item-info {
-        display: flex;
-        align-items: center;
+    .wishlist-item:hover {
+        background-color: #f0f0f0;
     }
 
-    .wishlist-item-image {
-        width: 81px;
-        height: 81px;
-        margin-right: 15px;
-    }
-
+    /* Image Styling */
     .wishlist-item-image img {
-        width: 100%;
-        height: 100%;
+        width: 90px;
+        height: 90px;
         object-fit: cover;
+        border-radius: 8px;
+        margin-right: 20px;
     }
 
+    /* Item Details */
     .wishlist-item-details {
+        flex-grow: 1;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .wishlist-item-details h5 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 8px;
         color: #333;
     }
 
     .wishlist-item-price {
+        font-size: 16px;
         color: #f53d2d;
         font-weight: bold;
-        text-align: right;
     }
 
-    .wishlist-item-price p {
-        color: red;
-        font-size: 20px;
-        font-weight: 700;
-
-    }
-
-    /* Updated Wishlist Actions */
+    /* Actions */
     .wishlist-actions {
         display: flex;
-        justify-content: flex-end;
         align-items: center;
-        margin-top: 10px;
-    }
-
-    .wishlist-item-content {
-        display: flex;
         justify-content: space-between;
-        flex: 1;
+        margin-left: 20px;
     }
 
-
-
-    .wishlist-actions button:hover {
-        opacity: 0.7;
-        transition: all 0.5s;
+    .wishlist-actions a {
+        text-decoration: none;
+        padding: 6px 12px;
+        font-size: 12px;
+        border-radius: 6px;
+        margin-left: 10px;
+        color: #fff;
+        transition: background-color 0.3s ease;
     }
 
-    /* Add button style */
-    .wishlist-item-content {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
+    .wishlist-actions a.btn-danger {
+        background-color: #dc3545;
     }
 
-    .wishlist-item-top {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
+    .wishlist-actions a.btn-danger:hover {
+        background-color: #c82333;
     }
 
-    .wishlist-item-details {
-        flex-grow: 1;
-        padding-right: 10px;
+    .wishlist-actions a.btn-primary {
+        background-color: #007bff;
     }
 
-    /* Separator between wishlist items */
-    .wishlist-item-separator {
-        border-bottom: 1px solid #e1e1e1;
-        margin: 20px 0;
+    .wishlist-actions a.btn-primary:hover {
+        background-color: #0056b3;
     }
 
-    .favourite-title {
-        margin-bottom: 35px;
-    }
-
-    .wishlist-delete {
-        display: inline;
-        margin-right: 10px;
-    }
-
+    /* No Data Section */
     .wishlist-data-image {
         margin-top: 15%;
+        width: 150px;
     }
+
+    .wishlist-empty {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 16px;
+        color: #999;
+    }
+
 </style>
+
 <section class="py-5">
     <div class="container">
         <div class="row">
             <div class="col-md-3">
                 @include('layouts.client.sidebar')
             </div>
+
             <div class="col-md-9">
                 @if($WishLists->isEmpty())
-                <div class="text-center">
-                    <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+                <div class="wishlist-empty">
+                    <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
                     <p class="text-center mt-3">Chưa có sản phẩm nào được yêu thích</p>
                 </div>
                 @else
                 <div class="wishlist-container">
-                    <h4 class="favourite-title">Danh sách sản phẩm yêu thích</h4>
+                    <div class="wishlist-header">Danh sách sản phẩm yêu thích</div>
                     @foreach($WishLists as $item)
                     <div class="wishlist-item">
                         <div class="wishlist-item-image">
-                            <img src="{{ asset('uploads/' . $item->product->image) }}" alt="Product Image" style="width: 150px; height: 100px; object-fit: cover;">
+                            <img src="{{ asset('uploads/' . $item->product->image) }}" alt="Product Image">
                         </div>
-                        <div class="wishlist-item-content">
-                            <div class="wishlist-item-top">
-                                <div class="wishlist-item-details">
-                                    <p><strong>{{ $item->product->name }}</strong></p>
-                                    <p>Danh mục: {{ $item->product->category->name }}</p>
-                                    <p>Thể loại: {{ $item->product->subCategory->name }}</p>
-                                    <p>Đạt: {{ $item->product->favourite }} lượt yêu thích <i class="bi bi-heart-fill text-danger"></i></p>
-                                    @if($item->product->sales > 0)
-                                    <p>Đã bán: {{ $item->product->sales }}</p>
-                                    @endif
-                                </div>
-                                <div class="wishlist-item-price">
-                                    <p>{{ number_format($item->product->price, 0, ',', '.') }} vnđ</p>
-                                </div>
-                            </div>
-                            <div class="wishlist-actions">
-                                <a href="{{ route('client.wishList.destroy', ['id' => $item->id]) }}" class="btn btn-danger wishlist-delete">
-                                    <i class="bi bi-trash2-fill"></i> Xóa sản phẩm
-                                </a>
-                                <a href="#" class="btn btn-primary">
-                                    <i class="bi bi-bag-fill"></i> Mua sản phẩm
-                                </a>
-                            </div>
+                        <div class="wishlist-item-details">
+                            <h5>{{ $item->product->name }}</h5>
+                            <p>Danh mục: {{ $item->product->category->name }}</p>
+                            <p>Thể loại: {{ $item->product->subCategory->name }}</p>
+                            <p><i class="bi bi-heart-fill text-danger"></i> {{ $item->product->favourite }} lượt yêu thích</p>
+                        </div>
+                        <div class="wishlist-item-price">
+                            {{ number_format($item->product->price, 0, ',', '.') }} vnđ
+                        </div>
+                        <div class="wishlist-actions">
+                            <a href="{{ route('client.wishList.destroy', ['id' => $item->id]) }}" class="btn btn-danger">
+                                <i class="bi bi-trash2-fill"></i> Xóa
+                            </a>
+                            <a href="#" class="btn btn-primary">
+                                <i class="bi bi-bag-fill"></i> Mua
+                            </a>
                         </div>
                     </div>
-
-                    <!-- khoảng cách sản phẩm -->
-                    <div class="wishlist-item-separator" style="border-bottom: 1px solid #ddd; margin: 20px 0;"></div>
                     @endforeach
                 </div>
                 @endif
             </div>
-
         </div>
+    </div>
 </section>
 @endsection

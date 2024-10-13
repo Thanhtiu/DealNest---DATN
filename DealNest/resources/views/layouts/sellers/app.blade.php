@@ -65,26 +65,28 @@
         outline: none;
     }
 
-.dataTables_length select:focus {
-    border: 2px solid #ff8a50;
-}
+    .dataTables_length select:focus {
+        border: 2px solid #ff8a50;
+    }
 
-.dataTables_length label {
-    font-weight: bold;
-    color: #333;
-}
-/* Style cho input tìm kiếm */
-.dataTables_filter input {
-    border: 2px solid #ff5722;
-    border-radius: 25px;
-    padding: 8px 15px 8px 35px;  /* Tạo không gian cho icon */
-    width: 300px;
-    font-size: 14px;
-    transition: border 0.3s ease;
-    outline: none;
-    background: url('https://cdn-icons-png.flaticon.com/512/622/622669.png') no-repeat scroll 10px 8px;
-    background-size: 20px 20px;
-}
+    .dataTables_length label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    /* Style cho input tìm kiếm */
+    .dataTables_filter input {
+        border: 2px solid #ff5722;
+        border-radius: 25px;
+        padding: 8px 15px 8px 35px;
+        /* Tạo không gian cho icon */
+        width: 300px;
+        font-size: 14px;
+        transition: border 0.3s ease;
+        outline: none;
+        background: url('https://cdn-icons-png.flaticon.com/512/622/622669.png') no-repeat scroll 10px 8px;
+        background-size: 20px 20px;
+    }
 
     /* Style cho input tìm kiếm */
     .dataTables_filter input {
@@ -100,19 +102,40 @@
         background-size: 20px 20px;
     }
 
-.dataTables_filter label {
-    font-weight: bold;
-    color: #333;
-    margin-right: 10px;
-}
+    .dataTables_filter label {
+        font-weight: bold;
+        color: #333;
+        margin-right: 10px;
+    }
 
-.dataTables_wrapper .dataTables_filter input::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
+    .dataTables_wrapper .dataTables_filter input::placeholder {
+        color: #aaa;
+        font-style: italic;
+    }
 
+    .sidebar .nav-item .nav-link {
+        padding: 15px;
+        color: #212529;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
+    .sidebar .nav-item .nav-link:hover {
+        background-color: #f8f9fa;
+        color: #0d6efd;
+    }
+
+    .sidebar .nav-item .nav-link.active {
+        background-color: #0d6efd;
+        color: #fff;
+    }
+
+    .sidebar .menu-title {
+        font-weight: 600;
+        font-size: 14px;
+    }
 </style>
+
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
@@ -308,39 +331,32 @@
                     <li class="nav-item">
                         <a class="nav-link" href="index.html">
                             <span class="menu-title">Thống kê</span>
-                            <i class="mdi mdi-home menu-icon"></i>
+                            <i class="bi-house-fill menu-icon"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"  href="{{route('seller.order')}}" 
-                            aria-controls="forms">
+                        <a class="nav-link" href="{{route('seller.order')}}" aria-controls="forms">
                             <span class="menu-title">Quản lý đơn hàng</span>
-                            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                            <i class="bi-list-task menu-icon"></i>
                         </a>
-                        
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
-                            aria-controls="ui-basic">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                             <span class="menu-title">Quản lý người dùng</span>
-                            <i class="menu-arrow"></i>
-                            <i class="mdi mdi-lock menu-icon"></i>
+                            <i class="bi-people-fill menu-icon"></i>
                         </a>
                         <div class="collapse" id="ui-basic">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/ui-features/buttons.html">Xem thông tin tài
-                                        khoản</a>
+                                    <a class="nav-link" href="pages/ui-features/buttons.html">Xem thông tin tài khoản</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false"
-                            aria-controls="forms">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="forms">
                             <span class="menu-title">Quản lý sản phẩm</span>
-                            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                            <i class="bi-box-seam menu-icon"></i>
                         </a>
                         <div class="collapse" id="forms">
                             <ul class="nav flex-column sub-menu">
@@ -357,18 +373,17 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false"
-                            aria-controls="charts">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
                             <span class="menu-title">Quản lý đánh giá</span>
-                            <i class="mdi mdi-chart-bar menu-icon"></i>
+                            <i class="bi-bar-chart-fill menu-icon"></i>
                         </a>
                         <div class="collapse" id="charts">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh gián sản phẩm</a>
+                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh giá sản phẩm</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh gián cửa hàng</a>
+                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh giá cửa hàng</a>
                                 </li>
                             </ul>
                         </div>
@@ -376,9 +391,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('seller.info')}}">
                             <span class="menu-title">Thông tin cửa hàng</span>
-                            <i class="mdi mdi-home menu-icon"></i>
+                            <i class="bi-info-circle-fill menu-icon"></i>
                         </a>
                     </li>
+
                 </ul>
             </nav>
 
@@ -426,7 +442,7 @@
     <!-- Include jQuery in your HTML -->
 
 
-    
+
 
 
 

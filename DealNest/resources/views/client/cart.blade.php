@@ -1,100 +1,156 @@
 @extends('layouts.client.app')
 <style>
-    .fixed-section {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        max-width: 1200px;
-        margin: 0 auto;
-        background-color: white;
-        padding: 15px 20px;
-        box-shadow: -1px -1px 5px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-    }
+   
+   /* Logo and Title Section */
+   .header-section {
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       padding: 20px 0;
+       background-color: #fff;
+       border-bottom: 2px solid #e1e1e1;
+       margin-bottom: 20px;
+       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+       max-width: 1200px;
+       margin: 0 auto;
+   }
 
+   .header-section img {
+       width: 120px; /* Đặt kích thước logo */
+       height: auto;
+   }
 
-    .voucher-row,
-    .shopee-xu-row,
-    .bottom-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;
-    }
+   .header-title {
+       font-size: 24px;
+       font-weight: bold;
+       color: #333;
+       margin-left: 20px;
+       flex-grow: 1;
+       text-align: center;
+   }
 
-    .voucher-row input,
-    .shopee-xu-row input,
-    .bottom-row input {
-        margin-right: 5px;
-    }
+   .fixed-section {
+       position: fixed;
+       bottom: 0;
+       left: 0;
+       right: 0;
+       max-width: 1200px;
+       margin: 0 auto;
+       background-color: #f9f9f9;
+       padding: 20px;
+       box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+       z-index: 1000;
+       font-family: 'Arial', sans-serif;
+       font-size: 14px;
+       border-top: 2px solid #e1e1e1;
+   }
 
-    .voucher-row a,
-    .shopee-xu-row span {
-        color: #007bff;
-    }
+   .voucher-row,
+   .shopee-xu-row,
+   .bottom-row {
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       margin-bottom: 10px;
+   }
 
-    .amount-deducted {
-        margin-left: auto;
-        color: #999;
-    }
+   .voucher-row input,
+   .shopee-xu-row input,
+   .bottom-row input {
+       margin-right: 10px;
+   }
 
-    .bottom-row input {
-        margin-right: 5px;
-    }
+   .voucher-row a,
+   .shopee-xu-row span {
+       color: #007bff;
+       font-weight: 500;
+       transition: color 0.3s ease;
+   }
 
-    .bottom-row a {
-        color: #ff5722;
-        margin-right: 20px;
-    }
+   .voucher-row a:hover,
+   .shopee-xu-row span:hover {
+       color: #0056b3;
+   }
 
-    .save-section {
-        color: red;
-        margin-right: auto;
-    }
+   .amount-deducted {
+       margin-left: auto;
+       color: #777;
+   }
 
-    .total-payment {
-        display: flex;
-        align-items: center;
-        margin-right: 20px;
-    }
+   .bottom-row input {
+       margin-right: 10px;
+   }
 
-    .total-amount {
-        color: #ff5722;
-        font-size: 18px;
-        font-weight: bold;
-        margin-left: 10px;
-    }
+   .bottom-row a {
+       color: #ff5722;
+       margin-right: 20px;
+       font-weight: 500;
+       transition: color 0.3s ease;
+   }
 
-    .savings {
-        color: #999;
-        margin-left: 5px;
-    }
+   .bottom-row a:hover {
+       color: #e64a19;
+   }
 
-    .purchase-button {
-        background-color: #ff5722;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-    }
+   .save-section {
+       color: red;
+       margin-right: auto;
+       font-weight: bold;
+   }
 
-    .purchase-button:hover {
-        background-color: #e64a19;
-    }
+   .total-payment {
+       display: flex;
+       align-items: center;
+       margin-right: 20px;
+   }
 
-    .click-code {
-        text-decoration: none;
-    }
+   .total-amount {
+       color: #ff5722;
+       font-size: 20px;
+       font-weight: bold;
+       margin-left: 10px;
+   }
 
-    .click-code:hover {
-        color: #0d6efd;
-    }
+   .savings {
+       color: #777;
+       font-size: 12px;
+       margin-left: 5px;
+   }
+
+   .purchase-button {
+       background-color: #ff5722;
+       color: white;
+       border: none;
+       padding: 12px 30px;
+       border-radius: 5px;
+       cursor: pointer;
+       transition: background-color 0.3s ease, box-shadow 0.3s ease;
+       font-size: 16px;
+   }
+
+   .purchase-button:hover {
+       background-color: #e64a19;
+       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+   }
+
+   .click-code {
+       text-decoration: none;
+       color: #007bff;
+       font-weight: 500;
+       transition: color 0.3s ease;
+   }
+
+   .click-code:hover {
+       color: #0056b3;
+   }
 </style>
 @section('content')
-
+<!-- Logo and Title Section Begin -->
+<section class="header-section">
+    
+    <div class="header-title">Giỏ Hàng Của Bạn</div> <!-- Tiêu đề giỏ hàng -->
+</section>
+<!-- Logo and Title Section End -->
 <!-- Shoping Cart Section Begin -->
 <section class="shoping-cart spad">
     <div class="container">

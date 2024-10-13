@@ -22,7 +22,7 @@ use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Sellers\VoucherController;
 use App\Http\Controllers\Sellers\OrderSellerController;
 use App\Http\Controllers\Sellers\ProdcutStatisticsController;
-use App\Http\Controllers\Sellers\CategoryAndSubcategoryController; 
+use App\Http\Controllers\Sellers\CategoryAndSubcategoryController;
 use App\Http\Controllers\Sellers\Categor;
 use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Client\PaymentController;
@@ -48,7 +48,7 @@ Route::post('/tim-kiem', [SearchController::class, 'index'])->name('client.searc
 
 Route::post('/san-pham/yeu-thich/{id}', [WishListController::class, 'create'])->middleware('auth');
 Route::get('/san-pham-yeu-thich', [WishListController::class, 'index'])->name('client.favourite');
-Route::get('/san-pham-yeu-thich/xoa/{id}',[WishListController::class,'destroy'])->name('client.wishList.destroy');
+Route::get('/san-pham-yeu-thich/xoa/{id}', [WishListController::class, 'destroy'])->name('client.wishList.destroy');
 Route::post('/theo-doi/cua-hang', [BuyerController::class, 'followSeller'])->name('client.follow.create');
 Route::get('/danh-sach/cua-hang', [BuyerController::class, 'index'])->name('client.follow');
 
@@ -63,6 +63,8 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::get('/dia-chi/xoa/{id}', [AddressController::class, 'delete'])->name('account.address.delete');
     Route::get('/dia-chi/mac-dinh/{id}', [AddressController::class, 'setDefault'])->name('account.address.setDefault');
     Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order');
+    Route::post('/don-mua/cap-nhat/trang-thai', [OrderController::class, 'updateOrderItemStatus'])->name('acccount.order.updateStatus');
+
     Route::get('/voucher', [HomeController::class, 'voucher']);
 });
 Route::middleware(['web'])->group(function () {
@@ -89,8 +91,8 @@ Route::group(['prefix' => 'tai-khoan'], function () {
     Route::post('/xac-thuc/otp', [OTPController::class, 'verifyOTP'])->name('otp.verifyOTP');
     // End Route Account
     // Password 
-    Route::get('/quen-mat-khau',[AccountController::class,'forgotPassword'])->name('account.forgotPassword');
-    Route::post('/checkEmail',[AccountController::class,'checkEmail'])->name('account.checkEmail');
+    Route::get('/quen-mat-khau', [AccountController::class, 'forgotPassword'])->name('account.forgotPassword');
+    Route::post('/checkEmail', [AccountController::class, 'checkEmail'])->name('account.checkEmail');
 });
 
 // Middleware
@@ -132,26 +134,25 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/danh-sach/voucher', [VoucherController::class, 'index'])->name('seller.voucher');
 
-        Route::post('/voucher/them',[VoucherController::class,'create'])->name('seller.voucher.create');
+        Route::post('/voucher/them', [VoucherController::class, 'create'])->name('seller.voucher.create');
 
         Route::get('/voucher/edit/{id}', [VoucherController::class, 'edit'])->name('seller.voucher.edit');
 
-        Route::get('/voucher/xoa/{id}',[VoucherController::class,'destroy'])->name('seller.voucher.destroy');
+        Route::get('/voucher/xoa/{id}', [VoucherController::class, 'destroy'])->name('seller.voucher.destroy');
 
-        Route::post('/voucher/cap-nhat/{id}',[VoucherController::class,'update'])->name('seller.voucher.update');
+        Route::post('/voucher/cap-nhat/{id}', [VoucherController::class, 'update'])->name('seller.voucher.update');
 
-        Route::get('/thong-ke/san-pham-ban-chay',[ProdcutStatisticsController::class, 'index'])->name('seller.productStatistics');
+        Route::get('/thong-ke/san-pham-ban-chay', [ProdcutStatisticsController::class, 'index'])->name('seller.productStatistics');
 
-        Route::get('/san-pham-ban-chay/chi-tiet/{id}',[ProdcutStatisticsController::class,'detail'])->name('seller.productStatistics.detail');
+        Route::get('/san-pham-ban-chay/chi-tiet/{id}', [ProdcutStatisticsController::class, 'detail'])->name('seller.productStatistics.detail');
 
-        Route::get('/danh-muc',[CategoryAndSubcategoryController::class, 'index'])->name('seller.categoryAndSubcategory');
+        Route::get('/danh-muc', [CategoryAndSubcategoryController::class, 'index'])->name('seller.categoryAndSubcategory');
 
-        Route::get('/don-hang',[OrderSellerController::class, 'index'])->name('seller.order');
+        Route::get('/don-hang', [OrderSellerController::class, 'index'])->name('seller.order');
 
         Route::get('/don-hang/chi-tiet/{id}/{status?}', [OrderSellerController::class, 'detail'])->name('seller.order.detail');
-        
-        Route::post('/don-hang/xac-nhan/{id}',[OrderSellerController::class,'confirm'])->name('seller.order.confirm');
-       
+
+        Route::post('/don-hang/xac-nhan/{id}', [OrderSellerController::class, 'confirm'])->name('seller.order.confirm');
     });
     // End Seller Route
     // Cart Route
@@ -165,8 +166,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/checkout/processing', [PaymentController::class, 'checkoutProcessing'])->name('checkout.processing');
 
     // VNpay payment
-    Route::get('/vnpay_payment',[vnPayController::class,'vnpay_payment'])->name('vnpay_payment');
-    Route::get('success',[vnPayController::class,'success'])->name('success');
-
-
+    Route::get('/vnpay_payment', [vnPayController::class, 'vnpay_payment'])->name('vnpay_payment');
+    Route::get('success', [vnPayController::class, 'success'])->name('success');
 });

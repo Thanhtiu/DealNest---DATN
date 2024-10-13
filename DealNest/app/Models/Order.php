@@ -26,7 +26,7 @@ class Order extends Model
     ];
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
     public function user()
     {
@@ -35,5 +35,28 @@ class Order extends Model
     public function order_items()
     {
         return $this->hasMany(OrderItem::class, 'order_id');
+    }
+    public function pendingOrderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id')->where('status', 'pending');
+    }
+
+    public function waitingForDeliveryOrderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id')->where('status', 'waiting_for_delivery');
+    }
+    public function cancelOrderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id')->where('status', 'cancel');
+    }
+
+    public function buyerCancelOrderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id')->where('status', 'buyer_cancel');
+    }
+
+    public function successOrderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id')->where('status', 'success');
     }
 }
