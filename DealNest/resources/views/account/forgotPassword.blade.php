@@ -37,7 +37,7 @@
                 {{ session('email_error') }}
               </div>
               @endif
-              <h4>Quên mật khẩu</h4>
+              <h4>Nhập Email</h4>
               <form class="pt-3" method="POST" action=" {{route('account.checkEmail')}} ">
                 @csrf
                 <div class="form-group">

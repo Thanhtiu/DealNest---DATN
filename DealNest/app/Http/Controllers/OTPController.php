@@ -85,7 +85,7 @@ class OTPController extends Controller
 
                     if(session()->has('forgotPassword')){
 
-                        // code tiep o day nè
+                        return redirect()->route('account.newPassword');
 
                     }else{
 

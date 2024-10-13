@@ -91,6 +91,8 @@ Route::group(['prefix' => 'tai-khoan'], function () {
     // Password 
     Route::get('/quen-mat-khau',[AccountController::class,'forgotPassword'])->name('account.forgotPassword');
     Route::post('/checkEmail',[AccountController::class,'checkEmail'])->name('account.checkEmail');
+    Route::get('/newPassword',[AccountController::class,'newPassword'])->name('account.newPassword');
+    Route::post('/newPasswordProcessing',[AccountController::class,'newPasswordProcessing'])->name('account.newPasswordProcessing');
 });
 
 // Middleware
@@ -147,6 +149,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/danh-muc',[CategoryAndSubcategoryController::class, 'index'])->name('seller.categoryAndSubcategory');
 
         Route::get('/don-hang',[OrderSellerController::class, 'index'])->name('seller.order');
+
+        Route::get('/doi-mat-khau',[AccountController::class,'changePassword'])->name('account.changePassword');
+        Route::post('/doi-mat-khau-xu-ly',[AccountController::class,'changePasswordProcessing'])->name('account.changePasswordProcessing');
         
        
     });

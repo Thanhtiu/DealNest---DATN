@@ -38,7 +38,7 @@
               </div>
               @endif
               <h4>Đổi mật khẩu</h4>
-              <form class="pt-3" method="POST" action=" {{route('account.profile.passwordProcessing')}} ">
+              <form class="pt-3" method="POST" action=" {{route('account.changePasswordProcessing')}} ">
                 @csrf
                 <div class="form-group">
                   <input type="password" name="old_password" class="form-control form-control-lg"
