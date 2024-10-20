@@ -17,7 +17,8 @@ class OrderItem extends Model
         'quantity',
         'price',
         'seller_id', // Thêm seller_id vào đây
-        'attribute','delivery_date'
+        'attribute',
+        'delivery_date'
     ];
 
     public function order()
@@ -28,5 +29,10 @@ class OrderItem extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function user()
+    {
+        return $this->hasOneThrough(User::class, Order::class, 'id', 'id', 'order_id', 'user_id');
     }
 }

@@ -13,6 +13,7 @@
         margin-bottom: 20px;
         position: relative;
         border-top: 5px solid #0288d1;
+        margin-right: 20px;
     }
 
     .revenue-card h3 {
@@ -27,8 +28,13 @@
         color: #0288d1;
     }
 
+    .revenue-card .amount span {
+        font-size: 18px;
+        color: #666;
+    }
+
     .revenue-card .amount::after {
-        content: ' lượt bán';
+
         font-size: 16px;
         font-weight: normal;
         color: #666;
@@ -41,25 +47,77 @@
 
 
     .chart-container {
-        width: 100%;
-        margin: 0;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .chart-item {
+        width: 48%;
+        /* Mỗi biểu đồ chiếm 48% để có khoảng trống giữa chúng */
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-item h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        color: #0288d1;
+    }
+
+    canvas {
+        max-height: 400px;
+    }
+
+    .list {
+        display: flex;
+    }
+
+    .page-title {
+        text-align: left;
+        font-size: 24px;
+        margin-bottom: 20px;
     }
 </style>
-
-<!-- Thẻ hiển thị tổng doanh thu -->
-<div class="revenue-card">
-    <h3>Tổng số lượt bán sản phẩm bán chạy</h3>
-    <div class="amount">{{$countSales}}</div>
-
-    <!-- SVG đường cong -->
-    <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
-        <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
-    </svg>
+<div class="page-title">
+    <h1>Thống Kê Sản Phẩm</h1>
 </div>
+<!-- Thẻ hiển thị tổng doanh thu -->
+<div class="list">
+    <div class="revenue-card">
+        <h3>Tổng số lượt bán sản phẩm bán chạy</h3>
+        <div class="amount">{{$countSales}} <span>lượt bán</span></div>
 
-<!-- Biểu đồ sản phẩm bán chạy -->
+        <!-- SVG đường cong -->
+        <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
+            <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
+        </svg>
+    </div>
+    <div class="revenue-card">
+        <h3>Tồn kho</h3>
+        <div class="amount">{{$inventory<0 ? '0' : $inventory}}</div>
+
+        <!-- SVG đường cong -->
+        <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
+            <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
+        </svg>
+    </div>
+</div>
+<!-- Container chứa hai biểu đồ đường -->
 <div class="chart-container">
-    <canvas id="bestSellingChart"></canvas>
+    <div class="chart-item">
+        <h3>Biểu đồ sản phẩm bán chạy</h3>
+        <canvas id="bestSellingLineChart"></canvas>
+    </div>
+
+    <div class="chart-item">
+        <h3>Thống kê lượt bán trong tháng</h3>
+        <canvas id="topSellingProductsChart"></canvas>
+    </div>
 </div>
 
 <div class="row mt-5">
@@ -103,16 +161,18 @@
     </div>
 </div>
 <script>
-    var ctx = document.getElementById('bestSellingChart').getContext('2d');
+    var ctx = document.getElementById('bestSellingLineChart').getContext('2d');
 
     // Lấy dữ liệu từ server (dữ liệu được truyền từ controller)
-    var productNames = @json($bestSeller -> pluck('name'));
+    var productNames = @json($bestSeller -> pluck('name')).map(function(name) {
+        return name.length > 10 ? name.substring(0, 10) + '...' : name; // Cắt tên sản phẩm còn 10 ký tự
+    });
     var productSales = @json($bestSeller -> pluck('sales'));
 
     var bestSellingChart = new Chart(ctx, {
         type: 'bar', // Loại biểu đồ cột
         data: {
-            labels: productNames, // Tên các sản phẩm
+            labels: productNames, // Tên các sản phẩm (đã cắt ngắn)
             datasets: [{
                     label: 'Số lượng bán',
                     data: productSales, // Số lượng bán của các sản phẩm tương ứng
@@ -151,6 +211,98 @@
                     tension: 0.4 // Tạo đường cong cho biểu đồ đường
                 }
             ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+
+    var topSellingProductsCtx = document.getElementById('topSellingProductsChart').getContext('2d');
+    var topSellingProductsData = @json($topProductsData);
+    var productLabels = [];
+    var productQuantities = [];
+
+    // Lặp qua từng tháng và thêm tên sản phẩm cắt ngắn vào mảng
+    Object.keys(topSellingProductsData).forEach(function(month) {
+        topSellingProductsData[month].forEach(function(product) {
+            // Cắt tên sản phẩm chỉ còn 10 ký tự
+            var shortenedName = product.product_name.length > 10 ? product.product_name.substring(0, 10) + '...' : product.product_name;
+            productLabels.push(shortenedName + ' (Tháng ' + month + ')');
+            productQuantities.push(product.total_quantity);
+        });
+    });
+
+    var ctx = document.getElementById('topSellingProductsChart').getContext('2d');
+
+    // Dữ liệu từ backend
+    var topProductsData = @json($topProductsData);
+
+    var productLabels = [];
+    var productQuantities = [];
+
+    // Lặp qua dữ liệu từng tháng để tạo nhãn sản phẩm và số lượng
+    Object.keys(topProductsData).forEach(function(month) {
+        topProductsData[month].forEach(function(product) {
+            // Cắt tên sản phẩm chỉ còn 10 ký tự nếu dài quá
+            var shortenedName = product.product_name.length > 10 ? product.product_name.substring(0, 10) + '...' : product.product_name;
+            productLabels.push(shortenedName + ' (Tháng ' + month + ')');
+            productQuantities.push(product.total_quantity);
+        });
+    });
+
+    var ctx = document.getElementById('topSellingProductsChart').getContext('2d');
+
+    // Dữ liệu từ backend
+    var topProductsData = @json($topProductsData);
+
+    var productLabels = [];
+    var productQuantities = [];
+
+    // Lặp qua dữ liệu từng tháng để tạo nhãn sản phẩm và số lượng
+    Object.keys(topProductsData).forEach(function(month) {
+        topProductsData[month].forEach(function(product) {
+            // Cắt tên sản phẩm chỉ còn 10 ký tự nếu dài quá
+            var shortenedName = product.product_name.length > 10 ? product.product_name.substring(0, 10) + '...' : product.product_name;
+            productLabels.push(shortenedName + ' (Tháng ' + month + ')');
+            productQuantities.push(product.total_quantity);
+        });
+    });
+
+    // Tạo biểu đồ cột và đường cho dữ liệu động
+    var topSellingProductsCtx = document.getElementById('topSellingProductsChart').getContext('2d');
+    var topSellingProductsData = @json($topProductsData);
+    var productLabels = [];
+    var productQuantities = [];
+
+    // Lặp qua từng tháng và thêm tên sản phẩm cắt ngắn vào mảng
+    Object.keys(topSellingProductsData).forEach(function(month) {
+        topSellingProductsData[month].forEach(function(product) {
+            // Cắt tên sản phẩm chỉ còn 10 ký tự
+            var shortenedName = product.product_name.length > 10 ? product.product_name.substring(0, 10) + '...' : product.product_name;
+            productLabels.push(shortenedName + ' (Tháng ' + month + ')');
+            productQuantities.push(product.total_quantity);
+        });
+    });
+
+    var topSellingProductsChart = new Chart(topSellingProductsCtx, {
+        type: 'line', // Hoặc 'bar' nếu muốn biểu đồ cột
+        data: {
+            labels: productLabels,
+            datasets: [{
+                label: 'Số lượng bán',
+                data: productQuantities,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                fill: false,
+                tension: 0.1
+            }]
         },
         options: {
             scales: {

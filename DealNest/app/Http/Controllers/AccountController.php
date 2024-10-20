@@ -245,7 +245,7 @@ class AccountController extends Controller
     }
 
     public function changePassword(){
-        return view('account.changePassword');
+        return view('client.password');
     }
 
     public function changePasswordProcessing(Request $request){

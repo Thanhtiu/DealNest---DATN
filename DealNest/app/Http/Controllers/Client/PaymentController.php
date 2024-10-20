@@ -146,6 +146,7 @@ class PaymentController extends Controller
                             'price' => $product['total_price'],
                             'seller_id' => $productModel->seller_id,
                             'attribute' => $attributesString,
+                            'status' => 'pending',
                         ]);
                     }
                 }

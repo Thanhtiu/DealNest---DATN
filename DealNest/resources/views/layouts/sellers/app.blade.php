@@ -314,51 +314,37 @@
             <!-- partial:partials/_sidebar.html -->
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
+                    <!-- Thông tin người dùng -->
                     <li class="nav-item nav-profile">
                         <a href="#" class="nav-link">
                             <div class="nav-profile-image">
                                 <img src="{{asset('sellers/assets/images/faces/face1.jpg')}}" alt="profile" />
                                 <span class="login-status online"></span>
-                                <!--change to offline or busy as needed-->
+                                <!-- change to offline or busy as needed -->
                             </div>
                             <div class="nav-profile-text d-flex flex-column">
-                                <span class="font-weight-bold mb-2"> {{Auth::user()->name}} </span>
+                                <span class="font-weight-bold mb-2">{{ Auth::user()->name }}</span>
                                 <span class="text-secondary text-small">Project Manager</span>
                             </div>
                             <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
                         </a>
                     </li>
+
+                    <!-- Quản lý bán hàng -->
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
-                            <span class="menu-title">Thống kê</span>
-                            <i class="bi-house-fill menu-icon"></i>
+                        <a class="nav-link" href="{{route('seller.index')}}">
+                            <span class="menu-title">Phân tích bán hàng</span>
+                            <i class="bi-graph-up-arrow menu-icon"></i> <!-- Biểu đồ bán hàng -->
                         </a>
                     </li>
+
+                    <!-- Quản lý sản phẩm -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('seller.order')}}" aria-controls="forms">
-                            <span class="menu-title">Quản lý đơn hàng</span>
-                            <i class="bi-list-task menu-icon"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                            <span class="menu-title">Quản lý người dùng</span>
-                            <i class="bi-people-fill menu-icon"></i>
-                        </a>
-                        <div class="collapse" id="ui-basic">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="pages/ui-features/buttons.html">Xem thông tin tài khoản</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="forms">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#product-management" aria-expanded="false" aria-controls="product-management">
                             <span class="menu-title">Quản lý sản phẩm</span>
-                            <i class="bi-box-seam menu-icon"></i>
+                            <i class="bi-box-seam menu-icon"></i> <!-- Icon quản lý sản phẩm -->
                         </a>
-                        <div class="collapse" id="forms">
+                        <div class="collapse" id="product-management">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{route('seller.product.list')}}">Danh sách sản phẩm</a>
@@ -372,31 +358,74 @@
                             </ul>
                         </div>
                     </li>
+
+                    <!-- Thống kê sản phẩm -->
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-                            <span class="menu-title">Quản lý đánh giá</span>
-                            <i class="bi-bar-chart-fill menu-icon"></i>
+                        <a class="nav-link" href="{{route('seller.productStatistics')}}">
+                            <span class="menu-title">Thống kê sản phẩm</span>
+                            <i class="bi-bar-chart-line-fill menu-icon"></i> <!-- Icon biểu đồ thống kê -->
                         </a>
-                        <div class="collapse" id="charts">
+                    </li>
+
+                    <!-- Quản lý danh mục -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('seller.categoryAndSubcategory')}}">
+                            <span class="menu-title">Danh mục</span>
+                            <i class="bi-tags-fill menu-icon"></i> <!-- Icon quản lý danh mục -->
+                        </a>
+                    </li>
+
+                    <!-- Quản lý đơn hàng -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('seller.order')}}" aria-controls="forms">
+                            <span class="menu-title">Quản lý đơn hàng</span>
+                            <i class="bi-list-task menu-icon"></i> <!-- Icon quản lý đơn hàng -->
+                        </a>
+                    </li>
+
+                    <!-- Quản lý người dùng -->
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#user-management" aria-expanded="false" aria-controls="user-management">
+                            <span class="menu-title">Quản lý người dùng</span>
+                            <i class="bi-people-fill menu-icon"></i> <!-- Icon quản lý người dùng -->
+                        </a>
+                        <div class="collapse" id="user-management">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh giá sản phẩm</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="pages/charts/chartjs.html">Đánh giá cửa hàng</a>
+                                    <a class="nav-link" href="#">Xem thông tin tài khoản</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
+
+                    <!-- Quản lý đánh giá -->
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#rating-management" aria-expanded="false" aria-controls="rating-management">
+                            <span class="menu-title">Quản lý đánh giá</span>
+                            <i class="bi-star-fill menu-icon"></i> <!-- Icon quản lý đánh giá -->
+                        </a>
+                        <div class="collapse" id="rating-management">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Đánh giá sản phẩm</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Đánh giá cửa hàng</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Thông tin cửa hàng -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('seller.info')}}">
                             <span class="menu-title">Thông tin cửa hàng</span>
-                            <i class="bi-info-circle-fill menu-icon"></i>
+                            <i class="bi-info-circle-fill menu-icon"></i> <!-- Icon thông tin cửa hàng -->
                         </a>
                     </li>
-
                 </ul>
             </nav>
+
 
             <!-- partial -->
             <div class="main-panel">

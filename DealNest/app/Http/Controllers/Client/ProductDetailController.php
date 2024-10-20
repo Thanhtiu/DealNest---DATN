@@ -24,14 +24,10 @@ class ProductDetailController extends Controller
     {
 
         $productDetail = Product::with(['subcategory', 'product_image', 'attribute_values.attribute'])->find($id);
-
-
         $product = Product::with('seller')->find($id);
         $seller = $product->seller;
 
-
         $countProduct = Product::where('seller_id', $seller->id)->count();
-
         // Tính số ngày seller đã tham gia
         $currentDate = Carbon::now();
         $startDate = Carbon::parse($seller->created_at);
@@ -54,18 +50,20 @@ class ProductDetailController extends Controller
             ->where('product_id', $id)
             ->exists();
 
+            $productRelated = Product::with(['subcategory', 'product_image', 'attribute_values.attribute'])
+            ->where('subcategory_id', $productDetail->subcategory->id)
+            ->where('id', '!=', $productDetail->id) 
+            ->orderBy('sales', 'desc') 
+            ->get();
+
         return view('client.product-detail', compact(
             'productDetail',
             'seller',
             'countProduct',
             'dateJoin',
             'string_address',
-            'isFavourited'
+            'isFavourited',
+            'productRelated',
         ));
     }
-
-
-   
-
-    
 }

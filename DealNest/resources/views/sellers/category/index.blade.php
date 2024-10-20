@@ -31,11 +31,20 @@
     .card-body {
         position: relative;
     }
-    .tab-index{
+
+    .tab-index {
         margin-bottom: 30px;
     }
-</style>
 
+    .page-title {
+        text-align: left;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+</style>
+<div class="page-title">
+    <h1>Danh mục sản phẩm cửa hàng</h1>
+</div>
 <div class="tab-index" role="tab_list">
     <a href="#" class="tab-item active" data-tab="categories">Danh mục ({{$countCategories}})</a>
     <a href="#" class="tab-item" data-tab="subcategories">Thể loại ({{$countSubCategories}})</a>
@@ -51,77 +60,81 @@
 <!-- Tab Categories -->
 <div class="tab-content active" id="tab-categories">
     @if($countCategories <= 0)
-    <div class="text-center">
+        <div class="text-center">
         <img class="no-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
         <p class="text-center mt-3">Chưa có danh mục nào</p>
-    </div>
-    @else
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <table id="productTableAll" class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Tên danh mục</th>
-                                <th>Hình ảnh</th>
-                                <th>Slug</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($categories as $item)
-                            <tr>
-                                <td>{{$item->name}}</td>
-                                <td></td>
-                                <td>{{$item->slug}}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+</div>
+@else
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <table id="productTableAll" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tên danh mục</th>
+                            <th>Hình ảnh</th>
+                            <th>Slug</th>
+                            <th></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($categories as $item)
+                        <tr>
+                            <td>{{$item->name}}</td>
+                            <td></td>
+                            <td>{{$item->slug}}</td>
+                            <td><a href="" class="btn btn-outline-info btn-icon-text"> <i class="bi bi-eye"></i> Xem chi tiết
+                                </a></td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    @endif
+</div>
+@endif
 </div>
 
 <!-- Tab Subcategories -->
 <div class="tab-content" id="tab-subcategories">
     @if($countSubCategories <= 0)
-    <div class="text-center">
+        <div class="text-center">
         <img class="no-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
         <p class="text-center mt-3">Chưa có sản phẩm nào hoạt động</p>
-    </div>
-    @else
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Tổng sản phẩm</h4>
-                    <table class="table" id="productTableActive">
-                        <thead>
-                            <tr>
-                                <th>Tên sản phẩm</th>
-                                <th>Thể loại</th>
-                                <th>Hình ảnh</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($subCategories as $item)
-                            <tr>
-                                <td>{{$item->name}}</td>
-                                <td>{{$item->category->name}}</td>
-                                <td></td>  
-                                
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+</div>
+@else
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Tổng sản phẩm</h4>
+                <table class="table" id="productTableActive">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Thể loại</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($subCategories as $item)
+                        <tr>
+                            <td>{{$item->name}}</td>
+                            <td>{{$item->category->name}}</td>
+                            <td><a href="" class="btn btn-outline-info btn-icon-text"> <i class="bi bi-eye"></i> Xem chi tiết
+                            </a></td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    @endif
+</div>
+@endif
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {

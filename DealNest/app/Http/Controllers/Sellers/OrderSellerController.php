@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Order;
 use App\Models\OrderItem;
-
+use Carbon\Carbon;
+use Google\Protobuf\Internal\Message;
+use Illuminate\Support\Facades\Validator;
 
 class OrderSellerController extends Controller
 {
@@ -140,39 +142,65 @@ class OrderSellerController extends Controller
             foreach ($items as $itemData) {
                 $orderItem = OrderItem::find($itemData['id']);
                 if ($orderItem) {
-                    // Xác định trạng thái và lý do hủy
-                    $status = $itemData['status'];
-                    $cancellationReason = null;
+                    // Thực hiện validate trước khi xử lý logic cập nhật trạng thái
 
-                    // Sử dụng switch để kiểm tra các lý do và cập nhật trạng thái
-                    switch ($status) {
+                    // Sau khi validate thành công, xử lý cập nhật trạng thái
+                    switch ($itemData['status']) {
+                        case 'waiting_for_delivery':
+                            if ($itemData['status'] === 'waiting_for_delivery') {
+                                // Tạo validator cho từng item cụ thể
+                                $validator = Validator::make([
+                                    'delivery_date' => $request->input("items.{$itemData['id']}.delivery_date")
+                                ], [
+                                    'delivery_date' => 'required|date|after_or_equal:today'
+                                ], [
+                                    'delivery_date.required' => 'Vui lòng chọn ngày giao nhận.',
+                                    'delivery_date.after_or_equal' => 'Ngày giao nhận phải từ hôm nay trở đi.'
+                                ]);
+
+                                // Kiểm tra nếu có lỗi
+                                if ($validator->fails()) {
+                                    return redirect()->route('seller.order.detail', ['id' => $id, 'status' => 'pending'])
+                                        ->withErrors($validator)
+                                        ->withInput();
+                                }
+
+                                // Cập nhật trạng thái và ngày giao nhận nếu đã được duyệt
+                                $orderItem->status = 'waiting_for_delivery';
+
+                                // Cập nhật ngày giao nhận nếu có trong request
+                                if ($request->has("items.{$itemData['id']}.delivery_date")) {
+                                    $deliveryDate = $request->input("items.{$itemData['id']}.delivery_date");
+                                    $orderItem->delivery_date = Carbon::parse($deliveryDate);
+                                }
+                            }
+                            break;
+
                         case 'out_of_stock':
                             $orderItem->status = 'cancel';
-                            $cancellationReason = 'Hết hàng';
+                            $orderItem->cancellation_reason = 'Hết hàng';
                             break;
+
                         case 'invalid_info':
                             $orderItem->status = 'cancel';
-                            $cancellationReason = 'Thông tin không hợp lệ';
+                            $orderItem->cancellation_reason = 'Thông tin không hợp lệ';
                             break;
+
                         case 'unknown_reason':
                             $orderItem->status = 'cancel';
-                            $cancellationReason = 'Không rõ lý do liên hệ shop';
+                            $orderItem->cancellation_reason = 'Không rõ lý do liên hệ shop';
                             break;
+
                         default:
-                            $orderItem->status = $status;
+                            $orderItem->status = $itemData['status'];
                             break;
                     }
 
-                    // Nếu có lý do hủy, cập nhật cột cancellation_reason
-                    if ($cancellationReason !== null) {
-                        $orderItem->cancellation_reason = $cancellationReason;
-                    }
-
+                    // Lưu thay đổi vào cơ sở dữ liệu
                     $orderItem->save();
                 }
             }
         }
-
         // Đếm số lượng sản phẩm dựa trên trạng thái
         $totalItems = OrderItem::where('order_id', $id)
             ->where('seller_id', $sellerId)
@@ -198,7 +226,7 @@ class OrderSellerController extends Controller
 
         if ($approvedItems === $totalItems) {
             // Tất cả sản phẩm đều được duyệt
-            $order->status = 'waiting_for_delivery';
+            $order->delivery_date = Carbon::now(); // Thêm thời gian hiện tại vào cột delivery_date
         } elseif ($cancelledItems === $totalItems) {
             // Tất cả sản phẩm đều bị từ chối
             $order->status = 'cancelled';

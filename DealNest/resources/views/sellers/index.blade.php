@@ -1,331 +1,534 @@
-@extends('layouts/sellers.app')
+@extends('layouts.sellers.app')
 @section('content')
-<div class="page-header">
-  <h3 class="page-title">
-    <span class="page-title-icon bg-gradient-primary text-white me-2">
-      <i class="mdi mdi-home"></i>
-    </span> Dashboard
-  </h3>
-  <nav aria-label="breadcrumb">
-    <ul class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">
-        <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
-      </li>
-    </ul>
-  </nav>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  .revenue-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    /* Khoảng cách giữa các thẻ */
+    width: 100%;
+  }
+
+  .revenue-card {
+    flex: 1 1 calc(20% - 20px);
+    /* Mỗi thẻ sẽ chiếm 20% chiều rộng trừ đi khoảng cách */
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+    position: relative;
+    border-top: 5px solid #0288d1;
+    box-sizing: border-box;
+  }
+
+  /* Màu cho các trạng thái */
+  .revenue-card.pending-confirmation h3,
+  .revenue-card.pending-confirmation .amount {
+    color: #ff9800;
+    /* Màu cam cho "Chờ xác nhận" */
+  }
+
+  .revenue-card.pending-pickup h3,
+  .revenue-card.pending-pickup .amount {
+    color: #03a9f4;
+    /* Màu xanh pending cho "Chờ lấy hàng" */
+  }
+
+  .revenue-card.cancelled h3,
+  .revenue-card.cancelled .amount {
+    color: #f44336;
+    /* Màu đỏ cho "Đơn hủy" */
+  }
+
+  .revenue-card.completed h3,
+  .revenue-card.completed .amount {
+    color: #4caf50;
+    /* Màu xanh success cho "Hoàn thành" */
+  }
+
+  /* Đổi màu đường cong SVG theo trạng thái */
+  .revenue-card.pending-confirmation .curve path {
+    fill: #ffe0b2;
+    /* Màu nhạt cho "Chờ xác nhận" */
+  }
+
+  .revenue-card.pending-pickup .curve path {
+    fill: #b3e5fc;
+    /* Màu nhạt cho "Chờ lấy hàng" */
+  }
+
+  .revenue-card.cancelled .curve path {
+    fill: #ffcdd2;
+    /* Màu nhạt cho "Đơn hủy" */
+  }
+
+  .revenue-card.completed .curve path {
+    fill: #c8e6c9;
+    /* Màu nhạt cho "Hoàn thành" */
+  }
+
+  .revenue-card h3 {
+    font-size: 14px;
+    color: #ff5722;
+    /* Màu tiêu đề trong card - đổi thành màu cam */
+    margin-bottom: 5px;
+  }
+
+  .revenue-card .amount {
+    font-size: 28px;
+    font-weight: bold;
+    color: #37474f;
+    /* Màu chữ cho số liệu - đổi thành màu xám đậm */
+  }
+
+  .revenue-card .amount::after {
+    content: ' đơn';
+    font-size: 16px;
+    font-weight: normal;
+    color: #607d8b;
+    /* Màu chữ nhỏ hơn - đổi thành màu xám nhạt */
+  }
+
+  #statusChart,
+  #followerChart {
+    max-height: 350px;
+  }
+
+  .chart-container {
+    width: 100%;
+    margin: 0;
+  }
+
+  .chart-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .chart-item {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    /* Màu tiêu đề chính */
+    margin-bottom: 30px;
+  }
+
+  /* Đổi màu chữ cho tiêu đề biểu đồ */
+  .chart-item h3 {
+    font-size: 16px;
+    color: #009688;
+    /* Màu chữ tiêu đề của biểu đồ - đổi thành màu xanh ngọc */
+  }
+
+
+
+      .tabs {
+    display: flex;
+    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: 20px;
+    justify-content: space-around;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #0d6efd;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.tab-item.active {
+    color: #0d6efd;
+    border-bottom: 3px solid #0d6efd;
+    
+}
+
+.tab-item::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.tab-item:hover::after {
+    width: 100%;
+    text-align: none;
+}
+
+.tab-item:hover {
+    opacity: 0.5;
+    text-decoration: none;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    background-color: #fff;
+    border-radius: 0 0 8px 8px;
+    padding: 20px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.btn-container a {
+    padding: 12px 24px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-container a:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+th, td {
+    text-align: left;
+    padding: 15px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+}
+
+th {
+    background-color: #f9f9f9;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+td {
+    vertical-align: middle;
+}
+
+td img {
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+.badge {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.badge-warning {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+.badge-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-icon-text {
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    color: #333;
+    background-color: white;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.btn-icon-text i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.btn-icon-text:hover {
+    background-color: #f0f0f0;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+</style>
+
+<!-- Tiêu đề chính của trang -->
+<div class="page-title">
+  Thống Kê Doanh Thu & Người Theo Dõi
 </div>
-<div class="row">
-  <div class="col-md-4 stretch-card grid-margin">
-    <div class="card bg-gradient-danger card-img-holder text-white">
-      <div class="card-body">
-        <img src="{{asset('sellers/assets/images/dashboard/circle.svg')}}" class="card-img-absolute"
-          alt="circle-image" />
-        <h4 class="font-weight-normal mb-3">Weekly Sales <i class="mdi mdi-chart-line mdi-24px float-end"></i>
-        </h4>
-        <h2 class="mb-5">$ 15,0000</h2>
-        <h6 class="card-text">Increased by 60%</h6>
-      </div>
-    </div>
+
+<!-- Thẻ hiển thị tổng số đơn hàng chờ xử lý -->
+<!-- Thẻ hiển thị tổng số đơn hàng chờ xử lý -->
+<div class="revenue-list">
+  <div class="revenue-card pending-confirmation">
+    <h3>Chờ xác nhận</h3>
+    <div class="amount">{{ $pending < 0 ? '0' : $pending }}</div>
+    <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
+      <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
+    </svg>
   </div>
-  <div class="col-md-4 stretch-card grid-margin">
-    <div class="card bg-gradient-info card-img-holder text-white">
-      <div class="card-body">
-        <img src="{{asset('sellers/assets/images/dashboard/circle.svg')}}" class="card-img-absolute"
-          alt="circle-image" />
-        <h4 class="font-weight-normal mb-3">Weekly Orders <i class="mdi mdi-bookmark-outline mdi-24px float-end"></i>
-        </h4>
-        <h2 class="mb-5">45,6334</h2>
-        <h6 class="card-text">Decreased by 10%</h6>
-      </div>
-    </div>
+
+  <div class="revenue-card pending-pickup">
+    <h3>Chờ lấy hàng</h3>
+    <div class="amount">{{$waitingForDelivery < 0 ? '0' : $waitingForDelivery}}</div>
+    <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
+      <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
+    </svg>
   </div>
-  <div class="col-md-4 stretch-card grid-margin">
-    <div class="card bg-gradient-success card-img-holder text-white">
-      <div class="card-body">
-        <img src="{{asset('sellers/assets/images/dashboard/circle.svg')}}" class="card-img-absolute"
-          alt="circle-image" />
-        <h4 class="font-weight-normal mb-3">Visitors Online <i class="mdi mdi-diamond mdi-24px float-end"></i>
-        </h4>
-        <h2 class="mb-5">95,5741</h2>
-        <h6 class="card-text">Increased by 5%</h6>
-      </div>
-    </div>
+
+  <div class="revenue-card cancelled">
+    <h3>Đơn hủy</h3>
+    <div class="amount">{{$buyerCancel < 0 ? '0' : $buyerCancel}}</div>
+    <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
+      <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
+    </svg>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <div class="clearfix">
-          <h4 class="card-title float-start">Visit And Sales Statistics</h4>
-          <div id="visit-sale-chart-legend" class="rounded-legend legend-horizontal legend-top-right float-end"></div>
-        </div>
-        <canvas id="visit-sale-chart" class="mt-4"></canvas>
-      </div>
-    </div>
+
+  <div class="revenue-card completed">
+    <h3>Hoàn thành</h3>
+    <div class="amount">{{$success < 0 ? '0' : $success}}</div>
+    <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
+      <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
+    </svg>
+  </div>
+
+  <!-- Thẻ thứ 5 rơi xuống hàng dưới -->
+  <div class="revenue-card rejected">
+    <h3>Sản phẩm từ chối</h3>
+    <div class="amount">{{$cancel < 0 ? '0' : $cancel}}</div>
+    <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
+      <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
+    </svg>
   </div>
 
 </div>
-<div class="row">
-  <div class="col-12 grid-margin">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Recent Tickets</h4>
-        <div class="table-responsive">
-          <table class="table">
+
+
+<!-- Biểu đồ thống kê doanh thu và người theo dõi -->
+<div class="chart-row">
+  <div class="chart-item">
+    <h3 style="text-align: center;">Thống kê doanh thu</h3>
+    <canvas id="revenueChart"></canvas>
+  </div>
+
+  <div class="chart-item">
+    <h3 style="text-align: center;">Thống kê người dùng</h3>
+    <canvas id="user"></canvas>
+  </div>
+</div>
+
+@if($topUsers->count() <= 0)
+  <img src="{{ asset('sellers/assets/images/no-product-found.png') }}">
+@else
+  <div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Top người mua hàng nhiều nhất</h4>
+          <table class="table" id="userTableAll">
             <thead>
               <tr>
-                <th> Assignee </th>
-                <th> Subject </th>
-                <th> Status </th>
-                <th> Last Update </th>
-                <th> Tracking ID </th>
+                <th>Hình ảnh</th>
+                <th>Tên người dùng</th>
+                <th>Email</th>
+                <th>Số lượng hàng đã mua</th>
               </tr>
             </thead>
             <tbody>
+              @foreach($topUsers as $user)
               <tr>
                 <td>
-                  <img src="{{asset('sellers/assets/images/faces/face1.jpg')}}" class="me-2" alt="image"> wefwfwefwe
+                <img src="{{ asset('uploads/' . ($user['user']->image === 'default_avt.png' ? 'default_avt.png' :$user['user']->image )) }}" alt="User Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                 </td>
-                <td> Fund is not recieved </td>
-                <td>
-                  <label class="badge badge-gradient-success">DONE</label>
-                </td>
-                <td> Dec 5, 2017 </td>
-                <td> WD-12345 </td>
+                <td>{{ \Illuminate\Support\Str::limit($user['user']->full_name, 25, '...') }}</td>
+                <td>{{ \Illuminate\Support\Str::limit($user['user']->email, 25, '...') }}</td>
+                <td>{{ $user['total_items'] }}</td>
               </tr>
-              <tr>
-                <td>
-                  <img src="{{asset('sellers/assets/images/faces/face2.jpg')}}" class="me-2" alt="image"> Stella Johnson
-                </td>
-                <td> High loading time </td>
-                <td>
-                  <label class="badge badge-gradient-warning">PROGRESS</label>
-                </td>
-                <td> Dec 12, 2017 </td>
-                <td> WD-12346 </td>
-              </tr>
-              <tr>
-                <td>
-                  <img src="{{asset('sellers/assets/images/faces/face3.jpg')}}" class="me-2" alt="image"> Marina Michel
-                </td>
-                <td> Website down for one week </td>
-                <td>
-                  <label class="badge badge-gradient-info">ON HOLD</label>
-                </td>
-                <td> Dec 16, 2017 </td>
-                <td> WD-12347 </td>
-              </tr>
-              <tr>
-                <td>
-                  <img src="{{asset('sellers/assets/images/faces/face4.jpg')}}" class="me-2" alt="image"> John Doe
-                </td>
-                <td> Loosing control on server </td>
-                <td>
-                  <label class="badge badge-gradient-danger">REJECTED</label>
-                </td>
-                <td> Dec 3, 2017 </td>
-                <td> WD-12348 </td>
-              </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
       </div>
     </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-lg-5 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body p-0 d-flex">
-        <div id="inline-datepicker" class="datepicker datepicker-custom"></div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-7 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Recent Updates</h4>
-        <div class="d-flex">
-          <div class="d-flex align-items-center me-4 text-muted font-weight-light">
-            <i class="mdi mdi-account-outline icon-sm me-2"></i>
-            <span>jack Menqu</span>
-          </div>
-          <div class="d-flex align-items-center text-muted font-weight-light">
-            <i class="mdi mdi-clock icon-sm me-2"></i>
-            <span>October 3rd, 2018</span>
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col-6 pe-1">
-            <img src="assets/images/dashboard/img_1.jpg" class="mb-2 mw-100 w-100 rounded" alt="image">
-            <img src="assets/images/dashboard/img_4.jpg" class="mw-100 w-100 rounded" alt="image">
-          </div>
-          <div class="col-6 ps-1">
-            <img src="assets/images/dashboard/img_2.jpg" class="mb-2 mw-100 w-100 rounded" alt="image">
-            <img src="assets/images/dashboard/img_3.jpg" class="mw-100 w-100 rounded" alt="image">
-          </div>
-        </div>
-        <div class="d-flex mt-5 align-items-top">
-          <img src="assets/images/faces/face3.jpg" class="img-sm rounded-circle me-3" alt="image">
-          <div class="mb-0 flex-grow">
-            <h5 class="me-2 mb-2">School Website - Authentication Module.</h5>
-            <p class="mb-0 font-weight-light">It is a long established fact that a reader will be distracted by the
-              readable content of a page.</p>
-          </div>
-          <div class="ms-auto">
-            <i class="mdi mdi-heart-outline text-muted"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-7 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">Project Status</h4>
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th> # </th>
-                <th> Name </th>
-                <th> Due Date </th>
-                <th> Progress </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td> 1 </td>
-                <td> Herman Beck </td>
-                <td> May 15, 2015 </td>
-                <td>
-                  <div class="progress">
-                    <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 25%"
-                      aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td> 2 </td>
-                <td> Messsy Adam </td>
-                <td> Jul 01, 2015 </td>
-                <td>
-                  <div class="progress">
-                    <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 75%"
-                      aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td> 3 </td>
-                <td> John Richards </td>
-                <td> Apr 12, 2015 </td>
-                <td>
-                  <div class="progress">
-                    <div class="progress-bar bg-gradient-warning" role="progressbar" style="width: 90%"
-                      aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td> 4 </td>
-                <td> Peter Meggik </td>
-                <td> May 15, 2015 </td>
-                <td>
-                  <div class="progress">
-                    <div class="progress-bar bg-gradient-primary" role="progressbar" style="width: 50%"
-                      aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td> 5 </td>
-                <td> Edward </td>
-                <td> May 03, 2015 </td>
-                <td>
-                  <div class="progress">
-                    <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 35%"
-                      aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td> 5 </td>
-                <td> Ronald </td>
-                <td> Jun 05, 2015 </td>
-                <td>
-                  <div class="progress">
-                    <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 65%" aria-valuenow="65"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-5 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title text-dark">Todo List</h4>
-        <div class="add-items d-flex">
-          <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
-          <button class="add btn btn-gradient-primary font-weight-bold todo-list-add-btn" id="add-task">Add</button>
-        </div>
-        <div class="list-wrapper">
-          <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-            <li>
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input class="checkbox" type="checkbox"> Meeting with Alisa </label>
-              </div>
-              <i class="remove mdi mdi-close-circle-outline"></i>
-            </li>
-            <li class="completed">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input class="checkbox" type="checkbox" checked> Call John </label>
-              </div>
-              <i class="remove mdi mdi-close-circle-outline"></i>
-            </li>
-            <li>
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input class="checkbox" type="checkbox"> Create invoice </label>
-              </div>
-              <i class="remove mdi mdi-close-circle-outline"></i>
-            </li>
-            <li>
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input class="checkbox" type="checkbox"> Print Statements </label>
-              </div>
-              <i class="remove mdi mdi-close-circle-outline"></i>
-            </li>
-            <li class="completed">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input class="checkbox" type="checkbox" checked> Prepare for presentation </label>
-              </div>
-              <i class="remove mdi mdi-close-circle-outline"></i>
-            </li>
-            <li>
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input class="checkbox" type="checkbox"> Pick up kids from school </label>
-              </div>
-              <i class="remove mdi mdi-close-circle-outline"></i>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+@endif
 
-@endsection
+  <script>
+        $(document).ready(function() {
+            // Khởi tạo DataTable
+            $('#userTableAll').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50],
+                "pageLength": 5,
+                "language": {
+                    "paginate": {
+                        "previous": "<i class='bi bi-arrow-left'></i>",
+                        "next": "<i class='bi bi-arrow-right'></i>"
+                    },
+                    "search": "Tìm kiếm:",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục"
+                },
+                "dom": '<"row"<"col-md-6"l><"col-md-6"f>>' +
+                    '<"row"<"col-sm-12"tr>>' +
+                    '<"row"<"col-md-5"i><"col-md-7"p>>'
+            });
+        });
+    </script>
+
+  <script>
+    // Biểu đồ thống kê doanh thu
+    var revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    var revenueChart = new Chart(revenueCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+        datasets: [{
+          label: 'Doanh thu (triệu VND)',
+          data: @json($revenueData),
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+
+    // Lấy dữ liệu người dùng từ backend
+    var userData = @json($userData); // Dữ liệu từ backend về số lượng người dùng
+
+    var ctxUser = document.getElementById('user').getContext('2d');
+    var monthlyUserLineChart = new Chart(ctxUser, {
+      type: 'line', // Biểu đồ đường
+      data: {
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'], // Tên các tháng
+        datasets: [{
+          label: 'Số lượng người dùng',
+          data: userData, // Dữ liệu người dùng theo tháng
+          borderColor: 'rgba(255, 99, 132, 1)', // Màu đường
+          backgroundColor: 'rgba(255, 99, 132, 0.2)', // Màu nền trong suốt
+          fill: false, // Không tô màu phía dưới đường
+          tension: 0.3, // Độ cong của đường
+          pointBackgroundColor: 'rgba(255, 99, 132, 1)', // Màu của điểm trên đường biểu đồ
+          pointRadius: 4, // Kích thước của điểm
+          borderWidth: 2, // Độ dày của đường
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: true, // Hiển thị chú thích
+            labels: {
+              color: '#000' // Màu chữ của chú thích
+            }
+          },
+          title: {
+            display: true,
+            text: 'Thống kê số lượng người dùng theo tháng', // Tiêu đề biểu đồ
+            color: '#007bff', // Màu của tiêu đề
+            font: {
+              size: 18
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true, // Bắt đầu từ 0
+            ticks: {
+              color: '#000' // Màu của trục y
+            }
+          },
+          x: {
+            ticks: {
+              color: '#000' // Màu của trục x
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+  @endsection

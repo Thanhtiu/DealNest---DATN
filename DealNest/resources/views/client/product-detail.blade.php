@@ -1,5 +1,7 @@
 @extends('layouts/client.app')
 @section('content')
+<link rel="stylesheet" href="{{ asset('client/css/product.css') }}" type="text/css">
+
 <!-- Product Details Section Begin -->
 <style>
   .col-lg-12 {
@@ -373,7 +375,6 @@
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    margin-bottom: 20px;
   }
 
 
@@ -659,9 +660,51 @@
     font-weight: bold;
     font-size: 30px;
   }
-  .shop-logo{
+
+  .shop-logo {
     width: 60px;
-    
+
+  }
+
+  .product-related {
+    margin-top: 50px;
+  }
+
+  .related-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .product-container {
+    margin-top: 20px !important;
+  }
+
+  .product-related-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .text-center a {
+    color: #007bff;
+    /* Màu chủ đạo của link */
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+    /* Hiệu ứng hover */
+  }
+
+  .text-center a:hover {
+    opacity: 0.7;
+    /* Giảm độ opacity khi hover */
+    background-color: #e0e0e0;
+    /* Đổi màu nền nhẹ khi hover */
   }
 </style>
 <section class="product-section">
@@ -927,7 +970,7 @@
 
 
 <!-- Shop Info Section -->
-<section class="shop-info spad">
+<section class="shop-info">
   <div class="container">
     <div class="row">
       <!-- Shop Avatar and Name with Online Status -->
@@ -979,6 +1022,45 @@
     </div>
   </div>
 </section>
+
+
+<section class="product-related">
+  <h2 class="related-title">Sản phẩm liên quan</h2>
+  @if($productRelated->isEmpty())
+  <div class="product-related-empty">
+    <img class="product-related-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
+  </div>
+  <p class="text-center mt-3">Sản phẩm này hiện chưa có sản phẩm liên quan <a href="{{route('client.index')}}">Xem sản phẩm khác</a></p>
+  @else
+  <div class="product-container">
+    @foreach($productRelated as $item)
+    <div class="card">
+      <a href="{{ route('client.productDetail', ['id' => $item->id]) }}">
+        <div class="cardd">
+          <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
+          <div class="discount">-92%</div>
+          <div class="content">
+            <h2 class="title">{{ $item->name }}</h2>
+            <p class="pricee">{{ number_format($item->price, 0, ',', '.') }}<span
+                style="font-size: 12px; text-decoration: underline;">đ</span></p>
+          </div>
+          <div class="sold"><span class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </span>{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
+                    ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
+        </div>
+      </a>
+    </div>
+    @endforeach
+    @endif
+  </div>
+</section>
+
+
 
 
 
@@ -1034,6 +1116,14 @@
     </div>
   </div>
 </section>
+
+
+
+
+
+
+
+
 
 
 

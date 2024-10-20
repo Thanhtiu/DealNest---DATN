@@ -15,8 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone', 255)->nullable();
+            $table->string('image')->nullable();
+            $table->enum('role', ['admin', 'seller', 'buyer', 'staff'])->default('buyer');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('is_active')->default(true);
+            $table->string('google_id', 255)->nullable();
+            $table->integer('otp')->nullable();
+            $table->string('cccd')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

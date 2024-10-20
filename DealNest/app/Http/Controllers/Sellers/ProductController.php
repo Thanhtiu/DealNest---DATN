@@ -52,13 +52,8 @@ class ProductController extends Controller
                 'quantity' => 'required|integer|min:0',
                 'description' => 'nullable|string',
                 'brand_id' => 'required|integer|exists:brands,id',
-                'img' => 'required|array|min:5|max:10', // Validate số lượng ảnh
-                'img.*' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048', // Validate ảnh
-                // 'attributes' => 'required|array', // Validate biến thể chính
-                // 'attributes.*.name' => 'required|string|max:255', // Tên biến thể chính
-                // 'attributes.*.values' => 'required|array', // Các biến thể con
-                // 'attributes.*.values.*.value' => 'required|string|max:255', // Tên biến thể con
-                // 'attributes.*.values.*.price' => 'nullable|numeric|min:0', // Giá của từng biến thể con
+                'img' => 'required|array|min:5|max:10',
+                'img.*' => 'required|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
             ]);
 
             // Xử lý ảnh chính của sản phẩm
@@ -85,31 +80,7 @@ class ProductController extends Controller
                 'favourite' => 0,
             ]);
 
-            // Lấy dữ liệu attributes từ request
-            $attributes = $request->input('attributes');
-            if ($attributes) {
-                foreach ($attributes as $attributeId => $attributeData) {
-                    // Tìm thuộc tính chính (attribute) dựa trên ID có sẵn
-                    $attribute = Attribute::find($attributeId);
-
-                    // Kiểm tra nếu thuộc tính tồn tại
-                    if ($attribute) {
-                        // Duyệt qua các giá trị của thuộc tính (bao gồm value và price)
-                        foreach ($attributeData['values'] as $valueData) {
-                            if (isset($valueData['value'])) {
-                                // Tạo hoặc cập nhật giá trị của thuộc tính
-                                $attributeValue = attribute_value::create([
-                                    'attribute_id' => $attribute->id,
-                                    'value' => $valueData['value'],
-                                    'product_id' => $product->id,
-                                    'price' => $valueData['price'] ?? null, // Lưu price trực tiếp vào bảng attribute_value
-                                ]);
-                            }
-                        }
-                    }
-                }
-            }
-
+           
 
 
 

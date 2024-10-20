@@ -180,6 +180,34 @@
   .attribute-block {
     margin-bottom: 20px;
   }
+
+  .attribute-block {
+    margin-bottom: 20px;
+  }
+
+  .form-control {
+    margin-bottom: 10px;
+  }
+
+  .price-input {
+    display: none;
+  }
+
+  .attribute-form .price-input {
+    display: block;
+  }
+
+  .btn-danger {
+    margin-left: 10px;
+  }
+
+  .attribute-form {
+    margin-bottom: 15px;
+  }
+
+  .remove-button[disabled] {
+    display: none;
+  }
 </style>
 <div class="page-header">
   <h3 class="page-title"> Form elements </h3>
@@ -321,37 +349,59 @@
                   <h2>Chọn Thuộc Tính Sản Phẩm</h2>
 
                   <!-- Thuộc tính chính: Kích thước -->
-                  @foreach($attribute as $item)
                   <div class="row attribute-block">
                     <div class="col-12">
-                      <label class="form-check-label" for="attribute-{{$item->id}}">{{$item->name}}</label>
+                      <label class="form-check-label">Kích thước</label>
                       <div class="form-inline-row">
-                        <!-- Checkbox để chọn thuộc tính -->
-                        <input type="checkbox" class="form-check-input attribute-checkbox" id="attribute-{{$item->id}}" value="{{$item->name}}" data-id="{{$item->id}}" data-name="{{$item->name}}">
+                        <!-- Mặc định có một input cho Kích thước -->
+                        <div class="attribute-form">
+                          <div class="form-row">
+                            <div class="col">
+                              <input type="text" class="form-control" placeholder="Nhập kích thước">
+                            </div>
+                            <div class="col-auto">
+                              <button type="button" class="btn btn-danger remove-button" disabled>Xóa</button>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Nút thêm Kích thước -->
+                        <button type="button" id="add-size-form" class="btn btn-success mt-2">Thêm kích thước</button>
                       </div>
-                      <div class="price-checkbox">
-                        <input type="checkbox" class="form-check-input price-checkbox" id="attribute-price-{{$item->id}}" data-id="{{$item->id}}" value="attribute-price-{{$item->id}}" data-name="Giá {{$item->name}}">
-                        <label class="form-check-label" for="attribute-price-{{$item->id}}">Chọn Giá</label>
-                      </div>
-                      <div id="attribute-{{$item->id}}-forms"></div> <!-- Container thuộc tính con -->
-                      <button type="button" id="add-attribute-{{$item->id}}-form" class="btn btn-success add-attribute-btn" style="display: none;">Thêm thuộc tính con</button>
                     </div>
                   </div>
-                  @endforeach
 
-
-
-
-
-
+                  <!-- Thuộc tính chính: Màu sắc -->
+                  <div class="row attribute-block mt-4">
+                    <div class="col-12">
+                      <label class="form-check-label">Màu sắc</label>
+                      <div class="form-inline-row">
+                        <!-- Mặc định có một input cho Màu sắc và giá -->
+                        <div class="attribute-form">
+                          <div class="form-row">
+                            <div class="col">
+                              <input type="text" class="form-control" placeholder="Nhập màu sắc">
+                            </div>
+                            <div class="col price-input">
+                              <input type="number" class="form-control" placeholder="Nhập giá">
+                            </div>
+                            <div class="col-auto">
+                              <button type="button" class="btn btn-danger remove-button" disabled>Xóa</button>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Nút thêm Màu sắc -->
+                        <button type="button" id="add-color-form" class="btn btn-success mt-2">Thêm màu sắc</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
               </div>
             </div>
           </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Thêm</button>
-        <button class="btn btn-light" type="reset">Hủy bỏ</button>
+      </div>
+      <button type="submit" class="btn btn-primary">Thêm</button>
+      <button class="btn btn-light" type="reset">Hủy bỏ</button>
       </form>
     </div>
 
@@ -362,100 +412,53 @@
 
 
 <script>
-  let selectedAttributeWithPrice = null;
+  document.getElementById('add-size-form').addEventListener('click', function() {
+    let sizeContainer = this.previousElementSibling; // Chọn div chứa các form
+    let newFormGroup = document.createElement('div');
+    newFormGroup.classList.add('attribute-form');
+    newFormGroup.innerHTML = `
+      <div class="form-row">
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Nhập kích thước">
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn btn-danger remove-button">Xóa</button>
+        </div>
+      </div>
+    `;
+    sizeContainer.appendChild(newFormGroup);
 
-  // Khi chọn thuộc tính chính, hiển thị form thêm thuộc tính con và nút thêm tương ứng
-  document.querySelectorAll('.attribute-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-      let attributeId = this.dataset.id; // Lấy ID của checkbox thuộc tính
-      let attributeName = this.dataset.name;
-      let addButton = document.getElementById(`add-attribute-${attributeId}-form`);
-      let container = document.getElementById(`attribute-${attributeId}-forms`);
-
-      if (this.checked) {
-        // Hiển thị nút "Thêm thuộc tính con"
-        addButton.style.display = 'block';
-        container.innerHTML = ''; // Xóa nội dung cũ nếu có
-
-        // Thêm input ẩn để lưu tên thuộc tính vào form
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = `attributes[${attributeId}][name]`;
-        hiddenInput.value = attributeName;
-        container.appendChild(hiddenInput);
-
-        // Khi nhấn "Thêm thuộc tính con"
-        addButton.addEventListener('click', function() {
-          let index = container.children.length - 1; // Đếm số lượng phần tử con trừ đi input ẩn
-          let newFormGroup = document.createElement('div');
-          newFormGroup.classList.add('attribute-form');
-          newFormGroup.innerHTML = `
-                    <div class="form-row">
-                        <div class="col">
-                            <input type="text" class="form-control" placeholder="Tên ${attributeName}" name="attributes[${attributeId}][values][${index}][value]">
-                        </div>
-                        <div class="col price-input">
-                            <input type="number" class="form-control" placeholder="Nhập giá" name="attributes[${attributeId}][values][${index}][price]">
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" class="btn btn-danger remove-button">Xóa</button>
-                        </div>
-                    </div>
-                `;
-          container.appendChild(newFormGroup);
-
-          // Nếu checkbox "Chọn Giá" của thuộc tính chính đã được chọn, hiển thị input giá ngay lập tức
-          if (selectedAttributeWithPrice && selectedAttributeWithPrice.id === `attribute-price-${attributeId}`) {
-            newFormGroup.querySelector('.price-input').style.display = 'block';
-          } else {
-            newFormGroup.querySelector('.price-input').style.display = 'none';
-          }
-
-          // Xử lý xóa form mới thêm
-          newFormGroup.querySelector('.remove-button').addEventListener('click', function() {
-            newFormGroup.remove();
-          });
-        });
-      } else {
-        addButton.style.display = 'none'; // Ẩn nút nếu checkbox bị bỏ chọn
-        container.innerHTML = ''; // Xóa toàn bộ form nếu bỏ chọn checkbox thuộc tính chính
-      }
+    // Xử lý xóa form mới thêm
+    newFormGroup.querySelector('.remove-button').addEventListener('click', function() {
+      newFormGroup.remove();
     });
   });
 
-  // Xử lý hiển thị input giá khi chọn checkbox "Chọn Giá"
-  document.querySelectorAll('.price-checkbox').forEach(priceCheckbox => {
-    priceCheckbox.addEventListener('change', function() {
-      let attributeId = this.dataset.id; // Lấy ID của thuộc tính chính
-      let priceContainers = document.querySelectorAll(`#attribute-${attributeId}-forms .price-input`);
+  document.getElementById('add-color-form').addEventListener('click', function() {
+    let colorContainer = this.previousElementSibling; // Chọn div chứa các form
+    let newFormGroup = document.createElement('div');
+    newFormGroup.classList.add('attribute-form');
+    newFormGroup.innerHTML = `
+      <div class="form-row">
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Nhập màu sắc">
+        </div>
+        <div class="col price-input">
+          <input type="number" class="form-control" placeholder="Nhập giá">
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn btn-danger remove-button">Xóa</button>
+        </div>
+      </div>
+    `;
+    colorContainer.appendChild(newFormGroup);
 
-      if (this.checked) {
-        if (selectedAttributeWithPrice) {
-          alert('Bạn đã chọn giá cho một thuộc tính rồi, không thể thay đổi!'); // Thông báo không cho thay đổi
-          this.checked = false; // Không cho phép chọn checkbox khác
-          return;
-        }
-
-        // Ghi nhận thuộc tính chính đang được nhập giá
-        selectedAttributeWithPrice = this;
-
-        // Hiển thị tất cả các container chứa input giá của thuộc tính đó ngay lập tức
-        priceContainers.forEach(container => container.style.display = 'block');
-
-        // Vô hiệu hóa các checkbox khác
-        document.querySelectorAll('.price-checkbox').forEach(cb => {
-          if (cb !== this) {
-            cb.disabled = true; // Vô hiệu hóa các checkbox khác
-          }
-        });
-
-      } else {
-        this.checked = true; // Giữ checkbox này luôn được chọn
-      }
+    // Xử lý xóa form mới thêm
+    newFormGroup.querySelector('.remove-button').addEventListener('click', function() {
+      newFormGroup.remove();
     });
   });
 </script>
-
 
 
 @endsection

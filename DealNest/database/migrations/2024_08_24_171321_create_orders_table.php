@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['pending', 'completed', 'cancelled','partial','waiting_for_delivery'])->default('pending');
-            $table->decimal('total', 10, 2)->notNullable();
-            $table->date('delivery_date')->notNullable();
-            $table->enum('payment_method', ['cod', 'momo', 'vnpay'])->default('cod');
+            $table->string('address')->nullable();
+            $table->enum('status', ['pending', 'completed', 'cancelled', 'waiting_for_delivery'])->default('pending');
+            $table->decimal('total', 3, 2)->notNullable();
+            $table->enum('payment_method', ['cod', 'master_card', 'vnpay'])->default('cod');
             $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
+            $table->string('cancellation_reason')->nullable();
+            $table->date('delivery_date')->notNullable();
             $table->timestamps();
         });
     }

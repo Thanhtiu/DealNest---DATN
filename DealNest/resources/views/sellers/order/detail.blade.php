@@ -87,6 +87,17 @@
         position: relative;
     }
 
+    .delivery-date-input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1em;
+        background-color: #fff;
+        transition: border-color 0.3s ease;
+        margin-top: 10px;
+    }
+
     .order-status-select:focus {
         border-color: #007bff;
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
@@ -159,6 +170,7 @@
 
         <h5 class="mb-3">Sản Phẩm</h5>
         <table class="table table-bordered">
+
             <thead class="thead-light">
                 <tr>
                     <th>Hình Ảnh</th>
@@ -204,16 +216,26 @@
                             <option value="" {{ $item->status == 'success' ? 'selected' : '' }}>Hoàn thành</option>
                             @else
                             <option value="pending" {{ $item->status == 'pending' ? 'selected' : '' }}>⏳ Chờ duyệt</option>
-                            <option value="waiting_for_delivery" {{ $item->status == 'waiting_for_delivery' ? 'selected' : '' }}>✔️ Duyệt</option>
-                            <option value="out_of_stock" {{ $item->status == 'out_of_stock' ? 'selected' : '' }}>❌ Hết hàng</option>
-                            <option value="invalid_info" {{ $item->status == 'invalid_info' ? 'selected' : '' }}>⚠️ Thông tin không hợp lệ</option>
+                            <option value="waiting_for_delivery" {{ $item->status == 'waiting_for_delivery' ? 'selected' : '' }} name="waiting_for_delivery">✔️ Duyệt</option>
+                            <option value="out_of_stock" {{ $item->status == 'out_of_stock' ? 'selected' : '' }} name="out_of_stock">❌ Hết hàng</option>
+                            <option value="invalid_info" {{ $item->status == 'invalid_info' ? 'selected' : '' }} name="invalid_info">⚠️ Thông tin không hợp lệ</option>
                             <option value="unknown_reason" {{ $item->status == 'unknown_reason' ? 'selected' : '' }}>❔ Lý do khác</option>
                             @endif
                         </select>
+                        @if($item->status == 'pending')
+                        <div class="mt-3">
+                            <label for="delivery_date_{{ $item->id }}">Chọn ngày giao nhận:</label>
+                            <input type="date" id="delivery_date_{{ $item->id }}" name="items[{{ $item->id }}][delivery_date]" class="form-control">
+                            @error("items.{$item}.delivery_date")
+                            <div class="alert alert-danger" style="color: red;">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        @endif
                     </td>
                 </tr>
                 @endforeach
             </tbody>
+
         </table>
         <div class="order-actions">
             @if(isset($status) && $status === 'pending')

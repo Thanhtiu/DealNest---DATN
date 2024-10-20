@@ -287,7 +287,7 @@
     </script>
     @endif
 
-    @if(Session::has('error'))    
+    @if(Session::has('error'))
     <script>
         toastr.error("{{ Session::get('error') }}");
     </script>
