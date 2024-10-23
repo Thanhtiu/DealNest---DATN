@@ -20,28 +20,26 @@ class Product extends Model
         'name',
         'seller_id',
         'category_id',
-        'subcategory_id',
-        'brand_id',
+        'country_id',
+        'slug',
         'description',
         'price',
-        'quantity',
-        'favourite',
-        'rating',
-        'sales',
-        'status',
-        'note',
+        'mrp',
         'image',
+        'quantity',
+        'view',
+        'sku',
+        'sales',
+        'trash_can',
+        'note',
+        'status',
     ];
-
-    public function subcategory()
-    {
-        return $this->belongsTo(SubCategory::class, 'subcategory_id');
-    }
 
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+    
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brand_id');

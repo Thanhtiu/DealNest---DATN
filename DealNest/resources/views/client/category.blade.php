@@ -239,20 +239,33 @@
         <!-- Sidebar -->
         <div class="col-md-3">
             <div class="sidebar">
-                <h3>Tất Cả Danh Mục</h3>
+                <h3>{{ $parentCategory->name }}</h3>
                 <ul>
                     <li>
-                        <a href="#">{{ $category->name }} </a>
+                        {{-- <a href="#">{{ $category->name }}</a> --}}
                         <ul>
-                            @foreach($listSubCategory as $item)
-                            <li><a href="/the-loai/{{ $category->slug }}/{{ $item->slug }}" style={{ ($item->slug ===
-                                    $subcategory_slug) ? "color:red" : "" }} href="#"
-                                    class="subcategory-link" data-id="{{ $item->id }}">
-                                    {{$item->name}} </a>
+                            @php
+                            $sub_id = request()->query('sub');
+                            @endphp
+                            @if ($subcategories->count() > 0)
+                            @foreach ($subcategories as $subcategory)
+                            <li>
+                                <a style="{{ $subcategory->id == $sub_id ? 'color:red' : '' }}"
+                                    href="{{ url()->current() . '?sub=' . $subcategory->id }}">
+                                    {{ $subcategory->name }}
+                                </a>
                             </li>
                             @endforeach
+                            @else
+                            <li>
+                                <p>Không có danh mục con.</p>
+                            </li>
+                            @endif
                         </ul>
                     </li>
+                </ul>
+
+                </li>
                 </ul>
                 <div class="separator"></div>
                 <ul>
@@ -296,69 +309,87 @@
 
                 <div class="sort-options">
                     <label for="sort">Sắp xếp theo:</label>
+
+                    @php
+                    $currentUrl = url()->current();
+                    $query = request()->query();
+                    @endphp
+
                     <div class="price-sort">
-                        <button class="price-option" id="sortby-desc" value="DESC">Mới Nhất</button>
-                        <button class="price-option" id="sortby-asc" value="ASC">Cũ Nhất</button>
-                        <button class="price-option" id="sortby-sale" value="sale">Bán Chạy</button>
+                        <a href="{{ $currentUrl . '?' . http_build_query(array_merge($query, ['sortby' => 'DESC'])) }}">
+                            <button class="price-option" value="DESC">Mới Nhất</button>
+                        </a>
+                        <a href="{{ $currentUrl . '?' . http_build_query(array_merge($query, ['sortby' => 'ASC'])) }}">
+                            <button class="price-option" value="ASC">Cũ Nhất</button>
+                        </a>
+                        <a href="{{ $currentUrl . '?' . http_build_query(array_merge($query, ['sortby' => 'sale'])) }}">
+                            <button class="price-option" value="sale">Bán Chạy</button>
+                        </a>
                     </div>
-                    <select id="sort-category">
+
+                    <select id="sort-category" onchange="sortCategory(this.value)">
                         <option value="">Giá</option>
                         <option value="price-asc">Thấp Đến Cao</option>
                         <option value="price-desc">Cao Đến Thấp</option>
                     </select>
-                </div>
-            </div>
-
-
-            <!-- Product List -->
-            <div class="product-list">
-
-                @foreach($productCategory as $item)
-                <div class="cardd">
-                    <img src="{{asset('uploads/' . $item->product_image->first()->url)}}" alt="Product Image">
-                    <div class="discount">-92%</div>
-                    <div class="content">
-                        <h2 class="title"> {{$item->name}} </h2>
-                        <p class="price">₫ {{number_format($item->price, 0, ',', '.')}}</p>
-                    </div>
-                    <div class="sold">
-                        <span class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </span>
-                        Đã bán {{ $item->sales }}+
-                    </div>
-                    {{-- <span class="location">Hà Nội</span> --}}
-                    <span class="location">
-                        @php
-
-                        $string = $item->seller->address->string_address;
-
-                        $array = preg_split('/[\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
-
-                        $lastTwoWords = array_slice($array, -2);
-
-                        $result = implode(' ', $lastTwoWords);
-
-
-                        @endphp
-
-                        {{ $result }}
-
-                    </span>
-
 
 
                 </div>
-                @endforeach
 
 
-                <!-- Additional product cards -->
+                <!-- Product List -->
+                <div class="product-list">
+                    {{-- <h2>Sản phẩm thuộc danh mục </h2> --}}
+
+                    @if ($products->count() > 0)
+                    <div class="product-list">
+                        @foreach ($products as $item)
+                        <div class="cardd">
+                            <!-- Hiển thị hình ảnh sản phẩm -->
+                            <a href="{{ route('client.productDetail',$item->id) }}">
+                                <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
+                            </a>
+                            <!-- Phần trăm giảm giá -->
+                            <div class="discount">-92%</div>
+
+                            <!-- Thông tin sản phẩm -->
+                            <div class="content">
+                                <h2 class="title">{{ $item->name }}</h2>
+                                <p class="price">₫ {{ number_format($item->price, 0, ',', '.') }}</p>
+                            </div>
+
+                            <!-- Đánh giá và số lượng đã bán -->
+                            <div class="sold">
+                                <span class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </span>
+                                Đã bán {{ $item->sales }}+
+                            </div>
+
+                            <!-- Địa chỉ -->
+                            <span class="location">
+                                @php
+                                $string = $item->seller->address->string_address;
+                                $array = preg_split('/[\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
+                                $lastTwoWords = array_slice($array, -2);
+                                $result = implode(' ', $lastTwoWords);
+                                @endphp
+                                {{ $result }}
+                            </span>
+                        </div>
+                        @endforeach
+                    </div>
+                    @else
+                    <p>Không có sản phẩm nào thuộc danh mục này.</p>
+                    @endif
+                    <!-- Additional product cards -->
+                </div>
+
             </div>
         </div>
     </div>
-</div>
-@endsection
+    @endsection

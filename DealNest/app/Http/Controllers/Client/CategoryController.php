@@ -11,85 +11,64 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index(Request $request,$category_slug, $subcategory_slug = ""){
-
-        $column = "id";
-
-        $sort = "DESC";
-
-        $sortby = $request->get('sortby');
-
-        switch($sortby){
-            case 'ASC':
-                $sort = "ASC";
-                break;
-            case 'sale':
-                $column = 'sales';
-                $sort = 'DESC';
-                break;
-            case 'price-asc':
-                $column = 'price';
-                $sort = 'ASC';
-                break;
-            case 'price-desc':
-                $column = 'price';
-                $sort = 'DESC';
-                break;
-            default:
-                break;
+  
+    public function showCategory($id, Request $request)
+    {
+        $sub = $request->sub;   
+        $sort = $request->sortby;
+    
+        // Lấy category cha theo id
+        $parentCategory = Category::findOrFail($id);
+        $parentCategoryName = $parentCategory->name;
+    
+        // Lấy các subcategories có parent_id là $id
+        $subcategories = Category::where('parent_id', $id)->get();
+    
+        // Khởi tạo truy vấn sản phẩm
+        $query = Product::query();
+    
+        // Kiểm tra nếu $sub không rỗng
+        if ($sub != "") {
+            // Lấy sản phẩm có category_id bằng $sub_id
+            $query->where('category_id', $sub);
+        } else {
+            // Lấy sản phẩm của category hiện tại và các subcategories
+            $query->where('category_id', $id)
+                  ->orWhereIn('category_id', $subcategories->pluck('id'));
         }
-
-        // dd($sort);
-
-        $category = Category::where('slug',$category_slug)->where('status',1)->first();
-
-        $listSubCategory = SubCategory::where('category_id',$category->id)->get();
-
-        $productCategory = Product::with('product_image')
-        ->where('category_id', $category->id)
-        // ->where('status','Đã phê duyệt')
-        ->orderBy($column,$sort)
-        ->get();
-        if(is_null($category)){
-
-            return "404";
-        }
-
-        // dd($productCategory);
-
-        if($subcategory_slug != ""){
-
-            $subCategory = SubCategory::where('slug',$subcategory_slug)->first();
-
-            if(!is_null($subCategory)){
-
-                $productCategory = Product::with('product_image')
-                ->where('status','Đã phê duyệt')            
-                ->where('subcategory_id', $subCategory->id)
-                ->orderBy($column,$sort)
-                ->get();
-
+    
+        // Kiểm tra nếu sortBy không rỗng và thực hiện sắp xếp
+        if (!empty($sort)) {
+            switch ($sort) {
+                case 'DESC':
+                    $query->orderBy('id', 'desc'); // Sắp xếp theo ngày tạo
+                    break;
+                case 'ASC':
+                    $query->orderBy('id', 'asc');
+                    break;
+                case 'sale':
+                    $query->orderBy('sales', 'desc'); // Sắp xếp theo doanh số
+                    break;
+                case 'price-asc':
+                    $query->orderBy('price', 'asc'); // Sắp xếp theo giá từ thấp đến cao
+                    break;
+                case 'price-desc':
+                    $query->orderBy('price', 'desc'); // Sắp xếp theo giá từ cao đến thấp
+                    break;
             }
-      
-        } 
-
-        return view('client.category',
-        compact('category','listSubCategory','productCategory','subcategory_slug'));
+        }
+    
+        // Thực hiện truy vấn và lấy sản phẩm
+        $products = $query->get();
+    
+        // Trả về view với dữ liệu
+        return view('client.category', compact('parentCategory', 'subcategories', 'products', 'parentCategoryName'));
     }
+    
+    
+    
 
-    public function getProductAddress(Request $request){
-
-        $data = $request->all();
-
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'OK',
-            'data' => $data
-        ]);
-
-    }
-
+    
 
     
 }

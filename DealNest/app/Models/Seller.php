@@ -12,16 +12,16 @@ class Seller extends Model
     protected $table = 'sellers';
     protected $fillable = [
         'user_id',
-        'store_name',
-        'store_description',
-        'rating',
-        'follow',
-        'join',
-        'store_phone',
-        'store_email',
         'address_id',
+        'name',
+        'description',
+        'join',
+        'store_email',
+        'store_phone',
+        'logo',
+        'background',
+        'note',
         'status',
-        'note'
     ];
     public function address()
     {

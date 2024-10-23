@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
             $table->string('name', 255)->notNullable();
             $table->string('slug', 255)->notNullable();
-            $table->decimal('price', 3, 2)->notNullable();
-            $table->decimal('mrp', 3, 2)->notNullable();
+            $table->decimal('price', 10, 2)->notNullable();
+            $table->decimal('mrp', 10, 2)->notNullable();
             $table->string('image', 255)->nullable();
             $table->text('description')->notNullable();
             $table->integer('quantity')->notNullable();

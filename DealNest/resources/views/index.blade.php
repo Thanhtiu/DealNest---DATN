@@ -182,14 +182,14 @@
     <div class="category-wrapper">
         <div class="category-slider">
             <div class="category-list">
-                @foreach($categories as $item)
+                @foreach($categories as $category)
                 <div class="category-item">
-                    <a href="/the-loai/{{ $item->slug }}">
+                    <a href="{{ route('category.show', $category->id) }}">
                         <img src="https://down-vn.img.susercontent.com/file/ce8f8abc726cafff671d0e5311caa684@resize_w320_nl.webp"
-                            alt="{{ $item->name }}"> </a>
+                            alt="{{ $category->name }}"> </a>
 
-                    <span><a href="/the-loai/{{ $item->slug }}">
-                            {{$item->name}} </a></span>
+                    <span><a href="/the-loai/{{ $category->slug }}">
+                            {{$category->name}} </a></span>
 
                 </div>
                 @endforeach

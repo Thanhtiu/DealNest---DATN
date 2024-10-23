@@ -14,20 +14,28 @@ class Category extends Model
     protected $fillable = [
         'name',
         'status',
-        'url',
+        'image',
         'status',
+        'parent_id',
         'slug'
     ];
-
-    public function subcategories()
-    {
-        return $this->hasMany(SubCategory::class, 'category_id');
-    }
 
     public function products()
     {
         return $this->hasManyThrough(Product::class, SubCategory::class, 'category_id', 'subcategory_id');
     }
+
+     // Quan hệ với danh mục cha
+     public function parent()
+     {
+         return $this->belongsTo(Category::class, 'parent_id');
+     }
+ 
+     // Quan hệ với danh mục con
+     public function children()
+     {
+         return $this->hasMany(Category::class, 'parent_id');
+     }
 
 
 }

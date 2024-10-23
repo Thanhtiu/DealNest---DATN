@@ -20,15 +20,26 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $user = User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@exammple.com',
+
+        // $user = User::factory()->create([
+        //     'name' => 'Admin',
+        //     'email' => 'admin@exammple.com',
+        // ]);
+        // User::factory()->create([
+        //     'name' => 'Kind',
+        //     'email' => 'binhh0846@gmail.com'
+        // ]);
+        // $role = Role::create(['name' => 'Admin']);
+        // $user->assignRole($role);
+        
+         // Chạy seeder cho Categories, Sellers, và Products
+         $this->call([
+            CategorySeeder::class,
+            UsersTableSeeder::class,
+            AddressesTableSeeder::class,
+            SellersTableSeeder::class,
+            CountriesTableSeeder::class,
+            ProductsTableSeeder::class,
         ]);
-        User::factory()->create([
-            'name' => 'Kind',
-            'email' => 'binhh0846@gmail.com'
-        ]);
-        $role = Role::create(['name' => 'Admin']);
-        $user->assignRole($role);
     }
 }

@@ -36,6 +36,11 @@ use App\Http\Controllers\FacebookLoginController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('client.index');
+Route::get('/category/{id}', [CategoryController::class, 'showCategory'])->name('category.show');
+
+
+
+
 // test giao diện
 Route::get('/san-pham-chi-tiet/{id}', [ProductDetailController::class, 'index'])->name('client.productDetail');
 
