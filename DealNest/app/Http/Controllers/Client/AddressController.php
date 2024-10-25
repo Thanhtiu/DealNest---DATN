@@ -20,7 +20,7 @@ class AddressController extends Controller
     }
     public function create(Request $request)
     {
-        
+
         $existingActiveAddress = Address::where('user_id', auth()->user()->id)
             ->where('active', 1)
             ->exists();
@@ -34,7 +34,7 @@ class AddressController extends Controller
             'ward_id' => $request->input('ward'),
             'street' => $request->input('street'),
             'string_address' => $request->input('string_address'),
-            'active' => $activeValue, 
+            'active' => $activeValue,
             'name' => $request->name,
             'phone' => $request->phone,
         ]);

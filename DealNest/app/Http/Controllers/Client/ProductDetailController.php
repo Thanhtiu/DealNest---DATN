@@ -8,12 +8,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Product;
-use App\Models\Category;
-use App\Models\SubCategory;
-use App\Models\Brand;
+use App\Models\Country;
 use App\Models\Product_image;
-use App\Models\Attribute;
-use App\Models\Seller;
+use App\Models\ProductVariant;
 use Carbon\Carbon;
 use App\Models\Address;
 use App\Models\Wishlist;
@@ -23,7 +20,8 @@ class ProductDetailController extends Controller
     public function index($id)
     {
 
-        $productDetail = Product::with(['subcategory', 'product_image', 'attribute_values.attribute'])->find($id);
+        $productDetail = Product::with(['category.parent', 'product_image', 'productVariants'])->find($id);
+        // return $productDetail;
         $product = Product::with('seller')->find($id);
         $seller = $product->seller;
 
@@ -51,7 +49,6 @@ class ProductDetailController extends Controller
             ->exists();
 
             $productRelated = Product::with(['subcategory', 'product_image', 'attribute_values.attribute'])
-            ->where('subcategory_id', $productDetail->subcategory->id)
             ->where('id', '!=', $productDetail->id) 
             ->orderBy('sales', 'desc') 
             ->get();

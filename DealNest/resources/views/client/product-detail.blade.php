@@ -725,7 +725,7 @@
           <div class="thumbnail-track">
             @foreach($productDetail->product_image as $item)
             <div class="thumbnail-slide">
-              <img src="{{ asset('uploads/'.$item->url) }}" alt="Thumbnail {{ $loop->index }}">
+              <img src="{{ asset('uploads/'.$item->image) }}" alt="Thumbnail {{ $loop->index }}">
             </div>
             @endforeach
           </div>
@@ -744,14 +744,14 @@
         <span>- {{$productDetail->sales}} Đã Bán</span>
       </div>
       <div class="price-container">
-        <span class="original-price">{{number_format($productDetail->price, 0, ',', '.')}}</span>
-        <span class="discounted-price">₫600.000</span>
-        <span class="discount-badge">40% GIẢM</span>
+        <span class="original-price">{{number_format($productDetail->mrp, 0, ',', '.')}}</span>
+        <span class="discounted-price">₫{{number_format($productDetail->price, 0, ',', '.')}}</span>
+        <!-- <span class="discount-badge">40% GIẢM</span> -->
       </div>
-      <div class="discount-section">
+      <!-- <div class="discount-section">
         <span>Mã Giảm Giá Của Shop:</span>
         <span class="discount-tag">5% GIẢM</span>
-      </div>
+      </div> -->
       {{-- <div class="insurance-section">
         <span>Bảo Hiểm:</span>
         <span>Bảo hiểm Bảo vệ người tiêu dùng <span class="new-tag">Mới</span></span>
@@ -774,31 +774,24 @@
       <form action="{{ route('cart.add') }}" method="POST">
         @csrf
         <div class="product-options">
-          @foreach ($productDetail->attribute_values->groupBy('attribute_id') as $attribute_id => $attributes)
-          <div class="option mb-3">
-            <label class="form-label">{{ strtoupper($attributes->first()->attribute->name) }}</label>
-            <select class="form-select attribute-select" name="attributes[{{ $attribute_id }}]" required>
-              @foreach ($attributes as $attribute)
-              {{-- Hiển thị giá trị thuộc tính con đầu tiên --}}
-              @if ($loop->first)
-              <option value="{{ $attribute->value }}" selected>
-                {{ $attribute->value }}
-                @if ($attribute->price)
-                - Giá: {{ number_format($attribute->price, 2) }}
-                @endif
-              </option>
-              @else
-              <option value="{{ $attribute->value }}">
-                {{ $attribute->value }}
-                @if ($attribute->price)
-                - Giá: {{ number_format($attribute->price, 2) }}
-                @endif
-              </option>
-              @endif
-              @endforeach
-            </select>
-          </div>
-          @endforeach
+          <label for="size-select" class="form-label">Kích thước</label>
+          <select id="size-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;" name="size">
+            @foreach($productDetail->productVariants as $item)
+            @if($item->variant === 'Kích thước')
+            <option value="{{$item->value}}">{{$item->value}}</option>
+            @endif
+            @endforeach
+          </select>
+
+
+          <label for="color-select" class="form-label">Màu sắc</label>
+          <select id="color-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;" name="color">
+            @foreach($productDetail->productVariants as $item)
+            @if($item->variant === 'Màu sắc')
+            <option value="{{$item->value}}">{{$item->value}} - {{ number_format($item->price, 2, ',', '.') }} đ</option>
+            @endif
+            @endforeach
+          </select>
 
         </div>
 

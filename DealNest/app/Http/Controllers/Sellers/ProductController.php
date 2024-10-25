@@ -38,71 +38,92 @@ class ProductController extends Controller
     }
     public function create(Request $request)
     {
-        try {
-            // return dd($request->all());
 
-            $sellerId = Session::get('sellerId');
 
-            // Xử lý ảnh chính của sản phẩm
-            $imageName = null;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:products,slug,',
+            'category_id' => 'required|integer|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'mrp' => 'nullable|numeric|min:0', // Assuming MRP is optional
+            'quantity' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'country_id' => 'required|integer|',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,jfif,webp|max:2048', // Image validation
+            'img.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,jfif,webp|max:2048', // Validate uploaded images (if using multiple uploads)
+        ], [
+            'name.required' => 'Tên sản phẩm không được để trống.',
+            'slug.required' => 'Slug không được để trống.',
+            'slug.unique' => 'Slug đã tồn tại.',
+            'category_id.required' => 'Danh mục sản phẩm là bắt buộc.',
+            'price.required' => 'Giá sản phẩm là bắt buộc.',
+            'mrp.numeric' => 'Giá bán lẻ phải là số.',
+            'quantity.required' => 'Số lượng sản phẩm là bắt buộc.',
+            'country_id.required' => 'Thương hiệu là bắt buộc.',
+            'image.image' => 'Ảnh bìa phải là hình ảnh.',
+            'img.*.image' => 'Hình ảnh phải là hình ảnh.',
+        ]);
+        // return dd($request->all());
+
+        $sellerId = Session::get('sellerId');
+
+        // Xử lý ảnh chính của sản phẩm
+        $imageName = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads'), $imageName);
+        }
+
+        // Tạo sản phẩm
+        $product = Product::create([
+            'seller_id' => $sellerId,
+            'category_id' => $request->category_id,
+            'country_id' => $request->country_id,
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'price' => $request->price,
+            'mrp' => $request->mrp,
+            'image' => $imageName,
+            'description' => $request->description,
+            'quantity' => $request->quantity,
+            'trash_can' => 1,
+        ]);
+
+        // Xử lý ảnh phụ
+        if ($request->hasFile('img')) {
+            $images = $request->file('img');
+            foreach ($images as $image) {
                 $imageName = time() . '_' . $image->getClientOriginalName();
                 $image->move(public_path('uploads'), $imageName);
+
+                Product_image::create([
+                    'product_id' => $product->id,
+                    'image' => $imageName,
+                ]);
             }
+        }
 
-            // Tạo sản phẩm
-            $product = Product::create([
-                'seller_id' => $sellerId,
-                'category_id' => $request->category_id,
-                'country_id' => $request->country_id,
-                'name' => $request->name,
-                'slug' => $request->slug,
-                'price' => $request->price,
-                'mrp' => $request->mrp,
-                'image' => $imageName,
-                'description' => $request->description,
-                'quantity' => $request->quantity,
-                'trash_can' => 1,
-            ]);
+        $attributes = $request->input('attributes'); // Lấy dữ liệu biến thể từ request
 
-            // Xử lý ảnh phụ
-            if ($request->hasFile('img')) {
-                $images = $request->file('img');
-                foreach ($images as $image) {
-                    $imageName = time() . '_' . $image->getClientOriginalName();
-                    $image->move(public_path('uploads'), $imageName);
-
-                    Product_image::create([
-                        'product_id' => $product->id,
-                        'image' => $imageName,
-                    ]);
-                }
-            }
-
-            $attributes = $request->input('attributes'); // Lấy dữ liệu biến thể từ request
-
-            foreach ($attributes as $attribute) {
-                if (!empty($attribute['value'])) {
-                    foreach ($attribute['value'] as $key => $value) {
-                        // Kiểm tra nếu giá trị không rỗng
-                        if (!empty($value)) {
-                            ProductVariant::create([
-                                'product_id' => $product->id,
-                                'variant' => $attribute['variant'], // Tên thuộc tính (Kích thước hoặc Màu sắc)
-                                'value' => $value, // Giá trị của thuộc tính (S, M, L, Đỏ, Đen, Tím, ...)
-                                'price' => isset($attribute['price'][$key]) ? $attribute['price'][$key] : null, // Giá (null nếu không có)
-                            ]);
-                        }
+        foreach ($attributes as $attribute) {
+            if (!empty($attribute['value'])) {
+                foreach ($attribute['value'] as $key => $value) {
+                    // Kiểm tra nếu giá trị không rỗng
+                    if (!empty($value)) {
+                        ProductVariant::create([
+                            'product_id' => $product->id,
+                            'variant' => $attribute['variant'], // Tên thuộc tính (Kích thước hoặc Màu sắc)
+                            'value' => $value, // Giá trị của thuộc tính (S, M, L, Đỏ, Đen, Tím, ...)
+                            'price' => isset($attribute['price'][$key]) ? $attribute['price'][$key] : null, // Giá (null nếu không có)
+                        ]);
                     }
                 }
             }
-
-
-            return redirect()->route('seller.product.list')->with('success', 'Thêm sản phẩm thành công.');
-        } catch (\Exception $e) {
-            dd($e->getMessage());
         }
+
+
+        return redirect()->route('seller.product.list')->with('success', 'Thêm sản phẩm thành công.');
     }
 
     public function list()
@@ -112,25 +133,24 @@ class ProductController extends Controller
         // Fetch products based on seller's ID
         $productAll = Product::where('seller_id', $sellerId)
             ->where('trash_can', '!=', 0)
-            ->with(['subCategory', 'product_image'])
+            ->with(['category', 'product_image'])
             ->paginate(10);
-
         $productSuccess = Product::where('seller_id', $sellerId)
-            ->where('status', 'Đã phê duyệt')
+            ->where('status', 'approved')
             ->where('trash_can', '!=', 0)
-            ->with('product_image')
+            ->with(['parent', 'product_image'])
             ->paginate(10);
 
         $productPending = Product::where('seller_id', $sellerId)
-            ->where('status', 'Chờ phê duyệt')
+            ->where('status', 'pending')
             ->where('trash_can', '!=', 0)
-            ->with('product_image')
+            ->with(['parent', 'product_image'])
             ->paginate(10);
 
         $productFail = Product::where('seller_id', $sellerId)
-            ->where('status', 'Từ chối')
+            ->where('status', 'cancel')
             ->where('trash_can', '!=', 0)
-            ->with('product_image')
+            ->with(['parent', 'product_image'])
             ->paginate(10);
 
         // Đếm tổng số lượng sản phẩm
@@ -167,34 +187,42 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        // // Validate the request data
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'category_id' => 'required|integer|exists:categories,id',
-        //     'price' => 'required|numeric|min:0',
-        //     'quantity' => 'required|integer|min:0',
-        //     'description' => 'nullable|string',
-        //     'brand_id' => 'required|integer|exists:brands,id',
-        // ], [
-        //     'name.required' => 'Tên sản phẩm không được để trống.',
-        //     'category_id.required' => 'Danh mục sản phẩm là bắt buộc.',
-        //     'price.required' => 'Giá sản phẩm là bắt buộc.',
-        //     'quantity.required' => 'Số lượng sản phẩm là bắt buộc.',
-        //     'brand_id.required' => 'Thương hiệu là bắt buộc.',
 
-        // ]);
         $product = Product::findOrFail($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|',
+            'category_id' => 'required|integer|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'mrp' => 'nullable|numeric|min:0',
+            'quantity' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'country_id' => 'required|integer|',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,jfif,webp|max:2048',
+            'img.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,jfif,webp|max:2048',
+        ], [
+            'name.required' => 'Tên sản phẩm không được để trống.',
+            'slug.required' => 'Slug không được để trống.',
+            'slug.unique' => 'Slug đã tồn tại.',
+            'category_id.required' => 'Danh mục sản phẩm là bắt buộc.',
+            'price.required' => 'Giá sản phẩm là bắt buộc.',
+            'mrp.numeric' => 'Giá bán lẻ phải là số.',
+            'quantity.required' => 'Số lượng sản phẩm là bắt buộc.',
+            'country_id.required' => 'Thương hiệu là bắt buộc.',
+            'image.image' => 'Ảnh bìa phải là hình ảnh.',
+            'img.*.image' => 'Hình ảnh phải là hình ảnh.',
+        ]);
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-        
+
             if ($product && $product->image && file_exists(public_path('uploads/' . $product->image))) {
                 unlink(public_path('uploads/' . $product->image));
             }
-        
+
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('uploads'), $imageName);
-        
+
             $product->image = $imageName;
         } else {
             $imageName = $product->image;

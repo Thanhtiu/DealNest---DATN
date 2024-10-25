@@ -10,7 +10,6 @@ use App\Models\Cart;
 use App\Models\Cart_item;
 use App\Models\User;
 use App\Models\Product;
-use App\Models\attribute_value;
 use Illuminate\Support\Facades\Log;
 
 
@@ -22,76 +21,87 @@ class CartController extends Controller
     public function index()
     {
         $userId = Session::get('userId');
-        $carts = Cart::where('user_id', $userId)
-            ->with('product.product_image', 'items.attribute')
-            ->get();
-        // return dd($carts);
-        return view('client.cart', compact('carts',));
+
+        // Lấy giỏ hàng của người dùng
+        $cart = Cart::where('user_id', $userId)->first();
+
+        if (!$cart) {
+            return view('client.cart', ['carts' => []]); // Nếu không có giỏ hàng, trả về giỏ hàng rỗng
+        }
+
+        // Lấy danh sách các mục trong giỏ hàng
+        $cartItems = $cart->items()->with('product')->get();
+        // Tính tổng giá của giỏ hàng
+        $totalPrice = $cartItems->sum('total_price');
+
+        return view('client.cart', compact('cart', 'cartItems', 'totalPrice'));
     }
+
 
 
     public function add(Request $request)
     {
+        // Lấy user_id từ session
         $userId = Session::get('userId');
 
-        // Validation cho form
-        $validatedData = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            'attributes' => 'required|array',
-            'attributes.*' => 'required|string', // Validation cho từng thuộc tính
-        ]);
+        // Tìm giỏ hàng của người dùng
+        $cart = Cart::where('user_id', $userId)->first();
 
-        $totalPrice = 0;
-        $discountValue = 0; // Biến để lưu giá trị discount (tính từ thuộc tính hoặc giá sản phẩm)
-        $hasCustomPrice = false; // Biến để kiểm tra nếu có giá riêng
-
-        // Lặp qua các thuộc tính và kiểm tra giá riêng
-        foreach ($validatedData['attributes'] as $attributeId => $attributeValue) {
-            // Lấy thông tin attribute_value từ DB
-            $attributeValueRecord = attribute_value::where('attribute_id', $attributeId)
-                ->where('product_id', $validatedData['product_id'])
-                ->where('value', $attributeValue)
-                ->first();
-
-            if ($attributeValueRecord && $attributeValueRecord->price) {
-                // Nếu có giá riêng cho thuộc tính, gán giá này cho discount
-                $discountValue = $attributeValueRecord->price; // Gán giá trị discount là giá của thuộc tính
-                $hasCustomPrice = true; // Đánh dấu có giá riêng
-                break; // Không cần tiếp tục kiểm tra các thuộc tính khác
-            }
-        }
-
-        if (!$hasCustomPrice) {
-            // Nếu không có giá riêng, lấy giá từ bảng products
-            $product = Product::find($validatedData['product_id']);
-            $discountValue = $product->price; // Nếu không có giá riêng, discount là giá sản phẩm
-        }
-
-        // Tính tổng giá dựa trên số lượng và discount (nếu có)
-        $totalPrice = $discountValue * $validatedData['quantity'];
-
-        // Tạo bản ghi mới trong bảng carts
-        $cart = Cart::create([
-            'user_id' => $userId,
-            'product_id' => $validatedData['product_id'],
-            'total_price' => $totalPrice,
-            'quantity' => $validatedData['quantity'],
-            'discount' => $discountValue, // Lưu giá trị discount (giá của thuộc tính hoặc sản phẩm) vào bảng carts
-        ]);
-
-        // Lặp qua các thuộc tính để thêm vào bảng cart_items
-        foreach ($validatedData['attributes'] as $attributeId => $attributeValue) {
-            Cart_item::create([
-                'cart_id' => $cart->id,
-                'attribute_id' => $attributeId,
-                'value' => $attributeValue,
+        // Nếu chưa có giỏ hàng, tạo mới
+        if (!$cart) {
+            $cart = Cart::create([
+                'user_id' => $userId,
+                'total_price' => 0,
+                'quantity' => 0,
             ]);
         }
 
-        // Trả về trang trước với thông báo thành công
+        // Tìm sản phẩm
+        $product = Product::findOrFail($request->product_id);
+
+        // Tính tổng giá mới
+        $totalPrice = $product->price * $request->quantity;
+
+        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+        $cartItem = Cart_item::where('cart_id', $cart->id)
+            ->where('product_id', $product->id)
+            ->where('color', $request->color)
+            ->where('size', $request->size)
+            ->first();
+
+        if ($cartItem) {
+            // Nếu có, cập nhật số lượng và tổng giá
+            $cartItem->quantity += $request->quantity;
+            $cartItem->total_price += $totalPrice;
+            $cartItem->save();
+        } else {
+            // Nếu chưa có, thêm mới mục vào giỏ hàng
+            Cart_item::create([
+                'cart_id' => $cart->id,
+                'product_id' => $product->id,
+                'color' => $request->color,
+                'size' => $request->size,
+                'quantity' => $request->quantity,
+                'total_price' => $totalPrice,
+            ]);
+        }
+
+        // Cập nhật tổng giá của giỏ hàng
+        $cart->total_price += $totalPrice;
+
+        // Cập nhật quantity của giỏ hàng dựa trên số lượng bản ghi cart_items thuộc cart_id
+        $cart->quantity = Cart_item::where('cart_id', $cart->id)->count(); // Đếm số lượng bản ghi
+
+        // Lưu giỏ hàng
+        $cart->save();
+
         return back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng');
     }
+
+
+
+
+
 
     private function calculatePrice($productId, $quantity)
     {
@@ -106,77 +116,69 @@ class CartController extends Controller
     public function destroy(Request $request)
     {
         // Lấy danh sách các sản phẩm đã được chọn
-    $selectedItems = $request->input('checkbox', []);
+        $selectedItems = $request->input('checkbox', []);
 
-    // Nếu không có sản phẩm nào được chọn, trả về thông báo lỗi
-    if (empty($selectedItems)) {
-        return response()->json(['success' => false, 'message' => 'Không có sản phẩm nào được chọn.']);
-    }
+        // Nếu không có sản phẩm nào được chọn, trả về thông báo lỗi
+        if (empty($selectedItems)) {
+            return response()->json(['success' => false, 'message' => 'Không có sản phẩm nào được chọn.']);
+        }
 
-    // Xóa các sản phẩm đã chọn khỏi giỏ hàng
-    foreach ($selectedItems as $itemId) {
-        // Tìm sản phẩm trong giỏ hàng và xóa nó
-        Cart::find($itemId)->delete();
-    }
+        // Xóa các sản phẩm đã chọn khỏi giỏ hàng
+        foreach ($selectedItems as $itemId) {
+            // Tìm sản phẩm trong giỏ hàng và xóa nó
+            Cart::find($itemId)->delete();
+        }
 
         return response()->json(['success' => true, 'message' => 'Xóa thành công!']);
     }
 
 
     public function submit(Request $request)
-{
-    // Lấy danh sách các ID sản phẩm từ checkbox
-    $selectedIds = $request->input('checkbox', []);
+    {
+        // Lấy danh sách các ID sản phẩm từ checkbox
+        $selectedIds = $request->input('checkbox', []);
 
-    // Khởi tạo tổng số tiền
-    $totalAmount = 0;
+        // Khởi tạo tổng số tiền
+        $totalAmount = 0;
 
-    // Mảng chứa thông tin các sản phẩm đã chọn
-    $selectedItems = [];
+        // Mảng chứa thông tin các sản phẩm đã chọn
+        $selectedItems = [];
 
-    // Tính tổng giá trị total_price cho các sản phẩm được chọn và lưu thông tin vào mảng
-    foreach ($selectedIds as $id) {
-        $item = Cart::find($id); // Giả sử bạn có một model CartItem
-        if ($item) {
-            $totalAmount += $item->total_price; // Cộng dồn total_price
+        // Tính tổng giá trị total_price cho các sản phẩm được chọn và lưu thông tin vào mảng
+        foreach ($selectedIds as $id) {
+            $item = Cart::find($id); // Giả sử bạn có một model CartItem
+            if ($item) {
+                $totalAmount += $item->total_price; // Cộng dồn total_price
 
-            // Lấy thông tin các thuộc tính của sản phẩm
-            $attributes = $item->items->map(function($cartItem) {
-                return [
-                    'name' => $cartItem->attribute->name, // Tên thuộc tính
-                    'value' => $cartItem->value, // Giá trị thuộc tính
+                // Lấy thông tin các thuộc tính của sản phẩm
+                $attributes = $item->items->map(function ($cartItem) {
+                    return [
+                        'name' => $cartItem->attribute->name, // Tên thuộc tính
+                        'value' => $cartItem->value, // Giá trị thuộc tính
+                    ];
+                });
+
+                // Lưu thông tin sản phẩm vào mảng, bao gồm cả thuộc tính
+                $selectedItems[] = [
+                    'product_id' => $item->product_id,
+                    'product_name' => $item->product->name,
+                    'quantity' => $item->quantity,
+                    'total_price' => $item->total_price,
+                    'attributes' => $attributes->toArray(), // Lưu các thuộc tính vào mảng
                 ];
-            });
-
-            // Lưu thông tin sản phẩm vào mảng, bao gồm cả thuộc tính
-            $selectedItems[] = [
-                'product_id' => $item->product_id,
-                'product_name' => $item->product->name,
-                'quantity' => $item->quantity,
-                'total_price' => $item->total_price,
-                'attributes' => $attributes->toArray(), // Lưu các thuộc tính vào mảng
-            ];
+            }
         }
+
+        // Kiểm tra nếu không có sản phẩm nào được chọn
+        if (empty($selectedIds)) {
+            return response()->json(['success' => false]);
+        }
+
+        // Lưu tổng số tiền và thông tin sản phẩm vào session
+        session(['total_amount' => $totalAmount]);
+        session(['selected_items' => $selectedItems]);
+
+        // Trả về tổng số tiền và thông tin sản phẩm đã chọn
+        return response()->json(['success' => true, 'total_amount' => $totalAmount, 'selected_items' => $selectedItems]);
     }
-
-    // Kiểm tra nếu không có sản phẩm nào được chọn
-    if (empty($selectedIds)) {
-        return response()->json(['success' => false]);
-    }
-
-    // Lưu tổng số tiền và thông tin sản phẩm vào session
-    session(['total_amount' => $totalAmount]);
-    session(['selected_items' => $selectedItems]);
-
-    // Trả về tổng số tiền và thông tin sản phẩm đã chọn
-    return response()->json(['success' => true, 'total_amount' => $totalAmount, 'selected_items' => $selectedItems]);
-}
-
-    
-
-
-
-
-
-
 }

@@ -52,6 +52,11 @@ class Product extends Model
         return $this->hasOneThrough(Category::class, Category::class, 'id', 'id', 'category_id', 'parent_id');
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'category_id')->with('parent');
+    }
+
     public function seller()
     {
         return $this->belongsTo(Seller::class, 'seller_id');

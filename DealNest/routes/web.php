@@ -81,32 +81,36 @@ Route::group(['prefix' => 'tai-khoan'], function () {
     Route::get('/newPassword', [AccountController::class, 'newPassword'])->name('account.newPassword');
     Route::post('/newPasswordProcessing', [AccountController::class, 'newPasswordProcessing'])->name('account.newPasswordProcessing');
 
-
-    Route::prefix('/tai-khoan-cua-toi')->group(function () {
-        Route::get('/ho-so', [ProfileController::class, 'index'])->name('account.profile.index');
-        Route::put('/ho-so-cap-nhat/{id}', [ProfileController::class, 'update'])->name('account.profile.update');
-        Route::get('/dia-chi', [AddressController::class, 'index'])->name('account.address.index');
-        Route::post('/dia-chi/them', [AddressController::class, 'create'])->name('account.address.create');
-        Route::get('/dia-chi/sua/{id}', [AddressController::class, 'edit'])->name('account.address.edit');
-        Route::put('/dia-chi/cap-nhat/{id}', [AddressController::class, 'update'])->name('account.address.update');
-        Route::get('/dia-chi/xoa/{id}', [AddressController::class, 'delete'])->name('account.address.delete');
-        Route::get('/dia-chi/mac-dinh/{id}', [AddressController::class, 'setDefault'])->name('account.address.setDefault');
-        Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order');
-        Route::post('/don-mua/cap-nhat/trang-thai', [OrderController::class, 'updateOrderItemStatus'])->name('acccount.order.updateStatus');
-        Route::get('/cua-hang/{id}', [ShopController::class, 'index'])->name('client.shop');
-        Route::post('/san-pham/yeu-thich/{id}', [WishListController::class, 'create']);
-        Route::get('/san-pham-yeu-thich', [WishListController::class, 'index'])->name('client.favourite');
-        Route::get('/san-pham-yeu-thich/xoa/{id}', [WishListController::class, 'destroy'])->name('client.wishList.destroy');
-        Route::post('/theo-doi/cua-hang', [BuyerController::class, 'followSeller'])->name('client.follow.create');
-        Route::get('/danh-sach/cua-hang', [BuyerController::class, 'index'])->name('client.follow');
-
-        Route::get('/voucher', [HomeController::class, 'voucher']);
-
-        Route::get('/doi-mat-khau', [AccountController::class, 'changePassword'])->name('account.changePassword');
-
-        Route::post('/doi-mat-khau-xu-ly', [AccountController::class, 'changePasswordProcessing'])->name('account.changePasswordProcessing');
-    });
+  
 });
+
+
+Route::prefix('/tai-khoan-cua-toi')->group(function () {
+    Route::get('/ho-so', [ProfileController::class, 'index'])->name('account.profile.index');
+    Route::put('/ho-so-cap-nhat/{id}', [ProfileController::class, 'update'])->name('account.profile.update');
+    Route::get('/dia-chi', [AddressController::class, 'index'])->name('account.address.index');
+    Route::post('/dia-chi/them', [AddressController::class, 'create'])->name('account.address.create');
+    Route::get('/dia-chi/sua/{id}', [AddressController::class, 'edit'])->name('account.address.edit');
+    Route::put('/dia-chi/cap-nhat/{id}', [AddressController::class, 'update'])->name('account.address.update');
+    Route::get('/dia-chi/xoa/{id}', [AddressController::class, 'delete'])->name('account.address.delete');
+    Route::get('/dia-chi/mac-dinh/{id}', [AddressController::class, 'setDefault'])->name('account.address.setDefault');
+    Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order');
+    Route::post('/don-mua/cap-nhat/trang-thai', [OrderController::class, 'updateOrderItemStatus'])->name('acccount.order.updateStatus');
+    Route::get('/cua-hang/{id}', [ShopController::class, 'index'])->name('client.shop');
+    Route::post('/san-pham/yeu-thich/{id}', [WishListController::class, 'create']);
+    Route::get('/san-pham-yeu-thich', [WishListController::class, 'index'])->name('client.favourite');
+    Route::get('/san-pham-yeu-thich/xoa/{id}', [WishListController::class, 'destroy'])->name('client.wishList.destroy');
+    Route::post('/theo-doi/cua-hang', [BuyerController::class, 'followSeller'])->name('client.follow.create');
+    Route::get('/danh-sach/cua-hang', [BuyerController::class, 'index'])->name('client.follow');
+
+    Route::get('/voucher', [HomeController::class, 'voucher']);
+
+    Route::get('/doi-mat-khau', [AccountController::class, 'changePassword'])->name('account.changePassword');
+
+    Route::post('/doi-mat-khau-xu-ly', [AccountController::class, 'changePasswordProcessing'])->name('account.changePasswordProcessing');
+});
+
+
 
 // Middleware
 Route::group(['middleware' => 'auth'], function () {

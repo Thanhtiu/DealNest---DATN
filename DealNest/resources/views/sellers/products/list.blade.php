@@ -226,7 +226,7 @@ tr:hover {
                                 @foreach($productAll as $item)
                                 <tr>
                                     <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
                                     <td>
                                         @if($item->product_image->isNotEmpty())
                                         <img src="{{asset('uploads/'.$item->image)}}" alt=""
@@ -286,7 +286,7 @@ tr:hover {
                                 @foreach($productSuccess as $item)
                                 <tr>
                                     <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
                                     <td>
                                         @if($item->product_image->isNotEmpty())
                                         <img src="{{asset('uploads/'.$item->image)}}" alt=""
@@ -340,7 +340,8 @@ tr:hover {
                                 @foreach($productFail as $item)
                                 <tr>
                                     <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
+
                                     <td>
                                         @if($item->product_image->isNotEmpty())
                                         <img src="{{asset('uploads/'.$item->image)}}" alt=""
@@ -393,7 +394,7 @@ tr:hover {
                                 @foreach($productPending as $item)
                                 <tr>
                                     <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->subcategory->name, 20, '...') }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
                                     <td>
                                         @if($item->product_image->isNotEmpty())
                                         <img src="{{asset('uploads/'.$item->image)}}" alt=""

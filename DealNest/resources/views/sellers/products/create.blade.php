@@ -68,24 +68,19 @@
   .checkbox-container {
     display: flex;
     flex-wrap: wrap;
-    /* Để các checkbox xuống hàng mới nếu không đủ chỗ trên một hàng */
     gap: 20px;
-    /* Khoảng cách giữa các checkbox */
   }
 
   .form-check {
     display: flex;
     align-items: center;
     margin-right: 20px;
-    /* Khoảng cách giữa các checkbox nếu cần */
   }
 
   .form-check-input {
     margin-right: 10px;
-    /* Khoảng cách giữa checkbox và label */
   }
 
-  /* Container chính của ảnh bìa */
   .file-upload-container {
     display: flex;
     flex-direction: column;
@@ -94,7 +89,6 @@
     margin-top: 10px;
   }
 
-  /* Label hiển thị thông tin upload */
   .file-upload-info {
     font-size: 14px;
     color: #6c757d;
@@ -107,29 +101,21 @@
     color: #007bff;
   }
 
-  /* Ảnh bìa preview */
   #coverImagePreview {
     display: block;
     max-width: 70%;
     max-height: 300px;
     border-radius: 10px;
     object-fit: cover;
-    /* Đảm bảo ảnh không bị méo */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Tạo bóng cho ảnh */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /* margin-bottom: 10px; */
   }
 
-  /* Hiệu ứng hover cho ảnh bìa */
   #coverImagePreview:hover {
     transform: scale(1.05);
-    /* Zoom nhẹ khi hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    /* Tăng độ bóng khi hover */
   }
 
-  /* Thông báo nhỏ dưới ảnh */
   .mt-2.text-muted {
     font-size: 12px;
     color: #6c757d;
@@ -158,7 +144,6 @@
 
   .price-input {
     display: none;
-    /* Ẩn mặc định */
   }
 
   .add-attribute-btn {
@@ -175,10 +160,6 @@
 
   .price-checkbox {
     margin-top: 10px;
-  }
-
-  .attribute-block {
-    margin-bottom: 20px;
   }
 
   .attribute-block {
@@ -246,74 +227,71 @@
             <div class="file-upload-container">
               <label for="image" class="file-upload-info" id="fileUploadCoverInfo">Thêm hình ảnh (0/1)</label>
               <input type="file" id="image" name="image" class="file-upload-default" accept="image/*">
-              <img id="coverImagePreview" src="#" alt="" style="display: none; margin-top: 10px;" />
+              <img id="coverImagePreview" src="#" alt="Preview ảnh bìa" style="display: none; margin-top: 10px; max-width: 100%; border-radius: 5px;">
             </div>
             <p class="mt-2 text-muted">
               • Tải lên hình ảnh 1:1. Ảnh bìa sẽ được hiển thị tại các trang Kết quả tìm kiếm, Gợi ý hôm nay,...
             </p>
           </div>
 
-          <!-- Section for multiple images without preview -->
-          <div class="form-group">
+          <div class="form-group mt-4">
             <label class="form-label">* Thêm hình ảnh</label>
             <div class="file-upload-container">
               <label for="img" class="file-upload-info" id="fileUploadInfo">Thêm hình ảnh (0/10)</label>
               <input type="file" id="img" name="img[]" class="file-upload-default" multiple accept="image/*">
             </div>
+            <p class="mt-2 text-muted">
+              • Tải lên tối đa 10 hình ảnh. Các định dạng hỗ trợ: .jpg, .png, .gif.
+            </p>
+          </div>
+
+
+          <div class="row">
+            <!-- Tên sản phẩm -->
+            <div class="col-md-6 form-group">
+              <label for="name">Tên sản phẩm</label>
+              <input type="text" name="name" class="form-control" id="name" placeholder="Tên sản phẩm" value="{{ old('name') }}">
+            </div>
+
+            <!-- Slug sản phẩm -->
+            <div class="col-md-6 form-group">
+              <label for="slug">Slug sản phẩm</label>
+              <input type="text" name="slug" class="form-control" id="slug" placeholder="Slug sản phẩm" value="{{ old('slug') }}">
+            </div>
           </div>
 
 
 
-          <div class="form-group">
-            <label for="name">Tên sản phẩm</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Tên sản phẩm"
-              value="{{ old('name') }}">
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <label for="categorySelect" class="form-label">Thể loại</label>
+              <select class="form-select" id="categorySelect" name="">
+                <option value="">Chọn thể loại</option>
+                @foreach ($category as $item)
+                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                @endforeach
+              </select>
+            </div>
 
-          </div>
-
-          <div class="form-group">
-            <label for="slug">Tên sản phẩm</label>
-            <input type="text" name="slug" class="form-control" id="slug" placeholder="Tên sản phẩm"
-              value="{{ old('slug') }}">
-
-          </div>
-
-          <div class="form-group">
-            <label for="categorySelect" class="form-label">Thể loại</label>
-            <select class="form-select" id="categorySelect" name="">
-              <option value="">Chọn thể loại</option>
-              @foreach ($category as $item)
-              <option value="{{ $item->id }}">{{ $item->name }}</option>
-              @endforeach
-            </select>
-          </div>
-
-          <div class="col-md-6 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Thể loại con</h4>
-                <div class="form-group">
-                  <label for="subCategorySelect" class="form-label">Thể loại con</label>
-                  <select class="form-select" id="subCategorySelect" name="category_id">
-                    <option value="">Chọn thể loại con</option>
-                  </select>
-                </div>
-              </div>
+            <div class="col-md-6 form-group">
+              <label for="subCategorySelect" class="form-label">Thể loại con</label>
+              <select class="form-select" id="subCategorySelect" name="category_id">
+                <option value="">Chọn thể loại con</option>
+                <!-- Dữ liệu thể loại con sẽ được thêm vào thông qua AJAX hoặc sau khi chọn thể loại chính -->
+              </select>
             </div>
           </div>
 
 
           <div class="row">
-            <div class="form-group">
+            <div class="col-md-6 form-group">
               <label for="price">Giá</label>
-              <input type="text" class="form-control" name="price" id="price" placeholder="Giá" value={{old('price')}}>
+              <input type="text" class="form-control" name="price" id="price" placeholder="Giá" value="{{ old('price') }}">
             </div>
-          </div>
 
-          <div class="row">
-            <div class="form-group">
+            <div class="col-md-6 form-group">
               <label for="mrp">Giá bán lẻ</label>
-              <input type="text" class="form-control" name="mrp" id="mrp" placeholder="mrp" value={{old('mrp')}}>
+              <input type="text" class="form-control" name="mrp" id="mrp" placeholder="Giá bán lẻ" value="{{ old('mrp') }}">
             </div>
           </div>
 
@@ -357,16 +335,14 @@
                 <div class="container mt-5">
                   <h2>Chọn Thuộc Tính Sản Phẩm</h2>
 
-                  <!-- Thuộc tính chính: Kích thước -->
                   <div class="row attribute-block">
-                    <div class="col-12">
+                    <!-- Thuộc tính chính: Kích thước -->
+                    <div class="col-md-6">
                       <label class="form-check-label">Kích thước</label>
                       <div class="form-inline-row">
                         <div class="attribute-form" id="size-attributes">
                           <div class="form-row mb-2">
-                           
-                              <input type="hidden" name="attributes[0][variant]" value="Kích thước">
-                        
+                            <input type="hidden" name="attributes[0][variant]" value="Kích thước">
                             <div class="col">
                               <input type="text" name="attributes[0][value][]" class="form-control" placeholder="Nhập kích thước">
                             </div>
@@ -378,18 +354,14 @@
                         <button type="button" id="add-size-form" class="btn btn-success mt-2">Thêm kích thước</button>
                       </div>
                     </div>
-                  </div>
 
-                  <!-- Thuộc tính chính: Màu sắc -->
-                  <div class="row attribute-block mt-4">
-                    <div class="col-12">
+                    <!-- Thuộc tính chính: Màu sắc -->
+                    <div class="col-md-6">
                       <label class="form-check-label">Màu sắc</label>
                       <div class="form-inline-row">
                         <div class="attribute-form" id="color-attributes">
                           <div class="form-row mb-2">
-                           
-                              <input type="hidden" name="attributes[1][variant]" value="Màu sắc">
-                          
+                            <input type="hidden" name="attributes[1][variant]" value="Màu sắc">
                             <div class="col">
                               <input type="text" name="attributes[1][value][]" class="form-control" placeholder="Nhập màu sắc">
                             </div>
@@ -406,11 +378,6 @@
                     </div>
                   </div>
                 </div>
-
-
-
-
-
 
               </div>
             </div>

@@ -344,6 +344,7 @@ button, .delete-btn, .set-default-btn {
     document.querySelectorAll('.update-btn').forEach(button => {
         button.addEventListener('click', function() {
             const addressId = this.getAttribute('data-id');
+            
             document.getElementById('updateAddressId').value = addressId;
             const updateForm = document.getElementById('updateAddressForm');
             updateForm.action = `/tai-khoan-cua-toi/dia-chi/cap-nhat/${addressId}`;

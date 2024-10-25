@@ -1,153 +1,153 @@
 @extends('layouts.client.app')
 <style>
-   
-   /* Logo and Title Section */
-   .header-section {
-       display: flex;
-       align-items: center;
-       justify-content: space-between;
-       padding: 20px 0;
-       background-color: #fff;
-       border-bottom: 2px solid #e1e1e1;
-       margin-bottom: 20px;
-       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-       max-width: 1200px;
-       margin: 0 auto;
-   }
+    /* Logo and Title Section */
+    .header-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 0;
+        background-color: #fff;
+        border-bottom: 2px solid #e1e1e1;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-   .header-section img {
-       width: 120px; /* Đặt kích thước logo */
-       height: auto;
-   }
+    .header-section img {
+        width: 120px;
+        /* Đặt kích thước logo */
+        height: auto;
+    }
 
-   .header-title {
-       font-size: 24px;
-       font-weight: bold;
-       color: #333;
-       margin-left: 20px;
-       flex-grow: 1;
-       text-align: center;
-   }
+    .header-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-left: 20px;
+        flex-grow: 1;
+        text-align: center;
+    }
 
-   .fixed-section {
-       position: fixed;
-       bottom: 0;
-       left: 0;
-       right: 0;
-       max-width: 1200px;
-       margin: 0 auto;
-       background-color: #f9f9f9;
-       padding: 20px;
-       box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-       z-index: 1000;
-       font-family: 'Arial', sans-serif;
-       font-size: 14px;
-       border-top: 2px solid #e1e1e1;
-   }
+    .fixed-section {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: #f9f9f9;
+        padding: 20px;
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        font-family: 'Arial', sans-serif;
+        font-size: 14px;
+        border-top: 2px solid #e1e1e1;
+    }
 
-   .voucher-row,
-   .shopee-xu-row,
-   .bottom-row {
-       display: flex;
-       align-items: center;
-       justify-content: space-between;
-       margin-bottom: 10px;
-   }
+    .voucher-row,
+    .shopee-xu-row,
+    .bottom-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
 
-   .voucher-row input,
-   .shopee-xu-row input,
-   .bottom-row input {
-       margin-right: 10px;
-   }
+    .voucher-row input,
+    .shopee-xu-row input,
+    .bottom-row input {
+        margin-right: 10px;
+    }
 
-   .voucher-row a,
-   .shopee-xu-row span {
-       color: #007bff;
-       font-weight: 500;
-       transition: color 0.3s ease;
-   }
+    .voucher-row a,
+    .shopee-xu-row span {
+        color: #007bff;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
 
-   .voucher-row a:hover,
-   .shopee-xu-row span:hover {
-       color: #0056b3;
-   }
+    .voucher-row a:hover,
+    .shopee-xu-row span:hover {
+        color: #0056b3;
+    }
 
-   .amount-deducted {
-       margin-left: auto;
-       color: #777;
-   }
+    .amount-deducted {
+        margin-left: auto;
+        color: #777;
+    }
 
-   .bottom-row input {
-       margin-right: 10px;
-   }
+    .bottom-row input {
+        margin-right: 10px;
+    }
 
-   .bottom-row a {
-       color: #ff5722;
-       margin-right: 20px;
-       font-weight: 500;
-       transition: color 0.3s ease;
-   }
+    .bottom-row a {
+        color: #ff5722;
+        margin-right: 20px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
 
-   .bottom-row a:hover {
-       color: #e64a19;
-   }
+    .bottom-row a:hover {
+        color: #e64a19;
+    }
 
-   .save-section {
-       color: red;
-       margin-right: auto;
-       font-weight: bold;
-   }
+    .save-section {
+        color: red;
+        margin-right: auto;
+        font-weight: bold;
+    }
 
-   .total-payment {
-       display: flex;
-       align-items: center;
-       margin-right: 20px;
-   }
+    .total-payment {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+    }
 
-   .total-amount {
-       color: #ff5722;
-       font-size: 20px;
-       font-weight: bold;
-       margin-left: 10px;
-   }
+    .total-amount {
+        color: #ff5722;
+        font-size: 20px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
 
-   .savings {
-       color: #777;
-       font-size: 12px;
-       margin-left: 5px;
-   }
+    .savings {
+        color: #777;
+        font-size: 12px;
+        margin-left: 5px;
+    }
 
-   .purchase-button {
-       background-color: #ff5722;
-       color: white;
-       border: none;
-       padding: 12px 30px;
-       border-radius: 5px;
-       cursor: pointer;
-       transition: background-color 0.3s ease, box-shadow 0.3s ease;
-       font-size: 16px;
-   }
+    .purchase-button {
+        background-color: #ff5722;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        font-size: 16px;
+    }
 
-   .purchase-button:hover {
-       background-color: #e64a19;
-       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-   }
+    .purchase-button:hover {
+        background-color: #e64a19;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
-   .click-code {
-       text-decoration: none;
-       color: #007bff;
-       font-weight: 500;
-       transition: color 0.3s ease;
-   }
+    .click-code {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
 
-   .click-code:hover {
-       color: #0056b3;
-   }
+    .click-code:hover {
+        color: #0056b3;
+    }
 </style>
 @section('content')
 <!-- Logo and Title Section Begin -->
 <section class="header-section">
-    
+
     <div class="header-title">Giỏ Hàng Của Bạn</div> <!-- Tiêu đề giỏ hàng -->
 </section>
 <!-- Logo and Title Section End -->
@@ -157,7 +157,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="shoping__cart__table">
-                    @if($carts->isEmpty())
+                    @if($cartItems->isEmpty())
                     <div class="text-center">
                         <img src="{{ asset('client/img/no-cart.png') }}" alt="No Cart" class="img-fit">
                     </div>
@@ -181,7 +181,7 @@
 
                             <form id="cartForm">
                                 @csrf
-                                @foreach($carts as $item)
+                                @foreach($cartItems as $item)
                                 <tr>
                                     <td class="shoping__cart__item shoping_cart_item_checkbox">
                                         <input type="checkbox" class="shoping_cart_item_checkbox_checkbox"
@@ -189,7 +189,7 @@
                                             data-total-price="{{ $item->total_price }}">
                                     </td>
                                     <td class="shoping__cart__item">
-                                        @if($item->product->product_image->isNotEmpty())
+                                        @if($item->product->image)
                                         <img src="{{ asset('uploads/'.$item->product->image) }}" alt="Product Image"
                                             style="max-width: 100px; max-height: 140px; object-fit: cover;">
                                         @else
@@ -197,17 +197,11 @@
                                             style="max-width: 100px; max-height: 140px; object-fit: cover;">
                                         @endif
                                         <h5>{{ $item->product->name }}</h5>
-                                        @forelse($item->items as $cartItem)
-                                        <p class="text-center">{{ $cartItem->attribute->name }}: {{ $cartItem->value }}
-                                        </p>
-                                        @empty
-                                        <p>Không có thuộc tính</p>
-                                        @endforelse
+                                        <p class="text-center">Màu: {{ $item->color }}, Kích thước: {{ $item->size }}</p>
                                     </td>
-                                    <td class="shoping__cart__price">{{ number_format($item->discount) }}</td>
+                                    <td class="shoping__cart__price">{{ number_format($item->product->price, 0, ',', '.') }} VNĐ</td>
                                     <td class="shoping__cart__quantity">{{ $item->quantity }}</td>
-                                    <td class="shoping__cart__total">{{ number_format($item->total_price, 0, ',', '.')
-                                        }}</td>
+                                    <td class="shoping__cart__total">{{ number_format($item->total_price, 0, ',', '.') }} VNĐ</td>
                                 </tr>
                                 @php
                                 $totalPriceSum += $item->total_price; // Cộng dồn total_price vào biến totalPriceSum
@@ -215,24 +209,19 @@
                                 @endforeach
                                 <tr>
                                     <td colspan="4" style="text-align: right;"><strong>Tổng cộng:</strong></td>
-                                    <td class="shoping__cart__total">{{ number_format($totalPriceSum, 0, ',', '.') }}
-                                    </td>
+                                    <td class="shoping__cart__total">{{ number_format($totalPriceSum, 0, ',', '.') }} VNĐ</td>
                                 </tr>
                             </form>
-
-
                         </tbody>
                     </table>
-
                     @endif
                 </div>
             </div>
         </div>
     </div>
-
-
-
 </section>
+
+
 <!-- Shoping Cart Section End -->
 <!-- dat hang -->
 <div class="fixed-section">
@@ -252,7 +241,6 @@
     <div class="bottom-row">
         <input type="checkbox" id="select-all">
         <label for="select-all">
-            <span class="checkmark"></span> Chọn Tất Cả ({{ count($carts) }})
         </label>
         <a href="#" class="delete-selected">Xóa</a>
         <span class="save-section">Lưu vào mục Đã thích</span>
@@ -270,123 +258,6 @@
 </div>
 
 <!--end dat hang -->
-
-<script>
-    // Cart Submit
-    document.querySelector('.purchase-button').addEventListener('click', function(e) {
-        e.preventDefault();
-
-        let form = document.getElementById('cartForm');
-        let formData = new FormData(form);
-
-        fetch('{{ route('cart.submit') }}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('input[name=_token]').value
-                },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Chuyển hướng đến route checkout
-                    window.location.href = '{{ route('checkout') }}';
-                } else {
-                    alert('Vui lòng chọn ít nhất một sản phẩm!');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    });
-
-    // Selected product
-    document.getElementById('select-all').addEventListener('change', function() {
-        let checkboxes = document.querySelectorAll('.shoping_cart_item_checkbox_checkbox');
-        let totalAmount = 0; // Khởi tạo biến tổng
-
-        checkboxes.forEach(function(checkbox) {
-            checkbox.checked = document.getElementById('select-all').checked;
-
-            // Nếu checkbox được chọn, tính tổng giá trị
-            if (checkbox.checked) {
-                let totalPrice = parseFloat(checkbox.getAttribute('data-total-price')); // Lấy giá trị total_price từ thuộc tính data-total-price
-                if (!isNaN(totalPrice)) {
-                    totalAmount += totalPrice; // Cộng dồn
-                }
-            }
-        });
-
-        // Cập nhật tổng số tiền
-        document.querySelector('.total-amount').textContent = new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND'
-        }).format(totalAmount);
-        document.querySelector('.total-payment span').textContent = `Tổng thanh toán (${checkboxes.length} Sản phẩm):`;
-    });
-
-    // Destroy cart
-    document.querySelector('.delete-selected').addEventListener('click', function(e) {
-        e.preventDefault();
-
-        // Lấy tất cả các checkbox đã được chọn
-        let checkedBoxes = document.querySelectorAll('input[name="checkbox[]"]:checked');
-
-        // Kiểm tra xem có checkbox nào được chọn không
-        if (checkedBoxes.length === 0) {
-            alert('Vui lòng chọn ít nhất một sản phẩm để xóa.');
-            return;
-        }
-
-        // Tạo một mảng để lưu id của các mục được chọn
-        let selectedItems = [];
-        checkedBoxes.forEach(function(checkbox) {
-            selectedItems.push(checkbox.value);
-        });
-
-        // Tạo form data để gửi qua Ajax
-        let formData = new FormData();
-        formData.append('_token', document.querySelector('input[name=_token]').value);
-        selectedItems.forEach(function(item) {
-            formData.append('checkbox[]', item);
-        });
-
-        // Gửi Ajax request để xóa các mục đã chọn
-        fetch('{{ route('cart.destroy') }}', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Xóa thành công!');
-                    location.reload(); // Tải lại trang sau khi xóa thành công
-                } else {
-                    alert('Có lỗi xảy ra khi xóa các mục.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    });
-
-    // Sum totalprice
-    document.querySelectorAll('.shoping_cart_item_checkbox_checkbox').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            let totalAmount = 0;
-            let selectedCount = 0;
-
-            // Lặp qua tất cả các checkbox, nếu được chọn thì cộng giá trị total_price
-            document.querySelectorAll('.shoping_cart_item_checkbox_checkbox:checked').forEach(function(checkedBox) {
-                totalAmount += parseFloat(checkedBox.getAttribute('data-total-price')); // Lấy giá trị total_price từ thuộc tính data-total-price
-                selectedCount++;
-            });
-
-            // Cập nhật số lượng sản phẩm đã chọn và tổng số tiền
-            document.querySelector('.total-amount').textContent = new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }).format(totalAmount);
-            document.querySelector('.total-payment span').textContent = `Tổng thanh toán (${selectedCount} Sản phẩm):`;
-        });
-    });
-</script>
 
 
 @endsection
