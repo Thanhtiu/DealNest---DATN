@@ -123,7 +123,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/dang-ky', [RegisterTrationController::class, 'form'])->name('seller.register.form');
 
-        Route::get('/get-subCategory', [ProductController::class, 'getSubCategory'])->name('seller.getSubCategory');
+        Route::get('/categories/{id}/subcategories', [ProductController::class, 'getSubCategories'])->name('seller.getSubCategory');
 
         Route::post('/them-san-pham/submit', [ProductController::class, 'create'])->name('seller.product.create');
 
@@ -167,7 +167,6 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('/don-hang/xac-nhan/{id}', [OrderSellerController::class, 'confirm'])->name('seller.order.confirm');
         Route::get('/don-hang', [OrderSellerController::class, 'index'])->name('seller.order');
-
     });
     // End Seller Route
     // Cart Route

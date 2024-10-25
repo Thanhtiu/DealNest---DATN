@@ -25,7 +25,6 @@ class RegisterTrationController extends Controller
 
                 return redirect()->route('seller.index');
             }
-
         }
 
         return view('sellers.register.index');
@@ -50,11 +49,9 @@ class RegisterTrationController extends Controller
 
                 return view('sellers.register.form', compact('user'));
             }
-
         } else {
             return redirect()->route('account.login');
         }
-
     }
 
     public function store(Request $request)
@@ -64,7 +61,7 @@ class RegisterTrationController extends Controller
         // Get user by email
         $user = User::where('email', $userEmail)->first();
         $userId = $user->id;
-
+        // return $user;
         // Validate request inputs
         $request->validate([
             'store_name' => 'required|string|max:255',
@@ -105,14 +102,14 @@ class RegisterTrationController extends Controller
             'ward_id' => $request->input('ward'),
             'street' => $request->input('street'),
             'string_address' => $request->input('string_address'),
-            'phone' => $request->$user->phone,
-            'name'=> $request->$user->full_name,
+            'phone' => $request->input('store_phone'),
+            'name' => $user->name,
         ]);
 
         // Create seller record
         $seller = Seller::create([
             'user_id' => $userId,
-            'store_name' => $request->input('store_name'),
+            'name' => $request->input('store_name'),
             'store_phone' => $request->input('store_phone'),
             'store_email' => $request->input('store_email'),
             'address_id' => $address->id,
@@ -123,6 +120,4 @@ class RegisterTrationController extends Controller
 
         return redirect()->route('seller.index')->with('success', 'Đăng ký người bán thành công');
     }
-
-
 }

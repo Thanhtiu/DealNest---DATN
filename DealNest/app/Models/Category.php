@@ -20,10 +20,7 @@ class Category extends Model
         'slug'
     ];
 
-    public function products()
-    {
-        return $this->hasManyThrough(Product::class, SubCategory::class, 'category_id', 'subcategory_id');
-    }
+   
 
      // Quan hệ với danh mục cha
      public function parent()

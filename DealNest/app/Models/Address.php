@@ -10,6 +10,8 @@ class Address extends Model
     use HasFactory;
     protected $table = 'address';
     protected $fillable = [
+        'name',
+        'phone',
         'user_id',
         'province_id',
         'district_id',
@@ -17,8 +19,6 @@ class Address extends Model
         'street',
         'string_address',
         'active',
-        'phone',
-        'name',
     ];
     
     public function user(){

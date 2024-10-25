@@ -4,11 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Brand;
-use App\Models\SubCategory;
+use App\Models\Country;
 use App\Models\Product_image;
-use App\Models\attribute_value;
-use App\Models\Wishlist;
+// use App\Models\Wishlist;
 
 class Product extends Model
 {
@@ -17,47 +15,54 @@ class Product extends Model
     protected $table = 'products';
 
     protected $fillable = [
-        'name',
         'seller_id',
         'category_id',
         'country_id',
+        'name',
         'slug',
-        'description',
         'price',
         'mrp',
         'image',
+        'description',
         'quantity',
         'view',
-        'sku',
         'sales',
-        'trash_can',
-        'note',
         'status',
+        'transh_can',
+        'note'
+
     ];
 
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
-    
-    public function brand()
+
+    public function country()
     {
-        return $this->belongsTo(Brand::class, 'brand_id');
+        return $this->belongsTo(Country::class, 'country_id');
     }
     public function product_image()
     {
         return $this->hasMany(Product_image::class, 'product_id');
     }
 
+    public function parentCategory()
+    {
+        return $this->hasOneThrough(Category::class, Category::class, 'id', 'id', 'category_id', 'parent_id');
+    }
+
     public function seller()
     {
         return $this->belongsTo(Seller::class, 'seller_id');
     }
-    public function attribute_values()
+
+    // public function wishlist() {
+    //     return $this->hasMany(Wishlist::class);
+    // }
+
+    public function productVariants()
     {
-        return $this->hasMany(attribute_value::class, 'product_id');
-    }
-    public function wishlist() {
-        return $this->hasMany(Wishlist::class);
+        return $this->hasMany(ProductVariant::class, 'product_id');
     }
 }

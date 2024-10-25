@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
+
+class ProductVariant extends Model
+{
+    use HasFactory;
+
+    protected $table = 'product_variants';
+
+    protected $fillable = [
+        'variant',
+        'product_id',
+        'value',
+        'price', 
+    ];
+
+   
+
+    // Thiết lập mối quan hệ belongsTo đúng với khóa ngoại `product_id`
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+}
+

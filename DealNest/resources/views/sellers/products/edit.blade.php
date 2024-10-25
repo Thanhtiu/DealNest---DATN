@@ -310,7 +310,7 @@
             <div class="list-image">
               @foreach($product->product_image as $item)
               <div class="item-image">
-                <img src="{{ asset('uploads/' . $item->url) }}" alt="Image"
+                <img src="{{ asset('uploads/' . $item->image) }}" alt="Image"
                   style="width: 200px; height: 200px; object-fit: cover; display:block;">
                 <div class="form-group mt-3">
                   {{-- <label>File upload</label> --}}
@@ -330,51 +330,63 @@
             </div>
           </div>
 
-
-
           <div class="form-group">
             <label for="name">Tên sản phẩm</label>
             <input type="text" name="name" class="form-control" id="name" placeholder="Tên sản phẩm"
               value="{{$product->name}}">
+
+          </div>
+
+          <div class="form-group">
+            <label for="slug">Tên sản phẩm</label>
+            <input type="text" name="slug" class="form-control" id="slug" placeholder="Tên sản phẩm"
+              value="{{$product->slug}}">
+
           </div>
 
           <div class="form-group">
             <label for="categorySelect" class="form-label">Thể loại</label>
-            <select class="form-select" id="categorySelect" name="category_id">
-              @foreach ($category as $item)
-              <option value="{{ $item->id }}" @if($item->id === $product->category_id) selected @endif>
+            <select class="form-select" id="categorySelect" name="">
+              @foreach ($categories as $item)
+              <option value="{{ $item->id }}" @if((int)$item->id === (int)$product->category->parent->id) selected @endif>
                 {{ $item->name }}
               </option>
               @endforeach
             </select>
           </div>
 
+          <input type="hidden" id="currentSubCategoryId" value="{{ $product->category->id }}">
+
           <div class="col-md-6 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">Thể loại con</h4>
-                <p class="card-description"></p>
-                <div>
-                  <div class="row">
-                    <!-- Select Thể loại con -->
-                    <div class="form-group">
-                      <label for="subCategorySelect" class="form-label">Thể loại con</label>
-                      <select class="form-select" id="subCategorySelect" name="subcategory_id"
-                        data-selected-subcategory-id="{{ $product->subcategory_id }}">
-                        {{-- Subcategories will be populated by JavaScript --}}
-                      </select>
-                    </div>
-                  </div>
+                <div class="form-group">
+                  <label for="subCategorySelect" class="form-label">Thể loại con</label>
+                  <select class="form-select" id="subCategorySelect" name="category_id">
+                    <option value="">Chọn thể loại con</option>
+                  </select>
                 </div>
               </div>
             </div>
           </div>
+
+
+
+
 
           <div class="row">
             <div class="form-group">
               <label for="price">Giá</label>
               <input type="text" class="form-control" name="price" id="price" placeholder="Giá"
                 value="{{$product->price}}">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group">
+              <label for="mrp">Giá bán lẻ</label>
+              <input type="text" class="form-control" name="mrp" id="mrp" placeholder="mrp" value="{{$product->price}}">
             </div>
           </div>
 
@@ -405,127 +417,188 @@
                       value="{{$product->quantity}}">
                   </div>
                   <div class="form-group col-6">
-                    <label for="brand">Xuất xứ</label>
-                    <select class="form-select form-select-lg" id="brand" name="brand_id">
-                      @foreach($brand as $item)
-                      <option value="{{$item->id}}">{{$item->name}}</option>
+                    <label for="country_id">Xuất xứ</label>
+                    <select class="form-select form-select-lg" id="country" name="country_id">
+                      @foreach($country as $item)
+                      <option value="{{$item->id}}" {{$product->country_id=== $item->id ? 'selected' : ''}} >{{$item->name}}</option>
                       @endforeach
                     </select>
                   </div>
                 </div>
                 <div class="container mt-5">
-                  <h2>Chọn Thuộc Tính Sản Phẩm</h2>
+                  <h2>Chỉnh sửa thuộc tính sản phẩm</h2>
 
-                  <!-- Thuộc tính chính: Kích thước -->
+                  <!-- Thuộc tính: Kích thước -->
                   <div class="row attribute-block">
                     <div class="col-12">
                       <label class="form-check-label">Kích thước</label>
                       <div class="form-inline-row">
-                        <!-- Mặc định có một input cho Kích thước -->
-                        <div class="attribute-form">
-                          <div class="form-row">
+                        <div class="attribute-form" id="size-attributes">
+                          @foreach($product->productVariants as $variant)
+                          @if($variant->variant == 'Kích thước') <!-- Kiểm tra nếu thuộc tính là kích thước -->
+                          <div class="form-row mb-2">
+                            <input type="hidden" name="attributes[0][variant]" value="Kích thước">
                             <div class="col">
-                              <input type="text" class="form-control" placeholder="Nhập kích thước">
+                              <input type="text" name="attributes[0][value][]" class="form-control" value="{{ $variant->value }}" placeholder="Nhập kích thước">
                             </div>
                             <div class="col-auto">
-                              <button type="button" class="btn btn-danger remove-button" disabled>Xóa</button>
+                              <button type="button" class="btn btn-danger remove-button">Xóa</button>
                             </div>
                           </div>
+                          @endif
+                          @endforeach
                         </div>
-                        <!-- Nút thêm Kích thước -->
                         <button type="button" id="add-size-form" class="btn btn-success mt-2">Thêm kích thước</button>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Thuộc tính chính: Màu sắc -->
+                  <!-- Thuộc tính: Màu sắc -->
                   <div class="row attribute-block mt-4">
                     <div class="col-12">
                       <label class="form-check-label">Màu sắc</label>
                       <div class="form-inline-row">
-                        <!-- Mặc định có một input cho Màu sắc và giá -->
-                        <div class="attribute-form">
-                          <div class="form-row">
+                        <div class="attribute-form" id="color-attributes">
+                          @foreach($product->productVariants as $variant)
+                          @if($variant->variant == 'Màu sắc') <!-- Kiểm tra nếu thuộc tính là màu sắc -->
+                          <div class="form-row mb-2">
+                            <input type="hidden" name="attributes[1][variant]" value="Màu sắc">
                             <div class="col">
-                              <input type="text" class="form-control" placeholder="Nhập màu sắc">
+                              <input type="text" name="attributes[1][value][]" class="form-control" value="{{ $variant->value }}" placeholder="Nhập màu sắc">
                             </div>
                             <div class="col price-input">
-                              <input type="number" class="form-control" placeholder="Nhập giá">
+                              <input type="number" name="attributes[1][price][]" class="form-control" value="{{ $variant->price }}" placeholder="Nhập giá">
                             </div>
                             <div class="col-auto">
-                              <button type="button" class="btn btn-danger remove-button" disabled>Xóa</button>
+                              <button type="button" class="btn btn-danger remove-button">Xóa</button>
                             </div>
                           </div>
+                          @endif
+                          @endforeach
                         </div>
-                        <!-- Nút thêm Màu sắc -->
                         <button type="button" id="add-color-form" class="btn btn-success mt-2">Thêm màu sắc</button>
                       </div>
                     </div>
                   </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Cập nhật</button>
-            <button class="btn btn-light" type="reset">Hủy bỏ</button>
+              </div>
+              <button type="submit" class="btn btn-primary">Cập nhật</button>
+              <button class="btn btn-light" type="reset">Hủy bỏ</button>
         </form>
       </div>
     </div>
 
   </div>
-
 </div>
 
+<script>
+  document.getElementById('categorySelect').addEventListener('change', function() {
+    var categoryId = this.value;
+    var subCategorySelect = document.getElementById('subCategorySelect');
+    var currentSubCategoryId = document.getElementById('currentSubCategoryId').value;
 
+    // Reset danh sách thể loại con
+    subCategorySelect.innerHTML = '<option value="">Chọn thể loại con</option>';
+
+    if (categoryId) {
+      fetch(`/kenh-nguoi-ban/categories/${categoryId}/subcategories`)
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(function(subCategory) {
+            var option = document.createElement('option');
+            option.value = subCategory.id;
+            option.text = subCategory.name;
+
+            // Đặt selected nếu subCategory.id trùng với currentSubCategoryId
+            if (parseInt(subCategory.id) === parseInt(currentSubCategoryId)) {
+              option.selected = true;
+            }
+
+            subCategorySelect.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching subcategories:', error);
+        });
+    }
+  });
+
+  // Kích hoạt sự kiện thay đổi để hiển thị thể loại con cho thể loại chính hiện tại khi tải trang
+  document.getElementById('categorySelect').dispatchEvent(new Event('change'));
+</script>
+
+
+<script>
+  function removeVietnameseTones(str) {
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/gi, 'a');
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/gi, 'e');
+    str = str.replace(/ì|í|ị|ỉ|ĩ/gi, 'i');
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/gi, 'o');
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/gi, 'u');
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/gi, 'y');
+    str = str.replace(/đ/gi, 'd');
+    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/gi, ''); // Các dấu huyền, sắc, hỏi, ngã, nặng
+    str = str.replace(/\u02C6|\u0306|\u031B/gi, ''); // Các dấu mũ, ă, ơ, â
+    return str;
+  }
+
+  function convertToSlug(text) {
+    text = removeVietnameseTones(text); // Bỏ dấu tiếng Việt
+    return text.toLowerCase()
+      .replace(/ /g, '-') // Thay khoảng trắng bằng gạch ngang
+      .replace(/[^\w-]+/g, ''); // Xóa ký tự không phải là chữ cái, số, gạch ngang
+  }
+
+  document.getElementById('name').addEventListener('input', function() {
+    const nameValue = this.value;
+    const slugValue = convertToSlug(nameValue);
+    document.getElementById('slug').value = slugValue;
+  });
+</script>
 
 
 <script>
   document.getElementById('add-size-form').addEventListener('click', function() {
-    let sizeContainer = this.previousElementSibling; // Chọn div chứa các form
-    let newFormGroup = document.createElement('div');
-    newFormGroup.classList.add('attribute-form');
-    newFormGroup.innerHTML = `
-      <div class="form-row">
+    const newSize = document.createElement('div');
+    newSize.classList.add('form-row', 'mb-2');
+    newSize.innerHTML = `
         <div class="col">
-          <input type="text" class="form-control" placeholder="Nhập kích thước">
+            <input type="text" name="attributes[0][value][]" class="form-control" placeholder="Nhập kích thước">
         </div>
         <div class="col-auto">
-          <button type="button" class="btn btn-danger remove-button">Xóa</button>
+            <button type="button" class="btn btn-danger remove-button">Xóa</button>
         </div>
-      </div>
     `;
-    sizeContainer.appendChild(newFormGroup);
+    document.getElementById('size-attributes').appendChild(newSize);
 
-    // Xử lý xóa form mới thêm
-    newFormGroup.querySelector('.remove-button').addEventListener('click', function() {
-      newFormGroup.remove();
+    // Thêm sự kiện xóa cho nút "Xóa"
+    newSize.querySelector('.remove-button').addEventListener('click', function() {
+      newSize.remove();
     });
   });
 
   document.getElementById('add-color-form').addEventListener('click', function() {
-    let colorContainer = this.previousElementSibling; // Chọn div chứa các form
-    let newFormGroup = document.createElement('div');
-    newFormGroup.classList.add('attribute-form');
-    newFormGroup.innerHTML = `
-      <div class="form-row">
+    const newColor = document.createElement('div');
+    newColor.classList.add('form-row', 'mb-2');
+    newColor.innerHTML = `
         <div class="col">
-          <input type="text" class="form-control" placeholder="Nhập màu sắc">
+            <input type="text" name="attributes[1][value][]" class="form-control" placeholder="Nhập màu sắc">
         </div>
         <div class="col price-input">
-          <input type="number" class="form-control" placeholder="Nhập giá">
+            <input type="number" name="attributes[1][price][]" class="form-control" placeholder="Nhập giá">
         </div>
         <div class="col-auto">
-          <button type="button" class="btn btn-danger remove-button">Xóa</button>
+            <button type="button" class="btn btn-danger remove-button">Xóa</button>
         </div>
-      </div>
     `;
-    colorContainer.appendChild(newFormGroup);
+    document.getElementById('color-attributes').appendChild(newColor);
 
-    // Xử lý xóa form mới thêm
-    newFormGroup.querySelector('.remove-button').addEventListener('click', function() {
-      newFormGroup.remove();
+    // Thêm sự kiện xóa cho nút "Xóa"
+    newColor.querySelector('.remove-button').addEventListener('click', function() {
+      newColor.remove();
     });
   });
 </script>
-
 @endsection
 
 
@@ -617,49 +690,6 @@
         }
       });
     });
-
-
-    const categorySelect = document.getElementById('categorySelect');
-    const subCategorySelect = document.getElementById('subCategorySelect');
-    const selectedCategoryId = categorySelect ? categorySelect.value : null;
-    const selectedSubCategoryId = subCategorySelect ? subCategorySelect.getAttribute('data-selected-subcategory-id') : null;
-
-    function populateSubCategories(categoryId) {
-      subCategorySelect.innerHTML = '<option value="">Chọn thể loại con</option>';
-
-      if (categoryId) {
-        const url = `{{ route('seller.getSubCategory') }}?category_id=${categoryId}`;
-
-        fetch(url)
-          .then(response => response.json())
-          .then(subcategories => {
-            subcategories.forEach(subcategory => {
-              const option = document.createElement('option');
-              option.value = subcategory.id;
-              option.textContent = subcategory.name;
-
-              if (subcategory.id == selectedSubCategoryId) {
-                option.selected = true;
-              }
-
-              subCategorySelect.appendChild(option);
-            });
-          })
-          .catch(error => console.error('Error:', error));
-      }
-    }
-
-    if (categorySelect) {
-      if (selectedCategoryId) {
-        populateSubCategories(selectedCategoryId);
-      }
-
-      categorySelect.addEventListener('change', function() {
-        const categoryId = this.value;
-        populateSubCategories(categoryId);
-      });
-    }
-
 
   });
 </script>
