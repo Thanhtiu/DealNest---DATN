@@ -76,6 +76,7 @@ class SellerResource extends Resource
                             'Thông tin gian lận hoặc sai lệch' => 'Thông tin gian lận hoặc sai lệch',
                             'Không tuân thủ yêu cầu từ Shopee' => 'Không tuân thủ yêu cầu từ Shopee',
                         ])
+                        ->placeholder("Chọn lý do")
                         ->columnSpan(1) // Chiếm toàn bộ chiều rộng
                         ->reactive() // Để trường này phản ứng với các thay đổi
                         ->afterStateUpdated(function ($state, callable $set) {
@@ -94,7 +95,7 @@ class SellerResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('store_name')->label('Tên cửa hàng')->sortable()->searchable(),
+                TextColumn::make('name')->label('Tên cửa hàng')->sortable()->searchable(),
                 TextColumn::make('store_email')->label('Email')->sortable()->searchable(),
                 TextColumn::make('store_phone')->label('Điện thoại')->sortable()->searchable(),
                 BooleanColumn::make('status')->label('Trạng thái')->sortable()->searchable(),

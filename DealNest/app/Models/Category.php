@@ -21,6 +21,10 @@ class Category extends Model
     ];
 
    
+    public function products()
+    {
+        return $this->hasManyThrough(Product::class, 'category_id',);
+    }
 
      // Quan hệ với danh mục cha
      public function parent()
@@ -33,6 +37,11 @@ class Category extends Model
      {
          return $this->hasMany(Category::class, 'parent_id');
      }
+
+     public function getTableQuery()
+    {
+        return Category::with('parent'); // Eager load danh mục cha
+    }
 
 
 }

@@ -81,7 +81,8 @@ class UserResource extends Resource
                         ->required()
                         ->options([
                             'seller' => "Người bán hàng",
-                            'buyer' => "Người mua hàng"
+                            'buyer' => "Người mua hàng",
+                             'staff' => "Nhân viên"
                         ])
                         ->default('buyer')
                         ->label('Vai trò'),
