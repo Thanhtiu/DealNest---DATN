@@ -17,8 +17,10 @@
         margin: 20px auto;
         padding: 20px;
         background-color: #ffffff;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ lớn hơn */
-        border-radius: 12px; /* Bo góc mềm mại hơn */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        /* Thêm bóng đổ lớn hơn */
+        border-radius: 12px;
+        /* Bo góc mềm mại hơn */
         max-width: 1200px;
     }
 
@@ -47,7 +49,8 @@
 
     .tab-menu a.active {
         color: var(--primary-color);
-        border-bottom: 3px solid var(--primary-color); /* Màu chủ đạo */
+        border-bottom: 3px solid var(--primary-color);
+        /* Màu chủ đạo */
     }
 
     .tab-menu a:hover {
@@ -83,7 +86,8 @@
     input[type="text"]:focus,
     textarea:focus {
         border-color: var(--primary-color);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng khi focus */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        /* Hiệu ứng khi focus */
         outline: none;
     }
 
@@ -111,13 +115,14 @@
         border-radius: 8px;
         background-color: #ddd;
         margin-right: 20px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ cho ảnh */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        /* Thêm bóng đổ cho ảnh */
     }
 
     .logo-container button,
     .bg-container button {
         padding: 10px 20px;
-        background-color: #0d6efd; 
+        background-color: #0d6efd;
         color: #fff;
         border: none;
         border-radius: 8px;
@@ -130,7 +135,8 @@
     .logo-container button:hover,
     .bg-container button:hover,
     .save-btn:hover {
-        opacity: 0.85; /* Giảm opacity khi hover */
+        opacity: 0.85;
+        /* Giảm opacity khi hover */
     }
 
     .logo-details {
@@ -163,7 +169,8 @@
     }
 
     .cancel-btn:hover {
-        opacity: 0.85; /* Giảm opacity khi hover */
+        opacity: 0.85;
+        /* Giảm opacity khi hover */
     }
 
     .button-group {
@@ -217,8 +224,20 @@
             </div>
             <div class="form-group">
                 <label for="shop-name">Tên Shop</label>
-                <input type="text" id="shop-name" name="store_name" value="{{$seller->store_name}}" maxlength="30">
+                <input type="text" id="shop-name" name="name" value="{{$seller->name}}" maxlength="30">
                 <input type="hidden" id="seller_id" name="seller_id" value="{{$seller->id}}" maxlength="30">
+                <div class="input-counter">17/30</div>
+            </div>
+
+            <div class="form-group">
+                <label for="store_phone">Số điện thoại:</label>
+                <input type="text" id="store_phone" name="store_phone" value="{{$seller->store_phone}}" maxlength="30">
+                <div class="input-counter">17/30</div>
+            </div>
+
+            <div class="form-group">
+                <label for="store_emaile">Email cửa hàng:</label>
+                <input type="text" id="store_emaile" name="store_email" value="{{$seller->store_email}}" maxlength="30">
                 <div class="input-counter">17/30</div>
             </div>
 
@@ -252,8 +271,8 @@
 
             <div class="form-group">
                 <label for="shop-description">Mô tả Shop</label>
-                <textarea id="shop-description" name="store_description" rows="4" maxlength="500"
-                    placeholder="Nhập mô tả hoặc thông tin về Shop của bạn tại đây">{{$seller->store_description}}</textarea>
+                <textarea id="shop-description" name="description" rows="4" maxlength="500"
+                    placeholder="Nhập mô tả hoặc thông tin về Shop của bạn tại đây">{{$seller->description}}</textarea>
             </div>
 
             <div class="button-group">

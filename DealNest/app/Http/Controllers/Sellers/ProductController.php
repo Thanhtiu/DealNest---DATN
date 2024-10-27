@@ -133,7 +133,7 @@ class ProductController extends Controller
         // Fetch products based on seller's ID
         $productAll = Product::where('seller_id', $sellerId)
             ->where('trash_can', '!=', 0)
-            ->with(['category', 'product_image'])
+            ->with(['parent', 'product_image'])
             ->paginate(10);
         $productSuccess = Product::where('seller_id', $sellerId)
             ->where('status', 'approved')
@@ -288,7 +288,7 @@ class ProductController extends Controller
     {
         $sellerId = Session::get('sellerId');
         $products = Product::where('seller_id', operator: $sellerId)
-            ->where('trash_can', 'false')->get();
+            ->where('trash_can', 'false')->with('parent')->get();
         return view('sellers.products.listTrashCan', compact('products'));
     }
 

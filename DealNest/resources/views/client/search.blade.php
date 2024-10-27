@@ -234,100 +234,69 @@
 </style>
 
 <div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3">
-            <div class="sidebar">
-                <h3>Danh mục liên quan</h3>
-                <ul>
-                    @foreach($categories as $category)
-                        <li>{{ $category->name }}
-                            <ul>
-                                @foreach($category->subcategories as $subcategory)
-                                    <li>{{ $subcategory->name }}</li>
-                                @endforeach
-                            </ul>
-                        </li>
-                    @endforeach
-                </ul>
-
-
-
-                <div class="separator"></div>
-
-                <ul>
-                    <li>
-                        <a href="#">BỘ LỌC TÌM KIẾM</a>
+<div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3">
+        <div class="sidebar">
+            <h3>Danh mục liên quan</h3>
+            <ul>
+                @foreach($parentCategories as $category)
+                    <li>{{ $category->name }}
                         <ul>
-                            <li>
-                                <input class="province" type="checkbox" id="ha-noi" value="Hà Nội">
-                                <label for="ha-noi">Hà Nội</label>
-                            </li>
-                            <li>
-                                <input class="province" type="checkbox" id="tp-hcm" value="TP HCM">
-                                <label for="tp-hcm">TP HCM</label>
-                            </li>
-                            <li>
-                                <input class="province" type="checkbox" id="thai-nguyen" value="Thái Nguyên">
-                                <label for="thai-nguyen">Thái Nguyên</label>
-                            </li>
-                            <li>
-                                <input class="province" type="checkbox" id="vinh-phuc" value="Vĩnh Phúc">
-                                <label for="vinh-phuc">Vĩnh Phúc</label>
-                            </li>
-                            <li>
-                                <input class="province" type="checkbox" id="hai-phong" value="Hải Phòng">
-                                <label for="hai-phong">Hải Phòng</label>
-                            </li>
-                            <li>
-                                <input class="province" type="checkbox" id="can-tho" value="Cần Thơ">
-                                <label for="can-tho">Cần Thơ</label>
-                            </li>
-                            <li>
-                                <input class="province" type="checkbox" id="nam-dinh" value="Nam Định">
-                                <label for="nam-dinh">Nam Định</label>
-                            </li>
-                            {{-- Có thể thêm một nút "Thêm" nếu cần --}}
+                            @foreach($subCategories->where('parent_id', $category->id) as $subcategory)
+                                <li>{{ $subcategory->name }}</li>
+                            @endforeach
                         </ul>
                     </li>
-                </ul>
-            </div>
+                @endforeach
+            </ul>
 
+            <div class="separator"></div>
+
+            <!-- Bộ lọc tìm kiếm -->
+            <ul>
+                <li>
+                    <a href="#">BỘ LỌC TÌM KIẾM</a>
+                    <ul>
+                        <li>
+                            <input class="province" type="checkbox" id="ha-noi" value="Hà Nội">
+                            <label for="ha-noi">Hà Nội</label>
+                        </li>
+                        <!-- Thêm các tùy chọn lọc khác -->
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9">
+        <!-- Sort Bar -->
+        <div class="sort-bar">
+            <div class="sort-options">
+                <label for="sort">Sắp xếp theo:</label>
+                <div class="price-sort">
+                    <button class="price-option" id="sortby-desc" value="DESC">Mới Nhất</button>
+                    <button class="price-option" id="sortby-asc" value="ASC">Cũ Nhất</button>
+                    <button class="price-option" id="sortby-sale" value="sale">Bán Chạy</button>
+                </div>
+                <select id="sort-category">
+                    <option value="">Giá</option>
+                    <option value="price-asc">Thấp Đến Cao</option>
+                    <option value="price-desc">Cao Đến Thấp</option>
+                </select>
+            </div>
         </div>
 
-
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <!-- Sort Bar -->
-            <!-- Sort Bar -->
-            <div class="sort-bar">
-
-                <div class="sort-options">
-                    <label for="sort">Sắp xếp theo:</label>
-                    <div class="price-sort">
-                        <button class="price-option" id="sortby-desc" value="DESC">Mới Nhất</button>
-                        <button class="price-option" id="sortby-asc" value="ASC">Cũ Nhất</button>
-                        <button class="price-option" id="sortby-sale" value="sale">Bán Chạy</button>
-                    </div>
-                    <select id="sort-category">
-                        <option value="">Giá</option>
-                        <option value="price-asc">Thấp Đến Cao</option>
-                        <option value="price-desc">Cao Đến Thấp</option>
-                    </select>
-                </div>
-            </div>
-
-
-            <!-- Product List -->
-            <div class="product-list">
-
-                @foreach($products as $item)
+        <!-- Product List -->
+        <div class="product-list">
+            @foreach($products as $item)
                 <div class="cardd">
-                    <img src="{{asset('uploads/'.$item->image)}}" alt="Product Image">
+                    <img src="{{ asset('uploads/'.$item->image) }}" alt="Product Image">
                     <div class="discount">-92%</div>
                     <div class="content">
-                        <h2 class="title">{{$item->name}}</h2>
-                        <p class="price">₫ {{number_format($item->price, 0, ',', '.')}}</p>
+                        <h2 class="title">{{ $item->name }}</h2>
+                        <p class="price">₫ {{ number_format($item->price, 0, ',', '.') }}</p>
                     </div>
                     <div class="sold">
                         <span class="rating">
@@ -336,39 +305,23 @@
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star-half-alt"></i>
-
                         </span>
-                        {{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
-                        ($item->sales >= 1000 ? 'k' : '') }} lượt bán
+                        {{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) . ($item->sales >= 1000 ? 'k' : '') }} lượt bán
                     </div>
-                    {{-- <span class="location">Hà Nội</span> --}}
                     <span class="location">
                         @php
-
-                        $string = $item->seller->address->string_address;
-
-                        $array = preg_split('/[\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
-
-                        $lastTwoWords = array_slice($array, -2);
-
-                        $location = implode(' ', $lastTwoWords);
-
-
+                            $string = $item->seller->address->string_address ?? '';
+                            $array = preg_split('/[\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
+                            $lastTwoWords = array_slice($array, -2);
+                            $location = implode(' ', $lastTwoWords);
                         @endphp
-
                         {{ $location }}
-
                     </span>
-
-
-
                 </div>
-                @endforeach
-
-
-                <!-- Additional product cards -->
-            </div>
+            @endforeach
         </div>
     </div>
+</div>
+
 </div>
 @endsection

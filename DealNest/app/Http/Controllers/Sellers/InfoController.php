@@ -58,12 +58,13 @@ class InfoController extends Controller
         $seller->save();
 
         $seller->update([
-            'store_name' => $request->store_name,
-            'store_description' => $request->store_description,
+            'name' => $request->name,
+            'description' => $request->description,
+            'store_phone' => $request->store_phone,
+            'store_email' => $request->store_email,
             'logo' => isset($imageName) ? $imageName : $seller->logo,
             'background' => isset($imageName) ? $imageName : $seller->background
         ]);
         return redirect()->back()->with('success', 'Cập nhật hồ sơ cửa hàng thành công!');
-
     }
 }

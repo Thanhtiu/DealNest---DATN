@@ -12,33 +12,39 @@ class SearchController extends Controller
 {
     public function index(Request $request)
     {
-        $keyword = $this->convertToLowerNoAccents($request->input('key'));
+        // Lấy các danh mục cha có `parent_id` là 0
+        $parentCategories = Category::where('parent_id', 0)->get();
 
-        // Tìm kiếm sản phẩm theo tên, danh mục hoặc subcategory
-        $products = Product::with(['category', 'subcategory'])
-            ->whereRaw("LOWER(name) LIKE ?", ["%{$keyword}%"])
-            ->orWhereHas('category', function ($query) use ($keyword) {
-                $query->whereRaw("LOWER(name) LIKE ?", ["%{$keyword}%"]);
-            })
-            ->orWhereHas('subcategory', function ($query) use ($keyword) {
-                $query->whereRaw("LOWER(name) LIKE ?", ["%{$keyword}%"]);
-            })
+        // Lấy các danh mục con có `parent_id` khác 0
+        $subCategories = Category::where('parent_id', '!=', 0)->get();
+
+        // Tìm kiếm sản phẩm theo tên được nhập từ form tìm kiếm
+        $searchTerm = $request->input('search');
+        $products = Product::where('name', 'LIKE', "%{$searchTerm}%")
+            ->with('category.parent') // lấy cả thông tin danh mục và danh mục cha của sản phẩm
             ->get();
 
-        // Lấy danh mục từ các sản phẩm đã tìm thấy hoặc từ subcategory
-        $categories = Category::with('subcategories')
-            ->whereHas('products', function ($query) use ($keyword) {
-                $query->whereRaw("LOWER(products.name) LIKE ?", ["%{$keyword}%"]);
-            })
-            ->orWhereHas('subcategories', function ($query) use ($keyword) {
-                $query->whereRaw("LOWER(subcategories.name) LIKE ?", ["%{$keyword}%"]);
-            })
-            ->get();
+        // Lấy danh sách thể loại con có cùng danh mục cha với sản phẩm đầu tiên (nếu có)
+        $relatedSubCategories = collect();
+        if ($products->isNotEmpty()) {
+            // Lấy `parent_id` của danh mục cha từ sản phẩm đầu tiên tìm thấy
+            $parentId = $products->first()->category->parent_id ?? null;
 
-        return view('client.search', compact('products', 'categories'));
+            if ($parentId) {
+                // Lấy tất cả các danh mục con có cùng `parent_id`
+                $relatedSubCategories = Category::where('parent_id', $parentId)->get();
+            }
+        }
+
+
+        // Trả về view với các dữ liệu cần thiết
+        return view('client.search', compact(
+            'parentCategories',
+            'subCategories',
+            'products',
+            'relatedSubCategories'
+        ));
     }
-
-
 
 
 
@@ -191,6 +197,4 @@ class SearchController extends Controller
 
         return strtr($str, $unwanted_array);
     }
-
-
 }
