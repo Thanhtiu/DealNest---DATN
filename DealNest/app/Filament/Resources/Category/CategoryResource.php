@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 use Filament\Forms\Set;
 use Filament\Forms\Get;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -41,24 +42,26 @@ class CategoryResource extends Resource
     {
         return $form
         ->schema([
-            Grid::make(2) 
+            Grid::make(2)
                 ->schema([
                     TextInput::make('name')
-                        ->maxLength(255)
-                        ->required()
-                        ->live(onBlur: true)
-                        ->afterStateUpdated(function (string $operation, string $state, Forms\Set $set, Forms\Get $get) {
-                            $set('slug', Str::slug($state));
-                        })
-                        ->unique(Category::class,'slug', ignoreRecord:true)
-                        ->label('Tên danh mục'),
-        
-                    FileUpload::make('url')
+    ->maxLength(255)
+    ->required()
+    ->live(onBlur: true)
+    ->afterStateUpdated(function (string $operation, ?string $state, Forms\Set $set, Forms\Get $get) {
+        if ($state !== null) { // Kiểm tra nếu $state không rỗng
+            $set('slug', Str::slug($state));
+        }
+    })
+    ->unique(Category::class, 'slug', ignoreRecord: true)
+    ->label('Tên danh mục'),
+    
+                    FileUpload::make('image')
                         ->label('Hình ảnh')
                         ->directory('categories'),
                 ]),
-        
-            Grid::make(2) 
+    
+            Grid::make(2)
                 ->schema([
                     TextInput::make('slug')
                         ->maxLength(255)
@@ -67,11 +70,19 @@ class CategoryResource extends Resource
                         ->dehydrated()
                         ->unique(Category::class, 'slug', ignoreRecord: true)
                         ->label('Tên định danh'),
-        
+    
                     Toggle::make('status')
                         ->label('Hiển thị')
                         ->default(true),
                 ]),
+    
+                Select::make('parent_id')
+                ->label('Danh mục cha')
+                ->options(['0' => 'Danh mục lớn nhất'] + Category::all()->pluck('name', 'id')->toArray())
+                ->searchable()
+                ->placeholder('Chọn danh mục cha')
+                ->required()
+                ->default(0), // Đặt giá trị mặc định là 0 
         ]);
     }
 
@@ -81,8 +92,14 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Tên danh mục')->sortable()->searchable(),
                 TextColumn::make('slug')->label('Đường dẫn')->sortable()->searchable(),
-                ImageColumn::make('url')->label('Hình ảnh'),
-                
+                ImageColumn::make('image')->label('Hình ảnh'),
+                TextColumn::make('parent.name')
+                ->label('Danh mục cha')
+                ->sortable()
+                ->searchable()
+                ->getStateUsing(function ($record) {
+                    return $record->parent ? $record->parent->name : 'Danh mục lớn nhất'; // Nếu không có danh mục cha, hiển thị "Danh mục lớn nhất"
+                }),
             ])
             ->filters([
                 //
