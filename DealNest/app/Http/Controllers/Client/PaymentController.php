@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Voucher;
 use App\Models\User;
 use App\Models\Address;
+use App\Models\Cart_item;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Carbon\Carbon; 
@@ -16,45 +17,23 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-    public function index()
-    {
-        $userId =  auth()->id();
-        $userAddress = Address::where('user_id', $userId)->where('active', 1)->first();
-        
+    public function index(Request $request)
+{
+    $userId = auth()->id();
 
-        if (!session()->has('total_amount') || !session()->has('selected_items')) {
-            return redirect()->route('client.cart');
-        }
+    // Lấy địa chỉ mặc định của người dùng
+    $userAddress = Address::where('user_id', $userId)->where('active', 1)->first();
 
-        $totalAmount = session('total_amount');
-        $selectedItems = session('selected_items');
-        $productIds = array_column($selectedItems, 'product_id');
+    // Lấy các product_id từ request
+    $productIds = $request->input('cartIdtem', []);
 
-        // Lấy thông tin các sản phẩm từ cơ sở dữ liệu
-        $products = Product::whereIn('id', $productIds)->get();
+    // Lấy các sản phẩm từ bảng Cart_item dựa trên product_id trong mảng productIds
+    $products = Cart_item::whereIn('id', $productIds)->get();
 
-        // Nhóm sản phẩm theo seller để hiển thị voucher theo từng người bán
-        $groupedProducts = $products->groupBy('seller_id');
+    // dd($products);
 
-        // Khởi tạo mảng để chứa voucher của từng seller
-        $sellerVouchers = [];
-
-        // Lấy voucher theo seller và danh mục con
-        foreach ($groupedProducts as $sellerId => $sellerProducts) {
-            $subcategoryIds = $sellerProducts->pluck('subcategory_id')->toArray();
-
-            // Lấy voucher cho mỗi seller
-            $vouchers = Voucher::whereIn('subcategory_id', $subcategoryIds)
-                ->where('seller_id', $sellerId)
-                ->get();
-
-            // Gán voucher vào mảng sellerVouchers
-            $sellerVouchers[$sellerId] = $vouchers;
-        }
-
-        // Trả về view với dữ liệu
-        return view('client.checkout', compact('totalAmount', 'selectedItems', 'groupedProducts', 'sellerVouchers', 'products','userAddress'));
-    }
+    return view('client.checkout', compact('products', 'userAddress'));
+}
 
 
     public function checkoutProcessing(Request $request) {

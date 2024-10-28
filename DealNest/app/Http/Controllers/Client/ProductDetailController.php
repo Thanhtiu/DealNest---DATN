@@ -47,12 +47,6 @@ class ProductDetailController extends Controller
         $isFavourited = Wishlist::where('user_id', auth()->id())
             ->where('product_id', $id)
             ->exists();
-
-            $productRelated = Product::with(['subcategory', 'product_image', 'attribute_values.attribute'])
-            ->where('id', '!=', $productDetail->id) 
-            ->orderBy('sales', 'desc') 
-            ->get();
-
         return view('client.product-detail', compact(
             'productDetail',
             'seller',
@@ -60,7 +54,7 @@ class ProductDetailController extends Controller
             'dateJoin',
             'string_address',
             'isFavourited',
-            'productRelated',
+            
         ));
     }
 }

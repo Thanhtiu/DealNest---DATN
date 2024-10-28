@@ -713,8 +713,8 @@
     <div class="product-images">
       <!-- Hình ảnh chính (ảnh lớn) -->
       <div class="main-image">
-        <img src="{{ asset('uploads/'.$productDetail->image) }}" alt="Giày PUMA"
-          class="img-responsive" id="main-product-image">
+        <img src="{{ asset('uploads/'.$productDetail->image) }}" alt="Giày PUMA" class="img-responsive"
+          id="main-product-image">
       </div>
 
       <!-- Slider thumbnail -->
@@ -775,7 +775,8 @@
         @csrf
         <div class="product-options">
           <label for="size-select" class="form-label">Kích thước</label>
-          <select id="size-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;" name="size">
+          <select id="size-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;"
+            name="size">
             @foreach($productDetail->productVariants as $item)
             @if($item->variant === 'Kích thước')
             <option value="{{$item->value}}">{{$item->value}}</option>
@@ -785,10 +786,12 @@
 
 
           <label for="color-select" class="form-label">Màu sắc</label>
-          <select id="color-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;" name="color">
+          <select id="color-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;"
+            name="color">
             @foreach($productDetail->productVariants as $item)
             @if($item->variant === 'Màu sắc')
-            <option value="{{$item->value}}">{{$item->value}} - {{ number_format($item->price, 2, ',', '.') }} đ</option>
+            <option value="{{$item->value}}">{{$item->value}} - {{ number_format($item->price, 2, ',', '.') }} đ
+            </option>
             @endif
             @endforeach
           </select>
@@ -829,16 +832,14 @@
   <div class="product__details__tab">
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
-          aria-selected="true">Mô tả</a>
+        <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" aria-selected="true">Mô tả</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
-          aria-selected="false">Thông tin liên quan</a>
+        <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" aria-selected="false">Thông tin liên quan</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-          aria-selected="false">Đánh giá <span>(1)</span></a>
+        <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" aria-selected="false">Đánh giá
+          <span>(1)</span></a>
       </li>
     </ul>
     <div class="tab-content">
@@ -904,7 +905,9 @@
               <div class="mt-4">
                 <div class="border-bottom pb-3 mb-3">
                   <div class="d-flex align-items-start">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s" alt="User" class="rounded-circle me-3" style="width: 40px;">
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s"
+                      alt="User" class="rounded-circle me-3" style="width: 40px;">
                     <div>
                       <h6 class="mb-1">dosen98</h6>
                       <p class="mb-1 text-muted">2023-08-02 15:38 | Phân loại hàng: COOL,M(30-45KG)</p>
@@ -915,10 +918,15 @@
                         <span class="text-warning">★</span>
                         <span class="text-warning">★</span>
                       </div>
-                      <p class="mt-2 mb-2">Đúng với mô tả: chất đẹp ,vừa tiền giao đúng. Shop tư vấn nhiệt tình, giao nhanh.</p>
+                      <p class="mt-2 mb-2">Đúng với mô tả: chất đẹp ,vừa tiền giao đúng. Shop tư vấn nhiệt tình, giao
+                        nhanh.</p>
                       <div class="d-flex ">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" class="mr-2 " style="width: 100px;">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" style="width: 100px;">
+                        <img
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s"
+                          alt="Product" class="mr-2 " style="width: 100px;">
+                        <img
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s"
+                          alt="Product" style="width: 100px;">
                       </div>
                       <div class="mt-2">
                         <span class="text-muted">12 <i class="icon_like mr-2"></i></span>
@@ -929,7 +937,9 @@
 
                 <div>
                   <div class="d-flex align-items-start">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s" alt="User" class="rounded-circle me-3" style="width: 40px;">
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s"
+                      alt="User" class="rounded-circle me-3" style="width: 40px;">
                     <div>
                       <h6 class="mb-1">trannhicherry1997</h6>
                       <p class="mb-1 text-muted">2024-06-23 11:52 | Phân loại hàng: UNIQUE HỒNG,M(30-45KG)</p>
@@ -940,10 +950,15 @@
                         <span class="text-warning">★</span>
                         <span class="text-muted">★</span>
                       </div>
-                      <p class="mt-2 mb-2">Giao hàng nhanh, đóng gói bao bì cẩn thận, sản phẩm rất đẹp vải mát không bị nóng đâu.</p>
+                      <p class="mt-2 mb-2">Giao hàng nhanh, đóng gói bao bì cẩn thận, sản phẩm rất đẹp vải mát không bị
+                        nóng đâu.</p>
                       <div class="d-flex ">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" class="mr-2 " style="width: 100px;">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s" alt="Product" style="width: 100px;">
+                        <img
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s"
+                          alt="Product" class="mr-2 " style="width: 100px;">
+                        <img
+                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s"
+                          alt="Product" style="width: 100px;">
                       </div>
                       <div class="mt-2">
                         <span class="text-muted">12 <i class="icon_like mr-2"></i></span>
@@ -972,7 +987,8 @@
           <!-- Header with Avatar and Shop Name -->
           <div class="shop-info__header d-flex align-items-center">
             <!-- Shop Avatar -->
-            <img src="{{ asset('uploads/' . ($seller->logo === null ? 'logo-default-seller.png' : $seller->logo)) }}" alt="Shop Logo" class="shop-logo">
+            <img src="{{ asset('uploads/' . ($seller->logo === null ? 'logo-default-seller.png' : $seller->logo)) }}"
+              alt="Shop Logo" class="shop-logo">
             <div class="shop-name ml-3">
               <h5>{{$seller->store_name}}</h5>
               <p class="text-shop">Online 1 giờ trước</p>
@@ -1017,13 +1033,14 @@
 </section>
 
 
-<section class="product-related">
+{{-- <section class="product-related">
   <h2 class="related-title">Sản phẩm liên quan</h2>
   @if($productRelated->isEmpty())
   <div class="product-related-empty">
     <img class="product-related-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
   </div>
-  <p class="text-center mt-3">Sản phẩm này hiện chưa có sản phẩm liên quan <a href="{{route('client.index')}}">Xem sản phẩm khác</a></p>
+  <p class="text-center mt-3">Sản phẩm này hiện chưa có sản phẩm liên quan <a href="{{route('client.index')}}">Xem sản
+      phẩm khác</a></p>
   @else
   <div class="product-container">
     @foreach($productRelated as $item)
@@ -1044,14 +1061,14 @@
               <i class="fas fa-star"></i>
               <i class="far fa-star"></i>
             </span>{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
-                    ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
+            ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
         </div>
       </a>
     </div>
     @endforeach
     @endif
   </div>
-</section>
+</section> --}}
 
 
 

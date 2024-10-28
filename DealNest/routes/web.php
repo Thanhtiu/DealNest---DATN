@@ -176,7 +176,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Cart Route
     Route::get('/gio-hang', [CartController::class, 'index'])->name('client.cart');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::post('/cart', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::delete('/cart', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::post('/cart/submit', [CartController::class, 'submit'])->name('cart.submit');
     Route::get('/thanh-toan', [PaymentController::class, 'index'])->name('checkout');
 

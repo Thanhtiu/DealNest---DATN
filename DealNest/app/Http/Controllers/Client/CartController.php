@@ -112,25 +112,24 @@ class CartController extends Controller
 
 
 
-
     public function destroy(Request $request)
     {
-        // Lấy danh sách các sản phẩm đã được chọn
-        $selectedItems = $request->input('checkbox', []);
-
-        // Nếu không có sản phẩm nào được chọn, trả về thông báo lỗi
-        if (empty($selectedItems)) {
-            return response()->json(['success' => false, 'message' => 'Không có sản phẩm nào được chọn.']);
+        try {
+            $ids = $request->input('ids');
+            
+            // Kiểm tra nếu có ids
+            if (!empty($ids)) {
+                // Sử dụng mô hình CartItem để xóa
+                Cart_item::whereIn('id', $ids)->delete();
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Không có sản phẩm nào để xóa.']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Lỗi khi xóa sản phẩm: ' . $e->getMessage()]);
         }
-
-        // Xóa các sản phẩm đã chọn khỏi giỏ hàng
-        foreach ($selectedItems as $itemId) {
-            // Tìm sản phẩm trong giỏ hàng và xóa nó
-            Cart::find($itemId)->delete();
-        }
-
-        return response()->json(['success' => true, 'message' => 'Xóa thành công!']);
     }
+    
 
 
     public function submit(Request $request)

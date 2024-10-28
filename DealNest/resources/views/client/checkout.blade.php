@@ -519,6 +519,17 @@
     .btn-secondary:hover {
         background-color: #666;
     }
+
+    .grand-total {
+        text-align: right;
+        /* Căn phải */
+        font-size: 1.2em;
+        /* Tăng kích thước font chữ */
+        font-weight: bold;
+        margin-top: 20px;
+        margin-right: 20px;
+        /* Khoảng cách bên phải */
+    }
 </style>
 
 <div class="container">
@@ -538,59 +549,52 @@
 
     <!-- Product Details -->
     <div class="product-details">
-
-
-
-        @if(count($selectedItems) > 0)
-        @foreach($selectedItems as $item)
         @php
-        // Lấy thông tin sản phẩm từ danh sách products
-        $product = $products->firstWhere('id', $item['product_id']);
+        $grandTotal = 0; // Khởi tạo biến để tính tổng tất cả sản phẩm
         @endphp
-        <div class="product" data-product-id="{{ $product->id }}">
-            <img src="{{ asset('/uploads/'.$product->image) }}" alt="{{ $product->name }}">
+
+        @foreach ($products as $item)
+        @php
+        $itemTotal = $item->total_price * $item->quantity; // Tính thành tiền cho từng sản phẩm
+        $grandTotal += $itemTotal; // Cộng dồn thành tiền của từng sản phẩm vào tổng tất cả
+        @endphp
+        <div class="product" data-product-id="{{ $item->id }}">
+            <img src="{{ asset('/uploads/' . $item->product->image) }}" alt="{{ $item->name }}">
             <div class="product-info">
-                <p>{{ $product->name }}</p>
+                <p>ID sản phẩm: {{ $item->product->id }}</p>
+                <p>{{ $item->product->name }}</p>
                 <!-- Hiển thị thuộc tính -->
-                @if(isset($item['attributes']) && count($item['attributes']) > 0)
                 <ul>
-                    @foreach($item['attributes'] as $attribute)
-                    <li>{{ $attribute['name'] }}: {{ $attribute['value'] }}</li>
-                    @endforeach
+                    {{ ($item->color != "") ? $item->color : "" }}
                 </ul>
-                @else
-                <p>Không có thuộc tính</p>
-                @endif
                 <p class="return-policy"><i class="bi bi-arrow-repeat"></i> Đổi ý miễn phí 15 ngày</p>
             </div>
             <div class="price-info">
-                <p>Đơn giá: ₫{{ number_format($product->price, 0, ',', '.') }}</p>
-                <p>Số lượng: {{ $item['quantity'] }}</p>
-                <p>Thành tiền: ₫{{ number_format($item['total_price'], 0, ',', '.') }}</p>
+                <p>Đơn giá: ₫{{ number_format($item->total_price, 0, ',', '.') }}</p>
+                <p>Số lượng: {{ $item->quantity }}</p>
+                <p>Thành tiền: ₫{{ number_format($itemTotal, 0, ',', '.') }}</p>
             </div>
         </div>
         @endforeach
-        @else
-        <p>Không có sản phẩm nào được chọn.</p>
-        @endif
-
-
-
-
-
+        <!-- Hiển thị tổng tất cả các sản phẩm -->
+        <div class="grand-total">
+            <p><strong>Tổng cộng: ₫{{ number_format($grandTotal, 0, ',', '.') }}</strong></p>
+        </div>
 
         <!-- Voucher Section -->
-        <div class="voucher">
+
+        {{-- <div class="voucher">
             <span><i class="bi bi-ticket-fill"></i> Voucher của Shop</span>
             <div id="voucher-display"></div>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#voucherModal">
                 Chọn Voucher
             </button>
-        </div>
+        </div> --}}
 
         <!-- Modal -->
         <!-- Modal Voucher -->
-        <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="voucherModalLabel" aria-hidden="true">
+        {{-- <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="voucherModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -693,9 +697,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-
+        </div> --}}
 
     </div>
 
@@ -705,10 +707,6 @@
             <p><i class="bi bi-gift-fill"></i> Shopee Voucher</p>
             <a href="#"><i class="bi bi-chevron-right"></i> Chọn Voucher</a>
         </div>
-
-
-
-
         <!-- Payment Method -->
         <!-- Payment Method -->
         <div class="payment-method">
@@ -754,7 +752,6 @@
             </div>
         </div>
 
-
         <!-- Place Order Button -->
         <div class="place-order">
             <button id="order-button"><i class="bi bi-bag-check-fill"></i> Đặt hàng</button>
@@ -790,7 +787,7 @@
         });
 </script>
 
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Khi nhấn nút OK trong modal
         document.querySelector('.btn-primary[data-bs-dismiss="modal"]').addEventListener('click', function() {
@@ -822,158 +819,7 @@
             });
         });
     });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Đảm bảo selectedItems là một mảng đúng từ backend
-        const selectedItems = @json($selectedItems); // Lấy dữ liệu từ backend dưới dạng JSON
-
-        const shippingFee = 15000; // Phí vận chuyển cố định
-        let voucherDiscount = 0; // Giảm giá voucher, mặc định là 0 nếu chưa chọn
-
-        // Hàm tính tổng tiền hàng
-        function calculateTotalItemPrice() {
-            let totalItemPrice = 0;
-            selectedItems.forEach(item => {
-                // Đảm bảo cộng số thay vì chuỗi
-                totalItemPrice += parseFloat(item.total_price) || 0;
-            });
-            return totalItemPrice;
-        }
-
-        // Cập nhật lại tổng thanh toán
-        function updateTotalPayment() {
-            const totalItemPrice = calculateTotalItemPrice();
-            const totalPayment = totalItemPrice + shippingFee - voucherDiscount;
-
-            // Cập nhật giao diện
-            document.getElementById('total-item-price').textContent = `₫${totalItemPrice.toLocaleString('vi-VN')}`;
-            document.getElementById('voucher-discount').textContent = `₫${voucherDiscount.toLocaleString('vi-VN')}`;
-            document.getElementById('total-payment').textContent = `₫${totalPayment.toLocaleString('vi-VN')}`;
-        }
-
-        // Khi chọn voucher
-        document.querySelector('.btn-primary[data-bs-dismiss="modal"]').addEventListener('click', function() {
-            const selectedVouchers = document.querySelectorAll('.voucher-radio:checked');
-            voucherDiscount = 0; // Reset lại giảm giá voucher
-
-            selectedVouchers.forEach(function(voucher) {
-                const value = parseFloat(voucher.getAttribute('data-value'));
-                const type = voucher.getAttribute('data-type');
-
-                if (type === 'percentage') {
-                    voucherDiscount += calculateTotalItemPrice() * (value / 100);
-                } else {
-                    voucherDiscount += value;
-                }
-            });
-
-            // Cập nhật lại tổng tiền sau khi áp dụng voucher
-            updateTotalPayment();
-        });
-
-        // Gọi hàm để tính toán và cập nhật khi trang tải lần đầu
-        updateTotalPayment();
-    });
-
-
-
-// CheckOutProcressing 
-$(document).ready(function() {
-    $('#order-button').on('click', function() {
-        // Lấy giá trị từ span
-        var totalAmount = $('#total-payment').text();
-        
-        // Lấy HTML từ p
-        var selectedMethod = $('#selected-method').html();
-
-        // Lấy thông tin địa chỉ
-        var userName = $('.shipping-info .name').text().split('|')[0].trim(); // Lấy tên
-        var userPhone = $('.shipping-info .name').text().split('|')[1].trim(); // Lấy số điện thoại
-        var userAddress = $('.shipping-info .address').text(); // Lấy địa chỉ
-
-        // Lấy phí vận chuyển (shipping_fee) và chuyển thành số
-        var shippingFee = $('#shipping-fee').text().replace(' vnđ', '').replace(/\./g, ''); // Loại bỏ ' vnđ' và định dạng
-
-        // Lấy thông tin sản phẩm (product_id, quantity, total_price)
-        var productsData = [];
-        $('.product').each(function() {
-            var productId = $(this).data('product-id');
-            var quantity = $(this).find('.price-info p:nth-child(2)').text().replace('Số lượng: ', ''); // Lấy số lượng
-            var totalPrice = $(this).find('.price-info p:nth-child(3)').text().replace('Thành tiền: ₫', '').replace(/\./g, ''); // Lấy total_price (bỏ ký hiệu và định dạng)
-            
-            // Lấy thuộc tính sản phẩm
-            var attributes = [];
-            $(this).find('ul li').each(function() {
-                var attributeName = $(this).text().split(': ')[0]; // Tên thuộc tính
-                var attributeValue = $(this).text().split(': ')[1]; // Giá trị thuộc tính
-                attributes.push({
-                    name: attributeName,
-                    value: attributeValue
-                });
-            });
-
-            // Thêm vào mảng productsData
-            productsData.push({
-                product_id: productId,
-                quantity: quantity,
-                total_price: totalPrice,
-                attributes: attributes // Gửi thuộc tính sản phẩm
-            });
-        });
-
-        // Gửi dữ liệu đến route processingPayment
-        $.ajax({
-            url: "{{ route('checkout.processing') }}", // Thay đổi đường dẫn nếu cần
-            type: 'POST', // Hoặc 'GET' tùy theo yêu cầu
-            data: {
-                total_amount: totalAmount,
-                payment_method: selectedMethod, // Gửi phương thức thanh toán
-                products: productsData, // Gửi thông tin các sản phẩm
-                user_name: userName, // Gửi tên người dùng
-                user_phone: userPhone, // Gửi số điện thoại
-                user_address: userAddress, // Gửi địa chỉ
-                shipping_fee: shippingFee, // Gửi phí vận chuyển
-                _token: '{{ csrf_token() }}' // Thêm token CSRF nếu sử dụng Laravel
-            },
-            success: function(response) {
-                // Chuyển hướng đến route vnpay_payment
-                window.location.href = response.redirect_url;
-            },
-            error: function(xhr, status, error) {
-                // Xử lý lỗi nếu có
-                console.error(error);
-            }
-        });
-    });
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</script>
-
+</script> --}}
 
 
 

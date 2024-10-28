@@ -152,6 +152,7 @@
 </section>
 <!-- Logo and Title Section End -->
 <!-- Shoping Cart Section Begin -->
+
 <section class="shoping-cart spad">
     <div class="container">
         <div class="row">
@@ -176,7 +177,7 @@
                         </thead>
                         <tbody>
                             @php
-                            $totalPriceSum = 0; // Khởi tạo biến để tính tổng
+                            $totalPriceSum = 0;
                             @endphp
 
                             <form id="cartForm">
@@ -197,19 +198,23 @@
                                             style="max-width: 100px; max-height: 140px; object-fit: cover;">
                                         @endif
                                         <h5>{{ $item->product->name }}</h5>
-                                        <p class="text-center">Màu: {{ $item->color }}, Kích thước: {{ $item->size }}</p>
+                                        <p class="text-center">Màu: {{ $item->color }}, Kích thước: {{ $item->size }}
+                                        </p>
                                     </td>
-                                    <td class="shoping__cart__price">{{ number_format($item->product->price, 0, ',', '.') }} VNĐ</td>
+                                    <td class="shoping__cart__price">{{ number_format($item->product->price, 0, ',',
+                                        '.') }} VNĐ</td>
                                     <td class="shoping__cart__quantity">{{ $item->quantity }}</td>
-                                    <td class="shoping__cart__total">{{ number_format($item->total_price, 0, ',', '.') }} VNĐ</td>
+                                    <td class="shoping__cart__total">{{ number_format($item->total_price, 0, ',', '.')
+                                        }} VNĐ</td>
                                 </tr>
                                 @php
-                                $totalPriceSum += $item->total_price; // Cộng dồn total_price vào biến totalPriceSum
+                                $totalPriceSum += $item->total_price;
                                 @endphp
                                 @endforeach
                                 <tr>
                                     <td colspan="4" style="text-align: right;"><strong>Tổng cộng:</strong></td>
-                                    <td class="shoping__cart__total">{{ number_format($totalPriceSum, 0, ',', '.') }} VNĐ</td>
+                                    <td class="shoping__cart__total" id="total-price-display">{{
+                                        number_format($totalPriceSum, 0, ',', '.') }} VNĐ</td>
                                 </tr>
                             </form>
                         </tbody>
@@ -220,6 +225,9 @@
         </div>
     </div>
 </section>
+
+
+
 
 
 <!-- Shoping Cart Section End -->
@@ -245,11 +253,9 @@
         <a href="#" class="delete-selected">Xóa</a>
         <span class="save-section">Lưu vào mục Đã thích</span>
         <div class="total-payment">
-            <span>Tổng thanh toán (1 Sản phẩm):</span>
-            <span class="total-amount">
-                @if(isset($totalPriceSum))
-                {{ number_format($totalPriceSum, 0, ',', '.') }}
-                @endif
+            <span id="total-payment-label">Tổng thanh toán (0 Sản phẩm):</span>
+            <span class="total-amount" id="total-payment-amount">
+                {{ number_format($totalPriceSum ?? 0, 0, ',', '.') }}
             </span>
             <span class="savings">Tiết kiệm ₫43k</span>
         </div>
@@ -258,6 +264,154 @@
 </div>
 
 <!--end dat hang -->
+
+
+
+{{-- Delete cart --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.shoping_cart_item_checkbox_checkbox');
+        const selectAllCheckbox = document.getElementById('select-all');
+        const totalPriceDisplay = document.getElementById('total-price-display');
+        const totalPaymentLabel = document.getElementById('total-payment-label');
+        const totalPaymentAmount = document.getElementById('total-payment-amount');
+        const deleteSelectedButton = document.querySelector('.delete-selected');
+    
+        function updateTotalPayment() {
+            let total = 0;
+            let selectedItems = 0;
+            
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    total += parseFloat(checkbox.getAttribute('data-total-price'));
+                    selectedItems += 1;
+                }
+            });
+    
+            // Cập nhật tổng tiền
+            totalPriceDisplay.innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
+            totalPaymentAmount.innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
+    
+            // Cập nhật số lượng sản phẩm đã chọn trong "Tổng thanh toán"
+            totalPaymentLabel.innerText = `Tổng thanh toán (${selectedItems} Sản phẩm):`;
+        }
+    
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', updateTotalPayment);
+        });
+
+        selectAllCheckbox.addEventListener('change', function () {
+            const isChecked = selectAllCheckbox.checked;
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+            updateTotalPayment();
+        });
+
+        deleteSelectedButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            const selectedIds = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+
+            if (selectedIds.length === 0) {
+                alert("Vui lòng chọn sản phẩm để xóa.");
+                return;
+            }
+
+            // Gửi AJAX đến route cart.destroy
+            fetch("{{ route('cart.destroy') }}", {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ ids: selectedIds })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Xóa các dòng sản phẩm đã xóa khỏi giao diện
+                    selectedIds.forEach(id => {
+                        document.querySelector(`input[value="${id}"]`).closest('tr').remove();
+                    });
+                    updateTotalPayment(); // Cập nhật lại tổng tiền sau khi xóa
+                    alert("Sản phẩm đã được xóa thành công.");
+                } else {
+                    const errorMessage = data.message || "Có lỗi xảy ra khi xóa sản phẩm.";
+                    alert(errorMessage);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`Có lỗi xảy ra khi xóa sản phẩm: ${error.message}`);
+            });
+        });
+
+        updateTotalPayment();
+    });
+</script>
+
+{{-- Check out --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const purchaseButton = document.querySelector('.purchase-button');
+
+        purchaseButton.addEventListener('click', function () {
+            // Lấy danh sách sản phẩm đã chọn
+            const selectedIds = Array.from(document.querySelectorAll('.shoping_cart_item_checkbox_checkbox:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (selectedIds.length === 0) {
+                alert("Vui lòng chọn sản phẩm để mua.");
+                return;
+            }
+
+            // Tạo URL với các tham số ID sản phẩm đã chọn
+            const params = new URLSearchParams();
+            selectedIds.forEach(id => params.append('cartIdtem[]', id));
+
+            const checkoutUrl = "{{ route('checkout') }}?" + params.toString();
+
+            // Điều hướng đến trang thanh toán
+            window.location.href = checkoutUrl;
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @endsection
