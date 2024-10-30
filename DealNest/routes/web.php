@@ -185,5 +185,5 @@ Route::group(['middleware' => 'auth'], function () {
 
     // VNpay payment
     Route::get('/vnpay_payment', [vnPayController::class, 'vnpay_payment'])->name('vnpay_payment');
-    Route::get('success', [vnPayController::class, 'success'])->name('success');
+    Route::get('success', [vnPayController::class, 'success'])->name('vnpay.success');
 });

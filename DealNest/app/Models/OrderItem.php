@@ -14,11 +14,10 @@ class OrderItem extends Model
     protected $fillable = [
         'order_id',
         'product_id',
-        'quantity',
-        'price',
-        'seller_id', // Thêm seller_id vào đây
-        'attribute',
-        'delivery_date'
+        'size',
+        'color',
+        'quantity', 
+        'total',
     ];
 
     public function order()

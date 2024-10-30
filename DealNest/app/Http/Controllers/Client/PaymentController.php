@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
@@ -36,117 +37,115 @@ class PaymentController extends Controller
        
         return view('client.checkout', compact('products', 'userAddress', 'vouchers'));
     }
-    
 
 
     public function checkoutProcessing(Request $request)
     {
-        try {
-            // Lấy dữ liệu từ request
-            $totalAmount = $request->input('total_amount');
-            $paymentMethod = $request->input('payment_method');
-            $products = $request->input('products'); // Lấy danh sách sản phẩm từ request
-            $shippingFee = $request->input('shipping_fee'); // Lấy phí vận chuyển từ request
-
-            // Kiểm tra dữ liệu
-            if (is_null($totalAmount) || is_null($paymentMethod) || empty($products)) {
-                return response()->json(['message' => 'Dữ liệu không hợp lệ.'], 400);
-            }
-
-            // Xử lý giá trị totalAmount
-            $totalAmount = intval(preg_replace('/[^\d]/', '', $totalAmount));
-
-            // Kiểm tra phương thức thanh toán
-            if ($paymentMethod === "VNPay") {
-                $paymentMethod = "vnpay";
-            } elseif ($paymentMethod === "Thanh toán khi nhận hàng") {
-                $paymentMethod = "cod";
-            }
-
-            // Lấy user_id từ phiên làm việc hiện tại
-            $userId = Auth::id();
-            if (is_null($userId)) {
-                return response()->json(['message' => 'User không xác định.'], 400);
-            }
-
-            // Tính toán delivery_date
-            $deliveryDate = Carbon::now()->addDays(5);
-
-            // Nhóm các sản phẩm theo seller_id
-            $productsBySeller = collect($products)->groupBy(function ($product) {
-                $productModel = Product::find($product['product_id']);
-                return $productModel ? $productModel->seller_id : null;
-            });
-
-            // Kiểm tra xem có sản phẩm không tìm được seller_id không
-            if ($productsBySeller->has(null)) {
-                return response()->json(['message' => 'Một số sản phẩm không hợp lệ.'], 400);
-            }
-
-            // Tạo một mảng để lưu các order_id
-            $orderIds = [];
-
-            // Duyệt qua từng nhóm sản phẩm theo seller_id
-            foreach ($productsBySeller as $sellerId => $productsGroup) {
-                // Tính tổng giá trị cho từng nhóm sản phẩm của seller
-                $groupTotalAmount = collect($productsGroup)->sum('total_price');
-
-                // Lưu thông tin đơn hàng vào cơ sở dữ liệu cho mỗi seller
-                $order = Order::create([
-                    'user_id' => $userId,
-                    'total' => $groupTotalAmount,
-                    'delivery_date' => $deliveryDate,
-                    'payment_method' => $paymentMethod,
-                    'payment_status' => 'pending',
-                    'status' => 'pending',
-                    'seller_id' => $sellerId, // Lưu seller_id vào đơn hàng
-                    'name' => $request->input('user_name'), // Lưu thông tin name vào orders
-                    'phone' => $request->input('user_phone'), // Lưu thông tin phone vào orders
-                    'address' => $request->input('user_address'), // Lưu thông tin address vào orders
-                ]);
-
-                // Lưu order_id vào mảng
-                $orderIds[] = $order->id;
-
-                // Lưu sản phẩm vào bảng order_items
-                foreach ($productsGroup as $product) {
-                    // Lấy product_id từ dữ liệu sản phẩm
-                    $productModel = Product::find($product['product_id']);
-
-                    if ($productModel) {
-                        // Tạo chuỗi thuộc tính từ mảng attributes
-                        $attributes = [];
-                        foreach ($product['attributes'] as $attribute) {
-                            $attributes[] = $attribute['name'] . ': ' . $attribute['value'];
-                        }
-                        $attributesString = implode(', ', $attributes); // Tạo chuỗi cách nhau bằng dấu phẩy
-
-                        // Lưu sản phẩm vào order_items
-                        OrderItem::create([
-                            'order_id' => $order->id,
-                            'product_id' => $product['product_id'],
-                            'quantity' => $product['quantity'],
-                            'price' => $product['total_price'],
-                            'seller_id' => $productModel->seller_id,
-                            'attribute' => $attributesString,
-                            'status' => 'pending',
-                        ]);
-                    }
-                }
-            }
-
-            // Lưu id của đơn hàng và phí vận chuyển vào session
-            session(['order_ids' => $orderIds, 'shipping_fee' => $shippingFee]);
-
-            // Trả về phản hồi với URL chuyển hướng
-            return response()->json([
-                'message' => 'Đơn hàng đã được tạo thành công!',
-                'redirect_url' => route('vnpay_payment'),
-            ]);
-        } catch (\Exception $e) {
-            // Ghi lỗi vào log và trả về thông báo lỗi
-            \Log::error('Lỗi trong checkoutProcessing: ' . $e->getMessage());
-            return response()->json(['message' => 'Đã xảy ra lỗi: ' . $e->getMessage()], 500);
+        // Xác thực dữ liệu đầu vào
+        $request->validate([
+            'cartItemIds' => 'required|array',
+            'totalPayment' => 'required|numeric',
+        ]);
+    
+        // Lấy dữ liệu từ request
+        $cartItemIds = $request->input('cartItemIds');
+        $totalPayment = $request->input('totalPayment');
+    
+        $paymentMethod = $request->input('paymentMethod') ?: 'cod'; // Nếu không có phương thức thanh toán thì mặc định là 'cod'
+    
+        // Truy vấn dữ liệu của các CartItem dựa vào IDs và lấy seller_id từ product
+        $cartItems = Cart_item::with('product') // Sử dụng eager loading để lấy thông tin product
+            ->whereIn('id', $cartItemIds)
+            ->get();
+    
+        // Kiểm tra xem có CartItem nào không
+        if ($cartItems->isEmpty()) {
+            return response()->json(['message' => 'Không tìm thấy sản phẩm trong giỏ hàng.'], 404);
         }
+    
+        // Nhóm các sản phẩm theo seller_id
+        $groupedItems = $cartItems->groupBy(function($item) {
+            return $item->product->seller_id; // Nhóm theo seller_id
+        });
+    
+        // Khởi tạo mảng để lưu thông tin đơn hàng đã tạo
+        $orders = [];
+        $totalOrders = $groupedItems->count();
+        $shippingFee = 15000; // Phí ship cố định là 15k 
+    
+        foreach ($groupedItems as $sellerId => $items) {
+            // Tính tổng tiền cho đơn hàng
+            $orderTotal = $items->sum(function($item) {
+                return $item->total_price * $item->quantity; // Tính tổng cho từng sản phẩm
+            });
+    
+            // Tính phí ship cho đơn hàng này
+            $orderShippingFee = $shippingFee / $totalOrders; // Chia đều phí ship cho từng đơn hàng
+            $totalWithShipping = $orderTotal + $orderShippingFee; // Tổng tiền đơn hàng bao gồm phí ship
+    
+            // Tạo đơn hàng mà không cần seller_id
+            $order = Order::create([
+                'user_id' => auth()->id(), // Hoặc ID người dùng hiện tại
+                'status' => 'pending', // Hoặc trạng thái mặc định khác
+                'total' => $totalWithShipping, // Tổng tiền bao gồm phí ship
+                'delivery_date' => now()->addDays(7), // Ví dụ: giao hàng trong 7 ngày
+                'payment_method' => $paymentMethod, // Hoặc phương thức thanh toán khác
+                'payment_status' => 'pending', // Trạng thái thanh toán
+            ]);
+    
+            // Lưu thông tin đơn hàng
+            $orders[] = $order;
+    
+            // Lưu vào session orderId và totalWithShipping (chỉ lấy cái đầu tiên)
+            if (count($orders) === 1) {
+                session(['orderId' => $order->id, 'totalWithShipping' => $totalPayment]);
+            }
+    
+            // Tạo order items cho từng sản phẩm
+            foreach ($items as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'size' => $item->size, // Nếu có trường size
+                    'color' => $item->color, // Nếu có trường color
+                    'quantity' => $item->quantity,
+                    'total' => $item->total_price * $item->quantity, // Tính tổng tiền cho từng sản phẩm
+                ]);
+            }
+        }
+    
+        // Kiểm tra phương thức thanh toán
+        if ($paymentMethod === 'vnpay') {
+            return response()->json([
+                'message' => 'Đặt hàng thành công! Chuyển hướng đến thanh toán.',
+                'paymentUrl' => route('vnpay_payment') // Trả về URL để chuyển hướng thanh toán
+            ]);
+        }
+    
+        // Trả về thông tin đơn hàng đã tạo nếu không phải vnpay
+        return response()->json([
+            'message' => 'Đặt hàng thành công!',
+            'orders' => $orders,
+            'totalPayment' => number_format($totalPayment, 0, ',', '.'),
+        ]);
     }
+    
+
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }
