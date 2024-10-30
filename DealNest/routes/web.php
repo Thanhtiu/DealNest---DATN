@@ -151,11 +151,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/danh-sach/voucher', [VoucherController::class, 'index'])->name('seller.voucher');
 
-        Route::post('/voucher/them', [VoucherController::class, 'create'])->name('seller.voucher.create');
+        Route::post('/them/voucher', [VoucherController::class, 'create'])->name('seller.voucher.create');  
 
         Route::get('/voucher/edit/{id}', [VoucherController::class, 'edit'])->name('seller.voucher.edit');
 
-        Route::get('/voucher/xoa/{id}', [VoucherController::class, 'destroy'])->name('seller.voucher.destroy');
+        Route::delete('/voucher/xoa/{id}', [VoucherController::class, 'destroy'])->name('seller.voucher.destroy');
 
         Route::post('/voucher/cap-nhat/{id}', [VoucherController::class, 'update'])->name('seller.voucher.update');
 

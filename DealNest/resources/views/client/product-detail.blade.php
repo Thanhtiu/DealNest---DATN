@@ -786,15 +786,15 @@
 
 
           <label for="color-select" class="form-label">Màu sắc</label>
-          <select id="color-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;"
-            name="color">
+          <select id="color-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;" name="color">
             @foreach($productDetail->productVariants as $item)
             @if($item->variant === 'Màu sắc')
-            <option value="{{$item->value}}">{{$item->value}} - {{ number_format($item->price, 2, ',', '.') }} đ
-            </option>
+            <option value="{{ $item->price . '|' . $item->value }}">{{ $item->value }} - {{ number_format($item->price, 2, ',', '.') }} đ</option>
             @endif
             @endforeach
           </select>
+
+
 
         </div>
 
@@ -1038,36 +1038,36 @@
   @if($productRelated->isEmpty())
   <div class="product-related-empty">
     <img class="product-related-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
-  </div>
-  <p class="text-center mt-3">Sản phẩm này hiện chưa có sản phẩm liên quan <a href="{{route('client.index')}}">Xem sản
-      phẩm khác</a></p>
-  @else
-  <div class="product-container">
-    @foreach($productRelated as $item)
-    <div class="card">
-      <a href="{{ route('client.productDetail', ['id' => $item->id]) }}">
-        <div class="cardd">
-          <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
-          <div class="discount">-92%</div>
-          <div class="content">
-            <h2 class="title">{{ $item->name }}</h2>
-            <p class="pricee">{{ number_format($item->price, 0, ',', '.') }}<span
-                style="font-size: 12px; text-decoration: underline;">đ</span></p>
-          </div>
-          <div class="sold"><span class="rating">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="far fa-star"></i>
-            </span>{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
-            ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
+</div>
+<p class="text-center mt-3">Sản phẩm này hiện chưa có sản phẩm liên quan <a href="{{route('client.index')}}">Xem sản
+    phẩm khác</a></p>
+@else
+<div class="product-container">
+  @foreach($productRelated as $item)
+  <div class="card">
+    <a href="{{ route('client.productDetail', ['id' => $item->id]) }}">
+      <div class="cardd">
+        <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
+        <div class="discount">-92%</div>
+        <div class="content">
+          <h2 class="title">{{ $item->name }}</h2>
+          <p class="pricee">{{ number_format($item->price, 0, ',', '.') }}<span
+              style="font-size: 12px; text-decoration: underline;">đ</span></p>
         </div>
-      </a>
-    </div>
-    @endforeach
-    @endif
+        <div class="sold"><span class="rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="far fa-star"></i>
+          </span>{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
+            ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
+      </div>
+    </a>
   </div>
+  @endforeach
+  @endif
+</div>
 </section> --}}
 
 

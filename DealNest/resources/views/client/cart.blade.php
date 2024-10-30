@@ -201,7 +201,7 @@
                                         <p class="text-center">Màu: {{ $item->color }}, Kích thước: {{ $item->size }}
                                         </p>
                                     </td>
-                                    <td class="shoping__cart__price">{{ number_format($item->product->price, 0, ',',
+                                    <td class="shoping__cart__price">{{ number_format($item->price, 0, ',',
                                         '.') }} VNĐ</td>
                                     <td class="shoping__cart__quantity">{{ $item->quantity }}</td>
                                     <td class="shoping__cart__total">{{ number_format($item->total_price, 0, ',', '.')
@@ -269,38 +269,44 @@
 
 {{-- Delete cart --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const checkboxes = document.querySelectorAll('.shoping_cart_item_checkbox_checkbox');
         const selectAllCheckbox = document.getElementById('select-all');
         const totalPriceDisplay = document.getElementById('total-price-display');
         const totalPaymentLabel = document.getElementById('total-payment-label');
         const totalPaymentAmount = document.getElementById('total-payment-amount');
         const deleteSelectedButton = document.querySelector('.delete-selected');
-    
+
         function updateTotalPayment() {
             let total = 0;
             let selectedItems = 0;
-            
+
             checkboxes.forEach(checkbox => {
                 if (checkbox.checked) {
                     total += parseFloat(checkbox.getAttribute('data-total-price'));
                     selectedItems += 1;
                 }
             });
-    
+
             // Cập nhật tổng tiền
-            totalPriceDisplay.innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
-            totalPaymentAmount.innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
-    
+            totalPriceDisplay.innerText = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(total);
+            totalPaymentAmount.innerText = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(total);
+
             // Cập nhật số lượng sản phẩm đã chọn trong "Tổng thanh toán"
             totalPaymentLabel.innerText = `Tổng thanh toán (${selectedItems} Sản phẩm):`;
         }
-    
+
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('click', updateTotalPayment);
         });
 
-        selectAllCheckbox.addEventListener('change', function () {
+        selectAllCheckbox.addEventListener('change', function() {
             const isChecked = selectAllCheckbox.checked;
             checkboxes.forEach(checkbox => {
                 checkbox.checked = isChecked;
@@ -308,7 +314,7 @@
             updateTotalPayment();
         });
 
-        deleteSelectedButton.addEventListener('click', function (e) {
+        deleteSelectedButton.addEventListener('click', function(e) {
             e.preventDefault();
             const selectedIds = Array.from(checkboxes)
                 .filter(checkbox => checkbox.checked)
@@ -321,31 +327,33 @@
 
             // Gửi AJAX đến route cart.destroy
             fetch("{{ route('cart.destroy') }}", {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ ids: selectedIds })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Xóa các dòng sản phẩm đã xóa khỏi giao diện
-                    selectedIds.forEach(id => {
-                        document.querySelector(`input[value="${id}"]`).closest('tr').remove();
-                    });
-                    updateTotalPayment(); // Cập nhật lại tổng tiền sau khi xóa
-                    alert("Sản phẩm đã được xóa thành công.");
-                } else {
-                    const errorMessage = data.message || "Có lỗi xảy ra khi xóa sản phẩm.";
-                    alert(errorMessage);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert(`Có lỗi xảy ra khi xóa sản phẩm: ${error.message}`);
-            });
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        ids: selectedIds
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Xóa các dòng sản phẩm đã xóa khỏi giao diện
+                        selectedIds.forEach(id => {
+                            document.querySelector(`input[value="${id}"]`).closest('tr').remove();
+                        });
+                        updateTotalPayment(); // Cập nhật lại tổng tiền sau khi xóa
+                        alert("Sản phẩm đã được xóa thành công.");
+                    } else {
+                        const errorMessage = data.message || "Có lỗi xảy ra khi xóa sản phẩm.";
+                        alert(errorMessage);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(`Có lỗi xảy ra khi xóa sản phẩm: ${error.message}`);
+                });
         });
 
         updateTotalPayment();
@@ -354,10 +362,10 @@
 
 {{-- Check out --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const purchaseButton = document.querySelector('.purchase-button');
 
-        purchaseButton.addEventListener('click', function () {
+        purchaseButton.addEventListener('click', function() {
             // Lấy danh sách sản phẩm đã chọn
             const selectedIds = Array.from(document.querySelectorAll('.shoping_cart_item_checkbox_checkbox:checked'))
                 .map(checkbox => checkbox.value);

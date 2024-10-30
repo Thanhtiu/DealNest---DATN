@@ -15,6 +15,7 @@ class Cart_item extends Model
         'product_id',
         'color',
         'size',
+        'price',
         'total_price',
         'quantity',
     ];

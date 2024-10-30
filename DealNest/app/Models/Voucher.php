@@ -11,7 +11,7 @@ class Voucher extends Model
     use HasFactory;
     protected $table = 'vouchers';
     protected $fillable = [
-        'subcategory_id',
+        'product_id',
         'seller_id',
         'name',
         'code',
@@ -22,8 +22,5 @@ class Voucher extends Model
         'status',
     ];
 
-    public function subcategory()
-    {
-        return $this->belongsTo(Subcategory::class, 'subcategory_id');
-    }
+   
 }

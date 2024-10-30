@@ -59,13 +59,25 @@ class CartController extends Controller
         // Tìm sản phẩm
         $product = Product::findOrFail($request->product_id);
 
+        // Lấy giá từ request (giá bây giờ là giá trị màu sắc)
+        // Tách giá và màu từ giá trị của option
+        $colorInfo = explode('|', $request->color); // Giả sử giá trị color là "giá|màu"
+
+        // Kiểm tra xem mảng có đủ phần tử không
+        if (count($colorInfo) < 2) {
+            return back()->withErrors(['color' => 'Giá trị màu sắc không hợp lệ.']);
+        }
+
+        $colorPrice = (float) $colorInfo[0]; // Giá màu
+        $selectedColor = trim($colorInfo[1]); // Màu sắc
+
         // Tính tổng giá mới
-        $totalPrice = $product->price * $request->quantity;
+        $totalPrice = $colorPrice * $request->quantity;
 
         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
         $cartItem = Cart_item::where('cart_id', $cart->id)
             ->where('product_id', $product->id)
-            ->where('color', $request->color)
+            ->where('color', $selectedColor)
             ->where('size', $request->size)
             ->first();
 
@@ -79,9 +91,10 @@ class CartController extends Controller
             Cart_item::create([
                 'cart_id' => $cart->id,
                 'product_id' => $product->id,
-                'color' => $request->color,
+                'color' => $selectedColor, // Lưu màu sắc được chọn
                 'size' => $request->size,
                 'quantity' => $request->quantity,
+                'price' => $colorPrice,
                 'total_price' => $totalPrice,
             ]);
         }
@@ -103,6 +116,8 @@ class CartController extends Controller
 
 
 
+
+
     private function calculatePrice($productId, $quantity)
     {
         // Tính toán giá sản phẩm
@@ -116,7 +131,7 @@ class CartController extends Controller
     {
         try {
             $ids = $request->input('ids');
-            
+
             // Kiểm tra nếu có ids
             if (!empty($ids)) {
                 // Sử dụng mô hình CartItem để xóa
@@ -129,7 +144,7 @@ class CartController extends Controller
             return response()->json(['success' => false, 'message' => 'Lỗi khi xóa sản phẩm: ' . $e->getMessage()]);
         }
     }
-    
+
 
 
     public function submit(Request $request)

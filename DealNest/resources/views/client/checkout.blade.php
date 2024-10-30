@@ -452,7 +452,7 @@
     }
 
     .voucher-image {
-        width: 80px;
+        max-width: 80px;
         height: 80px;
         margin-right: 15px;
         border-radius: 10px;
@@ -549,163 +549,99 @@
 
     <!-- Product Details -->
     <div class="product-details">
-        @php
-        $grandTotal = 0; // Khởi tạo biến để tính tổng tất cả sản phẩm
-        @endphp
+        <div class="product-details">
+            @php
+            $grandTotal = 0;
+            $shippingFee = 15000; // Phí vận chuyển mặc định
+            $voucherDiscount = 0; // Giá trị voucher giảm giá
+            @endphp
 
-        @foreach ($products as $item)
-        @php
-        $itemTotal = $item->total_price * $item->quantity; // Tính thành tiền cho từng sản phẩm
-        $grandTotal += $itemTotal; // Cộng dồn thành tiền của từng sản phẩm vào tổng tất cả
-        @endphp
-        <div class="product" data-product-id="{{ $item->id }}">
-            <img src="{{ asset('/uploads/' . $item->product->image) }}" alt="{{ $item->name }}">
-            <div class="product-info">
-                <p>ID sản phẩm: {{ $item->product->id }}</p>
-                <p>{{ $item->product->name }}</p>
-                <!-- Hiển thị thuộc tính -->
-                <ul>
-                    {{ ($item->color != "") ? $item->color : "" }}
-                </ul>
-                <p class="return-policy"><i class="bi bi-arrow-repeat"></i> Đổi ý miễn phí 15 ngày</p>
+            @foreach ($products as $item)
+            @php
+            // Tính thành tiền cho sản phẩm
+            $itemTotal = $item->total_price * $item->quantity; // Thành tiền ban đầu
+            $grandTotal += $itemTotal;
+            @endphp
+            <div class="product" data-product-id="{{ $item->id }}">
+                <img src="{{ asset('/uploads/' . $item->product->image) }}" alt="{{ $item->name }}">
+                <div class="product-info">
+                    <p>ID sản phẩm: {{ $item->product->id }}</p>
+                    <p>{{ $item->product->name }}</p>
+                    <ul>{{ ($item->color != "") ? $item->color : "" }}</ul>
+                    <p class="return-policy"><i class="bi bi-arrow-repeat"></i> Đổi ý miễn phí 15 ngày</p>
+                </div>
+                <div class="price-info" data-product-id="{{ $item->id }}">
+                    <p>Đơn giá: ₫<span class="item-price">{{ number_format($item->total_price, 0, ',', '.') }}</span></p>
+                    <p>Số lượng: <span class="quantity">{{ $item->quantity }}</span></p>
+                    <p>Thành tiền: ₫<span class="item-total">{{ number_format($itemTotal, 0, ',', '.') }}</span></p>
+                </div>
             </div>
-            <div class="price-info">
-                <p>Đơn giá: ₫{{ number_format($item->total_price, 0, ',', '.') }}</p>
-                <p>Số lượng: {{ $item->quantity }}</p>
-                <p>Thành tiền: ₫{{ number_format($itemTotal, 0, ',', '.') }}</p>
+            @endforeach
+
+            <!-- Voucher Section -->
+            <div class="voucher">
+                <span><i class="bi bi-ticket-fill"></i> Voucher của Shop</span>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                    Chọn Voucher
+                </button>
             </div>
-        </div>
-        @endforeach
-        <!-- Hiển thị tổng tất cả các sản phẩm -->
-        <div class="grand-total">
-            <p><strong>Tổng cộng: ₫{{ number_format($grandTotal, 0, ',', '.') }}</strong></p>
-        </div>
 
-        <!-- Voucher Section -->
-
-        {{-- <div class="voucher">
-            <span><i class="bi bi-ticket-fill"></i> Voucher của Shop</span>
-            <div id="voucher-display"></div>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#voucherModal">
-                Chọn Voucher
-            </button>
-        </div> --}}
-
-        <!-- Modal -->
-        <!-- Modal Voucher -->
-        {{-- <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="voucherModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="voucherModalLabel">Chọn Shopee Voucher</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Tab navigation -->
-                        <ul class="nav nav-tabs" id="voucherTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="shop-voucher-tab" data-bs-toggle="tab"
-                                    data-bs-target="#shop-voucher" type="button" role="tab" aria-controls="shop-voucher"
-                                    aria-selected="true">Mã Voucher</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="shopee-voucher-tab" data-bs-toggle="tab"
-                                    data-bs-target="#shopee-voucher" type="button" role="tab"
-                                    aria-controls="shopee-voucher" aria-selected="false">Mã Shopee Voucher</button>
-                            </li>
-                        </ul>
-
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <!-- Shopee Voucher List -->
-                            <div class="tab-pane fade show active" id="shop-voucher" role="tabpanel"
-                                aria-labelledby="shop-voucher-tab">
-                                <div class="voucher-list">
-                                    <!-- Vòng lặp hiển thị voucher cho từng sản phẩm -->
-                                    @foreach($groupedProducts as $sellerId => $products)
-                                    @php
-                                    // Kiểm tra có voucher hay không
-                                    $hasVoucher = isset($sellerVouchers[$sellerId]) &&
-                                    $sellerVouchers[$sellerId]->count() > 0;
-                                    @endphp
-
-                                    <!-- Chỉ hiển thị sản phẩm và voucher nếu có voucher -->
-                                    @if($hasVoucher)
-                                    <div class="seller-section">
-                                        <h3>{{ $products->first()->seller->store_name }}</h3>
-                                        <div class="product-list">
-                                            @foreach($products as $product)
-                                            <div class="product-item">
-                                                <p>{{ $product->name }}</p>
-                                                <p>Giá: <span style="color: red;">{{ number_format($product->price, 0,
-                                                        ',', '.') }} vnđ</span></p>
-                                            </div>
-                                            @endforeach
-                                        </div>
-
-                                        <!-- Hiển thị voucher -->
-                                        <div class="voucher-list">
-                                            <h4>Voucher của sản phẩm</h4>
-                                            <div class="row">
-                                                @foreach($sellerVouchers[$sellerId] as $voucher)
-                                                <div class="voucher-item col-md-6">
-                                                    <div class="voucher-info">
-                                                        <img src="https://st4.depositphotos.com/27867620/30555/v/1600/depositphotos_305556988-stock-illustration-voucher-web-icon-simple-design.jpg"
-                                                            alt="Voucher Image" class="voucher-image">
-                                                        <div class="voucher-details">
-                                                            <h6>{{ $voucher->name }}</h6>
-                                                            <p>Giảm: {{ $voucher->type == 'percentage' ? $voucher->value
-                                                                . '%' : '₫' . number_format($voucher->value, 0, ',',
-                                                                '.') }}</p>
-                                                            <small>HSD: {{
-                                                                \Carbon\Carbon::parse($voucher->start_date)->format('d/m/Y')
-                                                                }} - {{
-                                                                \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y')
-                                                                }}</small>
-                                                        </div>
-                                                        <div class="voucher-select">
-                                                            <input type="radio" name="voucher_{{ $sellerId }}"
-                                                                value="{{ $voucher->id }}"
-                                                                data-value="{{ $voucher->value }}"
-                                                                data-type="{{ $voucher->type }}"
-                                                                data-product-name="{{ $products->first()->name }}"
-                                                                class="form-check-input voucher-radio">
-                                                        </div>
-                                                    </div>
+            <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="voucherModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="voucherModalLabel">Chọn Voucher</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="voucher-list">
+                                @foreach($products as $product)
+                                <div class="product-item">
+                                    <h6>Sản phẩm: {{ $product->product->name }}</h6>
+                                    <img src="{{ asset('/uploads/' . $product->product->image) }}" alt="{{ $product->product->name }}" class="img-fluid" width="100">
+                                    <p>Đơn giá: ₫{{ number_format($product->total_price, 0, ',', '.') }}</p>
+                                    <p>Số lượng: {{ number_format($product->quantity, 0, ',', '.') }}</p>
+                                    <p>Thành tiền: ₫{{ number_format($product->total_price * $product->quantity, 0, ',', '.') }}</p>
+                                    <div class="vouchers-for-product">
+                                        @if(isset($vouchers[$product->product->id])) <!-- Kiểm tra xem voucher có tồn tại không -->
+                                        @foreach($vouchers[$product->product->id] as $voucher)
+                                        <div class="voucher-item">
+                                            <div class="voucher-info">
+                                                <img src="https://st4.depositphotos.com/27867620/30555/v/1600/depositphotos_305556988-stock-illustration-voucher-web-icon-simple-design.jpg" alt="Voucher Image" class="voucher-image">
+                                                <div class="voucher-details">
+                                                    <h6>{{ $voucher->name }}</h6>
+                                                    <p>Giảm: {{ $voucher->type == 'percentage' ? $voucher->value . '%' : '₫' . number_format($voucher->value, 0, ',', '.') }}</p>
+                                                    <small>HSD: {{ \Carbon\Carbon::parse($voucher->start_date)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</small>
                                                 </div>
-                                                @endforeach
+                                                <div class="voucher-select">
+                                                    <input type="radio" name="voucher_{{ $product->product->id }}" value="{{ $voucher->id }}" data-value="{{ $voucher->value }}" data-type="{{ $voucher->type }}" class="form-check-input voucher-radio">
+                                                </div>
                                             </div>
                                         </div>
+                                        @endforeach
+                                        @else
+                                        <p>Không có voucher cho sản phẩm này.</p> <!-- Hiển thị thông báo nếu không có voucher -->
+                                        @endif
                                     </div>
-                                    @endif
-                                    <!-- Kết thúc kiểm tra voucher -->
-                                    @endforeach
                                 </div>
-                            </div>
-
-                            <!-- Shopee Voucher List -->
-                            <div class="tab-pane fade" id="shopee-voucher" role="tabpanel"
-                                aria-labelledby="shopee-voucher-tab">
-                                <p>Danh sách Shopee Voucher của bạn</p>
+                                @endforeach
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Trở Lại</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Trở Lại</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="apply-voucher">OK</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div> --}}
 
-    </div>
-
-    <!-- Additional Section -->
-    <div class="additional-section">
-        <div class="voucher-shopee">
-            <p><i class="bi bi-gift-fill"></i> Shopee Voucher</p>
-            <a href="#"><i class="bi bi-chevron-right"></i> Chọn Voucher</a>
+            <!-- Additional Section -->
+            <!-- <div class="breakdown-method">
+            <div class="breakdown-item total">
+                <span>Tổng thanh toán</span>
+                <span id="total-payment" class="total-amount">₫{{ number_format($grandTotal, 0, ',', '.') }}</span>
+            </div>
+        </div> -->
         </div>
         <!-- Payment Method -->
         <!-- Payment Method -->
@@ -735,19 +671,24 @@
             <div class="breakdown">
                 <div class="breakdown-item">
                     <span>Tổng tiền hàng</span>
-                    <span id="total-item-price">0</span>
+                    <span id="total-item-price">₫{{ number_format($grandTotal, 0, ',', '.') }}</span>
+                </div>
+                <!-- Breakdown Section -->
+                <div class="breakdown-item">
+                    <span>Tổng tiền hàng</span>
+                    <span id="total-item-price">₫{{ number_format($grandTotal, 0, ',', '.') }}</span>
                 </div>
                 <div class="breakdown-item">
                     <span>Phí vận chuyển</span>
-                    <span id="shipping-fee">15.000 vnđ</span>
+                    <span id="shipping-fee">₫{{ number_format($shippingFee, 0, ',', '.') }}</span>
                 </div>
                 <div class="breakdown-item">
                     <span>Tổng cộng Voucher giảm giá:</span>
-                    <span id="voucher-discount">0</span>
+                    <span id="voucher-discount">₫{{ number_format($voucherDiscount, 0, ',', '.') }}</span>
                 </div>
                 <div class="breakdown-item total">
                     <span>Tổng thanh toán</span>
-                    <span id="total-payment" class="total-amount">0</span>
+                    <span id="total-payment" class="total-amount">₫{{ number_format($grandTotal + $shippingFee - $voucherDiscount, 0, ',', '.') }}</span>
                 </div>
             </div>
         </div>
@@ -767,59 +708,74 @@
 </div>
 <script>
     const changeMethodLink = document.getElementById('change-method');
-        const paymentOptions = document.getElementById('payment-options');
-        const selectedMethod = document.getElementById('selected-method');
-        const paymentButtons = document.querySelectorAll('.payment-method-button');
+    const paymentOptions = document.getElementById('payment-options');
+    const selectedMethod = document.getElementById('selected-method');
+    const paymentButtons = document.querySelectorAll('.payment-method-button');
 
-        changeMethodLink.addEventListener('click', function() {
-            if (paymentOptions.style.display === 'none') {
-                paymentOptions.style.display = 'block';
+    changeMethodLink.addEventListener('click', function() {
+        if (paymentOptions.style.display === 'none') {
+            paymentOptions.style.display = 'block';
+        } else {
+            paymentOptions.style.display = 'none';
+        }
+    });
+
+    paymentButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            selectedMethod.textContent = this.textContent;
+            paymentOptions.style.display = 'none';
+        });
+    });
+</script>
+
+
+
+
+<script>
+    // JavaScript để xử lý việc áp dụng voucher
+    document.getElementById('apply-voucher').addEventListener('click', function() {
+        let selectedVouchers = document.querySelectorAll('input[type="radio"]:checked');
+        let totalDiscount = 0;
+
+
+
+        selectedVouchers.forEach(voucher => {
+            let discountValue = parseFloat(voucher.getAttribute('data-value'));
+            let discountType = voucher.getAttribute('data-type');
+
+            // Log ra voucher được chọn
+            console.log("Voucher đã chọn:");
+            console.log("ID voucher:", voucher.value); // ID voucher
+            console.log("Giá trị giảm giá:", discountValue); // Giá trị giảm
+            console.log("Loại giảm giá:", discountType); // Loại giảm
+
+            if (discountType === 'percentage') {
+                totalDiscount += (discountValue / 100) * {
+                    {
+                        $grandTotal
+                    }
+                };
             } else {
-                paymentOptions.style.display = 'none';
+                totalDiscount += discountValue;
             }
         });
 
-        paymentButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                selectedMethod.textContent = this.textContent;
-                paymentOptions.style.display = 'none';
-            });
-        });
-</script>
+        // Cập nhật giá trị giảm giá voucher
+        document.getElementById('voucher-discount').innerText = '₫' + totalDiscount.toLocaleString();
 
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Khi nhấn nút OK trong modal
-        document.querySelector('.btn-primary[data-bs-dismiss="modal"]').addEventListener('click', function() {
-            const voucherDisplay = document.getElementById('voucher-display'); // Khu vực hiển thị voucher
-            voucherDisplay.innerHTML = ''; // Xóa nội dung cũ trước khi hiển thị mới
-
-            // Lấy tất cả các radio button đã được chọn
-            const selectedVouchers = document.querySelectorAll('.voucher-radio:checked');
-
-            selectedVouchers.forEach(function(voucher) {
-                let value = voucher.getAttribute('data-value');
-                let type = voucher.getAttribute('data-type');
-                let productName = voucher.getAttribute('data-product-name');
-                let displayValue = '';
-
-                // Hiển thị loại giảm giá (phần trăm hoặc tiền)
-                if (type === 'percentage') {
-                    displayValue = `${value}% giảm giá`;
-                } else {
-                    displayValue = `₫${parseFloat(value).toLocaleString('vi-VN')} giảm giá`;
-                }
-
-                // Tạo một phần tử div mới để hiển thị
-                let voucherInfo = document.createElement('div');
-                voucherInfo.innerHTML = `<p>Voucher cho sản phẩm ${productName}: ${displayValue}</p>`;
-
-                // Thêm vào khu vực hiển thị
-                voucherDisplay.appendChild(voucherInfo);
-            });
-        });
+        // Tính toán tổng thanh toán
+        let totalPayment = {
+            {
+                $grandTotal
+            }
+        } + {
+            {
+                $shippingFee
+            }
+        } - totalDiscount;
+        document.getElementById('total-payment').innerText = '₫' + totalPayment.toLocaleString();
     });
-</script> --}}
+</script>
 
 
 

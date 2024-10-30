@@ -262,7 +262,6 @@
             </div>
     </footer>
     <!-- Footer Section End -->
-
     <!-- Js Plugins -->
     <!-- <script src="{{asset('client/js/jquery-3.3.1.min.js')}}"></script> -->
 
