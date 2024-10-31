@@ -17,7 +17,7 @@ use App\Models\Wishlist;
 
 class ProductDetailController extends Controller
 {
-    public function index($id)
+    public function index($id, $slug)
     {
 
         $productDetail = Product::with(['category.parent', 'product_image', 'productVariants'])->find($id);
@@ -54,7 +54,7 @@ class ProductDetailController extends Controller
             'dateJoin',
             'string_address',
             'isFavourited',
-            
+
         ));
     }
 }

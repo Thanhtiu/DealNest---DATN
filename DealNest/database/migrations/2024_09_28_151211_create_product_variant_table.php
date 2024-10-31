@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('variant')->notNullable();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->string('value');
-            $table->decimal('price', 3, 2)->nullable();
+            $table->decimal('price', 10, 2)->nullable();
             $table->timestamps();
         });
     }

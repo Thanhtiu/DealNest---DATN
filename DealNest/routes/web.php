@@ -42,7 +42,8 @@ Route::get('/category/{id}', [CategoryController::class, 'showCategory'])->name(
 
 
 // test giao diện
-Route::get('/san-pham-chi-tiet/{id}', [ProductDetailController::class, 'index'])->name('client.productDetail');
+Route::get('/san-pham-chi-tiet/{id}/{slug}', [ProductDetailController::class, 'index'])->name('client.productDetail');
+
 
 
 Route::get('/the-loai/{caetegory_slug}/{subcategory_slug?}', [CategoryController::class, 'index']);
@@ -80,8 +81,6 @@ Route::group(['prefix' => 'tai-khoan'], function () {
     Route::post('/checkEmail', [AccountController::class, 'checkEmail'])->name('account.checkEmail');
     Route::get('/newPassword', [AccountController::class, 'newPassword'])->name('account.newPassword');
     Route::post('/newPasswordProcessing', [AccountController::class, 'newPasswordProcessing'])->name('account.newPasswordProcessing');
-
-  
 });
 
 
@@ -151,7 +150,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/danh-sach/voucher', [VoucherController::class, 'index'])->name('seller.voucher');
 
-        Route::post('/them/voucher', [VoucherController::class, 'create'])->name('seller.voucher.create');  
+        Route::post('/them/voucher', [VoucherController::class, 'create'])->name('seller.voucher.create');
 
         Route::get('/voucher/edit/{id}', [VoucherController::class, 'edit'])->name('seller.voucher.edit');
 

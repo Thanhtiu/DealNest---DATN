@@ -202,7 +202,7 @@
 <div class="product-container">
     @foreach($products as $item)
     <div class="card">
-        <a href="{{ route('client.productDetail', ['id' => $item->id]) }}">
+        <a href="{{ route('client.productDetail', ['id' => $item->id, 'slug' => $item->slug]) }}">
             <div class="cardd">
                 <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
                 <div class="discount">-92%</div>

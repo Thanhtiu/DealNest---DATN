@@ -17,85 +17,21 @@ class OrderSellerController extends Controller
     {
         $sellerId = Session::get('sellerId');
 
-        // Lấy các đơn hàng có trạng thái 'pending' và kiểm tra điều kiện payment_method và payment_status
-        $orderPending = Order::where('seller_id', $sellerId)
-            ->whereIn('status', ['pending', 'partial'])
-            ->whereHas('orderItems', function ($query) {
-                $query->where('status', 'pending');
-            })
+        $pending = Order::where('seller_id', $sellerId)
             ->where(function ($query) {
-                $query->where('payment_method', 'cod')
+                $query->where(function ($query) {
+                    $query->where('payment_method', 'vnpay')
+                        ->where('payment_status', 'paid');
+                })
                     ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
+                        $query->where('payment_method', 'cod')
+                            ->where('payment_status', 'pending');
                     });
             })
-            ->with(['orderItems.product', 'user'])
             ->get();
 
-        // Lấy các đơn hàng có trạng thái 'waiting_for_delivery' và kiểm tra điều kiện payment_method và payment_status
-        $orderWaitingDelivery = Order::where('seller_id', $sellerId)
-            ->whereIn('status', ['waiting_for_delivery', 'partial'])
-            ->whereHas('orderItems', function ($query) {
-                $query->whereIn('status', ['waiting_for_delivery']);
-            })
-            ->where(function ($query) {
-                $query->where('payment_method', 'cod')
-                    ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
-                    });
-            })
-            ->with(['orderItems.product', 'user'])
-            ->get();
 
-        // Lấy các đơn hàng có trạng thái 'cancel' và kiểm tra điều kiện payment_method và payment_status
-        $orderCancel = Order::where('seller_id', $sellerId)
-            ->whereIn('status', ['cancelled', 'partial'])
-            ->whereHas('orderItems', function ($query) {
-                $query->whereIn('status', ['cancel']);
-            })
-            ->where(function ($query) {
-                $query->where('payment_method', 'cod')
-                    ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
-                    });
-            })
-            ->with(['orderItems.product', 'user'])
-            ->get();
-
-        $orderBuyerCancel = Order::where('seller_id', $sellerId)
-            ->whereIn('status', ['cancelled', 'partial'])
-            ->whereHas('orderItems', function ($query) {
-                $query->whereIn('status', ['buyer_cancel']);
-            })
-            ->where(function ($query) {
-                $query->where('payment_method', 'cod')
-                    ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
-                    });
-            })
-            ->with(['orderItems.product', 'user'])
-            ->get();
-
-        $orderSuccess = Order::where('seller_id', $sellerId)
-            ->whereIn('status', ['cancelled', 'partial'])
-            ->whereHas('orderItems', function ($query) {
-                $query->whereIn('status', ['success']);
-            })
-            ->where(function ($query) {
-                $query->where('payment_method', 'cod')
-                    ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
-                    });
-            })
-            ->with(['orderItems.product', 'user'])
-            ->get();
-
-        return view('sellers.order.index', compact('orderSuccess', 'orderBuyerCancel', 'orderPending', 'orderWaitingDelivery', 'orderCancel'));
+        return view('sellers.order.index', compact('pending'));
     }
 
 

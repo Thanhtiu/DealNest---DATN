@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('color', 255)->notNullable();
             $table->string('size', 255)->notNullable();
             $table->integer('quantity')->notNullable();
-            $table->decimal('total', 3, 2)->notNullable();
+            $table->decimal('total', 10, 2)->notNullable();
             $table->timestamps();
         });
     }
