@@ -112,9 +112,15 @@ class PaymentController extends Controller
     
         // Kiểm tra phương thức thanh toán
         if ($paymentMethod === 'vnpay') {
+            session(['paymentMethod' => 'vnpay']); 
             return response()->json([
                 'message' => 'Đặt hàng thành công! Chuyển hướng đến thanh toán.',
                 'paymentUrl' => route('vnpay_payment')
+            ]);
+        } elseif ($paymentMethod === 'cod') {
+            return response()->json([
+                'message' => 'Đặt hàng thành công! Chuyển hướng đến trang xác nhận.',
+                'paymentUrl' => route('vnpay.success')
             ]);
         }
     

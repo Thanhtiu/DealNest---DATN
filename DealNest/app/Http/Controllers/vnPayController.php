@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Cart_item;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -14,18 +15,18 @@ class vnPayController extends Controller
 {
     public function vnpay_payment() {
         try {
-
-           // Lấy mảng orderIds từ session
-$orderIds = session('orderIds');
-$totalWithShipping = session('totalWithShipping');
-
-// Kiểm tra xem giá trị đã tồn tại trong session hay chưa
-if (!$orderIds || !$totalWithShipping) {
-    return 'Không tìm thấy thông tin đơn hàng.';
-}
-
-// Tạo chuỗi từ mảng orderIds
-$orderIdString = implode(',', $orderIds);
+            $orderIds = session('orderIds');
+            $totalWithShipping = session('totalWithShipping');
+            
+            // Kiểm tra xem giá trị đã tồn tại trong session hay chưa
+            if (!$orderIds || !$totalWithShipping) {
+                return 'Không tìm thấy thông tin đơn hàng.';
+            }
+            
+            // Tạo chuỗi từ mảng orderIds
+            $orderIdString = implode(',', $orderIds);
+            
+            // Lưu giá trị "vnpay" vào session cho paymentMetho
            
         // call API
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
@@ -101,23 +102,54 @@ $orderIdString = implode(',', $orderIds);
     // Lấy userId từ auth() và productIds từ session
     $userId = auth()->id();
     $productIds = session('productIds');
-
+    
     // Kiểm tra xem session có chứa productIds hay không
     if (empty($productIds)) {
         return response()->json(['message' => 'Không tìm thấy sản phẩm để xóa.'], 404);
     }
-
-    // Thực hiện xóa các CartItem với điều kiện user_id và product_id
-    Cart_item::where('user_id', $userId)
+    
+    // Truy vấn cartId từ bảng carts dựa vào userId
+    $cartId = Cart::where('user_id', $userId)->value('id');
+    
+    // Kiểm tra xem cartId có tồn tại không
+    if (!$cartId) {
+        return response()->json(['message' => 'Không tìm thấy giỏ hàng cho người dùng này.'], 404);
+    }
+    
+    // Thực hiện xóa các CartItem với điều kiện cart_id và product_id
+    Cart_item::where('cart_id', $cartId)
         ->whereIn('product_id', $productIds)
         ->delete();
+    
+    // Kiểm tra phương thức thanh toán
+    if (session('paymentMethod') === 'vnpay') {
+        // Lấy orderIds từ session
+        $orderIds = session('orderIds');
+
+        // Kiểm tra xem orderIds có tồn tại và là một mảng không
+        if (is_array($orderIds) && !empty($orderIds)) {
+            // Cập nhật payment_status cho các đơn hàng
+            $updatedRows = DB::table('orders')
+                ->whereIn('id', $orderIds)
+                ->update(['payment_status' => 'paid']);
+            
+            // Trả về thông báo thành công
+            return response()->json(['message' => 'Đã cập nhật trạng thái thanh toán thành công.', 'updated_rows' => $updatedRows]);
+        } else {
+            return response()->json(['message' => 'orderIds không hợp lệ hoặc không có dữ liệu.'], 400);
+        }
+    }
 
     // Xóa session productIds sau khi xóa xong
     session()->forget('productIds');
+    session()->forget('orderIds');
+    session()->forget('paymentMethod');
 
-    return 'Đã xóa các sản phẩm khỏi giỏ hàng thành công.';
+    return response()->json(['message' => 'Đã xóa các sản phẩm khỏi giỏ hàng thành công.']);
 }
 
+
+    
     
     
     
