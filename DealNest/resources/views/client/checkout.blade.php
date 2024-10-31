@@ -788,56 +788,62 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-    let selectedPaymentMethod = '';
+        let selectedPaymentMethod = '';
 
-    // Thêm sự kiện click cho các nút phương thức thanh toán
-    $('.payment-method-button').on('click', function() {
-        selectedPaymentMethod = $(this).data('method'); // Lưu phương thức đã chọn
-    });
-
-    $('#order-button').on('click', function(e) {
-        e.preventDefault(); // Ngăn chặn hành động mặc định của nút
-        
-        // Lấy giá trị CartItemId
-        let cartItemIds = [];
-        $('.data-cart-item').each(function() {
-            cartItemIds.push($(this).text().split(': ')[1]); // Lấy ID sản phẩm từ text
+        // Thêm sự kiện click cho các nút phương thức thanh toán
+        $('.payment-method-button').on('click', function() {
+            selectedPaymentMethod = $(this).data('method'); // Lưu phương thức đã chọn
         });
-        
-        // Lấy tổng thanh toán
-        let totalPayment = $('#total-payment').text().replace(/₫|\.| /g, ''); // Lấy số tiền và loại bỏ ký tự không cần thiết
 
-        // Lấy địa chỉ
-        let address = $('.address').text().trim(); // Lấy địa chỉ và loại bỏ khoảng trắng
+        $('#order-button').on('click', function(e) {
+            e.preventDefault(); // Ngăn chặn hành động mặc định của nút
+            
+            // Lấy giá trị CartItemId
+            let cartItemIds = [];
+            $('.data-cart-item').each(function() {
+                cartItemIds.push($(this).text().split(': ')[1]); // Lấy ID sản phẩm từ text
+            });
+            
+            // Lấy tổng thanh toán
+            let totalPayment = $('#total-payment').text().replace(/₫|\.| /g, ''); // Lấy số tiền và loại bỏ ký tự không cần thiết
 
-        // Gửi dữ liệu qua AJAX
-        $.ajax({
-            url: '{{ route('checkout.processing') }}', // URL của route
-            method: 'POST',
-            data: {
-                cartItemIds: cartItemIds,
-                totalPayment: totalPayment,
-                address: address, // Gửi địa chỉ
-                paymentMethod: selectedPaymentMethod, // Gửi phương thức thanh toán đã chọn
-                _token: '{{ csrf_token() }}' // CSRF token
-            },
-            success: function(response) {
-                // Xử lý phản hồi từ server
-                alert(response.message); // Thông báo thành công
-                if (response.paymentUrl) {
-                    window.location.href = response.paymentUrl; // Chuyển hướng đến URL thanh toán
+            // Lấy địa chỉ
+            let address = $('.address').text().trim(); // Lấy địa chỉ và loại bỏ khoảng trắng
+
+            // Lấy danh sách seller IDs
+            let sellerIds = [];
+            $('.data-seller-id').each(function() {
+                sellerIds.push($(this).text().split(': ')[1]); // Lấy ID người bán từ text
+            });
+
+            // Gửi dữ liệu qua AJAX
+            $.ajax({
+                url: '{{ route('checkout.processing') }}', // URL của route
+                method: 'POST',
+                data: {
+                    cartItemIds: cartItemIds,
+                    totalPayment: totalPayment,
+                    address: address, // Gửi địa chỉ
+                    paymentMethod: selectedPaymentMethod, // Gửi phương thức thanh toán đã chọn
+                    sellerIds: sellerIds, // Gửi danh sách seller IDs
+                    _token: '{{ csrf_token() }}' // CSRF token
+                },
+                success: function(response) {
+                    // Xử lý phản hồi từ server
+                    alert(response.message); // Thông báo thành công
+                    if (response.paymentUrl) {
+                        window.location.href = response.paymentUrl; // Chuyển hướng đến URL thanh toán
+                    }
+                    console.log(response);
+                },
+                error: function(xhr) {
+                    // Xử lý lỗi
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    console.log(xhr.responseText);
                 }
-                console.log(response);
-            },
-            error: function(xhr) {
-                // Xử lý lỗi
-                alert('Có lỗi xảy ra, vui lòng thử lại.');
-                console.log(xhr.responseText);
-            }
+            });
         });
     });
-});
-
 </script>
 
 
