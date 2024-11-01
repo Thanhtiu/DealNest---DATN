@@ -4,71 +4,78 @@
     .order-details-container {
         padding: 20px;
         background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s;
+        border-radius: 6px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 1000px;
+        margin: 20px auto;
     }
 
     .order-title {
         text-align: center;
-        font-size: 32px;
-        margin-bottom: 30px;
-        color: #007bff;
-        font-weight: bold;
+        font-size: 28px;
+        margin-bottom: 25px;
+        color: #333;
+        font-weight: 600;
     }
 
     .badge-warning {
         background-color: #ff9800;
+        color: #fff;
     }
 
     .badge-success {
         background-color: #4caf50;
+        color: #fff;
     }
 
     .badge-danger {
         background-color: #f44336;
+        color: #fff;
     }
 
     .product-image {
-        width: 80px !important;
-        height: 80px !important;
-        border-radius: 5px !important;
-        object-fit: cover !important;
+        width: 70px;
+        height: 70px;
+        border-radius: 4px;
+        object-fit: cover;
     }
 
-    .order-info,
-    .customer-info {
-        border: 1px solid #dee2e6;
+    .order-info, .customer-info {
+        border: 1px solid #e0e0e0;
         padding: 15px;
-        border-radius: 8px;
-        background-color: #f8f9fa;
+        border-radius: 6px;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
     }
 
-    .order-info h5,
-    .customer-info h5 {
-        font-size: 18px;
-        color: #333;
-        margin-bottom: 15px;
+    .order-info h5, .customer-info h5 {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 12px;
     }
 
     .order-actions {
         text-align: center;
-        margin-top: 30px;
+        margin-top: 25px;
     }
 
     .btn-primary {
         background-color: #007bff;
-        border-color: #007bff;
+        border: none;
     }
 
     .btn-primary:hover {
         background-color: #0056b3;
-        border-color: #0056b3;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        color: #fff;
     }
 
     .btn-secondary:hover {
-        background-color: #6c757d;
-        border-color: #6c757d;
+        background-color: #565e64;
     }
 
     .order-status-select {
@@ -78,175 +85,120 @@
         font-size: 14px;
         border-radius: 4px;
         border: 1px solid #ced4da;
-        transition: border-color 0.3s;
-        background: #f8f9fa;
-        appearance: none;
-        /* Loại bỏ dấu mũi tên mặc định của trình duyệt */
-        padding-right: 30px;
-        /* Tạo khoảng trống cho icon */
-        position: relative;
+        background-color: #f1f1f1;
     }
 
-    .delivery-date-input {
+    .delivery-date-input, textarea.form-control {
         width: 100%;
         padding: 8px;
         border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 1em;
-        background-color: #fff;
-        transition: border-color 0.3s ease;
+        border-radius: 4px;
+        font-size: 14px;
         margin-top: 10px;
     }
 
-    .order-status-select:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
-    }
-
-    .customer-info {
-        border: 1px solid #dee2e6;
-        padding: 15px;
-        border-radius: 8px;
-        background-color: #f8f9fa;
-        text-align: center;
-        /* Căn giữa nội dung */
-    }
-
     .customer-image-container {
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     .customer-image {
-        width: 100px;
-        /* Đặt kích thước cho ảnh khách hàng */
-        height: 100px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
-        /* Bo tròn hình ảnh */
         object-fit: cover;
         border: 2px solid #007bff;
-        /* Đường viền cho ảnh */
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .product-attributes span {
+        display: inline-block;
+        margin-top: 5px;
+        padding: 4px 6px;
+        font-size: 12px;
+        background-color: #eee;
+        border-radius: 4px;
     }
 </style>
+
+
 <div class="container order-details-container">
-    <form action="{{ route('seller.order.confirm', ['id' => $orderDetail->id]) }}" method="POST">
-        @csrf
-        <h2 class="order-title">Chi Tiết Đơn Hàng</h2>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="order-info">
-                    <h5>Thông Tin Đơn Hàng</h5>
-                    <p><strong>Mã đơn hàng:</strong> {{$orderDetail->id}}</p>
-                    <p><strong>Khách hàng:</strong> {{$orderDetail->user->full_name}}</p>
-                    <p><strong>Ngày đặt:</strong> {{$orderDetail->delivery_date}}</p>
-                    <p><strong>Phương thức thanh toán:</strong> {{$orderDetail->payment_method}}</p>
-                    @php
-                    $totalAmount = 0;
-                    @endphp
-
-                    @foreach($orderDetail->order_items as $item)
-                    @if($item->status === $status)
-                    @php
-                    $totalAmount += $item->price * $item->quantity;
-                    @endphp
-                    @endif
-                    @endforeach
-
-                    <p><strong>Tổng tiền:</strong> {{ number_format($totalAmount, 0, ',', '.') }} vnđ</p>
-
-                </div>
+    <h2 class="order-title">Chi Tiết Đơn Hàng</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="order-info">
+                <h5>Thông Tin Đơn Hàng</h5>
+                <p><strong>Mã đơn hàng:</strong> {{$orderCode}}</p>
+                <p><strong>Khách hàng:</strong> {{$order->user->name}}</p>
+                <p><strong>Ngày đặt:</strong> {{$order->created_at}}</p>
+                <p><strong>Phương thức thanh toán:</strong> {{ $order->payment_method==='vnpay' ? 'vnpay':'Khi nhận hàng'}}</p>
+                <p><strong>Phí ship:</strong> 15.000 vnđ</p>
+                <p><strong>Tổng tiền:</strong> {{ number_format($order->total, 0, ',', '.') }} vnđ</p>
             </div>
-            <div class="col-md-6">
-                <div class="customer-info">
-                    <h5>Thông tin người nhận hàng</h5>
-                    <div class="customer-image-container">
-                        <img src="{{ asset('uploads/' . ($orderDetail->user->image ?? 'default_avt.png')) }}" alt="Customer Image" class="customer-image">
+        </div>
+        <div class="col-md-6">
+            <div class="customer-info text-center">
+                <h5>Thông tin người nhận hàng</h5>
+                <div class="customer-image-container">
+                    <img src="{{ asset('uploads/' . ($order->user->image ?? 'default_avt.png')) }}" alt="Customer Image" class="customer-image">
+                </div>
+                <p><strong>Tên:</strong> {{ $order->user->name }}</p>
+                <p><strong>Địa chỉ:</strong> {{$order->address}} </p>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="mt-4">Sản Phẩm</h5>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Hình Ảnh</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Số Lượng</th>
+                <th>Thành Tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($orderDetail as $item)
+            <tr>
+                <td><img src="{{ asset('uploads/' . $item->product->image) }}" alt="Product Image" class="product-image"></td>
+                <td>
+                    <strong>{{ \Illuminate\Support\Str::limit($item->product->name, 25, '...') }}</strong>
+                    <div class="product-attributes mt-2">
+                        @if ($item->color)
+                        <span>Kích thước: {{ $item->color }}</span>
+                        @endif
+                        @if ($item->size)
+                        <span>Màu sắc: {{ $item->size }}</span>
+                        @endif
                     </div>
-                    <p><strong>Tên:</strong> {{ $orderDetail->name }}</p>
-                    <p><strong>Địa chỉ:</strong> {{$orderDetail->address}} </p>
-                    <p><strong>Số điện thoại:</strong> {{$orderDetail->phone}}</p>
-                </div>
-            </div>
-        </div>
+                </td>
+                <td>{{ $item->quantity }}</td>
+                <td>{{ number_format($item->total, 0, ',', '.') }} vnđ</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-        <h5 class="mb-3">Sản Phẩm</h5>
-        <table class="table table-bordered">
+    <div class="order-actions">
+        <form action="{{ route('seller.order.confirm', ['id' => $order->id]) }}" method="POST">
+            @csrf
+            <select class="form-control order-status-select" name="status">
+                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>⏳ Chờ duyệt</option>
+                <option value="waiting_for_delivery" {{ $order->status == 'waiting_for_delivery' ? 'selected' : '' }}>✔️ Duyệt</option>
+                <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>❌ Từ chối</option>
+                <option value="refuse" {{ $order->status == 'cancelled' ? 'selected' : '' }}>⚠️ Khách hủy</option>
+            </select>
 
-            <thead class="thead-light">
-                <tr>
-                    <th>Hình Ảnh</th>
-                    <th>Tên Sản Phẩm</th>
-                    <th>Số Lượng</th>
-                    <th>Giá</th>
-                    <th>Thành Tiền</th>
-                    <th>Thao Tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($orderItems as $item)
-                <tr>
-                    <td><img src="{{ asset('uploads/' . $item->product->image) }}" alt="Product Image" class="product-image"></td>
-                    <td>
-                        <strong>{{ \Illuminate\Support\Str::limit($item->product->name, 25, '...') }}</strong>
-                        @if($item->attribute)
-                        @php
-                        $attributes = explode(', ', $item->attribute);
-                        @endphp
-                        <div class="product-attributes mt-3">
-                            @foreach($attributes as $attribute)
-                            <span class="badge attribute-badge" style="color: #333">{{ $attribute }}</span>
-                            @endforeach
-                        </div>
-                        @else
-                        <p><small>Không có thông tin kích thước và màu sắc</small></p>
-                        @endif
-                    </td>
-                    <td>{{ $item->quantity }}</td>
-                    <td>{{ number_format($item->price, 0, ',', '.') }} vnđ</td>
-                    <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} vnđ</td>
-                    <td>
-                        <input type="hidden" name="items[{{ $item->id }}][id]" value="{{ $item->id }}">
-                        <select class="form-control order-status-select" name="items[{{ $item->id }}][status]">
-                            @if(isset($status) && $status === 'waiting_for_delivery')
-                            <option value="waiting_for_delivery" {{ $item->status == 'waiting_for_delivery' ? 'selected' : '' }}>✔️ Duyệt</option>
-                            @elseif($item->status === 'cancel')
-                            <option value="" {{ $item->status == 'cancel' ? 'selected' : '' }}>{{$item->cancellation_reason}}</option>
-                            @elseif($item->status === 'buyer_cancel')
-                            <option value="" {{ $item->status == 'cancel' ? 'selected' : '' }}>Khách hủy</option>
-                            @elseif($item->status === 'success')
-                            <option value="" {{ $item->status == 'success' ? 'selected' : '' }}>Hoàn thành</option>
-                            @else
-                            <option value="pending" {{ $item->status == 'pending' ? 'selected' : '' }}>⏳ Chờ duyệt</option>
-                            <option value="waiting_for_delivery" {{ $item->status == 'waiting_for_delivery' ? 'selected' : '' }} name="waiting_for_delivery">✔️ Duyệt</option>
-                            <option value="out_of_stock" {{ $item->status == 'out_of_stock' ? 'selected' : '' }} name="out_of_stock">❌ Hết hàng</option>
-                            <option value="invalid_info" {{ $item->status == 'invalid_info' ? 'selected' : '' }} name="invalid_info">⚠️ Thông tin không hợp lệ</option>
-                            <option value="unknown_reason" {{ $item->status == 'unknown_reason' ? 'selected' : '' }}>❔ Lý do khác</option>
-                            @endif
-                        </select>
-                        @if($item->status == 'pending')
-                        <div class="mt-3">
-                            <label for="delivery_date_{{ $item->id }}">Chọn ngày giao nhận:</label>
-                            <input type="date" id="delivery_date_{{ $item->id }}" name="items[{{ $item->id }}][delivery_date]" class="form-control">
-                            @error("items.{$item}.delivery_date")
-                            <div class="alert alert-danger" style="color: red;">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        @endif
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
+            <textarea class="form-control mt-2" name="note" placeholder="Nhập ghi chú..."></textarea>
 
-        </table>
-        <div class="order-actions">
-            @if(isset($status) && $status === 'pending')
-            <button type="submit" class="btn btn-primary">Cập nhật trạng thái</button>
-            <button type="button" class="btn btn-secondary">In đơn hàng</button>
-            @else
-            <button type="button" class="btn btn-secondary">In đơn hàng</button>
-            @endif
-        </div>
-    </form>
-
-
+            <button type="submit" class="btn btn-primary mt-3">Cập nhật</button>
+        </form>
+        <button type="button" class="btn btn-secondary mt-2">In đơn hàng</button>
+    </div>
 </div>
+
 @endsection
