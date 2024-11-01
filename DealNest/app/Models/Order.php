@@ -22,7 +22,8 @@ class Order extends Model
         'payment_status',
         'cancellation_reason',
         'address',
-        'voucher_id'
+        'voucher_id',
+        'phone'
     ];
     public function orderItems()
     {

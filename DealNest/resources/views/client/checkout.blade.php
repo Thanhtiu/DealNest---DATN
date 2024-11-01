@@ -542,7 +542,7 @@
     <!-- Shipping Info -->
     <div class="shipping-info">
         <h3><i class="bi bi-geo-alt-fill"></i> Địa Chỉ Nhận Hàng</h3>
-        <p class="name">{{$userAddress->name}} | {{$userAddress->phone}}</p>
+        <p class="name">{{$userAddress->name}} | <span id="user-phone">{{$userAddress->phone}}</span></p>
         <p class="address">{{$userAddress->string_address}} {{$userAddress->street}}</p>
         <button class="change-btn"><i class="bi bi-pencil-fill"></i> Thay Đổi</button>
     </div>
@@ -810,6 +810,9 @@
             // Lấy địa chỉ
             let address = $('.address').text().trim(); // Lấy địa chỉ và loại bỏ khoảng trắng
 
+            // Lấy số điện thoại
+            let phone = $('#user-phone').text(); // Lấy số điện thoại và loại bỏ khoảng trắng
+
             // Lấy danh sách seller IDs
             let sellerIds = [];
             $('.data-seller-id').each(function() {
@@ -824,6 +827,7 @@
                     cartItemIds: cartItemIds,
                     totalPayment: totalPayment,
                     address: address, // Gửi địa chỉ
+                    phone: phone, // Gửi số điện thoại
                     paymentMethod: selectedPaymentMethod, // Gửi phương thức thanh toán đã chọn
                     sellerIds: sellerIds, // Gửi danh sách seller IDs
                     _token: '{{ csrf_token() }}' // CSRF token
