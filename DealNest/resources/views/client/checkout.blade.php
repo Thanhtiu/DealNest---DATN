@@ -574,10 +574,10 @@
                     <p class="return-policy"><i class="bi bi-arrow-repeat"></i> Đổi ý miễn phí 15 ngày</p>
                 </div>
                 <div class="price-info" data-product-id="{{ $item->id }}">
-                    <p>Đơn giá: ₫<span class="item-price">{{ number_format($item->total_price, 0, ',', '.') }}</span>
+                    <p>Đơn giá: ₫<span class="item-price">{{ number_format($item->price, 0, ',', '.') }}</span>
                     </p>
                     <p>Số lượng: <span class="quantity">{{ $item->quantity }}</span></p>
-                    <p>Thành tiền: ₫<span class="item-total">{{ number_format($itemTotal, 0, ',', '.') }}</span></p>
+                    <p>Thành tiền: ₫<span class="item-total">{{ number_format($item->total_price, 0, ',', '.') }}</span></p>
                 </div>
             </div>
             @endforeach
