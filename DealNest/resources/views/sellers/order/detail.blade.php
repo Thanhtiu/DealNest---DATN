@@ -40,7 +40,8 @@
         object-fit: cover;
     }
 
-    .order-info, .customer-info {
+    .order-info,
+    .customer-info {
         border: 1px solid #e0e0e0;
         padding: 15px;
         border-radius: 6px;
@@ -48,7 +49,8 @@
         margin-bottom: 20px;
     }
 
-    .order-info h5, .customer-info h5 {
+    .order-info h5,
+    .customer-info h5 {
         font-size: 16px;
         color: #555;
         margin-bottom: 12px;
@@ -88,7 +90,8 @@
         background-color: #f1f1f1;
     }
 
-    .delivery-date-input, textarea.form-control {
+    .delivery-date-input,
+    textarea.form-control {
         width: 100%;
         padding: 8px;
         border: 1px solid #ddd;
@@ -109,7 +112,8 @@
         border: 2px solid #007bff;
     }
 
-    .table th, .table td {
+    .table th,
+    .table td {
         vertical-align: middle;
         text-align: center;
     }
@@ -122,9 +126,27 @@
         background-color: #eee;
         border-radius: 4px;
     }
+
+    .delivery_date {
+        margin-bottom: 15px;
+    }
 </style>
 
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
 
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
 <div class="container order-details-container">
     <h2 class="order-title">Chi Tiết Đơn Hàng</h2>
     <div class="row">
@@ -184,20 +206,26 @@
     </table>
 
     <div class="order-actions">
+
         <form action="{{ route('seller.order.confirm', ['id' => $order->id]) }}" method="POST">
             @csrf
+            <div class="delivery_date">
+                <label for="delivery-date" class="form-label">Chọn ngày giao hàng:</label>
+                <input type="date" id="delivery-date" class="delivery-date-input" name="delivery_date" value="{{$order->delivery_date}}">
+            </div>
             <select class="form-control order-status-select" name="status">
                 <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>⏳ Chờ duyệt</option>
                 <option value="waiting_for_delivery" {{ $order->status == 'waiting_for_delivery' ? 'selected' : '' }}>✔️ Duyệt</option>
                 <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>❌ Từ chối</option>
-                <option value="refuse" {{ $order->status == 'cancelled' ? 'selected' : '' }}>⚠️ Khách hủy</option>
+                <option value="refuse" {{ $order->status == 'refuse' ? 'selected' : '' }}>⚠️ Khách hủy</option>
             </select>
 
-            <textarea class="form-control mt-2" name="note" placeholder="Nhập ghi chú..."></textarea>
+            <textarea class="form-control mt-2" name="note" placeholder="Nhập ghi chú...">{{$order->cancellation_reason}}</textarea>
 
             <button type="submit" class="btn btn-primary mt-3">Cập nhật</button>
         </form>
-        <button type="button" class="btn btn-secondary mt-2">In đơn hàng</button>
+        <a href="" class="btn btn-secondary mt-2">In đơn hàng</a>
+        <a href="{{route('seller.order')}}" class="btn btn-secondary mt-2">Trở về</a>
     </div>
 </div>
 

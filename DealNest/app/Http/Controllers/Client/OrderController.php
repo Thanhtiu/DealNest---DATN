@@ -12,73 +12,100 @@ class OrderController extends Controller
     public function index()
     {
         $userId = auth()->id();
-        $orderAll = Order::where('user_id', $userId)
+
+        // Đơn hàng đang chờ xác nhận
+        $pending = Order::where('user_id', $userId)
+            ->where('status', 'pending')
             ->where(function ($query) {
-                $query->where('payment_method', 'cod')
+                $query->where(function ($query) {
+                    $query->where('payment_method', 'vnpay')
+                        ->where('payment_status', 'paid');
+                })
                     ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
+                        $query->where('payment_method', 'cod')
+                            ->where('payment_status', 'pending');
                     });
             })
-            ->with(['orderItems.product', 'user'])
+            ->whereHas('orderItems')
+            ->with('orderItems.product')
             ->get();
 
-        $orderPending = Order::where('user_id', $userId)
+        // Đơn hàng chờ giao hàng
+        $waitingForDelivery = Order::where('user_id', $userId)
+            ->where('status', 'waiting_for_delivery')
             ->where(function ($query) {
-                $query->where('payment_method', 'cod')
+                $query->where(function ($query) {
+                    $query->where('payment_method', 'vnpay')
+                        ->where('payment_status', 'paid');
+                })
                     ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
+                        $query->where('payment_method', 'cod')
+                            ->where('payment_status', 'pending');
                     });
             })
-            ->with(['pendingOrderItems.product', 'user'])
+            ->whereHas('orderItems')
+            ->with('orderItems.product')
             ->get();
 
-        $orderWaitingForDelivery = Order::where('user_id', $userId)
+
+        // Đơn hàng đã hoàn thành
+        $completed = Order::where('user_id', $userId)
+            ->where('status', 'completed')
             ->where(function ($query) {
-                $query->where('payment_method', 'cod')
+                $query->where(function ($query) {
+                    $query->where('payment_method', 'vnpay')
+                        ->where('payment_status', 'paid');
+                })
                     ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
+                        $query->where('payment_method', 'cod')
                             ->where('payment_status', 'paid');
                     });
             })
-            ->with(['waitingForDeliveryOrderItems.product', 'user'])
+            ->whereHas('orderItems')
+            ->with('orderItems.product')
             ->get();
 
-        $orderCancel = Order::where('user_id', $userId)
+        // Đơn hàng đã từ chối
+        $refuse = Order::where('user_id', $userId)
+            ->where('status', 'refuse')
             ->where(function ($query) {
-                $query->where('payment_method', 'cod')
+                $query->where(function ($query) {
+                    $query->where('payment_method', 'vnpay')
+                        ->where('payment_status', 'paid');
+                })
                     ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
+                        $query->where('payment_method', 'cod')
+                            ->where('payment_status', 'pending');
                     });
             })
-            ->with(['cancelOrderItems.product', 'user'])
+            ->whereHas('orderItems')
+            ->with('orderItems.product')
             ->get();
 
-        $orderBuyerCancel = Order::where('user_id', $userId)
+        // Đơn hàng đã hủy
+        $cancelled = Order::where('user_id', $userId)
+            ->where('status', 'cancelled')
             ->where(function ($query) {
-                $query->where('payment_method', 'cod')
+                $query->where(function ($query) {
+                    $query->where('payment_method', 'vnpay')
+                        ->where('payment_status', 'paid');
+                })
                     ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
+                        $query->where('payment_method', 'cod')
+                            ->where('payment_status', 'pending');
                     });
             })
-            ->with(['buyerCancelOrderItems.product', 'user'])
+            ->whereHas('orderItems')
+            ->with('orderItems.product')
             ->get();
 
-        $orderSuccess = Order::where('user_id', $userId)
-            ->where(function ($query) {
-                $query->where('payment_method', 'cod')
-                    ->orWhere(function ($query) {
-                        $query->where('payment_method', '!=', 'cod')
-                            ->where('payment_status', 'paid');
-                    });
-            })
-            ->with(['successOrderItems.product', 'user'])
-            ->get();
-        return view('client.order', compact('orderSuccess','orderCancel', 'orderAll', 'orderPending', 'orderWaitingForDelivery', 'orderBuyerCancel'));
+        return view('client.order', compact('pending', 'waitingForDelivery', 'completed', 'refuse', 'cancelled'));
     }
+
+
+
+
+
 
 
 

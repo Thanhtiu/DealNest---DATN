@@ -138,9 +138,13 @@ class OrderSellerController extends Controller
         }
 
         $order->status = $request->input('status');
-        $order->cancellation_reason = $request->input('note'); 
+        $order->cancellation_reason = $request->input('note');
+        $order->delivery_date = $request->input('delivery_date');
+        if ($request->status === 'waiting_for_delivery' || $request->status === 'pending' || $request->status === 'completed') {
+            $order->cancellation_reason = null;
+        }
         $order->save();
-        
+
         return redirect()->back()->with('success', 'Cập nhật đơn hàng thành công!');
     }
 }
