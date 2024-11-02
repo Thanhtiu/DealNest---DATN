@@ -23,6 +23,8 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Notifications\Notification;
 
 class CategoryResource extends Resource
 {
@@ -58,6 +60,7 @@ class CategoryResource extends Resource
     
                     FileUpload::make('image')
                         ->label('Hình ảnh')
+                        ->required()
                         ->directory('categories'),
                 ]),
     
@@ -148,5 +151,6 @@ class CategoryResource extends Resource
     {
         return 'Quản lý danh mục'; 
     }
+    
 
 }

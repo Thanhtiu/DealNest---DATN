@@ -23,5 +23,10 @@ class EditBanner extends EditRecord
     {
         return 'Tùy chỉnh banner'; 
     }
+    protected function afterSave()
+    {
+    // Chuyển hướng về danh sách sản phẩm
+         return redirect()->route('filament.admin.resources.banner.banners.index');
+    }
 
 }

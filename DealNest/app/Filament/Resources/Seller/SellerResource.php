@@ -40,7 +40,7 @@ class SellerResource extends Resource
         ->schema([
             Grid::make(2) // Tạo lưới với 2 cột
                 ->schema([
-                    TextInput::make('store_name')
+                    TextInput::make('name')
                         ->label('Tên cửa hàng')
                         ->columnSpan(1), // Chiếm 1 cột
     
@@ -62,12 +62,13 @@ class SellerResource extends Resource
                         ->inline(false) // Đặt ở giữa cột để tạo sự cân đối
                         ->columnSpan(1) // Chiếm 1 cột
                         ->reactive(), // Để trường này phản ứng với các thay đổi
+                        
                 ]),
     
             Grid::make(1) // Tạo lưới với 1 cột cho trường select
                 ->schema([
                     Select::make('note')
-                        ->label('Lý do khóa cửa hàng')
+                        ->label('Khóa cửa hàng')
                         ->options([
                             'Vi phạm chính sách bán hàng' => 'Vi phạm chính sách bán hàng',
                             'Sản phẩm không tuân thủ quy định' => 'Sản phẩm không tuân thủ quy định',
@@ -76,7 +77,7 @@ class SellerResource extends Resource
                             'Thông tin gian lận hoặc sai lệch' => 'Thông tin gian lận hoặc sai lệch',
                             'Không tuân thủ yêu cầu từ Shopee' => 'Không tuân thủ yêu cầu từ Shopee',
                         ])
-                        ->placeholder("Chọn lý do")
+                        ->placeholder("Không")
                         ->columnSpan(1) // Chiếm toàn bộ chiều rộng
                         ->reactive() // Để trường này phản ứng với các thay đổi
                         ->afterStateUpdated(function ($state, callable $set) {
@@ -113,9 +114,7 @@ class SellerResource extends Resource
                 Tables\Actions\EditAction::make()->label('Xem'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+               
             ]);
     }
 

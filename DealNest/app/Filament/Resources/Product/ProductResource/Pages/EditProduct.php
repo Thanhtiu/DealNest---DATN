@@ -21,6 +21,11 @@ class EditProduct extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return 'Tùy chỉnh sản phẩm'; 
+        return 'Duyệt sản phẩm'; 
+    }
+    protected function afterSave()
+    {
+    // Chuyển hướng về danh sách sản phẩm
+         return redirect()->route('filament.admin.resources.product.products.index');
     }
 }
