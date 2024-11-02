@@ -22,6 +22,12 @@ use Filament\Forms\Components\Toggle;
 use Illuminate\Support\Str;
 use Filament\Forms\Set;
 use Filament\Forms\Get;
+use Filament\Tables\Filters\QueryBuilder;
+use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
+
+
+
+
 
 class UserResource extends Resource
 {
@@ -104,7 +110,16 @@ class UserResource extends Resource
 
         ])
             ->filters([
-                //
+                QueryBuilder::make()
+                ->constraints([
+                    SelectConstraint::make('role')
+                        ->options([
+                            'seller' => 'Người bán hàng',
+                            'buyer' => 'Người mua hàng',
+                            'staff' => 'Nhân viên',
+                            // Không thêm admin ở đây
+                        ]),
+                ]),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -125,6 +140,12 @@ class UserResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        // Thêm điều kiện để loại bỏ người dùng có vai trò là admin
+        return parent::getEloquentQuery()->where('role', '!=', 'admin');
     }
 
     public static function getPages(): array

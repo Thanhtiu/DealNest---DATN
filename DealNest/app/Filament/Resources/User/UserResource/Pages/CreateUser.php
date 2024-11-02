@@ -15,4 +15,9 @@ class CreateUser extends CreateRecord
     {
         return 'Thêm tài khoản'; 
     }
+    protected function afterSave()
+    {
+    // Chuyển hướng về danh sách sản phẩm
+         return redirect()->route('filament.admin.resources.user.users.index');
+    }
 }

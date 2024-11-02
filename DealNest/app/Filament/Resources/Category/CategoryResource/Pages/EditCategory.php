@@ -24,4 +24,10 @@ class EditCategory extends EditRecord
         return 'Tùy chỉnh danh mục'; 
     }
 
+    protected function afterSave()
+    {
+    // Chuyển hướng về danh sách sản phẩm
+         return redirect()->route('filament.admin.resources.category.categories.index');
+    }
+
 }

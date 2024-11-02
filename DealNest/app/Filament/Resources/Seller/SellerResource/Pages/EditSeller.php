@@ -23,5 +23,10 @@ class EditSeller extends EditRecord
     {
         return 'Tùy chỉnh cửa hàng'; 
     }
+    protected function afterSave()
+    {
+    // Chuyển hướng về danh sách sản phẩm
+         return redirect()->route('filament.admin.resources.seller.sellers.index');
+    }
 
 }
