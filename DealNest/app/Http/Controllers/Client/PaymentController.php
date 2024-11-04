@@ -130,6 +130,13 @@ class PaymentController extends Controller
         ]);
     }
 
+    elseif ($paymentMethod === 'master_card') {
+        return response()->json([
+            'message' => 'Đặt hàng thành công! Chuyển hướng đến trang xác nhận.',
+            'paymentUrl' => route('stripe.session')
+        ]);
+    }
+
     // Trả về thông tin đơn hàng đã tạo nếu không phải vnpay
     return response()->json([
         'message' => 'Đặt hàng thành công!',
