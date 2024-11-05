@@ -15,7 +15,8 @@ class ListCategories extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Thêm danh mục'),
+            Actions\CreateAction::make()->label('Thêm danh mục')
+            ->successRedirectUrl(route('filament.admin.resources.category.categories.index')),
         ];
     }
 

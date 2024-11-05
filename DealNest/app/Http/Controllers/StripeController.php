@@ -38,15 +38,11 @@ class StripeController extends Controller
                 ],
             ],
             'mode'        => 'payment',
-            'success_url' => route('stripe.success'),
+            'success_url' => route('vnpay.success'),
             'cancel_url'  => route('checkout'),
         ]);
     
         return redirect()->away($session->url);
-    }
-
-    public function success(){
-        return "Thanh toán thành công";
     }
 
 }

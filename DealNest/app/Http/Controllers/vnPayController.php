@@ -122,7 +122,7 @@ class vnPayController extends Controller
         ->delete();
     
     // Kiểm tra phương thức thanh toán
-    if (session('paymentMethod') === 'vnpay') {
+    if (session('paymentMethod') === 'vnpay' || session('paymentMethod') === 'master_card') {
         // Lấy orderIds từ session
         $orderIds = session('orderIds');
 

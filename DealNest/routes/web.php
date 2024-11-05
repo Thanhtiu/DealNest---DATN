@@ -187,5 +187,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('success', [vnPayController::class, 'success'])->name('vnpay.success');
     // Visa Payment
     Route::get('/stripe_payment', [StripeController::class, 'session'])->name('stripe.session');
-    Route::get('/stripe_payment/success', [StripeController::class, 'success'])->name('stripe.success');
 });

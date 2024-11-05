@@ -14,4 +14,5 @@ class CreateProduct extends CreateRecord
     {
         return 'Thêm sản phẩm'; 
     }
+    
 }

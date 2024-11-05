@@ -29,6 +29,10 @@ class PaymentController extends Controller
     
         // Lấy các sản phẩm từ bảng Cart_item dựa trên product_id trong mảng productIds
         $products = Cart_item::whereIn('id', $productIds)->get();
+
+        if($products->isEmpty()){
+            return redirect()->route('client.cart');
+        }
     
         // Lấy danh sách voucher dựa trên product_id từ các sản phẩm
         $voucherIds = $products->pluck('product_id')->toArray();
@@ -124,6 +128,7 @@ class PaymentController extends Controller
             'paymentUrl' => route('vnpay_payment')
         ]);
     } elseif ($paymentMethod === 'cod') {
+        session(['paymentMethod' => 'cod']); 
         return response()->json([
             'message' => 'Đặt hàng thành công! Chuyển hướng đến trang xác nhận.',
             'paymentUrl' => route('vnpay.success')
@@ -131,6 +136,7 @@ class PaymentController extends Controller
     }
 
     elseif ($paymentMethod === 'master_card') {
+        session(['paymentMethod' => 'master_card']); 
         return response()->json([
             'message' => 'Đặt hàng thành công! Chuyển hướng đến trang xác nhận.',
             'paymentUrl' => route('stripe.session')

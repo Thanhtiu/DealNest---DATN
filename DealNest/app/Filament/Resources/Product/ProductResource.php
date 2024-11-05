@@ -43,17 +43,11 @@ class ProductResource extends Resource
             Grid::make(2) 
                 ->schema([
                     Select::make('seller_id')
-                    ->relationship('seller','store_name')
+                    ->relationship('seller','name')
                     ->label('Tên cửa hàng')->disabled(),
                     Select::make('category_id')
                     ->relationship('category','name')
                     ->label('Tên danh mục')->disabled(),
-                    Select::make('subcategory_id')
-                    ->relationship('subcategory','name')
-                    ->label('Tên danh mục con')->disabled(),
-                    Select::make('brand_id')
-                    ->relationship('brand','name')
-                    ->label('Xuất xứ')->disabled(),
                     Textarea::make('description')->label('Mô tả sản phẩm')->disabled(),
                 ]),
         
@@ -68,14 +62,16 @@ class ProductResource extends Resource
             Grid::make(1)->schema([
                 Select::make('status')
                 ->options([
-                    'Chờ phê duyệt' => 'Chờ phê duyệt',
-                    'Đã phê duyệt' => 'Đã phê duyệt ',
-                    'Từ chối' => 'Từ chối'
+                    'pending' => 'Chờ phê duyệt',
+                    'approved' => 'Đã phê duyệt ',
+                    'cancel' => 'Từ chối'
                 ])
+                ->placeholder('Chọn trạng thái')
                 ->label('Trạng thái'),
                 ]),
             Grid::make(1)->schema([
-                Select::make('note')->options([
+                Select::make('note')
+                ->options([
                     'Sản phẩm đạt yêu cầu' => 'Sản phẩm đạt yêu cầu',
                     'Vi phạm chính sách về sản phẩm cấm' => 'Vi phạm chính sách về sản phẩm cấm',
                     'Thông tin sản phẩm không chính xác hoặc không rõ ràng' => 'Thông tin sản phẩm không chính xác hoặc không rõ ràng',
@@ -83,7 +79,9 @@ class ProductResource extends Resource
                     'Sản phẩm vi phạm chính sách giá cả' => 'Sản phẩm vi phạm chính sách giá cả',
                     'Thiếu giấy tờ hợp lệ' => 'Thiếu giấy tờ hợp lệ',
                     'Sản phẩm bị sao chép hoặc trùng lặp' => 'Sản phẩm bị sao chép hoặc trùng lặp'
-                ])->default('Sản phẩm đạt yêu cầu') 
+                ])
+                ->placeholder('Chọn lý do')
+                ->label('Ghi chú')
             ])
            
         ]);
@@ -94,7 +92,7 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->label('Tên')->sortable()->searchable(),
-                TextColumn::make('seller.store_name')->label('Cửa hàng đăng sản phẩm')->sortable()->searchable(),
+                TextColumn::make('seller.name')->label('Cửa hàng đăng sản phẩm')->sortable()->searchable(),
                 TextColumn::make('status')
                     ->label('Trạng thái')
                     ->sortable()

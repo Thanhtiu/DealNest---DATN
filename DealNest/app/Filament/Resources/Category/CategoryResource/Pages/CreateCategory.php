@@ -20,7 +20,13 @@ class CreateCategory extends CreateRecord
         return 'Thêm danh mục'; 
     }
 
-
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\CreateAction::make()->label('Thêm danh mục')
+            ->successRedirectUrl(route('filament.admin.resources.category.categories.index')),
+        ];
+    }
 
    
 

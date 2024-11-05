@@ -3,6 +3,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
 
 <style>
+    .data-product-id,
+    .data-seller-id,
+    .data-cart-item {
+        display: none;
+    }
+
     /* General Styling */
     .container {
         width: 80%;
@@ -577,7 +583,8 @@
                     <p>Đơn giá: ₫<span class="item-price">{{ number_format($item->price, 0, ',', '.') }}</span>
                     </p>
                     <p>Số lượng: <span class="quantity">{{ $item->quantity }}</span></p>
-                    <p>Thành tiền: ₫<span class="item-total">{{ number_format($item->total_price, 0, ',', '.') }}</span></p>
+                    <p>Thành tiền: ₫<span class="item-total">{{ number_format($item->total_price, 0, ',', '.') }}</span>
+                    </p>
                 </div>
             </div>
             @endforeach
@@ -834,7 +841,6 @@
                 },
                 success: function(response) {
                     // Xử lý phản hồi từ server
-                    alert(response.message); // Thông báo thành công
                     if (response.paymentUrl) {
                         window.location.href = response.paymentUrl; // Chuyển hướng đến URL thanh toán
                     }
