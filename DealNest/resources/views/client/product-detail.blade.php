@@ -8,6 +8,7 @@
     max-width: 1200px;
     margin: 0 auto;
   }
+
   .col-lg-12 {
     max-width: 1200px;
     margin: 0 auto;
@@ -373,6 +374,18 @@
   }
 
   /* shop info */
+  .shop-info {
+    margin-top: 50px;
+    background-color: #ffffff; 
+    color: #333; 
+    padding: 20px;
+    border-radius: 8px; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+    border: 1px solid #e0e0e0; 
+    margin-bottom: 50px;
+}
+
+
   .shop-info__item {
     display: flex;
     align-items: center;
@@ -797,9 +810,6 @@
             @endif
             @endforeach
           </select>
-
-
-
         </div>
 
 
@@ -890,7 +900,7 @@
           <!-- Đánh giá sản phẩm -->
           <section class="product-details spad" style="padding: 0px;">
             <div class="container mt-4">
-              <div class="border p-3 ">
+              <div class="border p-3">
                 <h4>ĐÁNH GIÁ SẢN PHẨM</h4>
                 <div class="d-flex align-items-center">
                   <h3 class="mb-0">4.5</h3>
@@ -918,72 +928,35 @@
               </div>
 
               <div class="mt-4">
+                @foreach($reviews as $review)
                 <div class="border-bottom pb-3 mb-3">
                   <div class="d-flex align-items-start">
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s"
-                      alt="User" class="rounded-circle me-3" style="width: 40px;">
-                    <div>
-                      <h6 class="mb-1">dosen98</h6>
-                      <p class="mb-1 text-muted">2023-08-02 15:38 | Phân loại hàng: COOL,M(30-45KG)</p>
-                      <div class="d-flex align-items-center">
-                        <span class="text-warning">★</span>
-                        <span class="text-warning">★</span>
-                        <span class="text-warning">★</span>
-                        <span class="text-warning">★</span>
-                        <span class="text-warning">★</span>
-                      </div>
-                      <p class="mt-2 mb-2">Đúng với mô tả: chất đẹp ,vừa tiền giao đúng. Shop tư vấn nhiệt tình, giao
-                        nhanh.</p>
-                      <div class="d-flex ">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s"
-                          alt="Product" class="mr-2 " style="width: 100px;">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s"
-                          alt="Product" style="width: 100px;">
-                      </div>
-                      <div class="mt-2">
-                        <span class="text-muted">12 <i class="icon_like mr-2"></i></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                    <img src="{{ asset('uploads/' . ($review->user->image ?? 'default_avt.jpg')) }}" alt="User" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit:cover;">
 
-                <div>
-                  <div class="d-flex align-items-start">
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkMKELi_bJbHSqXl1yj0HosEYlsAvMIomsZg&s"
-                      alt="User" class="rounded-circle me-3" style="width: 40px;">
                     <div>
-                      <h6 class="mb-1">trannhicherry1997</h6>
-                      <p class="mb-1 text-muted">2024-06-23 11:52 | Phân loại hàng: UNIQUE HỒNG,M(30-45KG)</p>
+                      <h6 class="mb-1">{{ $review->user->name }}</h6>
+                      <p class="mb-1 text-muted">{{ $review->created_at->format('Y-m-d H:i') }}</p>
+                      <span>{{$review->classify}}</span>
                       <div class="d-flex align-items-center">
-                        <span class="text-warning">★</span>
-                        <span class="text-warning">★</span>
-                        <span class="text-warning">★</span>
-                        <span class="text-warning">★</span>
-                        <span class="text-muted">★</span>
+                        @for ($i = 1; $i <= 5; $i++)
+                          <span class="{{ $i <= $review->rating ? 'text-warning' : 'text-muted' }}">★</span>
+                          @endfor
                       </div>
-                      <p class="mt-2 mb-2">Giao hàng nhanh, đóng gói bao bì cẩn thận, sản phẩm rất đẹp vải mát không bị
-                        nóng đâu.</p>
-                      <div class="d-flex ">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s"
-                          alt="Product" class="mr-2 " style="width: 100px;">
-                        <img
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfgct344qmtPhte_NdC1knPF8izcN_8kUHQ&s"
-                          alt="Product" style="width: 100px;">
+                      <p class="mt-2 mb-2">{{ $review->description }}</p>
+                      <div class="d-flex">
+                        @foreach($review->images as $image)
+                        <img src="{{ asset('uploads/reviews/' . $image->image) }}" alt="Product" class="mr-2" style="width: 80px;">
+                        @endforeach
                       </div>
-                      <div class="mt-2">
-                        <span class="text-muted">12 <i class="icon_like mr-2"></i></span>
-                      </div>
+
                     </div>
                   </div>
                 </div>
+                @endforeach
               </div>
             </div>
           </section>
+
           <!-- END Đánh giá sản phẩm -->
         </div>
       </div>
@@ -1002,7 +975,7 @@
           <!-- Header with Avatar and Shop Name -->
           <div class="shop-info__header d-flex align-items-center">
             <!-- Shop Avatar -->
-            <img src="{{ asset('uploads/' . ($seller->logo === null ? 'logo-default-seller.png' : $seller->logo)) }}"
+            <img src="{{ asset('uploads/default/' . ($seller->logo === null ? 'seller_default.jpg' : $seller->logo)) }}"
               alt="Shop Logo" class="shop-logo">
             <div class="shop-name ml-3">
               <h5>{{$seller->name}}</h5>
@@ -1050,39 +1023,39 @@
 
 <section class="related-product mt-3">
   <h4>Sản phẩm liên quan</h4>
-<div class="product-container">
-  @if($relatedProducts->isEmpty())
-  <div class="product-related-empty">
-    <img class="product-related-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
-  </div>
-  <p class="text-center mt-3">Sản phẩm này hiện chưa có sản phẩm liên quan <a href="{{route('client.index')}}">Xem sản
-      phẩm khác</a></p>
-  @else
-  @foreach($relatedProducts as $item)
-  <div class="card">
-    <a href="{{ route('client.productDetail', ['id' => $item->id, 'slug' => $item->slug]) }}">
-      <div class="cardd">
-        <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
-        <div class="discount">-92%</div>
-        <div class="content">
-          <h2 class="title">{{ $item->name }}</h2>
-          <p class="pricee">{{ number_format($item->price, 0, ',', '.') }}<span
-              style="font-size: 12px; text-decoration: underline;">đ</span></p>
-        </div>
-        <div class="sold"><span class="rating">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="far fa-star"></i>
-          </span>{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
+  <div class="product-container">
+    @if($relatedProducts->isEmpty())
+    <div class="product-related-empty">
+      <img class="product-related-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
+    </div>
+    <p class="text-center mt-3">Sản phẩm này hiện chưa có sản phẩm liên quan <a href="{{route('client.index')}}">Xem sản
+        phẩm khác</a></p>
+    @else
+    @foreach($relatedProducts as $item)
+    <div class="card">
+      <a href="{{ route('client.productDetail', ['id' => $item->id, 'slug' => $item->slug]) }}">
+        <div class="cardd">
+          <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
+          <div class="discount">-92%</div>
+          <div class="content">
+            <h2 class="title">{{ $item->name }}</h2>
+            <p class="pricee">{{ number_format($item->price, 0, ',', '.') }}<span
+                style="font-size: 12px; text-decoration: underline;">đ</span></p>
+          </div>
+          <div class="sold"><span class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </span>{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
                     ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
-      </div>
-    </a>
+        </div>
+      </a>
+    </div>
+    @endforeach
+    @endif
   </div>
-  @endforeach
-  @endif
-</div>
 
 </section>
 

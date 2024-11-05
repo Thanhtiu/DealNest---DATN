@@ -45,7 +45,7 @@ class BannerResource extends Resource
                         ->live(onBlur: true)
                         ->label('Tên banner'),
                     FileUpload::make('image')   
- 
+                        ->directory('banners')
                         ->label('Hình ảnh')
                         
                 ]),

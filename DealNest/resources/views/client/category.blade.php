@@ -346,7 +346,7 @@
                         @foreach ($products as $item)
                         <div class="cardd">
                             <!-- Hiển thị hình ảnh sản phẩm -->
-                            <a href="{{ route('client.productDetail',$item->id) }}">
+                            <a href="{{ route('client.productDetail',['id'=>$item->id,'slug'=>$item->slug]) }}">
                                 <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
                             </a>
                             <!-- Phần trăm giảm giá -->

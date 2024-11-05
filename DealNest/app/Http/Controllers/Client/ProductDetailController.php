@@ -11,6 +11,8 @@ use App\Models\Product;
 use Carbon\Carbon;
 use App\Models\Address;
 use App\Models\Wishlist;
+use App\Models\Review;
+use App\Models\Review_image;
 
 class ProductDetailController extends Controller
 {
@@ -47,7 +49,11 @@ class ProductDetailController extends Controller
         $relatedProducts = Product::with('product_image')
             ->where('category_id', $productDetail->category_id)
             ->where('id', '!=', $id)
-            ->take(4) 
+            ->take(4)
+            ->get();
+
+            $reviews = Review::where('product_id', $productDetail->id)
+            ->with(['user', 'images']) 
             ->get();
 
         return view('client.product-detail', compact(
@@ -57,7 +63,8 @@ class ProductDetailController extends Controller
             'dateJoin',
             'string_address',
             'isFavourited',
-            'relatedProducts'
+            'relatedProducts',
+            'reviews'
         ));
     }
 }

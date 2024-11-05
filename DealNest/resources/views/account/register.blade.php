@@ -44,20 +44,14 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <input type="text" name="first_name" class="form-control form-control-lg"
-                                            id="exampleInputFirstName" value="{{ old('first_name') }}" placeholder="Họ">
-                                        @error('first_name')
+                                    <div class="form-group">
+                                        <input type="text" name="name" class="form-control form-control-lg"
+                                            id="exampleInputFirstName" value="{{ old('name') }}" placeholder="Tên người dùng">
+                                        @error('name')
                                         <p class="text-danger"> {{ $message }} </p>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <input type="text" name="last_name" class="form-control form-control-lg"
-                                            id="exampleInputLastName" value="{{ old('last_name') }}" placeholder="Tên">
-                                        @error('last_name')
-                                        <p class="text-danger"> {{ $message }} </p>
-                                        @enderror
-                                    </div>
+
                                 </div>
 
 

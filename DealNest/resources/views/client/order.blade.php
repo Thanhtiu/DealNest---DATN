@@ -222,7 +222,7 @@
 
                     <!-- Tab nội dung -->
                     <div id="tab-all" class="tab-content active">
-                    @include('layouts.client.order', ['orders' => $all])
+                        @include('layouts.client.order', ['orders' => $all])
 
                     </div>
 
@@ -250,9 +250,72 @@
         </div>
     </div>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLabel">Đánh giá sản phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Thêm form -->
+                <form id="reviewForm" action="{{route('client.review.store')}}" method="POST" enctype="multipart/form-data">
+                    @csrf <!-- Thêm token CSRF để bảo mật -->
 
+                    <!-- Thông tin sản phẩm -->
+                    <div class="product-info">
+                        <img src="https://via.placeholder.com/80" id="modalProductImage" alt="Hình ảnh sản phẩm">
+                        <div>
+                            <h6 id="modalProductName">Tên sản phẩm</h6>
+                            <p id="modalProductType">Phân loại: Điện tử</p>
+                            <input type="hidden" id="productId" name="product_id">
+                            <input type="hidden" id="classify" name="classify">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rating">Đánh giá:</label>
+                        <select class="form-control" id="rating" name="rating">
+                            <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+                            <option value="4">⭐️⭐️⭐️⭐️</option>
+                            <option value="3">⭐️⭐️⭐️</option>
+                            <option value="2">⭐️⭐️</option>
+                            <option value="1">⭐️</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewText">Nội dung đánh giá:</label>
+                        <textarea class="form-control" id="reviewText" name="description" rows="4" placeholder="Nhập nội dung đánh giá"></textarea>
+                    </div>
+
+                    <!-- Nút chọn hình ảnh -->
+                    <label for="imageUpload" class="custom-file-upload">
+                        <i class="bi bi-camera"></i> Thêm hình ảnh
+                        <input type="file" id="imageUpload" name="images[]" accept="image/*" multiple style="display: none;" />
+                    </label>
+
+                    <!-- Khu vực hiển thị hình ảnh đã chọn -->
+                    <div id="imagePreview" class="image-preview mt-3"></div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary" id="submitReviewButton">Gửi đánh giá</button> <!-- Thêm id cho nút -->
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
 
 <script src="{{asset('client/js/tabindex.js')}}"></script>
+
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.cancel-order-item').forEach(function(button) {
@@ -261,44 +324,100 @@
                 var status = this.getAttribute('data-status');
                 var orderElement = document.getElementById('order-' + orderId);
 
-                console.log('Order ID:', orderId); 
-                console.log(orderElement); 
+                console.log('Order ID:', orderId);
+                console.log(orderElement);
 
                 fetch('{{ route("acccount.order.updateStatus") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        order_item_id: orderId,
-                        status: status
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            order_item_id: orderId,
+                            status: status
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        orderElement.style.transition = 'opacity 0.5s';
-                        orderElement.style.opacity = '0';
-                        setTimeout(() => {
-                            orderElement.remove(); 
-                        }, 500);
-                        toastr.success(data.message);
-                    } else {
-                        toastr.error(data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    toastr.error('Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.');
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            orderElement.style.transition = 'opacity 0.5s';
+                            orderElement.style.opacity = '0';
+                            setTimeout(() => {
+                                orderElement.remove();
+                            }, 500);
+                            toastr.success(data.message);
+                        } else {
+                            toastr.error(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        toastr.error('Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.');
+                    });
             });
         });
     });
 </script>
 
 
+<script>
+    $(document).ready(function() {
+        const style = `
+            <style>
+                .image-preview {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
 
+                .image-thumbnail {
+                    margin: 5px;
+                }
+            </style>
+        `;
+        $('head').append(style);
+
+        $('.review-button').on('click', function() {
+            const productId = $(this).data('product-id');
+            const productName = $(this).data('product-name');
+            const productImage = $(this).data('product-image');
+            const productType = $(this).data('product-type');
+            const classify = $(this).data('classify');
+
+            $('#productId').val(productId);
+            $('#classify').val(productType);
+            $('#modalProductName').text(productName);
+            $('#modalProductImage').attr('src', productImage);
+            $('#modalProductType').text(productType);
+            $('#imagePreview').empty();
+        });
+
+        // Xử lý sự kiện khi chọn hình ảnh
+        $('#imageUpload').on('change', function() {
+            const files = this.files;
+            $('#imagePreview').empty();
+
+            const maxFiles = 5;
+            const fileCount = files.length > maxFiles ? maxFiles : files.length;
+
+            for (let i = 0; i < fileCount; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    if ($('#imagePreview').find(`img[src="${e.target.result}"]`).length === 0) {
+                        $('#imagePreview').append(`
+                            <div class="image-thumbnail">
+                                <img src="${e.target.result}" alt="Hình ảnh sản phẩm" style="width: 100px; height: 100px;">
+                            </div>
+                        `);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 
 
 @endsection

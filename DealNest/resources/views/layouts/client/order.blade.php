@@ -1,3 +1,39 @@
+<style>
+    .product-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .product-info img {
+        width: 80px;
+        /* Kích thước hình ảnh */
+        height: 80px;
+        /* Kích thước hình ảnh */
+        margin-right: 15px;
+    }
+
+    .custom-file-upload {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #007bff;
+        transition: background-color 0.3s;
+    }
+
+    .custom-file-upload:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .custom-file-upload i {
+        margin-right: 5px;
+    }
+</style>
 <div class="order-list">
     @if($orders->isEmpty())
     <div class="text-center">
@@ -41,7 +77,18 @@
                         @endswitch
                     </p>
 
-
+                    <!-- Nút đánh giá sản phẩm -->
+                    @if($order->status === 'completed')
+                    <button type="button" class="btn btn-primary review-button"
+                        data-toggle="modal"
+                        data-target="#reviewModal"
+                        data-product-id="{{ $item->product->id }}"
+                        data-product-name="{{ $item->product->name }}"
+                        data-product-image="{{ asset('uploads/' . $item->product->image) }}"
+                        data-product-type="Phân loại: {{ $item->color }}, Size: {{ $item->size }}">
+                        Đánh giá sản phẩm
+                    </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -57,7 +104,6 @@
             @break
             @case('waiting_for_delivery')
             <button class="cancel-order-item" data-order-id="{{ $order->id }}" data-status="completed">Đã nhận được hàng</button>
-
             @break
             @endswitch
         </div>
@@ -65,4 +111,7 @@
     <hr>
     @endforeach
     @endif
+
+   
 </div>
+

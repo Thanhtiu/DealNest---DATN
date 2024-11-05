@@ -87,8 +87,7 @@ class AccountController extends Controller
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255|unique:users',
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'name' => 'required',
             'phone' => 'required|numeric|digits_between:10,15',
             'password' => 'required|min:3|confirmed',
         ], [
@@ -103,10 +102,9 @@ class AccountController extends Controller
         if ($validator->passes()) {
 
             $user = new User();
-            $user->name = $request->last_name;
+            $user->name = $request->name;
             $user->email = $request->email;
             $user->phone = $request->phone;
-            $user->full_name = $request->first_name . $request->last_name;
             $user->password = Hash::make($request->password);
             $user->image = "default_avt.png";
             $user->role = 'buyer';

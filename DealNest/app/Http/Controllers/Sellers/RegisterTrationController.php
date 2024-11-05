@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use App\Models\Address;
 use Google\Cloud\Vision\V1\ImageAnnotatorClient;
+use Carbon\Carbon;
 
 class RegisterTrationController extends Controller
 {
@@ -105,7 +106,6 @@ class RegisterTrationController extends Controller
             'phone' => $request->input('store_phone'),
             'name' => $user->name,
         ]);
-
         // Create seller record
         $seller = Seller::create([
             'user_id' => $userId,
@@ -113,6 +113,8 @@ class RegisterTrationController extends Controller
             'store_phone' => $request->input('store_phone'),
             'store_email' => $request->input('store_email'),
             'address_id' => $address->id,
+            'join' => Carbon::now()->toDateString(),
+            'logo' => 'seller_default.jpg',
         ]);
 
         $user->role = 'seller';

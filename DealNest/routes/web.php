@@ -17,6 +17,7 @@ use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\AddressController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Sellers\VoucherController;
 use App\Http\Controllers\Sellers\OrderSellerController;
@@ -103,6 +104,8 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::get('/doi-mat-khau', [AccountController::class, 'changePassword'])->name('account.changePassword');
 
     Route::post('/doi-mat-khau-xu-ly', [AccountController::class, 'changePasswordProcessing'])->name('account.changePasswordProcessing');
+
+    Route::post('/danh-gia/san-pham', [ReviewController::class, 'store'])->name('client.review.store');
 });
 
 
