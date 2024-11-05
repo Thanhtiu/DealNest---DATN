@@ -16,15 +16,11 @@ use App\Http\Controllers\Client\CategoryController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\AddressController;
 use App\Http\Controllers\Client\OrderController;
-use App\Http\Controllers\Client\BuyerController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Sellers\VoucherController;
-use App\Http\Controllers\Sellers\SalesAnalysisController;
 use App\Http\Controllers\Sellers\OrderSellerController;
 use App\Http\Controllers\Sellers\ProdcutStatisticsController;
-use App\Http\Controllers\Sellers\CategoryAndSubcategoryController;
-use App\Http\Controllers\Sellers\Categor;
 use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\WishListController;
@@ -161,8 +157,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/thong-ke/san-pham-ban-chay', [ProdcutStatisticsController::class, 'index'])->name('seller.productStatistics');
 
         Route::get('/san-pham-ban-chay/chi-tiet/{id}', [ProdcutStatisticsController::class, 'detail'])->name('seller.productStatistics.detail');
-
-        Route::get('/danh-muc', [CategoryAndSubcategoryController::class, 'index'])->name('seller.categoryAndSubcategory');
 
         Route::get('/don-hang', [OrderSellerController::class, 'index'])->name('seller.order');
 

@@ -14,6 +14,23 @@ class OrderController extends Controller
         $userId = auth()->id();
 
         // Đơn hàng đang chờ xác nhận
+        $all = Order::where('user_id', $userId)
+            ->where(function ($query) {
+                $query->where(function ($query) {
+                    $query->where('payment_method', 'vnpay')
+                        ->where('payment_status', 'paid');
+                })
+                    ->orWhere(function ($query) {
+                        $query->where('payment_method', 'cod')
+                            ->whereIn('payment_status', ['pending', 'paid']);
+                    });
+            })
+            ->whereHas('orderItems')
+            ->with('orderItems.product')
+            ->get();
+
+
+        // Đơn hàng đang chờ xác nhận
         $pending = Order::where('user_id', $userId)
             ->where('status', 'pending')
             ->where(function ($query) {
@@ -81,7 +98,6 @@ class OrderController extends Controller
             ->whereHas('orderItems')
             ->with('orderItems.product')
             ->get();
-
         // Đơn hàng đã hủy
         $cancelled = Order::where('user_id', $userId)
             ->where('status', 'cancelled')
@@ -99,7 +115,7 @@ class OrderController extends Controller
             ->with('orderItems.product')
             ->get();
 
-        return view('client.order', compact('pending', 'waitingForDelivery', 'completed', 'refuse', 'cancelled'));
+        return view('client.order', compact('all', 'pending', 'waitingForDelivery', 'completed', 'refuse', 'cancelled'));
     }
 
 
@@ -111,22 +127,19 @@ class OrderController extends Controller
 
     public function updateOrderItemStatus(Request $request)
     {
-        // Tìm OrderItem theo ID
-        $orderItem = OrderItem::find($request->order_item_id);
+        $order = Order::find($request->order_item_id);
 
-        // Kiểm tra nếu OrderItem tồn tại
-        if ($orderItem) {
-            // Cập nhật trạng thái của OrderItem
-            $orderItem->status = $request->status;
-            $orderItem->save();
-
-            // Trả về phản hồi thành công
+        if ($order) {
+            $order->status = $request->status;
+            if ($request->status === 'completed') {
+                $order->payment_status = 'paid';
+            }
+            $order->save();
             return response()->json([
                 'success' => true,
                 'message' => 'Trạng thái đơn hàng đã được cập nhật.'
             ]);
         } else {
-            // Nếu không tìm thấy OrderItem, trả về lỗi
             return response()->json([
                 'success' => false,
                 'message' => 'Không tìm thấy mục đơn hàng.'

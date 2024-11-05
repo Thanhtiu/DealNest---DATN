@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Product;
-use App\Models\Country;
-use App\Models\Product_image;
-use App\Models\ProductVariant;
 use Carbon\Carbon;
 use App\Models\Address;
 use App\Models\Wishlist;
@@ -19,18 +16,16 @@ class ProductDetailController extends Controller
 {
     public function index($id, $slug)
     {
-
         $productDetail = Product::with(['category.parent', 'product_image', 'productVariants'])->find($id);
-        // return $productDetail;
         $product = Product::with('seller')->find($id);
         $seller = $product->seller;
 
         $countProduct = Product::where('seller_id', $seller->id)->count();
-        // Tính số ngày seller đã tham gia
+
+        // Calculate days since the seller joined
         $currentDate = Carbon::now();
         $startDate = Carbon::parse($seller->created_at);
         $dateJoin = round($startDate->diffInDays($currentDate));
-
 
         $string_address = 'Vui lòng cập nhật địa chỉ';
         $userId = Session::get('userId');
@@ -43,10 +38,18 @@ class ProductDetailController extends Controller
             }
         }
 
-        // Kiểm tra nếu sản phẩm đã được yêu thích bằng Eloquent Model
+        // Check if the product is favorited by the user
         $isFavourited = Wishlist::where('user_id', auth()->id())
             ->where('product_id', $id)
             ->exists();
+
+        // Fetch related products from the same category, excluding the current product
+        $relatedProducts = Product::with('product_image')
+            ->where('category_id', $productDetail->category_id)
+            ->where('id', '!=', $id)
+            ->take(4) 
+            ->get();
+
         return view('client.product-detail', compact(
             'productDetail',
             'seller',
@@ -54,7 +57,7 @@ class ProductDetailController extends Controller
             'dateJoin',
             'string_address',
             'isFavourited',
-
+            'relatedProducts'
         ));
     }
 }

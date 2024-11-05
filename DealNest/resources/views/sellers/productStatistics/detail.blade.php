@@ -61,7 +61,7 @@
 
   .file-upload-container label {
     cursor: pointer;
-    color: #ff4d4f;
+    color: #0d6efd;
     font-weight: bold;
   }
 
@@ -229,6 +229,34 @@
   .attribute-block {
     margin-bottom: 20px;
   }
+
+  .attribute-block {
+    margin-bottom: 20px;
+  }
+
+  .form-control {
+    margin-bottom: 10px;
+  }
+
+  .price-input {
+    display: none;
+  }
+
+  .attribute-form .price-input {
+    display: block;
+  }
+
+  .btn-danger {
+    margin-left: 10px;
+  }
+
+  .attribute-form {
+    margin-bottom: 15px;
+  }
+
+  .remove-button[disabled] {
+    display: none;
+  }
 </style>
 <div class="page-header">
   <h3 class="page-title">Chỉnh sửa </h3>
@@ -270,9 +298,7 @@
               <input type="file" id="image" name="image" class="file-upload-default" accept="image/*">
               <img id="coverImagePreview" src="{{asset('uploads/'.$product->image)}}" alt="" style="" />
             </div>
-            <p class="mt-2 text-muted">
-              • Tải lên hình ảnh 1:1. Ảnh bìa sẽ được hiển thị tại các trang Kết quả tìm kiếm, Gợi ý hôm nay,...
-            </p>
+
           </div>
 
           <!-- Cover Image Upload Section -->
@@ -281,66 +307,74 @@
             <div class="list-image">
               @foreach($product->product_image as $item)
               <div class="item-image">
-                <img src="{{ asset('uploads/' . $item->url) }}" alt="Image"
+                <img src="{{ asset('uploads/' . $item->image) }}" alt="Image"
                   style="width: 200px; height: 200px; object-fit: cover; display:block;">
                 <div class="form-group mt-3">
-                 
+                  {{-- <label>File upload</label> --}}
                   <input type="file" name="img[{{ $item->id }}]" class="file-upload-default" style="display: none;">
-                  
-                 
                 </div>
               </div>
               @endforeach
-            </div>
-          </div>
-
-
-
-          <div class="form-group">
-            <label for="name">Tên sản phẩm</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Tên sản phẩm"
-              value="{{$product->name}}" disabled>
-          </div>
-
-          <div class="form-group">
-            <label for="categorySelect" class="form-label">Thể loại</label>
-            <select class="form-select" id="categorySelect" name="category_id" disabled>
-              @foreach ($category as $item)
-              <option value="{{ $item->id }}" @if($item->id === $product->category_id) selected @endif>
-                {{ $item->name }}
-              </option>
-              @endforeach
-            </select>
-          </div>
-
-          <div class="col-md-6 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Thể loại con</h4>
-                <p class="card-description"></p>
-                <div>
-                  <div class="row">
-                    <!-- Select Thể loại con -->
-                    <div class="form-group">
-                      <label for="subCategorySelect" class="form-label">Thể loại con</label>
-                      <select class="form-select" id="subCategorySelect" name="subcategory_id"
-                        data-selected-subcategory-id="{{ $product->subcategory_id }}" disabled>
-                        {{-- Subcategories will be populated by JavaScript --}}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
           <div class="row">
-            <div class="form-group">
-              <label for="price">Giá</label>
-              <input type="text" class="form-control" name="price" id="price" placeholder="Giá"
-                value="{{$product->price}}" disabled>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="name">Tên sản phẩm</label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="Tên sản phẩm" value="{{$product->name}}" readonly>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="slug">Slug sản phẩm</label>
+                <input type="text" name="slug" class="form-control" id="slug" placeholder="Slug sản phẩm" value="{{$product->slug}}" readonly>
+              </div>
             </div>
           </div>
+
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="categorySelect" class="form-label">Thể loại</label>
+                <select class="form-select" id="categorySelect" name="" readonly>
+                  @foreach ($categories as $item)
+                  <option value="{{ $item->id }}" @if((int)$item->id === (int)$product->category->parent->id) selected @endif>
+                    {{ $item->name }}
+                  </option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <input type="hidden" id="currentSubCategoryId" value="{{ $product->category->id }}" readonly>
+              <div class="form-group">
+                <label for="subCategorySelect" class="form-label">Thể loại con</label>
+                <select class="form-select" id="subCategorySelect" name="category_id">
+                  <option value="">Chọn thể loại con</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="price">Giá</label>
+                <input type="text" class="form-control" name="price" id="price" placeholder="Giá" value="{{$product->price}}" readonly>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="mrp">Giá bán lẻ</label>
+                <input type="text" class="form-control" name="mrp" id="mrp" placeholder="Giá bán lẻ" value="{{$product->mrp}}" readonly>
+              </div>
+            </div>
+          </div>
+
 
           {{-- <div class="form-group">
             <label>File upload</label>
@@ -354,7 +388,7 @@
           </div> --}}
           <div class="form-group">
             <label for="description">Mô tả</label>
-            <textarea name="description" id="description" class="form-control" id="description" disabled
+            <textarea name="description" id="description" class="form-control" id="description" readonly
               rows="4">{{$product->description}}</textarea>
           </div>
           <div class="col-md-12 grid-margin stretch-card">
@@ -365,219 +399,115 @@
                 <div class="row">
                   <div class="form-group col-6">
                     <label for="quantity">Số lượng</label>
-                    <input type="text" class="form-control" id="quantity" name="quantity" disabled
-                      value="{{$product->quantity}}">
+                    <input type="text" class="form-control" id="quantity" name="quantity"
+                      value="{{$product->quantity}}" readonly>
                   </div>
                   <div class="form-group col-6">
-                    <label for="brand">Xuất xứ</label>
-                    <select class="form-select form-select-lg" id="brand" name="brand_id" disabled>
-                      @foreach($brand as $item)
-                      <option value="{{$item->id}}">{{$item->name}}</option>
+                    <label for="country_id">Xuất xứ</label>
+                    <select class="form-select form-select-lg" id="country" name="country_id" readonly>
+                      @foreach($country as $item)
+                      <option value="{{$item->id}}" {{$product->country_id=== $item->id ? 'selected' : ''}}>{{$item->name}}</option>
                       @endforeach
                     </select>
                   </div>
                 </div>
-                @foreach($attribute as $item)
-    @php
-    // Lấy tất cả các giá trị của thuộc tính từ cơ sở dữ liệu
-    $selectedValues = $product->attribute_values->where('attribute_id', $item->id);
-    @endphp
-    <div class="row attribute-block">
-        <div class="col-12">
-            <label class="form-check-label" for="attribute-{{$item->id}}">{{$item->name}}</label>
-            <div class="form-inline-row">
-                <!-- Checkbox để chọn thuộc tính -->
-                <input type="checkbox" class="form-check-input attribute-checkbox" disabled
-                    id="attribute-{{$item->id}}"
-                    value="{{$item->name}}"
-                    data-id="{{$item->id}}"
-                    data-name="{{$item->name}}"
-                    {{ $selectedValues->isNotEmpty() ? 'checked' : '' }}>
-            </div>
+                <div class="container mt-5">
+                  <h2>Chỉnh sửa thuộc tính sản phẩm</h2>
 
-            <!-- Checkbox chọn giá cho thuộc tính -->
-            <div class="price-checkbox">
-                <input type="checkbox" class="form-check-input price-checkbox" disabled
-                    id="attribute-price-{{$item->id}}"
-                    data-id="{{$item->id}}"
-                    value="attribute-price-{{$item->id}}"
-                    data-name="Giá {{$item->name}}"
-                    {{ $selectedValues->first() && $selectedValues->first()->price ? 'checked' : '' }}>
-                <label class="form-check-label" for="attribute-price-{{$item->id}}">Chọn Giá</label>
-            </div>
+                  <div class="row attribute-block">
+                    <div class="col-md-6">
+                      <label class="form-check-label">Kích thước</label>
+                      <div class="form-inline-row">
+                        <div class="attribute-form" id="size-attributes">
+                          @foreach($product->productVariants as $variant)
+                          @if($variant->variant == 'Kích thước') <!-- Kiểm tra nếu thuộc tính là kích thước -->
+                          <div class="form-row mb-2">
+                            <input type="hidden" name="attributes[0][variant]" value="Kích thước">
+                            <div class="col">
+                              <input type="text" name="attributes[0][value][]" class="form-control" value="{{ $variant->value }}" placeholder="Nhập kích thước">
+                            </div>
 
-            <!-- Hiển thị các giá trị của thuộc tính -->
-            <div id="attribute-{{$item->id}}-forms">
-                @foreach($selectedValues as $index => $value)
-                <div class="form-row">
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Tên {{$item->name}}" disabled
-                            name="attributes[{{$item->id}}][values][{{$index}}][value]"
-                            value="{{ $value->value }}">
+                          </div>
+                          @endif
+                          @endforeach
+                        </div>
+                      </div>
                     </div>
-                    <div class="col price-input" style="{{ $value->price ? 'display:block' : 'display:none' }}">
-                        <input type="number" class="form-control" placeholder="Nhập giá"
-                            name="attributes[{{$item->id}}][values][{{$index}}][price]"
-                            value="{{ $value->price }}" disabled>
+
+                    <div class="col-md-6">
+                      <label class="form-check-label">Màu sắc</label>
+                      <div class="form-inline-row">
+                        <div class="attribute-form" id="color-attributes">
+                          @foreach($product->productVariants as $variant)
+                          @if($variant->variant == 'Màu sắc') <!-- Kiểm tra nếu thuộc tính là màu sắc -->
+                          <div class="form-row mb-2">
+                            <input type="hidden" name="attributes[1][variant]" value="Màu sắc">
+                            <div class="col">
+                              <input type="text" name="attributes[1][value][]" class="form-control" value="{{ $variant->value }}" placeholder="Nhập màu sắc">
+                            </div>
+                            <div class="col price-input">
+                              <input type="number" name="attributes[1][price][]" class="form-control" value="{{ $variant->price }}" placeholder="Nhập giá">
+                            </div>
+
+                          </div>
+                          @endif
+                          @endforeach
+                        </div>
+                      </div>
                     </div>
-                    
+                  </div>
                 </div>
-                @endforeach
-            </div>
 
-           
-        </div>
-    </div>
-@endforeach
 
               </div>
-            </div>
-          </div>
-          <a href="{{route('seller.productStatistics')}}" class="btn btn-gradient-primary me-2">Trở về</a>
+
+              <a href="{{route('seller.productStatistics')}}" class="btn btn-light">Trở về</a>
         </form>
       </div>
     </div>
 
   </div>
-
 </div>
 
-
-
-
-
-
-
-
-
-
-
 <script>
-    let selectedAttributeWithPrice = null;
+  document.getElementById('categorySelect').addEventListener('change', function() {
+    var categoryId = this.value;
+    var subCategorySelect = document.getElementById('subCategorySelect');
+    var currentSubCategoryId = document.getElementById('currentSubCategoryId').value;
 
-    // Xử lý checkbox chọn thuộc tính
-    document.querySelectorAll('.attribute-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            let attributeId = this.dataset.id;
-            let attributeName = this.dataset.name;
-            let addButton = document.getElementById(`add-attribute-${attributeId}-form`);
-            let container = document.getElementById(`attribute-${attributeId}-forms`);
+    // Reset danh sách thể loại con
+    subCategorySelect.innerHTML = '<option value="">Chọn thể loại con</option>';
 
-            if (this.checked) {
-                // Hiển thị nút "Thêm thuộc tính con"
-                addButton.style.display = 'block';
-                container.innerHTML = ''; // Xóa nội dung cũ nếu có
+    if (categoryId) {
+      fetch(`/kenh-nguoi-ban/categories/${categoryId}/subcategories`)
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(function(subCategory) {
+            var option = document.createElement('option');
+            option.value = subCategory.id;
+            option.text = subCategory.name;
 
-                // Thêm input ẩn để lưu tên thuộc tính vào form
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = `attributes[${attributeId}][name]`;
-                hiddenInput.value = attributeName;
-                container.appendChild(hiddenInput);
-            } else {
-                addButton.style.display = 'none'; // Ẩn nút nếu checkbox bị bỏ chọn
-                container.innerHTML = ''; // Xóa toàn bộ form nếu bỏ chọn checkbox thuộc tính chính
+            // Đặt selected nếu subCategory.id trùng với currentSubCategoryId
+            if (parseInt(subCategory.id) === parseInt(currentSubCategoryId)) {
+              option.selected = true;
             }
+
+            subCategorySelect.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching subcategories:', error);
         });
-    });
+    }
+  });
 
-    // Đăng ký sự kiện click cho tất cả các nút "Thêm thuộc tính con"
-    document.querySelectorAll('.add-attribute-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            let attributeId = this.id.split('-')[2]; // Lấy ID của thuộc tính từ ID của nút
-            let container = document.getElementById(`attribute-${attributeId}-forms`);
-            let attributeName = document.querySelector(`#attribute-${attributeId}`).dataset.name;
-            let index = container.children.length - 1; // Đếm số lượng phần tử con trừ đi input ẩn
-
-            // Tạo form mới cho thuộc tính con
-            let newFormGroup = document.createElement('div');
-            newFormGroup.classList.add('attribute-form');
-            newFormGroup.innerHTML = `
-                <div class="form-row">
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Tên ${attributeName}" name="attributes[${attributeId}][values][${index}][value]">
-                    </div>
-                    <div class="col price-input">
-                        <input type="number" class="form-control" placeholder="Nhập giá" name="attributes[${attributeId}][values][${index}][price]">
-                    </div>
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-danger remove-button">Xóa</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(newFormGroup);
-
-            // Kiểm tra nếu checkbox giá đã được chọn
-            if (selectedAttributeWithPrice && selectedAttributeWithPrice.dataset.id === attributeId) {
-                newFormGroup.querySelector('.price-input').style.display = 'block';
-            } else {
-                newFormGroup.querySelector('.price-input').style.display = 'none';
-            }
-        });
-    });
-
-    // Xử lý checkbox "Chọn Giá"
-    document.querySelectorAll('.price-checkbox').forEach(priceCheckbox => {
-        priceCheckbox.addEventListener('change', function() {
-            let attributeId = this.dataset.id;
-            let priceContainers = document.querySelectorAll(`#attribute-${attributeId}-forms .price-input`);
-
-            if (this.checked) {
-                if (selectedAttributeWithPrice) {
-                    alert('Bạn đã chọn giá cho một thuộc tính rồi, không thể thay đổi!');
-                    this.checked = false;
-                    return;
-                }
-
-                // Ghi nhận thuộc tính chính đang được nhập giá
-                selectedAttributeWithPrice = this;
-
-                // Hiển thị tất cả các input giá của thuộc tính này
-                priceContainers.forEach(container => container.style.display = 'block');
-
-                // Vô hiệu hóa các checkbox khác
-                document.querySelectorAll('.price-checkbox').forEach(cb => {
-                    if (cb !== this) {
-                        cb.disabled = true;
-                    }
-                });
-            } else {
-                this.checked = true; // Không cho phép bỏ chọn
-            }
-        });
-    });
-
-    // Sử dụng event delegation để xóa thuộc tính con
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('remove-button')) {
-            let formRow = event.target.closest('.form-row');
-            if (formRow) {
-                formRow.remove(); // Xóa thuộc tính con
-            }
-        }
-    });
-
-    // Kiểm tra nếu có checkbox nào đã được chọn giá khi trang tải lại
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.price-checkbox').forEach(priceCheckbox => {
-            let attributeId = priceCheckbox.dataset.id;
-            let priceContainers = document.querySelectorAll(`#attribute-${attributeId}-forms .price-input`);
-
-            if (priceCheckbox.checked) {
-                // Nếu checkbox giá đã được chọn, hiển thị các input giá tương ứng
-                selectedAttributeWithPrice = priceCheckbox;
-                priceContainers.forEach(container => container.style.display = 'block');
-
-                // Vô hiệu hóa các checkbox khác
-                document.querySelectorAll('.price-checkbox').forEach(cb => {
-                    if (cb !== priceCheckbox) {
-                        cb.disabled = true;
-                    }
-                });
-            }
-        });
-    });
+  // Kích hoạt sự kiện thay đổi để hiển thị thể loại con cho thể loại chính hiện tại khi tải trang
+  document.getElementById('categorySelect').dispatchEvent(new Event('change'));
 </script>
+
+
+
+
 
 @endsection
 
@@ -625,57 +555,4 @@
       alert("This sample requires an HTTP server. Please serve this file with a web server.");
     }
   };
-</script>
-
-
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    
-
-
-    const categorySelect = document.getElementById('categorySelect');
-    const subCategorySelect = document.getElementById('subCategorySelect');
-    const selectedCategoryId = categorySelect ? categorySelect.value : null;
-    const selectedSubCategoryId = subCategorySelect ? subCategorySelect.getAttribute('data-selected-subcategory-id') : null;
-
-    function populateSubCategories(categoryId) {
-      subCategorySelect.innerHTML = '<option value="">Chọn thể loại con</option>';
-
-      if (categoryId) {
-        const url = `{{ route('seller.getSubCategory') }}?category_id=${categoryId}`;
-
-        fetch(url)
-          .then(response => response.json())
-          .then(subcategories => {
-            subcategories.forEach(subcategory => {
-              const option = document.createElement('option');
-              option.value = subcategory.id;
-              option.textContent = subcategory.name;
-
-              if (subcategory.id == selectedSubCategoryId) {
-                option.selected = true;
-              }
-
-              subCategorySelect.appendChild(option);
-            });
-          })
-          .catch(error => console.error('Error:', error));
-      }
-    }
-
-    if (categorySelect) {
-      if (selectedCategoryId) {
-        populateSubCategories(selectedCategoryId);
-      }
-
-      categorySelect.addEventListener('change', function() {
-        const categoryId = this.value;
-        populateSubCategories(categoryId);
-      });
-    }
-
-
-  });
 </script>

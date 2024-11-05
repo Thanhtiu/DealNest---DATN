@@ -6,7 +6,7 @@
     </div>
     @else
     @foreach($orders as $order)
-    <div class="order">
+    <div class="order" id="order-{{ $order->id }}">
         @foreach($order->orderItems as $item)
         <div class="order-item" id="order-item-{{ $item->id }}">
             <div class="order-item-info">
@@ -18,28 +18,51 @@
                     <p>Phân loại hàng: {{ $item->color }}, Size: {{ $item->size }}</p>
                     <p>Thành tiền {{$item->total}}</p>
 
-                    @if($order->status==='waiting_for_delivery')
+                    @if($order->status === 'waiting_for_delivery')
                     <p>Ngày giao: {{ $order->delivery_date }}</p>
                     @endif
+
+                    <p>Trạng thái:
+                        @switch(true)
+                        @case($order->status === 'pending')
+                        <span>Chờ xác nhận</span>
+                        @break
+                        @case($order->status === 'waiting_for_delivery')
+                        <span>Đang giao hàng</span>
+                        @break
+                        @case($order->status === 'completed')
+                        <span>Hoàn thành</span>
+                        @break
+                        @case($order->status === 'refuse')
+                        <span>Đơn từ chối</span>
+                        @break
+                        @default
+                        <span>Đơn hủy</span>
+                        @endswitch
+                    </p>
+
+
                 </div>
             </div>
         </div>
         @endforeach
-    </div>
-    <div class="order-actions">
-        <button class="secondary-button">Liên hệ người bán</button>
-        @switch($order->status)
-        @case('pending')
-        <button class="cancel-order-item" data-order-item-id="{{ $order->id }}" data-status="buyer_cancel">Hủy đơn hàng</button>
-        @break
-        @case('cancelled')
-        <button>Mua lại</button>
-        @break
+        <div class="order-actions">
+            <button class="secondary-button">Liên hệ người bán</button>
+            @switch($order->status)
+            @case('pending')
+            <button class="cancel-order-item" data-order-id="{{ $order->id }}" data-status="cancelled">Hủy đơn hàng</button>
+            @break
+            @case('cancelled')
+            <button>Mua lại</button>
+            @break
+            @case('waiting_for_delivery')
+            <button class="cancel-order-item" data-order-id="{{ $order->id }}" data-status="completed">Đã nhận được hàng</button>
 
-        @endswitch
+            @break
+            @endswitch
+        </div>
     </div>
     <hr>
-
     @endforeach
     @endif
 </div>

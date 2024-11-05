@@ -14,10 +14,10 @@ class WishListController extends Controller
     public function index()
     {
         $userId = auth()->user()->id;
-        $WishLists = Wishlist::with('product.subcategory.category')->where('user_id', $userId)->get();
-        // return $WishLists;
+        $WishLists = Wishlist::with('product.seller')->where('user_id', $userId)->get();
         return view('client.wishlist', compact('WishLists'));
     }
+
 
     public function create(Request $request, $id)
     {
@@ -48,8 +48,10 @@ class WishListController extends Controller
         } else {
             // Nếu đã yêu thích, xóa sản phẩm khỏi danh sách yêu thích
             $wishlist->delete();
-            $product->favourite = $product->favourite - 1;
-            $product->save();
+            if ($product->favourite > 0) {
+                $product->favourite = $product->favourite - 1;
+                $product->save();
+            }
             return response()->json([
                 'success' => true,
                 'status' => 'removed',

@@ -17,13 +17,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Lấy tất cả danh mục cha (parent_id = 0)
         $categories = Category::where('parent_id', 0)->get();
     
-        // Lấy danh sách sản phẩm với hình ảnh, sắp xếp theo số lượng bán hàng
-        $products = Product::with('product_image')->orderBy('sales', 'desc')->paginate(6);
+        $products = Product::with('product_image')->orderBy('sales', 'desc')->paginate(12);
     
-        // Trả về view với danh mục và sản phẩm
         return view('index', compact('products', 'categories'));
     }
 

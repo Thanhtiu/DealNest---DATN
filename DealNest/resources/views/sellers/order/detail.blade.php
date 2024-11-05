@@ -216,11 +216,11 @@
             <select class="form-control order-status-select" name="status">
                 <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>⏳ Chờ duyệt</option>
                 <option value="waiting_for_delivery" {{ $order->status == 'waiting_for_delivery' ? 'selected' : '' }}>✔️ Duyệt</option>
-                <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>❌ Từ chối</option>
-                <option value="refuse" {{ $order->status == 'refuse' ? 'selected' : '' }}>⚠️ Khách hủy</option>
+                <option value="cancelled" {{ $order->status == 'refuse' ? 'selected' : '' }}>❌ Từ chối</option>
+                <option value="refuse" {{ $order->status == 'cancelled' ? 'selected' : '' }}>⚠️ Khách hủy</option>
             </select>
 
-            <textarea class="form-control mt-2" name="note" placeholder="Nhập ghi chú...">{{$order->cancellation_reason}}</textarea>
+            <textarea class="form-control mt-2" name="cancellation_reason" placeholder="Nhập ghi chú...">{{$order->cancellation_reason}}</textarea>
 
             <button type="submit" class="btn btn-primary mt-3">Cập nhật</button>
         </form>

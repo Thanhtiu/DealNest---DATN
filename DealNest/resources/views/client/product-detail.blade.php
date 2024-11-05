@@ -4,6 +4,10 @@
 
 <!-- Product Details Section Begin -->
 <style>
+  body {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   .col-lg-12 {
     max-width: 1200px;
     margin: 0 auto;
@@ -804,7 +808,18 @@
           <button type="button" class="decrease">-</button>
           <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $productDetail->quantity }}">
           <button type="button" class="increase">+</button>
-          <span>{{ $productDetail->quantity }} sản phẩm có sẵn</span>
+          <?php
+          function formatQuantity($quantity)
+          {
+            if ($quantity >= 1000) {
+              return floor($quantity / 1000) . 'k' . ($quantity % 1000 > 0 ? ($quantity % 1000) : '');
+            }
+            return $quantity;
+          }
+          $maxQuantity = $productDetail->quantity;
+          $formattedMaxQuantity = formatQuantity($maxQuantity);
+          ?>
+          <span>{{ $formattedMaxQuantity }} sản phẩm có sẵn</span>
         </div>
 
         <input type="hidden" name="product_id" value="{{ $productDetail->id }}">
@@ -990,7 +1005,7 @@
             <img src="{{ asset('uploads/' . ($seller->logo === null ? 'logo-default-seller.png' : $seller->logo)) }}"
               alt="Shop Logo" class="shop-logo">
             <div class="shop-name ml-3">
-              <h5>{{$seller->store_name}}</h5>
+              <h5>{{$seller->name}}</h5>
               <p class="text-shop">Online 1 giờ trước</p>
             </div>
           </div>
@@ -1033,19 +1048,19 @@
 </section>
 
 
-{{-- <section class="product-related">
-  <h2 class="related-title">Sản phẩm liên quan</h2>
-  @if($productRelated->isEmpty())
+<section class="related-product mt-3">
+  <h4>Sản phẩm liên quan</h4>
+<div class="product-container">
+  @if($relatedProducts->isEmpty())
   <div class="product-related-empty">
     <img class="product-related-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
-</div>
-<p class="text-center mt-3">Sản phẩm này hiện chưa có sản phẩm liên quan <a href="{{route('client.index')}}">Xem sản
-    phẩm khác</a></p>
-@else
-<div class="product-container">
-  @foreach($productRelated as $item)
+  </div>
+  <p class="text-center mt-3">Sản phẩm này hiện chưa có sản phẩm liên quan <a href="{{route('client.index')}}">Xem sản
+      phẩm khác</a></p>
+  @else
+  @foreach($relatedProducts as $item)
   <div class="card">
-    <a href="{{ route('client.productDetail', ['id' => $item->id]) }}">
+    <a href="{{ route('client.productDetail', ['id' => $item->id, 'slug' => $item->slug]) }}">
       <div class="cardd">
         <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
         <div class="discount">-92%</div>
@@ -1061,16 +1076,15 @@
             <i class="fas fa-star"></i>
             <i class="far fa-star"></i>
           </span>{{ number_format($item->sales >= 1000 ? $item->sales / 1000 : $item->sales, 1) .
-            ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
+                    ($item->sales >= 1000 ? 'k' : '') }} lượt bán</div>
       </div>
     </a>
   </div>
   @endforeach
   @endif
 </div>
-</section> --}}
 
-
+</section>
 
 
 
@@ -1128,15 +1142,6 @@
 </section>
 
 
-
-
-
-
-
-
-
-
-
 <!-- xử lí thêm sản phẩm yêu thích -->
 <script>
   $(document).ready(function() {
@@ -1146,7 +1151,7 @@
       var favouriteCountElement = $(this).find('.favourite-count');
 
       $.ajax({
-        url: '/san-pham/yeu-thich/' + productId,
+        url: '/tai-khoan-cua-toi/san-pham/yeu-thich/' + productId,
         type: 'POST',
         data: {
           _token: '{{ csrf_token() }}' // Laravel CSRF protection

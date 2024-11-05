@@ -136,7 +136,7 @@
 
 
 
-      .tabs {
+  .tabs {
     display: flex;
     border-bottom: 2px solid #f0f0f0;
     margin-bottom: 20px;
@@ -144,9 +144,9 @@
     background-color: #ffffff;
     padding: 15px;
     border-radius: 8px 8px 0 0;
-}
+  }
 
-.tab-item {
+  .tab-item {
     padding: 12px 20px;
     cursor: pointer;
     font-size: 16px;
@@ -155,15 +155,15 @@
     text-decoration: none;
     position: relative;
     transition: color 0.3s ease, background-color 0.3s ease;
-}
+  }
 
-.tab-item.active {
+  .tab-item.active {
     color: #0d6efd;
     border-bottom: 3px solid #0d6efd;
-    
-}
 
-.tab-item::after {
+  }
+
+  .tab-item::after {
     content: '';
     position: absolute;
     left: 0;
@@ -172,36 +172,36 @@
     height: 3px;
     background-color: var(--primary-color);
     transition: width 0.3s ease;
-}
+  }
 
-.tab-item:hover::after {
+  .tab-item:hover::after {
     width: 100%;
     text-align: none;
-}
+  }
 
-.tab-item:hover {
+  .tab-item:hover {
     opacity: 0.5;
     text-decoration: none;
-}
+  }
 
-.tab-content {
+  .tab-content {
     display: none;
-}
+  }
 
-.tab-content.active {
+  .tab-content.active {
     display: block;
     background-color: #fff;
     border-radius: 0 0 8px 8px;
     padding: 20px;
-}
+  }
 
-.btn-container {
+  .btn-container {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
-}
+  }
 
-.btn-container a {
+  .btn-container a {
     padding: 12px 24px;
     background-color: var(--primary-color);
     color: white;
@@ -211,74 +211,75 @@
     font-size: 14px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+  }
 
-.btn-container a:hover {
+  .btn-container a:hover {
     background-color: #0056b3;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     text-decoration: none;
-}
+  }
 
-table {
+  table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
     font-size: 14px;
     font-weight: 400;
-}
+  }
 
-th, td {
+  th,
+  td {
     text-align: left;
     padding: 15px 10px;
     border-bottom: 1px solid #f0f0f0;
     color: #333;
-}
+  }
 
-th {
+  th {
     background-color: #f9f9f9;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-}
+  }
 
-td {
+  td {
     vertical-align: middle;
-}
+  }
 
-td img {
+  td img {
     border-radius: 5px;
     object-fit: cover;
-}
+  }
 
-tr:hover {
+  tr:hover {
     background-color: #f9f9f9;
     transition: background-color 0.3s ease;
-}
+  }
 
-.badge {
+  .badge {
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 500;
     text-transform: uppercase;
-}
+  }
 
-.badge-warning {
+  .badge-warning {
     background-color: #ffc107;
     color: #fff;
-}
+  }
 
-.badge-success {
+  .badge-success {
     background-color: #28a745;
     color: #fff;
-}
+  }
 
-.badge-danger {
+  .badge-danger {
     background-color: #dc3545;
     color: #fff;
-}
+  }
 
-.btn-icon-text {
+  .btn-icon-text {
     padding: 8px 14px;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -290,39 +291,38 @@ tr:hover {
     background-color: white;
     font-size: 14px;
     font-weight: 500;
-}
+  }
 
-.btn-icon-text i {
+  .btn-icon-text i {
     margin-right: 8px;
     font-size: 16px;
-}
+  }
 
-.btn-icon-text:hover {
+  .btn-icon-text:hover {
     background-color: #f0f0f0;
     border-color: var(--primary-color);
     color: var(--primary-color);
-}
+  }
 
-.btn-outline-danger {
+  .btn-outline-danger {
     border-color: #dc3545;
     color: #dc3545;
-}
+  }
 
-.btn-outline-danger:hover {
+  .btn-outline-danger:hover {
     background-color: #dc3545;
     color: white;
-}
+  }
 
-.btn-outline-secondary {
+  .btn-outline-secondary {
     border-color: #6c757d;
     color: #6c757d;
-}
+  }
 
-.btn-outline-secondary:hover {
+  .btn-outline-secondary:hover {
     background-color: #6c757d;
     color: white;
-}
-
+  }
 </style>
 
 <!-- Tiêu đề chính của trang -->
@@ -351,7 +351,7 @@ tr:hover {
 
   <div class="revenue-card cancelled">
     <h3>Đơn hủy</h3>
-    <div class="amount">{{$buyerCancel < 0 ? '0' : $buyerCancel}}</div>
+    <div class="amount">{{$cancelled < 0 ? '0' : $cancelled}}</div>
     <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
       <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
     </svg>
@@ -359,7 +359,7 @@ tr:hover {
 
   <div class="revenue-card completed">
     <h3>Hoàn thành</h3>
-    <div class="amount">{{$success < 0 ? '0' : $success}}</div>
+    <div class="amount">{{$completed < 0 ? '0' : $completed}}</div>
     <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
       <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
     </svg>
@@ -368,7 +368,7 @@ tr:hover {
   <!-- Thẻ thứ 5 rơi xuống hàng dưới -->
   <div class="revenue-card rejected">
     <h3>Sản phẩm từ chối</h3>
-    <div class="amount">{{$cancel < 0 ? '0' : $cancel}}</div>
+    <div class="amount">{{$refuse < 0 ? '0' : $refuse}}</div>
     <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
       <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
     </svg>
@@ -392,7 +392,7 @@ tr:hover {
 
 @if($topUsers->count() <= 0)
   <img src="{{ asset('sellers/assets/images/no-product-found.png') }}">
-@else
+  @else
   <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
       <div class="card">
@@ -411,9 +411,9 @@ tr:hover {
               @foreach($topUsers as $user)
               <tr>
                 <td>
-                <img src="{{ asset('uploads/' . ($user['user']->image === 'default_avt.png' ? 'default_avt.png' :$user['user']->image )) }}" alt="User Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                  <img src="{{ asset('uploads/' . ($user['user']->image === 'default_avt.png' ? 'default_avt.png' :$user['user']->image )) }}" alt="User Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                 </td>
-                <td>{{ \Illuminate\Support\Str::limit($user['user']->full_name, 25, '...') }}</td>
+                <td>{{ \Illuminate\Support\Str::limit($user['user']->name, 25, '...') }}</td>
                 <td>{{ \Illuminate\Support\Str::limit($user['user']->email, 25, '...') }}</td>
                 <td>{{ $user['total_items'] }}</td>
               </tr>
@@ -424,33 +424,33 @@ tr:hover {
       </div>
     </div>
   </div>
-@endif
+  @endif
 
   <script>
-        $(document).ready(function() {
-            // Khởi tạo DataTable
-            $('#userTableAll').DataTable({
-                "paging": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "lengthMenu": [5, 10, 25, 50],
-                "pageLength": 5,
-                "language": {
-                    "paginate": {
-                        "previous": "<i class='bi bi-arrow-left'></i>",
-                        "next": "<i class='bi bi-arrow-right'></i>"
-                    },
-                    "search": "Tìm kiếm:",
-                    "lengthMenu": "Hiển thị _MENU_ mục",
-                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục"
-                },
-                "dom": '<"row"<"col-md-6"l><"col-md-6"f>>' +
-                    '<"row"<"col-sm-12"tr>>' +
-                    '<"row"<"col-md-5"i><"col-md-7"p>>'
-            });
-        });
-    </script>
+    $(document).ready(function() {
+      // Khởi tạo DataTable
+      $('#userTableAll').DataTable({
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "lengthMenu": [5, 10, 25, 50],
+        "pageLength": 5,
+        "language": {
+          "paginate": {
+            "previous": "<i class='bi bi-arrow-left'></i>",
+            "next": "<i class='bi bi-arrow-right'></i>"
+          },
+          "search": "Tìm kiếm:",
+          "lengthMenu": "Hiển thị _MENU_ mục",
+          "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục"
+        },
+        "dom": '<"row"<"col-md-6"l><"col-md-6"f>>' +
+          '<"row"<"col-sm-12"tr>>' +
+          '<"row"<"col-md-5"i><"col-md-7"p>>'
+      });
+    });
+  </script>
 
   <script>
     // Biểu đồ thống kê doanh thu
@@ -461,7 +461,7 @@ tr:hover {
         labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
         datasets: [{
           label: 'Doanh thu (triệu VND)',
-          data: @json($revenueData),
+          data: @json(array_values($revenueData)), // Truyền dữ liệu doanh thu từ backend
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
@@ -470,45 +470,46 @@ tr:hover {
       options: {
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Doanh thu (triệu VND)'
+            }
           }
         }
       }
     });
 
-
-    // Lấy dữ liệu người dùng từ backend
-    var userData = @json($userData); // Dữ liệu từ backend về số lượng người dùng
-
-    var ctxUser = document.getElementById('user').getContext('2d');
-    var monthlyUserLineChart = new Chart(ctxUser, {
-      type: 'line', // Biểu đồ đường
+    // Biểu đồ số lượng người dùng theo tháng
+    var userCtx = document.getElementById('user').getContext('2d');
+    var userChart = new Chart(userCtx, {
+      type: 'line',
       data: {
-        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'], // Tên các tháng
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
         datasets: [{
           label: 'Số lượng người dùng',
-          data: userData, // Dữ liệu người dùng theo tháng
-          borderColor: 'rgba(255, 99, 132, 1)', // Màu đường
-          backgroundColor: 'rgba(255, 99, 132, 0.2)', // Màu nền trong suốt
-          fill: false, // Không tô màu phía dưới đường
-          tension: 0.3, // Độ cong của đường
-          pointBackgroundColor: 'rgba(255, 99, 132, 1)', // Màu của điểm trên đường biểu đồ
-          pointRadius: 4, // Kích thước của điểm
-          borderWidth: 2, // Độ dày của đường
+          data: @json(array_values($userData)), // Truyền dữ liệu người dùng từ backend
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          fill: false,
+          tension: 0.3,
+          pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+          pointRadius: 4,
+          borderWidth: 2
         }]
       },
       options: {
         plugins: {
           legend: {
-            display: true, // Hiển thị chú thích
+            display: true,
             labels: {
-              color: '#000' // Màu chữ của chú thích
+              color: '#000'
             }
           },
           title: {
             display: true,
-            text: 'Thống kê số lượng người dùng theo tháng', // Tiêu đề biểu đồ
-            color: '#007bff', // Màu của tiêu đề
+            text: 'Thống kê số lượng người dùng theo tháng',
+            color: '#007bff',
             font: {
               size: 18
             }
@@ -516,19 +517,20 @@ tr:hover {
         },
         scales: {
           y: {
-            beginAtZero: true, // Bắt đầu từ 0
+            beginAtZero: true,
             ticks: {
-              color: '#000' // Màu của trục y
+              color: '#000'
             }
           },
           x: {
             ticks: {
-              color: '#000' // Màu của trục x
+              color: '#000'
             }
           }
         }
       }
     });
   </script>
+
 
   @endsection

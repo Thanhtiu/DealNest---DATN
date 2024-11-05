@@ -367,13 +367,6 @@
                         </a>
                     </li>
 
-                    <!-- Quản lý danh mục -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('seller.categoryAndSubcategory')}}">
-                            <span class="menu-title">Danh mục</span>
-                            <i class="bi-tags-fill menu-icon"></i> <!-- Icon quản lý danh mục -->
-                        </a>
-                    </li>
 
                     <!-- Quản lý đơn hàng -->
                     <li class="nav-item">
@@ -415,7 +408,13 @@
                             </ul>
                         </div>
                     </li>
-
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('seller.voucher')}}">
+                            <span class="menu-title">Quản lý voucher</span>
+                            <i class="bi-ticket-perforated-fill menu-icon"></i> <!-- Icon voucher -->
+                        </a>
+                    </li>
                     <!-- Thông tin cửa hàng -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('seller.info')}}">

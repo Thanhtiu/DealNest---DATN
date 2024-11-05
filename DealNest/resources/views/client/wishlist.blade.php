@@ -115,7 +115,9 @@
         font-size: 16px;
         color: #999;
     }
-
+    a:hover{
+        color: #007bff;
+    }
 </style>
 
 <section class="py-5">
@@ -141,12 +143,12 @@
                         </div>
                         <div class="wishlist-item-details">
                             <h5>{{ $item->product->name }}</h5>
-                            <p>Danh mục: {{ $item->product->category->name }}</p>
-                            <p>Thể loại: {{ $item->product->subCategory->name }}</p>
+                            <p>Lượt bán: {{ $item->product->sales }}</p>
+                            <p>Cửa hàng: <a href="{{$item->product->seller->id}}">{{$item->product->seller->name}}</a></p>
                             <p><i class="bi bi-heart-fill text-danger"></i> {{ $item->product->favourite }} lượt yêu thích</p>
                         </div>
                         <div class="wishlist-item-price">
-                            {{ number_format($item->product->price, 0, ',', '.') }} vnđ
+                            {{ number_format($item->product->mrp, 0, ',', '.') }} vnđ
                         </div>
                         <div class="wishlist-actions">
                             <a href="{{ route('client.wishList.destroy', ['id' => $item->id]) }}" class="btn btn-danger">

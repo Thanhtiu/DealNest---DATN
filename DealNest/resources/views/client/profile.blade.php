@@ -2,7 +2,8 @@
 @section('content')
 <style>
     /* General Styling */
-    .card-profile, .card-add {
+    .card-profile,
+    .card-add {
         border-radius: 5px;
         background-color: #fff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -16,7 +17,8 @@
         border-bottom: 2px solid #dee2e6;
     }
 
-    .profile-card-body, .avatar-card-body {
+    .profile-card-body,
+    .avatar-card-body {
         padding: 15px;
     }
 
@@ -75,7 +77,9 @@
 
     /* Responsive Layout */
     @media (max-width: 768px) {
-        .card-profile, .card-add {
+
+        .card-profile,
+        .card-add {
             margin-bottom: 15px;
         }
     }
@@ -92,7 +96,6 @@
                     @include('layouts.client.sidebar')
                 </div>
 
-                <!-- Profile Content -->
                 <div class="col-md-6 profile-content">
                     <div class="card-profile">
                         <div class="card-pro">
@@ -103,25 +106,28 @@
                             <!-- Name Field -->
                             <div class="form-group">
                                 <label for="username" class="profile-form-label">Tên</label>
-                                <input type="text" class="profile-form-control" id="username" name="name" value="{{ $user->name }}" readonly>
-                            </div>
-
-                            <!-- Full Name Field -->
-                            <div class="form-group">
-                                <label for="name" class="profile-form-label">Họ và tên</label>
-                                <input type="text" class="profile-form-control" id="name" name="full_name" value="{{ $user->full_name }}">
+                                <input type="text" class="profile-form-control" id="username" name="name" value="{{ old('name', $user->name) }}">
+                                @if ($errors->has('name'))
+                                <p style="color: red;">{{ $errors->first('name') }}</p>
+                                @endif
                             </div>
 
                             <!-- Email Field -->
                             <div class="form-group">
                                 <label for="email" class="profile-form-label">Email</label>
-                                <input type="email" class="profile-form-control" id="email" value="{{ $user->email }}" readonly name="email">
+                                <input type="email" class="profile-form-control" id="email" value="{{ old('email', $user->email) }}"  name="email">
+                                @if ($errors->has('email'))
+                                <p style="color: red;">{{ $errors->first('email') }}</p>
+                                @endif
                             </div>
 
                             <!-- Phone Field -->
                             <div class="form-group">
                                 <label for="phone" class="profile-form-label">Số điện thoại</label>
-                                <input type="tel" class="profile-form-control" id="phone" name="phone" value="{{ $user->phone }}">
+                                <input type="tel" class="profile-form-control" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
+                                @if ($errors->has('phone'))
+                                <p style="color: red;">{{ $errors->first('phone') }}</p>
+                                @endif
                             </div>
 
                             <!-- Submit Button -->
@@ -129,6 +135,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Avatar Section -->
                 <div class="col-md-3">

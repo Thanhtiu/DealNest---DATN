@@ -100,7 +100,6 @@
     <div class="revenue-card">
         <h3>Tồn kho</h3>
         <div class="amount">{{$inventory<0 ? '0' : $inventory}}</div>
-
         <!-- SVG đường cong -->
         <svg class="curve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 50" preserveAspectRatio="none">
             <path d="M0,50 C150,30 350,30 500,50 L500,00 L0,0 Z" style="stroke: none; fill: #81d4fa;"></path>
@@ -140,11 +139,11 @@
                             @foreach($bestSeller as $item)
                             <tr>
                                 <td>
-                                    <img src="{{asset('uploads/'.$item->image)}}" class="me-2" alt="image"> wefwfwefwe
+                                    <img src="{{asset('uploads/'.$item->image)}}" class="me-2" alt="image"> 
                                 </td>
-                                <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+                                <td>{{ \Illuminate\Support\Str::limit($item->name, 20, '...') }}</td>
                                 <td>
-                                    {{ number_format($item->price, 0, ',', '.') }} vnđ
+                                    {{ number_format($item->mrp, 0, ',', '.') }} vnđ
                                 </td>
                                 <td>{{$item->favourite}} lượt</td>
                                 <td>
@@ -313,4 +312,87 @@
         }
     });
 </script>
+
+<script>
+    var ctx = document.getElementById('topSellingProductsChart').getContext('2d');
+
+    // Dữ liệu từ server
+    var monthlyData = @json($topProductsData);
+
+    // Tạo danh sách đầy đủ 12 tháng
+    var allMonths = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+        'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+    ];
+
+    // Tạo mảng dữ liệu bán hàng
+    var productSales = [];
+    var productNames = [];
+
+    for (var i = 1; i <= 12; i++) {
+        var monthKey = i.toString(); // Chuyển số tháng thành chuỗi để so sánh với dữ liệu
+        var found = monthlyData.find(function(item) {
+            return parseInt(item.month) === i;
+        });
+
+        if (found) {
+            productSales.push(parseInt(found.total_quantity));
+            productNames.push(found.name.length > 15 ?
+                found.name.substring(0, 15) + '...' :
+                found.name);
+        } else {
+            productSales.push(0); // Thêm giá trị 0 nếu không có dữ liệu cho tháng này
+            productNames.push('N/A');
+        }
+    }
+
+    // Vẽ biểu đồ cột
+    var topSellingProductsChart = new Chart(ctx, {
+        type: 'bar', // Loại biểu đồ là cột
+        data: {
+            labels: allMonths, // Hiển thị tên tháng ở dưới
+            datasets: [{
+                label: 'Số lượng bán trong tháng',
+                data: productSales, // Số lượng bán của các sản phẩm
+                backgroundColor: 'rgba(54, 162, 235, 0.5)', // Màu của cột
+                borderColor: 'rgba(54, 162, 235, 1)', // Màu viền của cột
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Tháng'
+                    }
+                },
+                y: {
+                    beginAtZero: true // Bắt đầu từ 0 trên trục y
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            // Hiển thị tên sản phẩm trong tooltip
+                            var index = tooltipItems[0].dataIndex;
+                            return productNames[index]; // Trả về tên sản phẩm tương ứng
+                        },
+                        label: function(tooltipItem) {
+                            // Hiển thị số lượng bán trong tooltip
+                            return 'Số lượng: ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
+
+
+
+
 @endsection

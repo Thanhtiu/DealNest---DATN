@@ -25,38 +25,45 @@ class DashboardController extends Controller
                 session()->flash('alertType', 'error');
                 return redirect('/');
             }
+
             $sellerId = $seller->id;
             Session::put('sellerId', $sellerId);
+
             // Thống kê tổng doanh thu theo tháng
-            $monthlyRevenue = OrderItem::where('seller_id', $sellerId)
-                ->whereIn('status', ['waiting_for_delivery', 'success'])
-                ->selectRaw('MONTH(delivery_date) as month, SUM(price * quantity) as total_revenue')
+            $monthlyRevenue = OrderItem::whereHas('order', function ($query) use ($sellerId) {
+                $query->where('seller_id', $sellerId)
+                    ->whereIn('status', ['waiting_for_delivery', 'completed']);
+            })
+                ->selectRaw('MONTH(orders.delivery_date) as month, SUM(order_items.total) as total_revenue')
+                ->join('orders', 'order_items.order_id', '=', 'orders.id')
                 ->groupBy('month')
                 ->orderBy('month')
                 ->get();
 
-            $revenueData = array_fill(1, 12, 0); // Tạo mảng 12 tháng với giá trị 0
+
+            $revenueData = array_fill(1, 12, 0);
             foreach ($monthlyRevenue as $revenue) {
                 $revenueData[$revenue->month] = $revenue->total_revenue;
             }
 
-            // Thống kê tổng số lượng user_id thuộc seller_id theo tháng
-            // Thống kê tổng số lượng user_id thuộc seller_id theo tháng
+            // Thống kê tổng số lượng user_id theo tháng
             $monthlyUsers = Order::where('seller_id', $sellerId)
                 ->selectRaw('MONTH(delivery_date) as month, COUNT(DISTINCT user_id) as total_users')
                 ->groupBy('month')
                 ->orderBy('month')
                 ->get();
 
-            $userData = array_fill(1, 12, 0); // Tạo mảng 12 tháng với giá trị 0
+            $userData = array_fill(1, 12, 0);
             foreach ($monthlyUsers as $user) {
                 $userData[$user->month] = $user->total_users;
             }
 
             // Thống kê số người mua hàng nhiều nhất từ seller
-            $topUsers = OrderItem::with('order.user') // Sử dụng quan hệ để lấy thông tin người dùng
-                ->where('seller_id', $sellerId)
-                ->whereIn('status', ['waiting_for_delivery', 'success'])
+            $topUsers = OrderItem::whereHas('order', function ($query) use ($sellerId) {
+                $query->where('seller_id', $sellerId)
+                    ->whereIn('status', ['waiting_for_delivery', 'completed']);
+            })
+                ->with('order.user')
                 ->get()
                 ->groupBy('order.user.id')
                 ->map(function ($orderItems, $userId) {
@@ -68,20 +75,90 @@ class DashboardController extends Controller
                 ->sortByDesc('total_items')
                 ->take(100);
 
-            // return $topUsers;
+            $pending = Order::where('seller_id', $sellerId)
+                ->where('status', 'pending')
+                ->where(function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('payment_method', 'vnpay')
+                            ->where('payment_status', 'paid');
+                    })
+                        ->orWhere(function ($query) {
+                            $query->where('payment_method', 'cod')
+                                ->where('payment_status', 'pending');
+                        });
+                })
+                ->count();
 
-            // Các thống kê khác
-            $pending = OrderItem::where('seller_id', $sellerId)->where('status', 'pending')->count();
-            $waitingForDelivery = OrderItem::where('seller_id', $sellerId)->where('status', 'waiting_for_delivery')->count();
-            $buyerCancel = OrderItem::where('seller_id', $sellerId)->where('status', 'buyer_cancel')->count();
-            $success = OrderItem::where('seller_id', $sellerId)->where('status', 'success')->count();
-            $cancel = OrderItem::where('seller_id', $sellerId)->where('status', 'cancel')->count();
+
+            // Số lượng đơn hàng đang chờ giao (waiting_for_delivery)
+            $waitingForDelivery = Order::where('seller_id', $sellerId)
+                ->where('status', 'waiting_for_delivery')
+                ->where(function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('payment_method', 'vnpay')
+                            ->where('payment_status', 'paid');
+                    })
+                        ->orWhere(function ($query) {
+                            $query->where('payment_method', 'cod')
+                                ->where('payment_status', 'pending');
+                        });
+                })
+                ->count();
+
+            // Số lượng đơn hàng bị hủy bởi người mua 
+            $cancelled = Order::where('seller_id', $sellerId)
+                ->where('status', 'cancelled')
+                ->where(function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('payment_method', 'vnpay')
+                            ->where('payment_status', 'paid');
+                    })
+                        ->orWhere(function ($query) {
+                            $query->where('payment_method', 'cod')
+                                ->where('payment_status', 'pending');
+                        });
+                })
+                ->count();
+
+            // Số lượng đơn hàng đã hoàn thành (completed)
+            $completed = Order::where('seller_id', $sellerId)
+                ->where('status', 'completed')
+                ->where(function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('payment_method', 'vnpay')
+                            ->where('payment_status', 'paid');
+                    })
+                        ->orWhere(function ($query) {
+                            $query->where('payment_method', 'cod')
+                                ->where('payment_status', 'paid');
+                        });
+                })
+                ->get()
+                ->count();
+          
+            // Số lượng đơn hàng từ chối
+            $refuse = Order::where('seller_id', $sellerId)
+                ->where('status', 'refuse')
+                ->where(function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('payment_method', 'vnpay')
+                            ->where('payment_status', 'paid');
+                    })
+                        ->orWhere(function ($query) {
+                            $query->where('payment_method', 'cod')
+                                ->where('payment_status', 'pending');
+                        });
+                })
+                ->count();
+
+
+
             return view('sellers.index', compact(
-                'cancel',
+                'cancelled',
                 'pending',
                 'waitingForDelivery',
-                'buyerCancel',
-                'success',
+                'completed',
+                'refuse',
                 'revenueData',
                 'userData',
                 'topUsers'

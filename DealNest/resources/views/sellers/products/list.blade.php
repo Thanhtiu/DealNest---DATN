@@ -121,28 +121,7 @@ tr:hover {
     transition: background-color 0.3s ease;
 }
 
-.badge {
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-}
 
-.badge-warning {
-    background-color: #ffc107;
-    color: #fff;
-}
-
-.badge-success {
-    background-color: #28a745;
-    color: #fff;
-}
-
-.badge-danger {
-    background-color: #dc3545;
-    color: #fff;
-}
 
 .btn-icon-text {
     padding: 8px 14px;
@@ -236,12 +215,13 @@ tr:hover {
                                     <td data-order="{{$item->price}}">{{$item->price}}</td>
                                     <td>{{$item->quantity}}</td>
                                     <td>
-                                        @if($item->status == 'Chờ phê duyệt')
-                                        <label class="badge badge-warning">Chờ phê duyệt</label>
-                                        @elseif($item->status == 'Đã phê duyệt')
-                                        <label class="badge badge-success">Đang hoạt động</label>
+                                        @if($item->status == 'pending')
+                                        
+                                        <label class="badge badge-warning">Chờ duyệt</label>
+                                        @elseif($item->status == 'approved')
+                                        <label class="badge badge-success">Hoạt động</label>
                                         @else
-                                        <label class="badge badge-danger">Không hoạt động</label>
+                                        <label class="badge badge-danger">Vi phạm</label>
                                         @endif
                                     </td>
                                     <td>
@@ -339,7 +319,7 @@ tr:hover {
                             <tbody>
                                 @foreach($productFail as $item)
                                 <tr>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 15, '...') }}</td>
                                     <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
 
                                     <td>
