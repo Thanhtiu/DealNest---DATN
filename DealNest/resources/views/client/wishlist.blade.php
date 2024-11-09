@@ -104,17 +104,7 @@
     }
 
     /* No Data Section */
-    .wishlist-data-image {
-        margin-top: 15%;
-        width: 150px;
-    }
-
-    .wishlist-empty {
-        text-align: center;
-        margin-top: 30px;
-        font-size: 16px;
-        color: #999;
-    }
+    
     a:hover{
         color: #007bff;
     }
@@ -129,8 +119,8 @@
 
             <div class="col-md-9">
                 @if($WishLists->isEmpty())
-                <div class="wishlist-empty">
-                    <img class="wishlist-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
+                <div class="nodata-empty">
+                    <img class="nodata-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
                     <p class="text-center mt-3">Chưa có sản phẩm nào được yêu thích</p>
                 </div>
                 @else

@@ -4,11 +4,6 @@
 
 <!-- Product Details Section Begin -->
 <style>
-  body {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
   .col-lg-12 {
     max-width: 1200px;
     margin: 0 auto;
@@ -375,15 +370,14 @@
 
   /* shop info */
   .shop-info {
-    margin-top: 50px;
-    background-color: #ffffff; 
-    color: #333; 
+    background-color: #ffffff;
+    color: #333;
     padding: 20px;
-    border-radius: 8px; 
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-    border: 1px solid #e0e0e0; 
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid #e0e0e0;
     margin-bottom: 50px;
-}
+  }
 
 
   .shop-info__item {
@@ -723,6 +717,12 @@
     background-color: #e0e0e0;
     /* Đổi màu nền nhẹ khi hover */
   }
+
+  .related-product,
+  .shop-info {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 </style>
 <section class="product-section">
   <div class="product-layout">
@@ -903,35 +903,41 @@
               <div class="border p-3">
                 <h4>ĐÁNH GIÁ SẢN PHẨM</h4>
                 <div class="d-flex align-items-center">
-                  <h3 class="mb-0">4.5</h3>
+                  <h3 class="mb-0">{{ number_format($averageRating, 1) }}</h3>
                   <span class="ms-2 text-muted">trên 5</span>
                   <div class="ms-3">
                     <div class="d-flex">
-                      <span class="text-warning">★</span>
-                      <span class="text-warning">★</span>
-                      <span class="text-warning">★</span>
-                      <span class="text-warning">★</span>
-                      <span class="text-warning">★</span>
+                      @for ($i = 1; $i <= 5; $i++)
+                        @if ($i <=floor($averageRating))
+                        <span class="text-warning">★</span> <!-- Sao đầy -->
+                        @elseif ($i == ceil($averageRating) && $averageRating - floor($averageRating) >= 0.5)
+                        <span class="text-warning">☆</span> <!-- Sao nửa -->
+                        @else
+                        <span class="text-muted">☆</span> <!-- Sao rỗng -->
+                        @endif
+                        @endfor
                     </div>
                   </div>
+
                 </div>
                 <div class="mt-2">
                   <button class="btn btn-outline-secondary btn-sm">Tất Cả</button>
-                  <button class="btn btn-outline-secondary btn-sm">5 Sao (453)</button>
-                  <button class="btn btn-outline-secondary btn-sm">4 Sao (70)</button>
-                  <button class="btn btn-outline-secondary btn-sm">3 Sao (32)</button>
-                  <button class="btn btn-outline-secondary btn-sm">2 Sao (18)</button>
-                  <button class="btn btn-outline-secondary btn-sm">1 Sao (26)</button>
-                  <button class="btn btn-outline-secondary btn-sm">Có Bình Luận (179)</button>
-                  <button class="btn btn-outline-secondary btn-sm">Có Hình Ảnh / Video (64)</button>
+                  <button class="btn btn-outline-secondary btn-sm">5 Sao (<?= $stars[5] ?? 0 ?>)</button>
+                  <button class="btn btn-outline-secondary btn-sm">4 Sao (<?= $stars[4] ?? 0 ?>)</button>
+                  <button class="btn btn-outline-secondary btn-sm">3 Sao (<?= $stars[3] ?? 0 ?>)</button>
+                  <button class="btn btn-outline-secondary btn-sm">2 Sao (<?= $stars[2] ?? 0 ?>)</button>
+                  <button class="btn btn-outline-secondary btn-sm">1 Sao (<?= $stars[1] ?? 0 ?>)</button>
+                  <button class="btn btn-outline-secondary btn-sm">Có Bình Luận {{$reviewCounts > 0 ? $reviewCounts : 0}}</button>
                 </div>
+
               </div>
 
               <div class="mt-4">
                 @foreach($reviews as $review)
                 <div class="border-bottom pb-3 mb-3">
                   <div class="d-flex align-items-start">
-                    <img src="{{ asset('uploads/' . ($review->user->image ?? 'default_avt.jpg')) }}" alt="User" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit:cover;">
+                    <img src="{{ asset('uploads/' . ($review->user->image != 'user_default.jpg' ? $review->user->image : 'default/user_default.jpg')) }}" alt="User" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit:cover;">
+
 
                     <div>
                       <h6 class="mb-1">{{ $review->user->name }}</h6>
@@ -994,8 +1000,8 @@
       <!-- Rating -->
       <div class="col-lg-3 col-md-6">
         <div class="shop-info__item">
-          <h5>Đánh giá</h5>
-          <p class="text-shop">95,2k</p>
+          <h5>Số lượt bán</h5>
+          <p class="text-shop">{{$totalSales}}</p>
           <h5>Tham gia</h5>
           <p class="text-shop">{{$dateJoin}} ngày trước</p>
         </div>

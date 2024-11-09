@@ -10,16 +10,19 @@
         overflow-x: hidden;
     }
 
+    .row {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
     /* Container */
     .container-fluid {
         padding: 0;
+
     }
 
     /* Sidebar */
-    .sidebar {
-        right: 30px;
-        padding: 50px;
-    }
+
 
     .sidebar h3 {
         font-size: 18px;
@@ -118,15 +121,9 @@
     /* Adjusted Container */
 
     /* Adjust Sidebar and Main Content */
-    .col-md-3 {
-        padding-right: 10px;
-        /* Reduce space on the right */
-    }
+    .col-md-3 {}
 
-    .col-md-9 {
-        padding-left: 10px;
-        /* Reduce space on the left */
-    }
+    .col-md-9 {}
 
     /* Adjust product list layout */
     .product-list {
@@ -220,9 +217,8 @@
         font-size: 12px;
         color: #777;
         margin-top: 10px;
-        /* Adjust the margin to create spacing from the price */
         position: relative;
-        /* Change from absolute to relative to place it naturally within the content flow */
+
     }
 
     .location {
@@ -231,13 +227,25 @@
         margin-top: 5px;
         padding-left: 10px;
     }
+
+    .left {
+        width: 15%;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .right {
+        width: 85%;
+    }
 </style>
 
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <!-- Sidebar -->
-        <div class="col-md-3">
+        <div class="left">
             <div class="sidebar">
                 <h3>{{ $parentCategory->name }}</h3>
                 <ul>
@@ -302,8 +310,7 @@
 
 
         <!-- Main Content -->
-        <div class="col-md-9">
-            <!-- Sort Bar -->
+        <div class="right">
             <!-- Sort Bar -->
             <div class="sort-bar">
 
@@ -332,62 +339,48 @@
                         <option value="price-asc">Thấp Đến Cao</option>
                         <option value="price-desc">Cao Đến Thấp</option>
                     </select>
-
-
                 </div>
 
-
-                <!-- Product List -->
+                @if ($products->count() > 0)
                 <div class="product-list">
-                    {{-- <h2>Sản phẩm thuộc danh mục </h2> --}}
-
-                    @if ($products->count() > 0)
-                    <div class="product-list">
-                        @foreach ($products as $item)
-                        <div class="cardd">
-                            <!-- Hiển thị hình ảnh sản phẩm -->
-                            <a href="{{ route('client.productDetail',['id'=>$item->id,'slug'=>$item->slug]) }}">
-                                <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
-                            </a>
-                            <!-- Phần trăm giảm giá -->
-                            <div class="discount">-92%</div>
-
-                            <!-- Thông tin sản phẩm -->
-                            <div class="content">
-                                <h2 class="title">{{ $item->name }}</h2>
-                                <p class="price">₫ {{ number_format($item->price, 0, ',', '.') }}</p>
-                            </div>
-
-                            <!-- Đánh giá và số lượng đã bán -->
-                            <div class="sold">
-                                <span class="rating">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </span>
-                                Đã bán {{ $item->sales }}+
-                            </div>
-
-                            <!-- Địa chỉ -->
-                            <span class="location">
-                                @php
-                                $string = $item->seller->address->string_address;
-                                $array = preg_split('/[\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
-                                $lastTwoWords = array_slice($array, -2);
-                                $result = implode(' ', $lastTwoWords);
-                                @endphp
-                                {{ $result }}
-                            </span>
+                    @foreach ($products as $item)
+                    <div class="cardd">
+                        <a href="{{ route('client.productDetail',['id'=>$item->id,'slug'=>$item->slug]) }}">
+                            <img src="{{ asset('uploads/' . $item->image) }}" alt="Product Image">
+                        </a>
+                        <div class="content">
+                            <h2 class="title">{{ $item->name }}</h2>
+                            <p class="price">₫ {{ number_format($item->price, 0, ',', '.') }}</p>
                         </div>
-                        @endforeach
+
+                        <!-- Đánh giá và số lượng đã bán -->
+                        <div class="sold">
+                            <span class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </span>
+                            Đã bán {{ $item->sales }}+
+                        </div>
+
+                        <!-- Địa chỉ -->
+                        <span class="location">
+                            @php
+                            $string = $item->seller->address->string_address;
+                            $array = preg_split('/[\s,]+/', $string, -1, PREG_SPLIT_NO_EMPTY);
+                            $lastTwoWords = array_slice($array, -2);
+                            $result = implode(' ', $lastTwoWords);
+                            @endphp
+                            {{ $result }}
+                        </span>
                     </div>
-                    @else
-                    <p>Không có sản phẩm nào thuộc danh mục này.</p>
-                    @endif
-                    <!-- Additional product cards -->
+                    @endforeach
                 </div>
+                @else
+                <p>Không có sản phẩm nào thuộc danh mục này.</p>
+                @endif
 
             </div>
         </div>

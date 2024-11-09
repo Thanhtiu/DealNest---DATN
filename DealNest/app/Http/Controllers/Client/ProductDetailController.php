@@ -14,6 +14,8 @@ use App\Models\Wishlist;
 use App\Models\Review;
 use App\Models\Review_image;
 
+use function Livewire\revert;
+
 class ProductDetailController extends Controller
 {
     public function index($id, $slug)
@@ -24,9 +26,12 @@ class ProductDetailController extends Controller
 
         $countProduct = Product::where('seller_id', $seller->id)->count();
 
-        // Calculate days since the seller joined
+        $totalSales = Product::where('seller_id', $seller->id)->sum('sales');
+
         $currentDate = Carbon::now();
+
         $startDate = Carbon::parse($seller->created_at);
+
         $dateJoin = round($startDate->diffInDays($currentDate));
 
         $string_address = 'Vui lòng cập nhật địa chỉ';
@@ -40,21 +45,40 @@ class ProductDetailController extends Controller
             }
         }
 
-        // Check if the product is favorited by the user
         $isFavourited = Wishlist::where('user_id', auth()->id())
             ->where('product_id', $id)
             ->exists();
 
-        // Fetch related products from the same category, excluding the current product
         $relatedProducts = Product::with('product_image')
             ->where('category_id', $productDetail->category_id)
             ->where('id', '!=', $id)
             ->take(4)
             ->get();
 
-            $reviews = Review::where('product_id', $productDetail->id)
-            ->with(['user', 'images']) 
+        $reviews = Review::where('product_id', $productDetail->id)
+            ->with(['user', 'images'])
             ->get();
+
+        $startCounts = Review::where('product_id', $productDetail->id)
+            ->select('rating', DB::raw('count(*) as count'))
+            ->groupBy('rating')
+            ->pluck('count', 'rating');
+
+        $stars = [
+            1 => 0,
+            2 => 0,
+            3 => 0,
+            4 => 0,
+            5 => 0,
+        ];
+
+        foreach ($startCounts as $rating => $count) {
+            $stars[$rating] = $count;
+        }
+
+        $reviewCounts = Review::where('product_id', $productDetail->id)->count();
+
+        $averageRating = Review::where('product_id', $productDetail->id)->avg('rating');
 
         return view('client.product-detail', compact(
             'productDetail',
@@ -64,7 +88,12 @@ class ProductDetailController extends Controller
             'string_address',
             'isFavourited',
             'relatedProducts',
-            'reviews'
+            'reviews',
+            'totalSales',
+            'startCounts',
+            'stars',
+            'reviewCounts',
+            'averageRating'
         ));
     }
 }

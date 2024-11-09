@@ -30,7 +30,8 @@
           <div class="col-lg-4 mx-auto">
             <div class="auth-form-light text-left p-5">
               <div class="brand-logo">
-                <img src="{{ asset('assets/login/assets/images/logo.svg') }}">
+                <img src="{{asset('image/dealnest-logo.png')}}"
+                  alt="Tiki Logo">
               </div>
               @if (session('login_error'))
               <div class="alert alert-danger">
@@ -57,20 +58,16 @@
                 </div>
                 <div class="mt-3 d-grid gap-2">
                   <button type="submit"
-                    class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"
+                    class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn btn-account"
                     href="../../index.html">Đăng nhập</button>
                 </div>
                 <div class="login-social">
-                  <div class="google">
+                  <div class="google btn-block">
                     <a href="{{route('login.google')}}">
                       <img src="{{asset('client/img/logo-google.png')}}" alt="" class="google-img">
                     </a>
                   </div>
-                  <div class="facebook">
-                    <a href="{{route('login.facebook')}}">
-                      <img src="{{asset('client/img/logo-facebook.png')}}" alt="" class="google-img">
-                    </a>
-                  </div>
+
                 </div>
                 {{-- <div class="my-2 d-flex justify-content-between align-items-center">
                   <div class="form-check">

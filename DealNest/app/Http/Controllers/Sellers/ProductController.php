@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Sellers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Product_image;
 use App\Models\ProductVariant;
+use App\Models\Review;
 
 
 class ProductController extends Controller
@@ -130,27 +133,31 @@ class ProductController extends Controller
     {
         $sellerId = Session::get('sellerId');
 
-        // Fetch products based on seller's ID
         $productAll = Product::where('seller_id', $sellerId)
             ->where('trash_can', '!=', 0)
             ->with(['parent', 'product_image'])
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
+
         $productSuccess = Product::where('seller_id', $sellerId)
             ->where('status', 'approved')
             ->where('trash_can', '!=', 0)
             ->with(['parent', 'product_image'])
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         $productPending = Product::where('seller_id', $sellerId)
             ->where('status', 'pending')
             ->where('trash_can', '!=', 0)
             ->with(['parent', 'product_image'])
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         $productFail = Product::where('seller_id', $sellerId)
             ->where('status', 'cancel')
             ->where('trash_can', '!=', 0)
             ->with(['parent', 'product_image'])
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         // Đếm tổng số lượng sản phẩm
@@ -179,11 +186,6 @@ class ProductController extends Controller
         $country = Country::all();
         return view('sellers.products.edit', compact('categories', 'product', 'country'));
     }
-
-
-
-
-
 
     public function update(Request $request, $id)
     {
@@ -288,7 +290,7 @@ class ProductController extends Controller
     {
         $sellerId = Session::get('sellerId');
         $products = Product::where('seller_id', operator: $sellerId)
-            ->where('trash_can', 'false')->with('parent')->get();
+            ->where('trash_can', 'false')->with('parent')->orderBy('created_at', 'desc')->get();
         return view('sellers.products.listTrashCan', compact('products'));
     }
 
@@ -324,11 +326,56 @@ class ProductController extends Controller
             if (file_exists(public_path('uploads/' . $productImage->url))) {
                 unlink(public_path('uploads/' . $productImage->url));
             }
-            // Xóa hình ảnh từ cơ sở dữ liệu
             $productImage->delete();
         }
 
         $product->delete();
         return redirect()->route('seller.product.list')->with('success', 'Product deleted successfully!');
+    }
+
+    public function review($id)
+    {
+        $reviews = Review::where('product_id', $id)
+            ->with(['user', 'images'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $startCounts = Review::where('product_id', $id)
+            ->select('rating', DB::raw('count(*) as count'))
+            ->groupBy('rating')
+            ->pluck('count', 'rating');
+
+        $stars = [
+            1 => 0,
+            2 => 0,
+            3 => 0,
+            4 => 0,
+            5 => 0,
+        ];
+
+
+
+        foreach ($startCounts as $rating => $count) {
+            $stars[$rating] = $count;
+        }
+
+        $reviewCounts = Review::where('product_id', $id)->count();
+
+        $averageRating = Review::where('product_id', $id)->avg('rating');
+
+        
+
+        return view('sellers.products.review', compact('reviews', 'reviewCounts','startCounts', 'stars','averageRating'));
+    }
+    public function reviewDestroy($id)
+    {
+        $review = Review::find($id);
+
+        if ($review) {
+            $review->delete();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Đánh giá không tồn tại.'], 404);
     }
 }

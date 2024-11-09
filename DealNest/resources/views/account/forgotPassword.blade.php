@@ -30,7 +30,8 @@
           <div class="col-lg-4 mx-auto">
             <div class="auth-form-light text-left p-5">
               <div class="brand-logo">
-                <img src="{{ asset('assets/login/assets/images/logo.svg') }}">
+                <a href="{{route('account.login')}}"><img src="{{asset('image/dealnest-logo.png')}}"
+                    alt="Tiki Logo"></a>
               </div>
               @if (session('email_error'))
               <div class="alert alert-danger">
@@ -49,7 +50,7 @@
                 </div>
                 <div class="mt-3 d-grid gap-2">
                   <button type="submit"
-                    class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"
+                    class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn btn-account"
                     href="../../index.html">Lấy lại mật khẩu</button>
                 </div>
               </form>

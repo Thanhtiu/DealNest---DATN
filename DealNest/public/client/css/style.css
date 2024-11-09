@@ -3485,3 +3485,13 @@ ol {
 		font-size: 24px;
 	}
 }
+
+.nodata-data-image {
+	width: 150px;
+}
+
+.nodata-empty {
+	text-align: center;
+	font-size: 16px;
+	color: #999;
+}

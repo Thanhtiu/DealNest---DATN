@@ -411,7 +411,7 @@
               @foreach($topUsers as $user)
               <tr>
                 <td>
-                  <img src="{{ asset('uploads/' . ($user['user']->image === 'default_avt.png' ? 'default_avt.png' :$user['user']->image )) }}" alt="User Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                  <img src="{{ asset('uploads/' . ($user['user']->image === 'user_default.jpg' ? 'default/user_default.jpg' :$user['user']->image )) }}" alt="User Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                 </td>
                 <td>{{ \Illuminate\Support\Str::limit($user['user']->name, 25, '...') }}</td>
                 <td>{{ \Illuminate\Support\Str::limit($user['user']->email, 25, '...') }}</td>

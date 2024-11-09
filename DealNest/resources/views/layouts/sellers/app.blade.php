@@ -5,6 +5,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Purple Admin</title>
     <!-- Bootstrap 4 CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -48,6 +50,7 @@
     <link rel="shortcut icon" href="{{asset('sellers/assets/images/favicon.png')}}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.0/ckeditor5.css">
+
 
 
 </head>
@@ -137,15 +140,19 @@
 </style>
 
 <body>
+    @php
+    $seller = \App\Models\Seller::where('user_id', Auth::user()->id)->first();
+    $user = \App\Models\User::find(Auth::user()->id);
+    @endphp
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <div class="dealnest-logo">
-                    <a class="navbar-brand brand-logo" href="index.html"><img class="seller-logo-image"
+                    <a class="navbar-brand brand-logo" href="{{route('seller.index')}}"><img class="seller-logo-image"
                             src="{{asset('image/dealnest-logo.png')}}" alt="logo" /></a>
                 </div>
-                <a class="navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg"
+                <a class="navbar-brand brand-logo-mini" href="{{route('seller.index')}}"><img src="assets/images/logo-mini.svg"
                         alt="logo" /></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -172,12 +179,12 @@
                                 <span class="availability-status online"></span>
                             </div>
                             <div class="nav-profile-text">
-                                <p class="mb-1 text-black"> {{Auth::user()->name}} </p>
+                                <p class="mb-1 text-black"> {{$seller->name}} </p>
                             </div>
                         </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-                            <a class="dropdown-item" href="#">
-                                <i class="mdi mdi-cached me-2 text-success"></i> Activity Log </a>
+                            <a class="dropdown-item" href="{{route('client.index')}}">
+                                <i class="mdi mdi-cached me-2 text-success"></i>Trở về DealNest </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href=" {{route('account.logout')}} ">
                                 <i class="mdi mdi-logout me-2 text-primary"></i> Đăng xuất </a>
@@ -311,20 +318,19 @@
         </nav>
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
-            <!-- partial:partials/_sidebar.html -->
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <!-- Thông tin người dùng -->
                     <li class="nav-item nav-profile">
                         <a href="#" class="nav-link">
                             <div class="nav-profile-image">
-                                <img src="{{asset('sellers/assets/images/faces/face1.jpg')}}" alt="profile" />
+                                <img src="{{ asset('uploads/' . ($seller->logo === null ? 'default/seller_default.jpg' : $seller->logo)) }}">
                                 <span class="login-status online"></span>
                                 <!-- change to offline or busy as needed -->
                             </div>
                             <div class="nav-profile-text d-flex flex-column">
-                                <span class="font-weight-bold mb-2">{{ Auth::user()->name }}</span>
-                                <span class="text-secondary text-small">Project Manager</span>
+                                <span class="font-weight-bold mb-2">{{$seller->name}}</span>
+                                <span class="text-secondary text-small">Chủ kênh</span>
                             </div>
                             <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
                         </a>
@@ -335,6 +341,14 @@
                         <a class="nav-link" href="{{route('seller.index')}}">
                             <span class="menu-title">Phân tích bán hàng</span>
                             <i class="bi-graph-up-arrow menu-icon"></i> <!-- Biểu đồ bán hàng -->
+                        </a>
+                    </li>
+
+                    <!-- Thống kê sản phẩm -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('seller.productStatistics')}}">
+                            <span class="menu-title">Thống kê sản phẩm</span>
+                            <i class="bi-bar-chart-line-fill menu-icon"></i> 
                         </a>
                     </li>
 
@@ -359,14 +373,6 @@
                         </div>
                     </li>
 
-                    <!-- Thống kê sản phẩm -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('seller.productStatistics')}}">
-                            <span class="menu-title">Thống kê sản phẩm</span>
-                            <i class="bi-bar-chart-line-fill menu-icon"></i> <!-- Icon biểu đồ thống kê -->
-                        </a>
-                    </li>
-
 
                     <!-- Quản lý đơn hàng -->
                     <li class="nav-item">
@@ -376,39 +382,9 @@
                         </a>
                     </li>
 
-                    <!-- Quản lý người dùng -->
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#user-management" aria-expanded="false" aria-controls="user-management">
-                            <span class="menu-title">Quản lý người dùng</span>
-                            <i class="bi-people-fill menu-icon"></i> <!-- Icon quản lý người dùng -->
-                        </a>
-                        <div class="collapse" id="user-management">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Xem thông tin tài khoản</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+
 
                     <!-- Quản lý đánh giá -->
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#rating-management" aria-expanded="false" aria-controls="rating-management">
-                            <span class="menu-title">Quản lý đánh giá</span>
-                            <i class="bi-star-fill menu-icon"></i> <!-- Icon quản lý đánh giá -->
-                        </a>
-                        <div class="collapse" id="rating-management">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Đánh giá sản phẩm</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Đánh giá cửa hàng</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('seller.voucher')}}">
                             <span class="menu-title">Quản lý voucher</span>
@@ -477,6 +453,7 @@
     <!-- <script src="{{asset('sellers/assets/js/spinner.js')}}"></script> -->
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <!-- plugins:js -->

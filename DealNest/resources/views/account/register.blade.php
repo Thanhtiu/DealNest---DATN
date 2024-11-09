@@ -30,7 +30,8 @@
                     <div class="col-lg-4 mx-auto">
                         <div class="auth-form-light text-left p-5">
                             <div class="brand-logo">
-                                <img src="{{ asset('assets/login/assets/images/logo.svg') }}">
+                                <img src="{{asset('image/dealnest-logo.png')}}" style="width: 100px !important; height: 100px !important"
+                                    alt="Tiki Logo">
                             </div>
                             <h4>Đăng ký</h4>
                             <form class="pt-3" method="POST" action=" {{route('account.processRegister')}} ">
@@ -79,7 +80,7 @@
 
                                 <div class="mt-3 d-grid gap-2">
                                     <button type="submit"
-                                        class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"
+                                        class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn btn-account"
                                         href="../../index.html">Đăng ký</button>
                                 </div>
                                 {{-- <div class="my-2 d-flex justify-content-between align-items-center">

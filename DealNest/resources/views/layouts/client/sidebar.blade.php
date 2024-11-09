@@ -72,8 +72,8 @@
 <div class="list-group">
     <a href="{{route('account.profile.index')}}" class="list-group-item list-group-item-action active-sidebar">
         <i class="bi bi-person-circle"></i>
-        @if(Session::has('userFullName'))
-        {{Session::get('userFullName')}}
+        @if(Session::has('userName'))
+        {{Session::get('userName')}}
         @endif
         <span class="btn btn-light rounded-pill edit-profile" style="float: right;">
             <i class="bi bi-pencil-fill"></i>
@@ -86,6 +86,5 @@
     <a href="{{route('account.changePassword')}}" class="list-group-item list-group-item-action"><i class="bi bi-shield-lock"></i> Đổi Mật Khẩu</a>
     <a href="{{route('client.order')}}" class="list-group-item list-group-item-action"><i class="bi bi-cart"></i> Đơn Mua</a>
     <a href="{{route('client.favourite')}}" class="list-group-item list-group-item-action"><i class="bi bi-heart-fill"></i> Yêu Thích</a>
-    <a href="voucher.html" class="list-group-item list-group-item-action"><i class="bi bi-gift"></i> Kho Voucher</a>
     <a href="{{route('account.logout')}}" class="list-group-item list-group-item-action"><i class="bi bi-box-arrow-right"></i> Đăng Xuất</a>
 </div>

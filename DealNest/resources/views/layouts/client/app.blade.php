@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>Ogani | Template</title>
+    <link rel="icon" href="{{asset('image/dealnest-logo.png')}}" type="image/png">
+    <title>DealNest | Mua sắm & Trò truyện</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Google Font -->
@@ -45,6 +45,10 @@
 
     <!-- Header Section Begin -->
     <header>
+    @php
+    $categories = \App\Models\Category::where('parent_id',0)->get();
+    @endphp
+
         <!-- Top Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -92,33 +96,11 @@
             <div class="container-fluid">
                 <!-- Product Categories -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    @foreach($categories as $item)
                     <li class="nav-item">
-                        <a class="nav-link" href="#">điện gia dụng</a>
+                        <a class="nav-link" href="{{ route('category.show', $item->id) }}">{{$item->name}}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">xe cộ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">mẹ & bé</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">khỏe đẹp</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">nhà cửa</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">sách</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">thể thao</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">nồi cơm điện</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">máy sấy tóc</a>
-                    </li>
+                    @endforeach
                 </ul>
 
                 <!-- addre -->

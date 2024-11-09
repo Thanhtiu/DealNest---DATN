@@ -8382,7 +8382,7 @@
   --bs-gray-700: #495057;
   --bs-gray-800: #343a40;
   --bs-gray-900: #212529;
-  --bs-primary: #b66dff;
+  --bs-primary: #0d6efd;
   --bs-secondary: #c3bdbd;
   --bs-success: #1bcfb4;
   --bs-info: #198ae3;
@@ -16857,7 +16857,7 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
 /* rtl:end:remove */
 .text-primary, .list-wrapper .completed .remove {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  color: #0d6efd;
 }
 
 .text-secondary, .list-wrapper .remove {
@@ -22608,7 +22608,7 @@ code {
 
 /* gradient buttons */
 .btn-gradient-primary {
-  background: linear-gradient(to right, #da8cff, #9a55ff);
+  background: #0d6efd;
   border: 0;
   -webkit-transition: opacity 0.3s ease;
   -moz-transition: opacity 0.3s ease;
@@ -22617,7 +22617,7 @@ code {
   transition: opacity 0.3s ease;
 }
 .btn-gradient-primary:not([disabled]):not(.disabled):active, .btn-gradient-primary:not([disabled]):not(.disabled).active, .show > .btn-gradient-primary.dropdown-toggle {
-  background: linear-gradient(to right, #da8cff, #9a55ff);
+  background: #0d6efd;
 }
 .btn-gradient-primary:hover {
   opacity: 0.8;
@@ -25048,7 +25048,9 @@ dl li {
   }
 }
 .auth .brand-logo {
-  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .auth .brand-logo img {
   width: 150px;
@@ -26316,3 +26318,6 @@ dl li {
   outline: none; /* Bỏ viền bao quanh khi focus */
 }
 
+.btn-account:hover{
+  background-color: #0d6efd !important;
+}

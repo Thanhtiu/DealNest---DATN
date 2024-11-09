@@ -43,7 +43,7 @@ class AccountController extends Controller
 
                     session()->put('userEmail', $request->email);
                     session()->put('userId', $userId);
-                    session()->put('userFullName', $user->full_name);
+                    session()->put('userName', $user->name);
                     $address = Address::where('user_id', $userId)
                         ->where('active', 1)
                         ->first();
@@ -52,7 +52,6 @@ class AccountController extends Controller
                         session()->put('stringAddress', $string_address);
                     }
                     return redirect('/');
-
                 } else {
 
                     session()->put('userEmail', $request->email);
@@ -61,15 +60,12 @@ class AccountController extends Controller
                     session()->flash('alertType', 'error');
 
                     return redirect()->back();
-
                 }
-
             } else {
                 return redirect()->route('account.login')
                     ->withInput()
                     ->with('login_error', 'Email hoặc mật khẩu không chính xác! Vui lòng thử lại');
             }
-
         } else {
             return redirect()->route('account.login')
                 ->withInput()
@@ -106,7 +102,7 @@ class AccountController extends Controller
             $user->email = $request->email;
             $user->phone = $request->phone;
             $user->password = Hash::make($request->password);
-            $user->image = "default_avt.png";
+            $user->image = "user_default.jpg";
             $user->role = 'buyer';
             if ($user->save()) {
 
@@ -120,8 +116,6 @@ class AccountController extends Controller
                 session()->flash('alertType', 'success');
 
                 return redirect()->route('otp.sendOTP');
-
-
             } else {
 
                 session()->flash('alertMessage', 'Đăng ký thất bại. Vui lòng thử lại!');
@@ -129,17 +123,12 @@ class AccountController extends Controller
                 session()->flash('alertType', 'error');
 
                 return redirect()->route('account.login');
-
             }
-
-
         } else {
             return redirect()->route('account.register')
                 ->withInput()
                 ->withErrors($validator);
         }
-
-
     }
 
     public function logout()
@@ -151,10 +140,10 @@ class AccountController extends Controller
     }
 
 
-    public function forgotPassword(Request $request){
+    public function forgotPassword(Request $request)
+    {
 
         return view('account.forgotPassword');
-
     }
 
 
@@ -174,11 +163,10 @@ class AccountController extends Controller
             if ($emailExists) {
 
                 session()->put('userEmail', $request->email);
-                
+
                 session()->put('forgotPassword', true);
 
                 return redirect()->route('otp.sendOTP');
-
             } else {
 
                 return redirect()->route('account.forgotPassword')
@@ -186,20 +174,21 @@ class AccountController extends Controller
                     ->with('email_error', 'Email không tồn tại trong hệ thống.');
             }
         } else {
-    
+
             return redirect()->route('account.forgotPassword')
                 ->withInput()
                 ->withErrors($validator);
         }
     }
 
-    public function newPassword(){
+    public function newPassword()
+    {
 
         return view('account.newPassword');
-
     }
 
-    public function newPasswordProcessing(Request $request){
+    public function newPasswordProcessing(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'password' => 'required|min:3|confirmed',
@@ -208,46 +197,44 @@ class AccountController extends Controller
             'password.required' => 'Mật khẩu là bắt buộc.',
         ]);
 
-        if($validator->passes()){
+        if ($validator->passes()) {
 
-                $userEmail = session('userEmail');
+            $userEmail = session('userEmail');
 
-                $user = User::where('email', $userEmail)->first();
-        
-                if ($user) {
-        
-                    $user->password = Hash::make($request->password);
-                    
-                    $user->save();
-        
-                    session()->forget('userEmail');
-                    
-                    session()->flash('alertMessage', 'Thay đổi mật khẩu thành công!');
-                    session()->flash('alertType', 'success');
-        
-                    return redirect()->route('account.login');
-        
-                } else {
-                    return redirect()->route('account.newPassword')
-                        ->with('password_error', 'Không tìm thấy người dùng.');
-                }
+            $user = User::where('email', $userEmail)->first();
 
-        }else{
+            if ($user) {
+
+                $user->password = Hash::make($request->password);
+
+                $user->save();
+
+                session()->forget('userEmail');
+
+                session()->flash('alertMessage', 'Thay đổi mật khẩu thành công!');
+                session()->flash('alertType', 'success');
+
+                return redirect()->route('account.login');
+            } else {
+                return redirect()->route('account.newPassword')
+                    ->with('password_error', 'Không tìm thấy người dùng.');
+            }
+        } else {
 
             return redirect()->route('account.newPassword')
-            ->withInput()
-            ->withErrors($validator); 
+                ->withInput()
+                ->withErrors($validator);
         }
-        
-
     }
 
-    public function changePassword(){
+    public function changePassword()
+    {
         return view('client.password');
     }
 
-    public function changePasswordProcessing(Request $request){
-        
+    public function changePasswordProcessing(Request $request)
+    {
+
 
         $validator = Validator::make($request->all(), [
             'password' => 'required|min:3|confirmed',
@@ -260,48 +247,32 @@ class AccountController extends Controller
         ]);
 
 
-        if($validator->passes()){
+        if ($validator->passes()) {
 
-            $user = Auth::user(); 
+            $user = Auth::user();
 
             if (Hash::check($request->old_password, $user->password)) {
-                $user->password = Hash::make($request->password); 
-                $user->save(); 
+                $user->password = Hash::make($request->password);
+                $user->save();
 
                 Auth::logout();
                 session()->invalidate();
-    
+
                 session()->flash('alertMessage', 'Thay đổi mật khẩu thành công! Vui lòng đăng nhập lại');
                 session()->flash('alertType', 'success');
-    
+
                 return redirect()->route('account.login');
             } else {
-                
-                return redirect()->route('account.changePassword')
-                ->withInput()
-                ->with('password_error', 'Mật khẩu không cũ chính xác! Vui lòng thử lại');
-            }    
 
-        }else{
+                return redirect()->route('account.changePassword')
+                    ->withInput()
+                    ->with('password_error', 'Mật khẩu không cũ chính xác! Vui lòng thử lại');
+            }
+        } else {
 
             return redirect()->route('account.changePassword')
-            ->withInput()
-            ->withErrors($validator); 
-            
+                ->withInput()
+                ->withErrors($validator);
         }
-        
-
     }
-
-
-
-    
-
-
-
-
-
-
-
-
 }

@@ -53,7 +53,6 @@ Route::post('/tim-kiem', [SearchController::class, 'index'])->name('client.searc
 
 
 Route::middleware(['web'])->group(function () {
-
     Route::get('login/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('login.google');
     Route::get('auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback']);
     Route::get('/auth/facebook', [FacebookLoginController::class, 'redirectToFacebook'])->name('login.facebook');
@@ -134,6 +133,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/sua-san-pham/{id}', [ProductController::class, 'edit'])->name('seller.product.edit');
 
         Route::put('/cap-nhat-san-pham/{id}', [ProductController::class, 'update'])->name('seller.product.update');
+
+        Route::get('/danh-gia-sam-pham/{id}/{slug}', [ProductController::class, 'review'])->name('seller.product.review');
+
+        Route::post('/xoa/danh-gia/{id}', [ProductController::class, 'reviewDestroy'])->name('seller.product.reviewDestroy');
 
         Route::get('/thung-rac', [ProductController::class, 'listTrashCan'])->name('seller.product.listTrashCan');
 

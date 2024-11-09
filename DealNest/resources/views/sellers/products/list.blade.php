@@ -1,172 +1,173 @@
 @extends('layouts.sellers.app')
 
 @section('content')
-<style>  
-   .tabs {
-    display: flex;
-    border-bottom: 2px solid #f0f0f0;
-    margin-bottom: 20px;
-    justify-content: space-around;
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 8px 8px 0 0;
-}
+<style>
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #f0f0f0;
+        margin-bottom: 20px;
+        justify-content: space-around;
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 8px 8px 0 0;
+    }
 
-.tab-item {
-    padding: 12px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    color: #0d6efd;
-    text-decoration: none;
-    position: relative;
-    transition: color 0.3s ease, background-color 0.3s ease;
-}
+    .tab-item {
+        padding: 12px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        color: #0d6efd;
+        text-decoration: none;
+        position: relative;
+        transition: color 0.3s ease, background-color 0.3s ease;
+    }
 
-.tab-item.active {
-    color: #0d6efd;
-    border-bottom: 3px solid #0d6efd;
-    
-}
+    .tab-item.active {
+        color: #0d6efd;
+        border-bottom: 3px solid #0d6efd;
 
-.tab-item::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 3px;
-    background-color: var(--primary-color);
-    transition: width 0.3s ease;
-}
+    }
 
-.tab-item:hover::after {
-    width: 100%;
-    text-align: none;
-}
+    .tab-item::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 3px;
+        background-color: var(--primary-color);
+        transition: width 0.3s ease;
+    }
 
-.tab-item:hover {
-    opacity: 0.5;
-    text-decoration: none;
-}
+    .tab-item:hover::after {
+        width: 100%;
+        text-align: none;
+    }
 
-.tab-content {
-    display: none;
-}
+    .tab-item:hover {
+        opacity: 0.5;
+        text-decoration: none;
+    }
 
-.tab-content.active {
-    display: block;
-    background-color: #fff;
-    border-radius: 0 0 8px 8px;
-    padding: 20px;
-}
+    .tab-content {
+        display: none;
+    }
 
-.btn-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-}
+    .tab-content.active {
+        display: block;
+        background-color: #fff;
+        border-radius: 0 0 8px 8px;
+        padding: 20px;
+    }
 
-.btn-container a {
-    padding: 12px 24px;
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 8px;
-    font-weight: 500;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+    .btn-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
 
-.btn-container a:hover {
-    background-color: #0056b3;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    text-decoration: none;
-}
+    .btn-container a {
+        padding: 12px 24px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    font-size: 14px;
-    font-weight: 400;
-}
+    .btn-container a:hover {
+        background-color: #0056b3;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        text-decoration: none;
+    }
 
-th, td {
-    text-align: left;
-    padding: 15px 10px;
-    border-bottom: 1px solid #f0f0f0;
-    color: #333;
-}
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: 400;
+    }
 
-th {
-    background-color: #f9f9f9;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
+    th,
+    td {
+        text-align: left;
+        padding: 15px 10px;
+        border-bottom: 1px solid #f0f0f0;
+        color: #333;
+    }
 
-td {
-    vertical-align: middle;
-}
+    th {
+        background-color: #f9f9f9;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
 
-td img {
-    border-radius: 5px;
-    object-fit: cover;
-}
+    td {
+        vertical-align: middle;
+    }
 
-tr:hover {
-    background-color: #f9f9f9;
-    transition: background-color 0.3s ease;
-}
+    td img {
+        border-radius: 5px;
+        object-fit: cover;
+    }
+
+    tr:hover {
+        background-color: #f9f9f9;
+        transition: background-color 0.3s ease;
+    }
 
 
 
-.btn-icon-text {
-    padding: 8px 14px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    color: #333;
-    background-color: white;
-    font-size: 14px;
-    font-weight: 500;
-}
+    .btn-icon-text {
+        padding: 8px 14px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        color: #333;
+        background-color: white;
+        font-size: 14px;
+        font-weight: 500;
+    }
 
-.btn-icon-text i {
-    margin-right: 8px;
-    font-size: 16px;
-}
+    .btn-icon-text i {
+        margin-right: 8px;
+        font-size: 16px;
+    }
 
-.btn-icon-text:hover {
-    background-color: #f0f0f0;
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-}
+    .btn-icon-text:hover {
+        background-color: #f0f0f0;
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
 
-.btn-outline-danger {
-    border-color: #dc3545;
-    color: #dc3545;
-}
+    .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
 
-.btn-outline-danger:hover {
-    background-color: #dc3545;
-    color: white;
-}
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
 
-.btn-outline-secondary {
-    border-color: #6c757d;
-    color: #6c757d;
-}
+    .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+    }
 
-.btn-outline-secondary:hover {
-    background-color: #6c757d;
-    color: white;
-}
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: white;
+    }
 </style>
 
 <div class="btn-container">
@@ -182,281 +183,301 @@ tr:hover {
 
 <div class="tab-content active" id="tab-all">
     @if($countProductAll <= 0)
-        <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
-        @else
-        <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Tổng sản phẩm</h4>
-                        <table id="productTableAll" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Thể loại</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Giá</th>
-                                    <th>Tồn kho</th>
-                                    <th>Trang thái</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($productAll as $item)
-                                <tr>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
-                                    <td>
-                                        @if($item->product_image->isNotEmpty())
-                                        <img src="{{asset('uploads/'.$item->image)}}" alt=""
-                                            style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-                                        @endif
-                                    </td>
-                                    <td data-order="{{$item->price}}">{{$item->price}}</td>
-                                    <td>{{$item->quantity}}</td>
-                                    <td>
-                                        @if($item->status == 'pending')
-                                        
-                                        <label class="badge badge-warning">Chờ duyệt</label>
-                                        @elseif($item->status == 'approved')
-                                        <label class="badge badge-success">Hoạt động</label>
-                                        @else
-                                        <label class="badge badge-danger">Vi phạm</label>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('seller.product.edit', ['id' => $item->id]) }}"
-                                            class="btn btn-outline-secondary btn-icon-text">
-                                            <i class="bi bi-pen"></i> Sửa
-                                        </a>
-                                        <a href="{{route('seller.product.softDelete',['id'=>$item->id])}}"
-                                            class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i>
-                                            Xóa</a>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <div class="text-center no-data">
+        <img class="data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+        <p class="text-center mt-3">Chưa có sản phẩm nào !</p>
+</div>
+@else
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Tổng sản phẩm</h4>
+                <table id="productTableAll" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Thể loại</th>
+                            <th>Hình ảnh</th>
+                            <th>Giá</th>
+                            <th>Tồn kho</th>
+                            <th>Trang thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($productAll as $item)
+                        <tr>
+                            <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+                            <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
+                            <td>
+                                @if($item->product_image->isNotEmpty())
+                                <img src="{{asset('uploads/'.$item->image)}}" alt=""
+                                    style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
+                                @endif
+                            </td>
+                            <td data-order="{{$item->price}}">{{$item->price}}</td>
+                            <td>{{$item->quantity}}</td>
+                            <td>
+                                @if($item->status == 'pending')
+
+                                <label class="badge badge-warning">Chờ duyệt</label>
+                                @elseif($item->status == 'approved')
+                                <label class="badge badge-success">Hoạt động</label>
+                                @else
+                                <label class="badge badge-danger">Vi phạm</label>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('seller.product.review', ['id' => $item->id,'slug'=>$item->slug]) }}"
+                                    class="btn btn-outline-secondary btn-icon-text">
+                                    <i class="bi bi-pen"></i> Đánh giá
+                                </a>
+                                <a href="{{ route('seller.product.edit', ['id' => $item->id]) }}"
+                                    class="btn btn-outline-secondary btn-icon-text">
+                                    <i class="bi bi-pen"></i> Sửa
+                                </a>
+                                <a href="{{route('seller.product.softDelete',['id'=>$item->id])}}"
+                                    class="btn btn-outline-danger btn-icon-text"><i class="bi bi-trash"></i>
+                                    Xóa</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
-        @endif
+    </div>
+</div>
+@endif
 </div>
 <div class="tab-content" id="tab-active">
-    @if($countProductSuccess <= 0) <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
-        @else
-        <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Tổng sản phẩm</h4>
-                        <table class="table" id="productTableActive">
-                            <thead>
-                                <tr>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Thể loại</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Giá</th>
-                                    <th>Tồn kho</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($productSuccess as $item)
-                                <tr>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
-                                    <td>
-                                        @if($item->product_image->isNotEmpty())
-                                        <img src="{{asset('uploads/'.$item->image)}}" alt=""
-                                            style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-                                        @endif
-                                    </td>
-                                    <td>{{$item->price}}</td>
-                                    <td>{{$item->quantity}}</td>
-                                    <td>
-                                        <a href="" class="btn btn-outline-secondary btn-icon-text"><i
-                                                class="bi bi-pen"></i>
-                                            Sửa</a>
-                                        <a href="" class="btn btn-outline-danger btn-icon-text"><i
-                                                class="bi bi-trash"></i>
-                                            Xóa</a>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                       
+    @if($countProductSuccess <= 0) <div class="text-center no-data">
+        <img class="data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+        <p class="text-center mt-3">Chưa có sản phẩm nào được hoạt động !</p>
+</div>
+@else
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Tổng sản phẩm</h4>
+                <table class="table" id="productTableActive">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Thể loại</th>
+                            <th>Hình ảnh</th>
+                            <th>Giá</th>
+                            <th>Tồn kho</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($productSuccess as $item)
+                        <tr>
+                            <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+                            <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
+                            <td>
+                                @if($item->product_image->isNotEmpty())
+                                <img src="{{asset('uploads/'.$item->image)}}" alt=""
+                                    style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
+                                @endif
+                            </td>
+                            <td>{{$item->price}}</td>
+                            <td>{{$item->quantity}}</td>
+                            <td>
+                                <a href="{{ route('seller.product.review', ['id' => $item->id,'slug'=>$item->slug]) }}"
+                                    class="btn btn-outline-secondary btn-icon-text">
+                                    <i class="bi bi-pen"></i> Đánh giá
+                                </a>
+                                <a href="" class="btn btn-outline-secondary btn-icon-text"><i
+                                        class="bi bi-pen"></i>
+                                    Sửa</a>
+                                <a href="" class="btn btn-outline-danger btn-icon-text"><i
+                                        class="bi bi-trash"></i>
+                                    Xóa</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
 
-                    </div>
-                </div>
+
             </div>
         </div>
-        @endif
+    </div>
+</div>
+@endif
 </div>
 
 <div class="tab-content" id="tab-violations">
-    @if($countProductFail <=0) <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
-        @else
-        <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Tổng sản phẩm</h4>
-                        <table class="table" id="productTableViolations">
-                            <thead>
-                                <tr>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Thể loại</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Giá</th>
-                                    <th>Tồn kho</th>
-                                    <th>Thao tác</th>
+    @if($countProductFail <=0)<div class="text-center no-data">
+        <img class="data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+        <p class="text-center mt-3">Chưa có sản phẩm nào vi phạm !</p>
+</div>
+@else
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Tổng sản phẩm</h4>
+                <table class="table" id="productTableViolations">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Thể loại</th>
+                            <th>Hình ảnh</th>
+                            <th>Giá</th>
+                            <th>Tồn kho</th>
+                            <th>Thao tác</th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($productFail as $item)
-                                <tr>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 15, '...') }}</td>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($productFail as $item)
+                        <tr>
+                            <td>{{ \Illuminate\Support\Str::limit($item->name, 15, '...') }}</td>
+                            <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
 
-                                    <td>
-                                        @if($item->product_image->isNotEmpty())
-                                        <img src="{{asset('uploads/'.$item->image)}}" alt=""
-                                            style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-                                        @endif
-                                    </td>
-                                    <td>{{$item->price}}</td>
-                                    <td>{{$item->quantity}}</td>
-                                    <td>
-                                        <a href="" class="btn btn-outline-secondary btn-icon-text"><i
-                                                class="bi bi-pen"></i>
-                                            Sửa</a>
-                                        <a href="" class="btn btn-outline-danger btn-icon-text"><i
-                                                class="bi bi-trash"></i>
-                                            Xóa</a>
-                                    </td>
-                                </tr>
+                            <td>
+                                @if($item->product_image->isNotEmpty())
+                                <img src="{{asset('uploads/'.$item->image)}}" alt=""
+                                    style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
+                                @endif
+                            </td>
+                            <td>{{$item->price}}</td>
+                            <td>{{$item->quantity}}</td>
+                            <td>
+                                <a href="" class="btn btn-outline-secondary btn-icon-text"><i
+                                        class="bi bi-pen"></i>
+                                    Sửa</a>
+                                <a href="" class="btn btn-outline-danger btn-icon-text"><i
+                                        class="bi bi-trash"></i>
+                                    Xóa</a>
+                            </td>
+                        </tr>
 
-                                @endforeach
-                            </tbody>
-                        </table>
-                       
+                        @endforeach
+                    </tbody>
+                </table>
 
-                    </div>
-                </div>
+
             </div>
         </div>
-        @endif
+    </div>
+</div>
+@endif
 </div>
 <div class="tab-content" id="tab-pending">
-    @if($countProductPending <= 0) <img src="{{asset('sellers/assets/images/no-product-found.png')}}">
-        @else
-        <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Tổng sản phẩm</h4>
-                        <table class="table" id="productTablePending">
-                            <thead>
-                                <tr>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Thể loại</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Giá</th>
-                                    <th>Tồn kho</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($productPending as $item)
-                                <tr>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
-                                    <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
-                                    <td>
-                                        @if($item->product_image->isNotEmpty())
-                                        <img src="{{asset('uploads/'.$item->image)}}" alt=""
-                                            style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
-                                        @endif
-                                    </td>
-                                    <td>{{$item->price}}</td>
-                                    <td>{{$item->quantity}}</td>
-                                    <td>
-                                        <a href="" class="btn btn-outline-secondary btn-icon-text"><i
-                                                class="bi bi-pen"></i>
-                                            Sửa</a>
-                                        <a href="" class="btn btn-outline-danger btn-icon-text"><i
-                                                class="bi bi-trash"></i>
-                                            Xóa</a>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                       
+    @if($countProductPending <= 0) <div class="text-center no-data">
+        <img class="data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+        <p class="text-center mt-3">Chưa có sản phẩm nào chờ duyệt !</p>
+</div>
+@else
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Tổng sản phẩm</h4>
+                <table class="table" id="productTablePending">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Thể loại</th>
+                            <th>Hình ảnh</th>
+                            <th>Giá</th>
+                            <th>Tồn kho</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($productPending as $item)
+                        <tr>
+                            <td>{{ \Illuminate\Support\Str::limit($item->name, 25, '...') }}</td>
+                            <td>{{ \Illuminate\Support\Str::limit($item->category->name ?? 'Chưa có', 20, '...') }}</td>
+                            <td>
+                                @if($item->product_image->isNotEmpty())
+                                <img src="{{asset('uploads/'.$item->image)}}" alt=""
+                                    style="width: 80px; height: 80px; border-radius: 5px; object-fit: cover">
+                                @endif
+                            </td>
+                            <td>{{$item->price}}</td>
+                            <td>{{$item->quantity}}</td>
+                            <td>
+                                <a href="" class="btn btn-outline-secondary btn-icon-text"><i
+                                        class="bi bi-pen"></i>
+                                    Sửa</a>
+                                <a href="" class="btn btn-outline-danger btn-icon-text"><i
+                                        class="bi bi-trash"></i>
+                                    Xóa</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
 
-                    </div>
-                </div>
+
             </div>
         </div>
-        @endif
+    </div>
+</div>
+@endif
 </div>
 
 <script>
-        $(document).ready(function() {
-            // Hàm khởi tạo DataTable
-            function initializeDataTable(tableId) {
-                $(tableId).DataTable({
-                    "paging": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "lengthMenu": [5, 10, 25, 50],
-                    "pageLength": 5,
-                    "language": {
-                        "paginate": {
-                            "previous": "<i class='bi bi-arrow-left'></i>",
-                            "next": "<i class='bi bi-arrow-right'></i>"
-                        },
-                        "search": "Tìm kiếm:",
-                        "lengthMenu": "Hiển thị _MENU_ mục",
-                        "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục"
+    $(document).ready(function() {
+        // Hàm khởi tạo DataTable
+        function initializeDataTable(tableId) {
+            $(tableId).DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50],
+                "pageLength": 5,
+                "language": {
+                    "paginate": {
+                        "previous": "<i class='bi bi-arrow-left'></i>",
+                        "next": "<i class='bi bi-arrow-right'></i>"
                     },
-                    "dom": '<"row"<"col-md-6"l><"col-md-6"f>>' +
-                        '<"row"<"col-sm-12"tr>>' +
-                        '<"row"<"col-md-5"i><"col-md-7"p>>',
-                    "columnDefs": [{
-                        "targets": 3, // Cột giá
-                        "render": $.fn.dataTable.render.number(',', '.', 0, '', ' VND')
-                    }]
-                });
-            }
-
-            // Khởi tạo DataTable cho bảng đầu tiên khi load trang
-            initializeDataTable('#productTableAll');
-
-            // Khởi tạo DataTable khi chuyển tab
-            $('.tab-item').on('click', function() {
-                var tabId = $(this).data('tab');
-                $('.tab-item').removeClass('active');
-                $(this).addClass('active');
-                $('.tab-content').removeClass('active');
-                $('#tab-' + tabId).addClass('active');
-
-                var tableId = '#productTable' + capitalizeFirstLetter(tabId);
-
-                // Chỉ khởi tạo DataTable nếu nó chưa được khởi tạo
-                if (!$.fn.DataTable.isDataTable(tableId)) {
-                    initializeDataTable(tableId);
-                }
+                    "search": "Tìm kiếm:",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục"
+                },
+                "dom": '<"row"<"col-md-6"l><"col-md-6"f>>' +
+                    '<"row"<"col-sm-12"tr>>' +
+                    '<"row"<"col-md-5"i><"col-md-7"p>>',
+                "columnDefs": [{
+                    "targets": 3, // Cột giá
+                    "render": $.fn.dataTable.render.number(',', '.', 0, '', ' VND')
+                }]
             });
+        }
 
-            // Hàm hỗ trợ viết hoa chữ cái đầu tiên
-            function capitalizeFirstLetter(string) {
-                return string.charAt(0).toUpperCase() + string.slice(1);
+        // Khởi tạo DataTable cho bảng đầu tiên khi load trang
+        initializeDataTable('#productTableAll');
+
+        // Khởi tạo DataTable khi chuyển tab
+        $('.tab-item').on('click', function() {
+            var tabId = $(this).data('tab');
+            $('.tab-item').removeClass('active');
+            $(this).addClass('active');
+            $('.tab-content').removeClass('active');
+            $('#tab-' + tabId).addClass('active');
+
+            var tableId = '#productTable' + capitalizeFirstLetter(tabId);
+
+            // Chỉ khởi tạo DataTable nếu nó chưa được khởi tạo
+            if (!$.fn.DataTable.isDataTable(tableId)) {
+                initializeDataTable(tableId);
             }
         });
-    </script>
+
+        // Hàm hỗ trợ viết hoa chữ cái đầu tiên
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    });
+</script>
 @endsection

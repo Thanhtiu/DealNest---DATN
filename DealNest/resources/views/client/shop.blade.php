@@ -24,9 +24,7 @@
         <div class="shop-stats">
             <div class="stat-item"><i class="fa fa-shopping-bag"></i> Sản Phẩm: <span
                     class="highlight">{{$countProduct}}</span></div>
-            <div class="stat-item"><i class="fa fa-users"></i> Đang Theo: <span class="highlight">1000</span></div>
-            <div class="stat-item"><i class="fa fa-comments"></i> Tỉ Lệ Phản Hồi Chat: <span
-                    class="highlight">95%</span> (Trong Vài Giờ)</div>
+           
             <div class="stat-item"><i class="fa fa-user-plus"></i> Người Theo Dõi: <span class="highlight">
                     @if($shop->follow == 0)
                     0
@@ -61,7 +59,7 @@
             @if(count($filteredProducts) > 0)
             @foreach($filteredProducts as $item)
             <div class="card">
-                <a href="{{ route('client.productDetail', ['id' => $item->id]) }}">
+                <a href="{{ route('client.productDetail', ['id' => $item->id,'slug'=>$item->slug]) }}">
                     <div class="cardd">
                         <img src="{{ asset('uploads/'.$item->image) }}" alt="Product Image">
                         <div class="discount">-92%</div>

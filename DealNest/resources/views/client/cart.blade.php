@@ -159,9 +159,10 @@
             <div class="col-lg-12">
                 <div class="shoping__cart__table">
                     @if($cartItems->isEmpty())
-                    <div class="text-center">
-                        <img src="{{ asset('client/img/no-cart.png') }}" alt="No Cart" class="img-fit">
-                    </div>
+                    <div class="nodata-empty">
+                    <img class="nodata-data-image" src="{{ asset('image/no-data.png') }}" alt="No Data">
+                    <p class="text-center mt-3">Chưa có sản phẩm nào trong giỏ hàng!</p>
+                </div>
                     <a href="{{ route('client.index') }}" class="btn btn-primary text-center d-block">Mua hàng</a>
                     @else
                     <table>
