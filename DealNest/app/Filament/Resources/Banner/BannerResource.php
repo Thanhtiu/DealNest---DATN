@@ -31,7 +31,8 @@ class BannerResource extends Resource
 
     protected static ?int $navigationSort =  6; // vị trí hiển thị
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-flag'; // Hoặc 'heroicon-o-collection'
+
 
     public static function form(Form $form): Form
     {
@@ -107,7 +108,7 @@ class BannerResource extends Resource
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return static::getModel()::count() > 10 ? 'primary' : 'warning';
+        return static::getModel()::count() > 1 ? 'primary' : 'warning';
     }
 
     public static function getBreadcrumb(): string

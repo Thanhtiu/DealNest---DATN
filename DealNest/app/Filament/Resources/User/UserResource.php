@@ -24,6 +24,7 @@ use Filament\Forms\Set;
 use Filament\Forms\Get;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -33,7 +34,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user';
 
     protected static ?string $navigationLabel = 'Tài khoản';
 
@@ -52,12 +53,13 @@ class UserResource extends Resource
                 TextInput::make('name')
                     ->maxLength(255)
                     ->label('Tên đầy đủ'),
-                FileUpload::make('image')
+                    FileUpload::make('image')
                     ->label('Hình ảnh')
                     ->image()
-                    ->directory('users')
+                    ->disk('uploads') // Chỉ định disk 'uploads'
+                    ->directory('users') // Đặt thư mục là 'users' bên trong public/uploads
                     ->afterStateUpdated(function ($state, callable $set, callable $get) {
-
+                        // Đặt giá trị mặc định nếu không có ảnh được tải lên
                         if (empty($get('image'))) {
                             $set('image', 'default_avt.png');
                         }
@@ -105,8 +107,25 @@ class UserResource extends Resource
         ->columns([
             TextColumn::make('name')->label('Tên')->sortable()->searchable(),
             TextColumn::make('email')->label('Email')->sortable()->searchable(),
-            TextColumn::make('role')->label('Chức vụ')->sortable()->searchable(),
-            ImageColumn::make('image')->label('Hình ảnh'),
+            TextColumn::make('role')
+            ->label('Chức vụ')
+            ->sortable()
+            ->searchable()
+            ->formatStateUsing(function ($state) {
+                $roles = [
+                    'seller' => 'Người bán hàng',
+                    'buyer' => 'Người mua hàng',
+                    'staff' => 'Nhân viên',              
+                ];
+
+                return $roles[$state] ?? $state; // Trả về giá trị tiếng Việt hoặc giá trị gốc nếu không tìm thấy
+            }),
+            ImageColumn::make('image')
+    ->label('Hình ảnh')
+    ->disk('uploads') // Đảm bảo sử dụng đúng disk
+    ->url(fn ($record) => Storage::disk('uploads')->url($record->image)) // Tạo đường dẫn URL
+    ->width(100)
+    ->height(100),
 
         ])
             ->filters([

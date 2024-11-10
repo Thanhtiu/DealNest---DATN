@@ -23,7 +23,8 @@ class SellerResource extends Resource
 {
     protected static ?string $model = Seller::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag'; // Hoặc 'heroicon-o-shopping-cart'
+
 
     protected static ?string $navigationLabel = 'Danh sách cửa hàng';
 
@@ -141,7 +142,7 @@ class SellerResource extends Resource
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return static::getModel()::count() > 10 ? 'primary' : 'warning';
+        return static::getModel()::count() > 1 ? 'primary' : 'warning';
     }
 
     public static function getBreadcrumb(): string

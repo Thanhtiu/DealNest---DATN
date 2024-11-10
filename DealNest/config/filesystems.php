@@ -44,6 +44,14 @@ return [
             'throw' => false,
         ],
 
+        // Cấu hình cho disk uploads
+    'uploads' => [
+        'driver' => 'local', // Chỉ định driver là 'local' để lưu trữ trên server
+        'root' => public_path('uploads'), // Đặt thư mục lưu trữ là public/uploads
+        'url' => env('APP_URL').'/uploads', // Đường dẫn URL sẽ trả về khi truy xuất ảnh
+        'visibility' => 'public', // Đảm bảo hình ảnh có thể truy cập công khai
+    ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

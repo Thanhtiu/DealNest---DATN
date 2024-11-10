@@ -6,27 +6,32 @@ use App\Filament\Resources\Product\ProductResource\Pages;
 use App\Filament\Resources\Product\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Markdown;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use PhpParser\Node\Stmt\Label;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
 
     protected static ?string $navigationLabel = 'Sản phẩm';
 
@@ -38,19 +43,44 @@ class ProductResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $record = $form->getRecord(); // Lấy record của đối tượng hiện tại
+
+        $imageUrl = $record && $record->image 
+        ? asset('uploads/' . $record->image) // Tính toán đường dẫn ảnh nếu có
+        : null; // Nếu không có ảnh thì là null
+
+        $productImages = $record ? $record->product_image->map(function($image) {
+            return asset('uploads/' . $image->image);  // Tính toán đường dẫn ảnh phụ
+        }) : []; 
+
         return $form
         ->schema([
             Grid::make(2) 
                 ->schema([
+                    TextInput::make('name')->disabled(),
                     Select::make('seller_id')
                     ->relationship('seller','name')
                     ->label('Tên cửa hàng')->disabled(),
                     Select::make('category_id')
                     ->relationship('category','name')
                     ->label('Tên danh mục')->disabled(),
+
+                    ViewField::make('image_preview')
+                    ->label('Hình ảnh')
+                    ->view('components.image-preview', [
+                        'image' => $imageUrl // Truyền giá trị ảnh vào view
+                    ]),
+
+                      // Hiển thị tất cả ảnh của sản phẩm
+                    ViewField::make('image_preview')
+                    ->label('Ảnh phụ')
+                    ->view('components.image-preview', [
+                        'images' => $productImages // Truyền tất cả ảnh vào view
+                    ]),
+
                     Textarea::make('description')->label('Mô tả sản phẩm')->disabled(),
                 ]),
-        
+                
             Grid::make(2) 
                 ->schema([
                     TextInput::make('price')->label('Giá')->disabled(),
@@ -91,28 +121,47 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Tên')->sortable()->searchable(),
-                TextColumn::make('seller.name')->label('Cửa hàng đăng sản phẩm')->sortable()->searchable(),
+                TextColumn::make('name')->label('Tên')->sortable()->searchable()->limit(20),
+                TextColumn::make('seller.name')->label('Cửa hàng')->sortable()->searchable(),
                 TextColumn::make('status')
                     ->label('Trạng thái')
                     ->sortable()
                     ->searchable()
                     ->icon(function ($state) {
                             switch ($state) {
-                                case 'Chờ phê duyệt':
+                                case 'pending':
                                     return 'heroicon-o-clock'; 
-                                case 'Đã phê duyệt':
+                                case 'approved':
                                     return 'heroicon-o-check-circle'; 
-                                case 'Từ chối':
+                                case 'cancel':
                                     return 'heroicon-o-x-circle'; 
                                 default:
                                     return null;
                             }
+                    
                 })
                 ->formatStateUsing(function ($state) {
-                    return $state;
+                    switch ($state) {
+                        case 'pending':
+                            return 'Đang chờ';
+                        case 'approved':
+                            return 'Đã duyệt';
+                        case 'cancel':
+                            return 'Đã hủy';
+                        default:
+                            return $state;
+                    }
                 }),
-                TextColumn::make('note')->label('Ghi chú')->sortable()->searchable()
+
+                ImageColumn::make('image')
+                ->label('Hình ảnh')
+                ->disk('uploads') // Đảm bảo sử dụng đúng disk
+                ->url(fn ($record) => Storage::disk('uploads')->url($record->image)) // Tạo đường dẫn URL
+                ->width(100)
+                ->height(100),
+
+                
+            TextColumn::make('note')->label('Ghi chú')->sortable()->searchable()
             ])
             ->filters([
                 //

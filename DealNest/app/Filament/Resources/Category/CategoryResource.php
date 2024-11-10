@@ -144,7 +144,7 @@ class CategoryResource extends Resource
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return static::getModel()::count() > 10 ? 'primary' : 'warning';
+        return static::getModel()::count() > 1 ? 'primary' : 'warning';
     }
 
     public static function getBreadcrumb(): string

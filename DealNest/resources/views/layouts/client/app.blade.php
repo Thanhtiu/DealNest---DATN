@@ -15,6 +15,8 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/heroicons@1.0.6/dist/heroicons.min.css" rel="stylesheet">
+
     <!-- Css Styles -->
     {{--
     <link rel="stylesheet" href="{{asset('client/css/bootstrap.min.css')}}" type="text/css"> --}}
@@ -45,17 +47,16 @@
 
     <!-- Header Section Begin -->
     <header>
-    @php
-    $categories = \App\Models\Category::where('parent_id',0)->get();
-    @endphp
+        @php
+        $categories = \App\Models\Category::where('parent_id',0)->get();
+        @endphp
 
         <!-- Top Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <!-- Logo -->
                 <a class="navbar-brand" href="{{route('client.index')}}">
-                    <img src="{{asset('image/dealnest-logo.png')}}"
-                        alt="Tiki Logo"> <!-- Replace with your logo -->
+                    <img src="{{asset('image/dealnest-logo.png')}}" alt="Tiki Logo"> <!-- Replace with your logo -->
                     Mua sắm & Trò truyện
                 </a>
 
@@ -70,7 +71,8 @@
                 <!-- Right Side Menu -->
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('client.cart')}}"><i class="bi bi-cart" style="font-size: 20px;"></i></a>
+                        <a class="nav-link" href="{{route('client.cart')}}"><i class="bi bi-cart"
+                                style="font-size: 20px;"></i></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('seller.index')}}">Kênh người bán</a>
@@ -210,22 +212,35 @@
                     <div class="footer__widget">
                         <h6>THANH TOÁN</h6>
                         <img src="{{asset('client/img/footer/jcb.jpg')}}" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/mastercard.jpg')}}" alt="Image 2" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/mbbank.jpg')}}" alt="Image 3" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/shoppepay.png')}}" alt="Image 4" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/tragop.png')}}" alt="Image 1" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/visa.png')}}" alt="Image 3" style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/mastercard.jpg')}}" alt="Image 2"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/mbbank.jpg')}}" alt="Image 3"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/shoppepay.png')}}" alt="Image 4"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/tragop.png')}}" alt="Image 1"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/visa.png')}}" alt="Image 3"
+                            style="width: 50px; margin: 0 10px;">
                     </div>
                     <div class="footer__widget">
                         <h6>ĐƠN VỊ VẬN CHUYỂN </h6>
-                        <img src="{{asset('client/img/footer/best.png')}}" alt="Image 1" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/ghn.jpg')}}" alt="Image 2" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/ghtk.png')}}" alt="Image 3" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/grab.webp')}}" alt="Image 4" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/jt-express.jpg')}}" alt="Image 1" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/ninja.png')}}" alt="Image 2" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/shoppeexpress.png')}}" alt="Image 3" style="width: 50px; margin: 0 10px;">
-                        <img src="{{asset('client/img/footer/vnpost.png')}}" alt="Image 3" style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/best.png')}}" alt="Image 1"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/ghn.jpg')}}" alt="Image 2"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/ghtk.png')}}" alt="Image 3"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/grab.webp')}}" alt="Image 4"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/jt-express.jpg')}}" alt="Image 1"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/ninja.png')}}" alt="Image 2"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/shoppeexpress.png')}}" alt="Image 3"
+                            style="width: 50px; margin: 0 10px;">
+                        <img src="{{asset('client/img/footer/vnpost.png')}}" alt="Image 3"
+                            style="width: 50px; margin: 0 10px;">
                     </div>
 
                 </div>
