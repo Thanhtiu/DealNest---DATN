@@ -53,18 +53,26 @@ class UserResource extends Resource
                 TextInput::make('name')
                     ->maxLength(255)
                     ->label('Tên đầy đủ'),
+
                     FileUpload::make('image')
-                    ->label('Hình ảnh')
-                    ->image()
-                    ->disk('uploads') // Chỉ định disk 'uploads'
-                    ->directory('users') // Đặt thư mục là 'users' bên trong public/uploads
-                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                        // Đặt giá trị mặc định nếu không có ảnh được tải lên
-                        if (empty($get('image'))) {
-                            $set('image', 'default_avt.png');
-                        }
-                    }),
+    ->label('Hình ảnh')
+    ->image()
+    ->disk('uploads')
+    ->dehydrateStateUsing(function ($state) {
+        // Kiểm tra nếu $state là một mảng và lấy tên tệp từ đó
+        if (is_array($state)) {
+            // Giả sử $state chứa một mảng với một khóa duy nhất, lấy tên tệp từ đó
+            return $state[array_key_first($state)] ?? 'user_default.jpg';
+        }
+        // Nếu không phải mảng, trả về chính nó hoặc giá trị mặc định
+        return $state ?: 'user_default.jpg';
+    }),
+
+
+                
+                    
                 TextInput::make('email')
+                    ->email()
                     ->maxLength(255)
                     ->required()
                     ->dehydrated()
@@ -190,5 +198,7 @@ class UserResource extends Resource
     {
         return 'Quản lý tài khoản';
     }
+
+    
 
 }
