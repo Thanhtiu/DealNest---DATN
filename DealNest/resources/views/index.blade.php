@@ -140,6 +140,19 @@
         color: inherit;
         /* Dùng màu sắc của phần tử cha hoặc màu cố định khi hover */
     }
+
+    .product-title {
+        width: 1200px;
+        margin: 0 auto;
+        background-color: #fff;
+        color: #0d6efd;
+        font-size: 20px;
+        padding: 15px;
+        box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1), 0 6px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: all 0.3s ease;
+        margin-bottom: 30px;
+    }
 </style>
 
 <section class="banner-section">
@@ -149,9 +162,8 @@
             <!-- Thêm thẻ div bao quanh slider -->
             <div class="banner-slider">
                 @foreach($banners as $item)
-                <div class="banner-item">
-
-                    <img src="{{asset('storage/banners/'.$item->image)}}" alt="Banner 2">
+                <div class="banner-item">                  
+                    <img src="{{asset('storage/'.$item->image)}}" alt="Banner 2">
                 </div>
                 @endforeach
             </div>
@@ -185,6 +197,10 @@
     </div>
     <button class="scroll-button next">&gt;</button>
 </section>
+
+<h2 class="product-title">
+    Top sản phẩm
+</h2>
 
 <div class="product-container">
     @foreach($products as $item)

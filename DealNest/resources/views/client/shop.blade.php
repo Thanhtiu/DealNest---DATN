@@ -6,12 +6,11 @@
     <div class="shop-header">
         <div class="logo" style="background-image: url('{{ asset('uploads/'.$shop->background) }}') !important;">
             <div class="shop-image">
-                <img src="{{ asset('uploads/' . ($shop->logo === null ? 'logo-default-seller.png' : $shop->logo)) }}" alt="Shop Logo">
-                <button class="favorite-btn">Yêu thích</button>
+            <img src="{{ asset('uploads/' . ($shop->logo === null ? 'default/seller_default.jpg' : $shop->logo)) }}"
+            alt="Shop Logo" class="shop-logo">
             </div>
             <div class="shop-info">
                 <h1>{{$shop->store_name}}</h1>
-                <p>Online 2 phút trước</p>
                 <<button class="follow-btn" data-seller-id="{{ $shop->id }}"
                     style="background: {{ $isFollowing ? 'red' : '#0d6efd' }};
                border: {{ $isFollowing ? 'red' : '#00bcd4' }};">
@@ -103,7 +102,7 @@
             },
             success: function(response) {
                 if (response.success) {
-                    if (response.status == 'added') {
+                    if (response.status == 'create') {
                         // Khi theo dõi thành công, đổi nút thành "Hủy Theo Dõi"
                         button.text('Hủy Theo Dõi');
                         button.css('background', 'red');

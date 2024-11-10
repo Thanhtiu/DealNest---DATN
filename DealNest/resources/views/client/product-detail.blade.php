@@ -757,7 +757,7 @@
     <div class="product-info">
       <h1>{{$productDetail->name}}</h1>
       <div class="rating-sales">
-        <span>4.8 ★ (43 Đánh Giá) -</span>
+        <span>{{ number_format($averageRating, 1) }} ★ ({{$reviewCounts > 0 ? $reviewCounts : 0}} Đánh Giá) -</span>
         <span>- {{$productDetail->sales}} Đã Bán</span>
       </div>
       <div class="price-container">
@@ -778,7 +778,7 @@
         <span class="free-ship">Miễn phí vận chuyển</span>
         <div class="shipping-info">
           <span>Vận Chuyển Tới: {{$string_address}}</span>
-          <span>Phí Vận Chuyển: 0₫</span>
+          <span>Phí Vận Chuyển: 15.000₫</span>
           <p class="favourite" data-id="{{ $productDetail->id }}">
             <i class="bi {{ $isFavourited ? 'bi-heart-fill text-danger' : 'bi-heart' }}"></i>
             <span class="favourite-count">{{ $productDetail->favourite }} lượt thích</span>
@@ -864,7 +864,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" aria-selected="false">Đánh giá
-          <span>(1)</span></a>
+          <span>{{$reviewCounts > (0) ? $reviewCounts : (0)}}</span></a>
       </li>
     </ul>
     <div class="tab-content">

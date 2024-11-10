@@ -2,9 +2,9 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* 6 columns of equal width */
     gap: 10px; /* Reduced space between items */
-    margin-top: 20px;
-    margin: 70px auto; /* Centering the container with auto margins on the sides */
-    max-width: 1200px; /* Optional: Max width to center the container and prevent it from stretching too wide */
+    margin: 0px auto; /* Centering the container with auto margins on the sides */
+    max-width: 1200px; 
+    margin-bottom: 30px;
 }
 
 .card {

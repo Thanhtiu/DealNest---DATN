@@ -17,6 +17,7 @@ use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\Client\AddressController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ShopController;
+use App\Http\Controllers\Client\FollowerController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Sellers\VoucherController;
@@ -48,6 +49,7 @@ Route::post('/the-loai', [CategoryController::class, 'getProductAddress'])->name
 
 
 Route::post('/tim-kiem', [SearchController::class, 'index'])->name('client.search');
+Route::post('/theo-doi/cua-hang', [FollowerController::class, 'create'])->name('client.follow.create');
 
 
 
@@ -95,8 +97,7 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::post('/san-pham/yeu-thich/{id}', [WishListController::class, 'create']);
     Route::get('/san-pham-yeu-thich', [WishListController::class, 'index'])->name('client.favourite');
     Route::get('/san-pham-yeu-thich/xoa/{id}', [WishListController::class, 'destroy'])->name('client.wishList.destroy');
-    Route::post('/theo-doi/cua-hang', [BuyerController::class, 'followSeller'])->name('client.follow.create');
-    Route::get('/danh-sach/cua-hang', [BuyerController::class, 'index'])->name('client.follow');
+    Route::get('/danh-sach/cua-hang', [FollowerController::class, 'index'])->name('client.follow');
 
     Route::get('/voucher', [HomeController::class, 'voucher']);
 

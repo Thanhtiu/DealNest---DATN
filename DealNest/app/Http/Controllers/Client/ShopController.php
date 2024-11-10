@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 use App\Models\Seller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\User;
-use App\Models\Buyer;
+use App\Models\Follower;
 use Carbon\Carbon;
 
 class ShopController extends Controller
@@ -55,12 +57,8 @@ class ShopController extends Controller
 
         // Kiểm tra nếu người dùng đã đăng nhập
         $isFollowing = false;
-        // if (auth()->check()) {
-        //     $userId = auth()->id();
-        //     $isFollowing = User::where('id', $userId)
-        //         ->where('seller_follow_id', $shop->id)
-        //         ->exists();
-        // }
+        
+
 
 
 
@@ -74,5 +72,12 @@ class ShopController extends Controller
             'countProduct',
             'isFollowing'
         ));
+    }
+
+
+    public function follower($id){
+        $sellerId = $id;
+        $userId = Session::get('userId');
+        
     }
 }
