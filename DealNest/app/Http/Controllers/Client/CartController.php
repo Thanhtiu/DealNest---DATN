@@ -57,19 +57,33 @@ class CartController extends Controller
         }
 
         // Tìm sản phẩm
+        // Tìm sản phẩm
         $product = Product::findOrFail($request->product_id);
 
-        // Lấy giá từ request (giá bây giờ là giá trị màu sắc)
-        // Tách giá và màu từ giá trị của option
-        $colorInfo = explode('|', $request->color); // Giả sử giá trị color là "giá|màu"
+        // Xác định giá mặc định từ sản phẩm
+        $defaultPrice = $product->price;
 
-        // Kiểm tra xem mảng có đủ phần tử không
-        if (count($colorInfo) < 2) {
-            return back()->withErrors(['color' => 'Giá trị màu sắc không hợp lệ.']);
+        // Xác định giá và giá trị mặc định cho color và size
+        $colorPrice = $defaultPrice; // Sử dụng giá mặc định ban đầu
+        $selectedColor = 'Mặc định'; // Giá trị mặc định nếu không có màu
+        $selectedSize = 'Mặc định'; // Giá trị mặc định nếu không có kích thước
+
+        // Kiểm tra xem có thuộc tính "color" được gửi từ request không
+        if ($request->has('color') && $request->color != 'null') {
+            $colorInfo = explode('|', $request->color);
+
+            if (count($colorInfo) < 2) {
+                return back()->withErrors(['color' => 'Giá trị màu sắc không hợp lệ.']);
+            }
+
+            $colorPrice = (float) $colorInfo[0];
+            $selectedColor = trim($colorInfo[1]);
         }
 
-        $colorPrice = (float) $colorInfo[0]; // Giá màu
-        $selectedColor = trim($colorInfo[1]); // Màu sắc
+        // Kiểm tra xem có thuộc tính "size" được gửi từ request không
+        if ($request->has('size') && $request->size != 'null') {
+            $selectedSize = $request->size;
+        }
 
         // Tính tổng giá mới
         $totalPrice = $colorPrice * $request->quantity;
@@ -78,7 +92,7 @@ class CartController extends Controller
         $cartItem = Cart_item::where('cart_id', $cart->id)
             ->where('product_id', $product->id)
             ->where('color', $selectedColor)
-            ->where('size', $request->size)
+            ->where('size', $selectedSize)
             ->first();
 
         if ($cartItem) {
@@ -91,8 +105,8 @@ class CartController extends Controller
             Cart_item::create([
                 'cart_id' => $cart->id,
                 'product_id' => $product->id,
-                'color' => $selectedColor, // Lưu màu sắc được chọn
-                'size' => $request->size,
+                'color' => $selectedColor,
+                'size' => $selectedSize,
                 'quantity' => $request->quantity,
                 'price' => $colorPrice,
                 'total_price' => $totalPrice,
@@ -103,10 +117,12 @@ class CartController extends Controller
         $cart->total_price += $totalPrice;
 
         // Cập nhật quantity của giỏ hàng dựa trên số lượng bản ghi cart_items thuộc cart_id
-        $cart->quantity = Cart_item::where('cart_id', $cart->id)->count(); // Đếm số lượng bản ghi
+        $cart->quantity = Cart_item::where('cart_id', $cart->id)->count();
 
         // Lưu giỏ hàng
         $cart->save();
+
+
 
         return back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng');
     }

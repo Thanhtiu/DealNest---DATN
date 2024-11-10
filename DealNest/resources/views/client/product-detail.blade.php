@@ -791,17 +791,31 @@
       <form action="{{ route('cart.add') }}" method="POST">
         @csrf
         <div class="product-options">
+          @php
+          $hasSize = false;
+          $hasColor = false;
+          foreach ($productDetail->productVariants as $item) {
+          if ($item->variant === 'Kích thước') {
+          $hasSize = true;
+          }
+          if ($item->variant === 'Màu sắc') {
+          $hasColor = true;
+          }
+          }
+          @endphp
+
+          @if ($hasSize)
           <label for="size-select" class="form-label">Kích thước</label>
-          <select id="size-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;"
-            name="size">
+          <select id="size-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;" name="size">
             @foreach($productDetail->productVariants as $item)
             @if($item->variant === 'Kích thước')
             <option value="{{$item->value}}">{{$item->value}}</option>
             @endif
             @endforeach
           </select>
+          @endif
 
-
+          @if ($hasColor)
           <label for="color-select" class="form-label">Màu sắc</label>
           <select id="color-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;" name="color">
             @foreach($productDetail->productVariants as $item)
@@ -810,7 +824,16 @@
             @endif
             @endforeach
           </select>
+          @endif
+
+          @if (!$hasSize && !$hasColor)
+          <label for="default-select" class="form-label">Lựa chọn</label>
+          <select id="default-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;" name="default">
+            <option value="default">Mặc định</option>
+          </select>
+          @endif
         </div>
+
 
 
         <div class="quantity-selector">
@@ -1194,9 +1217,7 @@
 
 
 <script>
-  // JavaScript to handle chat box toggle
 
-  // Function to select a chat and show chat history
   function selectChat(user) {
     const chatContent = document.getElementById('chatContent');
     chatContent.innerHTML = `

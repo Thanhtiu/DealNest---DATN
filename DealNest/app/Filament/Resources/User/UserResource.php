@@ -126,7 +126,7 @@ class UserResource extends Resource
                     'staff' => 'Nhân viên',              
                 ];
 
-                return $roles[$state] ?? $state; // Trả về giá trị tiếng Việt hoặc giá trị gốc nếu không tìm thấy
+                return $roles[$state] ?? $state; 
             }),
             ImageColumn::make('image')
     ->label('Hình ảnh')
