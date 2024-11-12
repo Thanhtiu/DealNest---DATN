@@ -8,6 +8,8 @@ class SellerChart extends ChartWidget
 {
     protected static ?string $heading = 'Cửa hàng có doanh thu hàng đầu sản';
 
+    protected static ?int $sort = 11;
+
     protected function getData(): array
     {
         // Lấy tổng doanh thu nhóm theo seller_id và join với bảng sellers để lấy tên cửa hàng

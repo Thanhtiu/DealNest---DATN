@@ -39,7 +39,7 @@ class vnPayController extends Controller
         $vnp_OrderType = "Online";
         // $vnp_Amount = 100000 * 100;
         $vnp_Amount = $totalWithShipping * 100;
-        $vnp_Locale = "VN";
+        $vnp_Locale = "vn";
         $vnp_BankCode = "NCB";
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
          
@@ -95,6 +95,8 @@ class vnPayController extends Controller
             return response()->json(['message' => 'Đã xảy ra lỗi: ' . $e->getMessage()], 500);
         }
     }
+
+
 
 
     public function success()

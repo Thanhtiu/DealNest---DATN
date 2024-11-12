@@ -9,6 +9,8 @@ class revenueAdminChart extends ChartWidget
 {
     protected static ?string $heading = 'Tổng doanh thu DealNest theo tháng';
 
+    protected static ?int $sort = 9;
+
     protected function getData(): array
 {
     // Lấy tổng doanh thu từ bảng orders theo từng tháng
