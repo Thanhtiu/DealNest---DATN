@@ -8,6 +8,8 @@ class revenueChart extends ChartWidget
 {
     protected static ?string $heading = 'Doanh thu của sàn';
 
+    protected static ?int $sort = 10;
+
     protected function getData(): array
     {
         // Lấy tổng doanh thu theo từng tháng

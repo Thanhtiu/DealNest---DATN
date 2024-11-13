@@ -9,6 +9,8 @@ class ProductSaleChart extends ChartWidget
 {
     protected static ?string $heading = 'Sản phẩm bán chạy hàng đầu';
 
+    protected static ?int $sort = 8;
+
     protected function getData(): array
 {
     // Lấy 5 sản phẩm có doanh thu cao nhất

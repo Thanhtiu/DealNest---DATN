@@ -8,6 +8,8 @@ class orderChart extends ChartWidget
 {
     protected static ?string $heading = 'Tổng số đơn hàng theo từng tháng';
 
+    protected static ?int $sort = 6;
+
    
 
 protected function getData(): array

@@ -248,14 +248,14 @@
         <div class="left">
             <div class="sidebar">
                 <h3>{{ $parentCategory->name }}</h3>
+
                 <ul>
                     <li>
-                        {{-- <a href="#">{{ $category->name }}</a> --}}
                         <ul>
                             @php
                             $sub_id = request()->query('sub');
                             @endphp
-                            @if ($subcategories->count() > 0)
+                            @if ($subcategories->isNotEmpty())
                             @foreach ($subcategories as $subcategory)
                             <li>
                                 <a style="{{ $subcategory->id == $sub_id ? 'color:red' : '' }}"
@@ -264,14 +264,24 @@
                                 </a>
                             </li>
                             @endforeach
+                            @elseif ($relatedCategories->isNotEmpty())
+                            @foreach ($relatedCategories as $relatedCategory)
+                            <li>
+                                <a href="{{ url('category/' . $relatedCategory->id) }}">
+                                    {{ $relatedCategory->name }}
+                                </a>
+                            </li>
+                            @endforeach
                             @else
                             <li>
-                                <p>Không có danh mục con.</p>
+                                <p>Không có danh mục con hoặc danh mục cùng cấp.</p>
                             </li>
                             @endif
                         </ul>
                     </li>
                 </ul>
+
+
 
                 </li>
                 </ul>

@@ -11,7 +11,7 @@ class ProductChart extends ChartWidget
 {
     protected static ?string $heading = 'Thống kê sản phẩm mới trong tháng';
 
-  
+    protected static ?int $sort = 7;
 
     protected function getData(): array
 {
