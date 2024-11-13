@@ -17,6 +17,8 @@ class Order extends Model
         'seller_id',
         'status',
         'total',
+        'discount_rate',
+        'percent',
         'delivery_date',
         'payment_method',
         'payment_status',
@@ -55,5 +57,13 @@ class Order extends Model
     public function successOrderItems()
     {
         return $this->hasMany(OrderItem::class, 'order_id')->where('status', 'success');
+    }
+
+    public function seller(){
+        return $this->belongsTo(Seller::class);
+    }
+
+    public function voucher(){
+        return $this->belongsTo(Voucher::class);
     }
 }
