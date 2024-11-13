@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -151,7 +152,7 @@ class DashboardController extends Controller
                 })
                 ->count();
 
-
+             
 
             return view('sellers.index', compact(
                 'cancelled',
@@ -165,4 +166,19 @@ class DashboardController extends Controller
             ));
         }
     }
+
+    public function markNotificationAsRead($notificationId)
+{
+    $sellerId = Session::get('sellerId');
+    $seller = Seller::find($sellerId);
+
+    // Tìm thông báo theo ID và đánh dấu là đã đọc
+    $notification = $seller->notifications()->find($notificationId);
+    
+    if ($notification) {
+        $notification->markAsRead();
+    }
+
+    return redirect()->back(); 
+}
 }

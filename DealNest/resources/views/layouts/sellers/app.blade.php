@@ -143,6 +143,9 @@
     @php
     $seller = \App\Models\Seller::where('user_id', Auth::user()->id)->first();
     $user = \App\Models\User::find(Auth::user()->id);
+    $unreadNotifications = $seller->notifications()->whereNull('read_at')->get();
+
+
     @endphp
     <div class="container-scroller">
         <!-- partial:partials/_navbar.html -->
@@ -250,54 +253,40 @@
                         <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
                             data-bs-toggle="dropdown">
                             <i class="mdi mdi-bell-outline"></i>
+                            @if ($unreadNotifications->isNotEmpty())
                             <span class="count-symbol bg-danger"></span>
+                            @endif
+
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list"
-                            aria-labelledby="notificationDropdown">
-                            <h6 class="p-3 mb-0">Notifications</h6>
+                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                            <h6 class="p-3 mb-0">Thông báo người theo dõi</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
+
+                           
+                            <span class="badge badge-danger position-absolute top-0 end-0 m-2"></span>
+
+                            @foreach ($unreadNotifications as $notification)
+                            <a class="dropdown-item preview-item" href="{{ route('notifications.read', $notification->id) }}">
                                 <div class="preview-thumbnail">
                                     <div class="preview-icon bg-success">
                                         <i class="mdi mdi-calendar"></i>
                                     </div>
                                 </div>
-                                <div
-                                    class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                    <h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
-                                    <p class="text-gray ellipsis mb-0"> Just a reminder that you have an event today
-                                    </p>
+                                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                                    <h6 class="preview-subject font-weight-normal mb-1">{{ $notification->data['message'] }}</h6>
+                                    <p class="text-gray ellipsis mb-0"> {{ $notification->data['message'] }}</p>
                                 </div>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-warning">
-                                        <i class="mdi mdi-cog"></i>
-                                    </div>
-                                </div>
-                                <div
-                                    class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                    <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                                    <p class="text-gray ellipsis mb-0"> Update dashboard </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-info">
-                                        <i class="mdi mdi-link-variant"></i>
-                                    </div>
-                                </div>
-                                <div
-                                    class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                    <h6 class="preview-subject font-weight-normal mb-1">Launch Admin</h6>
-                                    <p class="text-gray ellipsis mb-0"> New admin wow! </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <h6 class="p-3 mb-0 text-center">See all notifications</h6>
+                            @endforeach
+
+                            @if ($unreadNotifications->isEmpty())
+                            <h6 class="p-3 mb-0 text-center">Chưa có thông báo</h6>
+                            @endif
                         </div>
+
+
+
                     </li>
                     <li class="nav-item nav-logout d-none d-lg-block">
                         <a class="nav-link" href="#">
@@ -348,7 +337,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('seller.productStatistics')}}">
                             <span class="menu-title">Thống kê sản phẩm</span>
-                            <i class="bi-bar-chart-line-fill menu-icon"></i> 
+                            <i class="bi-bar-chart-line-fill menu-icon"></i>
                         </a>
                     </li>
 
@@ -391,6 +380,25 @@
                             <i class="bi-ticket-perforated-fill menu-icon"></i> <!-- Icon voucher -->
                         </a>
                     </li>
+
+                    <!-- Quản lý lượt theo dõi -->
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#customer-management" aria-expanded="false" aria-controls="customer-management">
+                            <span class="menu-title">Quản lý khách hàng</span>
+                            <i class="bi-people menu-icon"></i> <!-- Icon quản lý khách hàng -->
+                        </a>
+                        <div class="collapse" id="customer-management">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('seller.user.order') }}">Người mua hàng</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('seller.user.follower') }}">Người theo dõi</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
                     <!-- Thông tin cửa hàng -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('seller.info')}}">

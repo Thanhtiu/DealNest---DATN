@@ -6,24 +6,22 @@
     <div class="shop-header">
         <div class="logo" style="background-image: url('{{ asset('uploads/'.$shop->background) }}') !important;">
             <div class="shop-image">
-            <img src="{{ asset('uploads/' . ($shop->logo === null ? 'default/seller_default.jpg' : $shop->logo)) }}"
-            alt="Shop Logo" class="shop-logo">
+                <img src="{{ asset('uploads/' . ($shop->logo === null ? 'default/seller_default.jpg' : $shop->logo)) }}"
+                    alt="Shop Logo" class="shop-logo">
             </div>
             <div class="shop-info">
-                <h1>{{$shop->store_name}}</h1>
-                <<button class="follow-btn" data-seller-id="{{ $shop->id }}"
-                    style="background: {{ $isFollowing ? 'red' : '#0d6efd' }};
-               border: {{ $isFollowing ? 'red' : '#00bcd4' }};">
+                <h1>{{ $shop->store_name }}</h1>
+                <button class="follow-btn" data-seller-id="{{ $shop->id }}"
+                    style="background: {{ $isFollowing ? 'red' : '#0d6efd' }}; border: {{ $isFollowing ? 'red' : '#00bcd4' }};">
                     {{ $isFollowing ? 'Hủy Theo Dõi' : 'Theo dõi' }}
-                    </button>
-
-
+                </button>
             </div>
+
         </div>
         <div class="shop-stats">
             <div class="stat-item"><i class="fa fa-shopping-bag"></i> Sản Phẩm: <span
                     class="highlight">{{$countProduct}}</span></div>
-           
+
             <div class="stat-item"><i class="fa fa-user-plus"></i> Người Theo Dõi: <span class="highlight">
                     @if($shop->follow == 0)
                     0

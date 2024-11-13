@@ -48,7 +48,7 @@ class PaymentController extends Controller
     // Xác thực dữ liệu đầu vào
     $request->validate([
         'cartItemIds' => 'required|array',
-        'totalPayment' => 'required|numeric',
+        'totalPayment' => 'required',
         'address' => 'required|string', // Thêm validation cho address
         'phone' => 'required|string',   // Thêm validation cho phone
     ]);

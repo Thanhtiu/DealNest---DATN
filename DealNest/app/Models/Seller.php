@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Adress;
 
 class Seller extends Model
 {
     use HasFactory;
+    use Notifiable;
     protected $table = 'sellers';
     protected $fillable = [
         'user_id',

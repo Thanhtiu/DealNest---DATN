@@ -1,0 +1,283 @@
+@extends('layouts.sellers.app')
+@section('content')
+<style>
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #f0f0f0;
+        margin-bottom: 20px;
+        justify-content: space-around;
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .tab-item {
+        padding: 12px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        color: #0d6efd;
+        text-decoration: none;
+        position: relative;
+        transition: color 0.3s ease, background-color 0.3s ease;
+    }
+
+    .tab-item.active {
+        color: #0d6efd;
+        border-bottom: 3px solid #0d6efd;
+
+    }
+
+    .tab-item::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 3px;
+        background-color: var(--primary-color);
+        transition: width 0.3s ease;
+    }
+
+    .tab-item:hover::after {
+        width: 100%;
+        text-align: none;
+    }
+
+    .tab-item:hover {
+        opacity: 0.5;
+        text-decoration: none;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+        background-color: #fff;
+        border-radius: 0 0 8px 8px;
+        padding: 20px;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+    }
+
+    .btn-container a {
+        padding: 12px 24px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-container a:hover {
+        background-color: #0056b3;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        text-decoration: none;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    th,
+    td {
+        text-align: left;
+        padding: 15px 10px;
+        border-bottom: 1px solid #f0f0f0;
+        color: #333;
+    }
+
+    th {
+        background-color: #f9f9f9;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    td {
+        vertical-align: middle;
+    }
+
+    td img {
+        border-radius: 5px;
+        object-fit: cover;
+    }
+
+    tr:hover {
+        background-color: #f9f9f9;
+        transition: background-color 0.3s ease;
+    }
+
+    .badge {
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .badge-warning {
+        background-color: #ffc107;
+        color: #fff;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .btn-icon-text {
+        padding: 8px 14px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        color: #333;
+        background-color: white;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .btn-icon-text i {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .btn-icon-text:hover {
+        background-color: #f0f0f0;
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: white;
+    }
+</style>
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+@if($userOrders->count() <= 0) <div class="text-center no-data">
+    <img class="data-image" src="{{ asset('image/no-data.png') }}" alt="No Data" style="width: 200px;">
+    <p class="text-center mt-3">Chưa có người dùng nào theo dõi !</p>
+    </div>
+    @else
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Danh sách người theo dõi</h4>
+                    <table class="table table-striped" id="productTableAll">
+                        <thead>
+                            <tr>
+                                <th>Số điện thoại</th>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Đã mua của bạn</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($userOrders as $item)
+                            <tr>
+                                <td>
+                                    <img src="{{ asset('uploads/' . ($item->user->image ?? 'default/user_default.jpg')) }}" alt=""
+                                        style="width: 60px; height: 60px; border-radius: 5px; object-fit: cover">
+                                </td>
+                                <td>{{$item->user->name}}</td>
+                                <td>{{$item->user->email}}</td>
+                                <td>{{$item->user->phone}}</td>
+                                <td>{{ $item->total_purchased_quantity }}</td>
+                                <td>
+
+                                    <a href="{{ route('seller.user.deleteUserOrder', ['id' => $item->user->id]) }}"
+                                        class="btn btn-outline-danger btn-icon-text">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </a>
+
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+
+    <script>
+        $(document).ready(function() {
+            // Khởi tạo DataTable
+            $('#productTableAll').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50],
+                "pageLength": 5,
+                "language": {
+                    "paginate": {
+                        "previous": "<i class='bi bi-arrow-left'></i>",
+                        "next": "<i class='bi bi-arrow-right'></i>"
+                    },
+                    "search": "Tìm kiếm:",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục"
+                },
+                "dom": '<"row"<"col-md-6"l><"col-md-6"f>>' +
+                    '<"row"<"col-sm-12"tr>>' +
+                    '<"row"<"col-md-5"i><"col-md-7"p>>'
+            });
+        });
+    </script>
+    @endsection

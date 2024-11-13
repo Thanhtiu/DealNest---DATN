@@ -133,7 +133,7 @@
                     <div class="store-list">
                         @foreach($listFollow as $item)
                         <div class="store-card">
-                            <img src="{{ asset('uploads/' . ($item->seller->logo === null ? 'logo-default-seller.png' : $item->seller->logo)) }}" alt="Shop Logo" class="store-img">
+                            <img src="{{ asset('uploads/' . ($item->seller->logo === null ? '/default/seller_default.jpg' : $item->seller->logo)) }}" alt="Shop Logo" class="store-img">
                             <div class="store-details">
                                 <h2 class="store-name">{{$item->seller->store_name}}</h2>
                                 <p>Số sản phẩm: {{$item->seller->products->count()}}</p>
@@ -167,10 +167,10 @@
             success: function(response) {
                 if (response.success) {
                     if (response.status == 'added') {
-                        toastr.success(response.message); // Hiển thị thông báo khi thành công
+                        toastr.success(response.message); 
                         window.location.reload();
                     } else if (response.status == 'removed') {
-                        toastr.success(response.message); // Hiển thị thông báo khi hủy theo dõi thành công
+                        toastr.success(response.message); 
                         window.location.reload();
                     }
                 } else {

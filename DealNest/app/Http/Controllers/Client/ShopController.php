@@ -55,10 +55,10 @@ class ShopController extends Controller
             $filteredProducts = Product::where('seller_id', $id)->get();
         }
 
-        // Kiểm tra nếu người dùng đã đăng nhập
-        $isFollowing = false;
-        
 
+        // Kiểm tra xem người dùng đã theo dõi seller này chưa
+        $userId = Session::get('userId');
+        $isFollowing = $userId ? Follower::where('user_id', $userId)->where('seller_id', $id)->exists() : false;
 
 
 
@@ -72,12 +72,5 @@ class ShopController extends Controller
             'countProduct',
             'isFollowing'
         ));
-    }
-
-
-    public function follower($id){
-        $sellerId = $id;
-        $userId = Session::get('userId');
-        
     }
 }

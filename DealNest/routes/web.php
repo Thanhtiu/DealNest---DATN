@@ -23,6 +23,7 @@ use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Sellers\VoucherController;
 use App\Http\Controllers\Sellers\OrderSellerController;
 use App\Http\Controllers\Sellers\ProdcutStatisticsController;
+use App\Http\Controllers\Sellers\UserController;
 use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\WishListController;
@@ -170,9 +171,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/don-hang/chi-tiet/{id}/{status?}', [OrderSellerController::class, 'detail'])->name('seller.order.detail');
 
         Route::post('/don-hang/xac-nhan/{id}', [OrderSellerController::class, 'confirm'])->name('seller.order.confirm');
+
         Route::get('/don-hang', [OrderSellerController::class, 'index'])->name('seller.order');
+
+        Route::get('/danh-sach/theo-doi', [UserController::class, 'follower'])->name('seller.user.follower');
+
+        Route::get('/danh-sach/nguoi-mua-hang', [UserController::class, 'order'])->name('seller.user.order');
+
+        Route::get('/xoa/nguoi-mua-hang/{id}', [UserController::class, 'deleteUserOrder'])->name('seller.user.deleteUserOrder');
+
+        Route::get('/xoa/nguoi-theo-doi/{id}', [UserController::class, 'deleteUserFollower'])->name('seller.user.deleteUserFollower');
+
+        Route::get('/thong-bao/follower/da-doc/{id}', [DashBoardController::class, 'markNotificationAsRead'])->name('notifications.read');
     });
-    // End Seller Route
     // Cart Route
     Route::get('/gio-hang', [CartController::class, 'index'])->name('client.cart');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
