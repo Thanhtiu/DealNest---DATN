@@ -46,6 +46,7 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{asset('sellers/assets/css/style.css')}}">
     <link rel="stylesheet" href="{{asset('sellers/assets/css/spinner.css')}}">
+    <link rel="stylesheet" href="{{asset('sellers/assets/css/chat.css')}}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset('sellers/assets/images/favicon.png')}}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -397,6 +398,13 @@
                                 </li>
                             </ul>
                         </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('seller.message')}}">
+                            <span class="menu-title">Tin nhắn</span>
+                            <i class="bi-info-circle-fill menu-icon"></i> <!-- Icon thông tin cửa hàng -->
+                        </a>
                     </li>
 
                     <!-- Thông tin cửa hàng -->

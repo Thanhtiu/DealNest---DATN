@@ -81,6 +81,13 @@
     </a>
 
     <a href="#" class="list-group-item list-group-item-action"><i class="bi bi-person"></i> Tài Khoản Của Tôi</a>
+    <a href="{{ route('client.notification') }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <div>
+            <i class="bi bi-bell-fill"></i> Thông báo
+        </div>
+        <span class="badge bg-danger rounded-pill">5</span> 
+    </a>
+
     <a href="{{route('client.follow')}}" class="list-group-item list-group-item-action"><i class="bi bi-shop"></i> Cửa Hàng Theo Dõi</a>
     <a href="{{route('account.address.index')}}" class="list-group-item list-group-item-action"><i class="bi bi-geo-alt"></i> Địa Chỉ</a>
     <a href="{{route('account.changePassword')}}" class="list-group-item list-group-item-action"><i class="bi bi-shield-lock"></i> Đổi Mật Khẩu</a>

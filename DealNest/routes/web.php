@@ -18,12 +18,14 @@ use App\Http\Controllers\Client\AddressController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ShopController;
 use App\Http\Controllers\Client\FollowerController;
+use App\Http\Controllers\Client\NotificationController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Sellers\InfoController;
 use App\Http\Controllers\Sellers\VoucherController;
 use App\Http\Controllers\Sellers\OrderSellerController;
 use App\Http\Controllers\Sellers\ProdcutStatisticsController;
 use App\Http\Controllers\Sellers\UserController;
+use App\Http\Controllers\Sellers\ChatController;
 use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\WishListController;
@@ -107,6 +109,8 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::post('/doi-mat-khau-xu-ly', [AccountController::class, 'changePasswordProcessing'])->name('account.changePasswordProcessing');
 
     Route::post('/danh-gia/san-pham', [ReviewController::class, 'store'])->name('client.review.store');
+
+    Route::get('/thong-bao',[NotificationController::class, 'index'])->name('client.notification');
 });
 
 
@@ -183,6 +187,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/xoa/nguoi-theo-doi/{id}', [UserController::class, 'deleteUserFollower'])->name('seller.user.deleteUserFollower');
 
         Route::get('/thong-bao/follower/da-doc/{id}', [DashBoardController::class, 'markNotificationAsRead'])->name('notifications.read');
+
+        Route::get('tin-nhan',[ChatController::class, 'index'])->name('seller.message');
     });
     // Cart Route
     Route::get('/gio-hang', [CartController::class, 'index'])->name('client.cart');
