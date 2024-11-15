@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Filament\Notifications\Events\DatabaseNotificationsSent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -31,12 +32,19 @@ use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\WishListController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\FacebookLoginController;
-
-
-
-
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [HomeController::class, 'index'])->name('client.index');
+
+Route::get('/test', function () {
+    $re = Auth::user();
+    Notification::make()
+        ->title('Saved successfully')
+        ->sendToDatabase($re);
+});
+
+
 Route::get('/category/{id}', [CategoryController::class, 'showCategory'])->name('category.show');
 
 

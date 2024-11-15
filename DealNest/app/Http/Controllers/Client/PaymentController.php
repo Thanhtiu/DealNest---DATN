@@ -85,6 +85,7 @@ class PaymentController extends Controller
         // Tính phí ship và tổng cộng với phí ship
         $orderShippingFee = $shippingFee / $totalOrders;
         $totalWithShipping = $orderTotal + $orderShippingFee;
+        $discount_rate = $totalWithShipping * 0.05;
 
         // Tạo đơn hàng với seller_id và thêm address, phone
         $order = Order::create([
@@ -92,6 +93,7 @@ class PaymentController extends Controller
             'seller_id' => $sellerId,
             'status' => 'pending',
             'total' => $totalWithShipping,
+            'discount_rate' => $discount_rate,
             'delivery_date' => now()->addDays(7),
             'payment_method' => $paymentMethod,
             'payment_status' => 'pending',

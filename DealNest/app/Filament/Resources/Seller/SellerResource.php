@@ -32,7 +32,7 @@ class SellerResource extends Resource
 
     protected static ?string $modelLabel = 'Cửa hàng';
 
-    protected static ?int $navigationSort = 8; // vị trí hiển thị
+    protected static ?int $navigationSort = 6; // vị trí hiển thị
 
 
     public static function form(Form $form): Form
