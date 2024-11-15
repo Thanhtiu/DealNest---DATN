@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         $categories = Category::where('parent_id', 0)->get();
 
-        $products = Product::with('product_image')->orderBy('sales', 'desc')->paginate(12);
+        $products = Product::with('product_image')->orderBy('sales', 'desc')->paginate(24);
 
         $banners = Banner::where('status', 1)->orderBy('created_at', 'desc')->get();
         

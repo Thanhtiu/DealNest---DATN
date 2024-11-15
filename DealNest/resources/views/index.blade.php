@@ -198,7 +198,7 @@
 </section>
 
 <h2 class="product-title">
-    Top sản phẩm
+    Sản phẩm hiện có
 </h2>
 
 <div class="product-container">

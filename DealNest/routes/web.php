@@ -44,7 +44,7 @@ Route::get('/category/{id}', [CategoryController::class, 'showCategory'])->name(
 
 // test giao diện
 Route::get('/san-pham-chi-tiet/{id}/{slug}', [ProductDetailController::class, 'index'])->name('client.productDetail');
-
+Route::get('/cua-hang/{id}', [ShopController::class, 'index'])->name('client.shop');
 
 
 Route::get('/the-loai/{caetegory_slug}/{subcategory_slug?}', [CategoryController::class, 'index']);
@@ -96,7 +96,7 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::get('/dia-chi/mac-dinh/{id}', [AddressController::class, 'setDefault'])->name('account.address.setDefault');
     Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order');
     Route::post('/don-mua/cap-nhat/trang-thai', [OrderController::class, 'updateOrderItemStatus'])->name('acccount.order.updateStatus');
-    Route::get('/cua-hang/{id}', [ShopController::class, 'index'])->name('client.shop');
+   
     Route::post('/san-pham/yeu-thich/{id}', [WishListController::class, 'create']);
     Route::get('/san-pham-yeu-thich', [WishListController::class, 'index'])->name('client.favourite');
     Route::get('/san-pham-yeu-thich/xoa/{id}', [WishListController::class, 'destroy'])->name('client.wishList.destroy');

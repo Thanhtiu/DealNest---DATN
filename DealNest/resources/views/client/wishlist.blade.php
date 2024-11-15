@@ -133,8 +133,8 @@
                         </div>
                         <div class="wishlist-item-details">
                             <h5>{{ $item->product->name }}</h5>
-                            <p>Lượt bán: {{ $item->product->sales }}</p>
-                            <p>Cửa hàng: <a href="{{$item->product->seller->id}}">{{$item->product->seller->name}}</a></p>
+                            <p>Lượt bán: {{ $item->product->sales }}
+                            <p>Cửa hàng: <a href="{{route('client.shop',['id'=>$item->product->seller->id])}}">{{$item->product->seller->name}}</a></p>
                             <p><i class="bi bi-heart-fill text-danger"></i> {{ $item->product->favourite }} lượt yêu thích</p>
                         </div>
                         <div class="wishlist-item-price">
