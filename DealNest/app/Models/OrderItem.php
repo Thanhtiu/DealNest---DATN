@@ -18,6 +18,7 @@ class OrderItem extends Model
         'color',
         'quantity',
         'total',
+        'is_reviewed',
     ];
 
     public function order()
@@ -34,8 +35,5 @@ class OrderItem extends Model
     {
         return $this->hasOneThrough(User::class, Order::class, 'id', 'id', 'order_id', 'user_id');
     }
-    public function reviews()
-    {
-        return $this->hasMany(Review::class, 'product_id', 'product_id');
-    }
+
 }

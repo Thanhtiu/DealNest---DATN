@@ -956,12 +956,10 @@
               </div>
 
               <div class="mt-4">
-                @foreach($reviews as $review)
+                @foreach($reviews->take(3) as $review) <!-- Chỉ lấy 3 đánh giá đầu tiên -->
                 <div class="border-bottom pb-3 mb-3">
                   <div class="d-flex align-items-start">
                     <img src="{{ asset('uploads/' . ($review->user->image != 'user_default.jpg' ? $review->user->image : 'default/user_default.jpg')) }}" alt="User" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit:cover;">
-
-
                     <div>
                       <h6 class="mb-1">{{ $review->user->name }}</h6>
                       <p class="mb-1 text-muted">{{ $review->created_at->format('Y-m-d H:i') }}</p>
@@ -977,12 +975,44 @@
                         <img src="{{ asset('uploads/reviews/' . $image->image) }}" alt="Product" class="mr-2" style="width: 80px;">
                         @endforeach
                       </div>
-
                     </div>
                   </div>
                 </div>
                 @endforeach
+
+                <!-- Đánh giá ẩn, nhóm tiếp theo (extra-reviews) -->
+                <div id="extra-reviews" style="display: none;">
+                  @foreach($reviews->skip(3)->take(3) as $review) <!-- Lấy nhóm tiếp theo (từ đánh giá thứ 4 trở đi) -->
+                  <div class="border-bottom pb-3 mb-3">
+                    <div class="d-flex align-items-start">
+                      <img src="{{ asset('uploads/' . ($review->user->image != 'user_default.jpg' ? $review->user->image : 'default/user_default.jpg')) }}" alt="User" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit:cover;">
+                      <div>
+                        <h6 class="mb-1">{{ $review->user->name }}</h6>
+                        <p class="mb-1 text-muted">{{ $review->created_at->format('Y-m-d H:i') }}</p>
+                        <span>{{$review->classify}}</span>
+                        <div class="d-flex align-items-center">
+                          @for ($i = 1; $i <= 5; $i++)
+                            <span class="{{ $i <= $review->rating ? 'text-warning' : 'text-muted' }}">★</span>
+                            @endfor
+                        </div>
+                        <p class="mt-2 mb-2">{{ $review->description }}</p>
+                        <div class="d-flex">
+                          @foreach($review->images as $image)
+                          <img src="{{ asset('uploads/reviews/' . $image->image) }}" alt="Product" class="mr-2" style="width: 80px;">
+                          @endforeach
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  @endforeach
+                </div>
+
+                <!-- Nút "Xem thêm" -->
+                @if($reviews->count() > 3)
+                <button id="loadMoreReviews" class="btn btn-link text-primary mt-3">Xem thêm</button>
+                @endif
               </div>
+
             </div>
           </section>
 
@@ -1217,7 +1247,6 @@
 
 
 <script>
-
   function selectChat(user) {
     const chatContent = document.getElementById('chatContent');
     chatContent.innerHTML = `
@@ -1303,4 +1332,54 @@
   });
 </script>
 
+
+<script>
+  $(document).ready(function() {
+    let currentPage = 1; // Khởi tạo trang đánh giá
+
+    $('#loadMoreReviews').on('click', function() {
+        currentPage++;
+
+        // Lấy nhóm đánh giá tiếp theo
+        const start = (currentPage - 1) * 3; // Tính vị trí bắt đầu
+        const end = start + 3; // Tính vị trí kết thúc
+
+        // Ẩn nút "Xem thêm" nếu không còn đánh giá nào
+        if (end >= {{ $reviews->count() }}) {
+            $(this).hide();
+        }
+
+        // Hiển thị nhóm tiếp theo
+        $(`#extra-reviews`).append(`
+            @foreach($reviews->skip(3)->take(3) as $review)
+            <div class="border-bottom pb-3 mb-3">
+                <div class="d-flex align-items-start">
+                    <img src="{{ asset('uploads/' . ($review->user->image != 'user_default.jpg' ? $review->user->image : 'default/user_default.jpg')) }}" alt="User" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit:cover;">
+                    <div>
+                        <h6 class="mb-1">{{ $review->user->name }}</h6>
+                        <p class="mb-1 text-muted">{{ $review->created_at->format('Y-m-d H:i') }}</p>
+                        <span>{{$review->classify}}</span>
+                        <div class="d-flex align-items-center">
+                            @for ($i = 1; $i <= 5; $i++)
+                            <span class="{{ $i <= $review->rating ? 'text-warning' : 'text-muted' }}">★</span>
+                            @endfor
+                        </div>
+                        <p class="mt-2 mb-2">{{ $review->description }}</p>
+                        <div class="d-flex">
+                            @foreach($review->images as $image)
+                            <img src="{{ asset('uploads/reviews/' . $image->image) }}" alt="Product" class="mr-2" style="width: 80px;">
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        `);
+
+        // Hiển thị các đánh giá còn lại
+        $('#extra-reviews').slideDown();
+    });
+});
+
+</script>
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Review;
 use App\Models\Review_image;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Session;
 
 class ReviewController extends Controller
@@ -20,6 +21,9 @@ class ReviewController extends Controller
         $review->user_id = $userId;
         $review->rating = $request->rating;
         $review->description = $request->description;
+        $orderItem = OrderItem::find($request->orderItem_id);
+        $orderItem->is_reviewed = true;
+        $orderItem->save();
         $review->save();
 
         if ($request->hasFile('images')) {
@@ -35,6 +39,6 @@ class ReviewController extends Controller
         }
 
 
-        return redirect()->back()->with('success', 'Gửi đánh giá thành công!');
+        return redirect()->back()->with('success', 'Cảm ơn bạn đã đánh giá!');
     }
 }

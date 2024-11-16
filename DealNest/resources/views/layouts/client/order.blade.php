@@ -151,16 +151,20 @@
 
                 <!-- Nút đánh giá sản phẩm -->
                 @if($order->status === 'completed')
+                @if(!$item->is_reviewed)
                 <button type="button" class="btn btn-primary review-button"
                     data-toggle="modal"
                     data-target="#reviewModal"
                     data-product-id="{{ $item->product->id }}"
+                    data-orderitem-id="{{ $item->id }}"
                     data-product-name="{{ $item->product->name }}"
                     data-product-image="{{ asset('uploads/' . $item->product->image) }}"
                     data-product-type="Phân loại: {{ $item->color }}, Size: {{ $item->size }}">
                     Đánh giá sản phẩm
-                </button>
-                @endif
+                    @else
+                    <button class="secondary-button">Đã đánh giá</button>
+                    @endif
+                    @endif
             </div>
         </div>
         @endforeach

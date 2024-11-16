@@ -263,7 +263,6 @@
                 <!-- Thêm form -->
                 <form id="reviewForm" action="{{route('client.review.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf <!-- Thêm token CSRF để bảo mật -->
-
                     <!-- Thông tin sản phẩm -->
                     <div class="product-info">
                         <img src="https://via.placeholder.com/80" id="modalProductImage" alt="Hình ảnh sản phẩm">
@@ -272,6 +271,7 @@
                             <p id="modalProductType">Phân loại: Điện tử</p>
                             <input type="hidden" id="productId" name="product_id">
                             <input type="hidden" id="classify" name="classify">
+                            <input type="hidden" id="orderItem_id" name="orderItem_id">
                         </div>
                     </div>
 
@@ -378,13 +378,14 @@
 
         $('.review-button').on('click', function() {
             const productId = $(this).data('product-id');
+            const orderItem_id = $(this).data('orderitem-id'); // Dùng data-orderitem-id thay vì orderItem_id
             const productName = $(this).data('product-name');
             const productImage = $(this).data('product-image');
             const productType = $(this).data('product-type');
-            const classify = $(this).data('classify');
 
             $('#productId').val(productId);
             $('#classify').val(productType);
+            $('#orderItem_id').val(orderItem_id); // Đặt giá trị vào input ẩn
             $('#modalProductName').text(productName);
             $('#modalProductImage').attr('src', productImage);
             $('#modalProductType').text(productType);
