@@ -508,7 +508,7 @@
           },
           title: {
             display: true,
-            text: 'Thống kê số lượng người dùng theo tháng',
+            text: 'Thống kê số lượng người mua theo tháng',
             color: '#007bff',
             font: {
               size: 18

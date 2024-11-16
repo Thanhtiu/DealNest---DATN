@@ -144,9 +144,7 @@
                                     <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => $order->status]) }}" class="btn btn-outline-secondary btn-icon-text">
                                         <i class="bi bi-eye"></i> Chi tiết
                                     </a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text">
-                                        <i class="bi bi-trash"></i> Xóa
-                                    </a>
+                                    
                                 </td>
                             </tr>
                             @endforeach
@@ -198,9 +196,7 @@
                                     <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'pending']) }}" class="btn btn-outline-secondary btn-icon-text">
                                         <i class="bi bi-eye"></i> Chi tiết
                                     </a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text">
-                                        <i class="bi bi-trash"></i> Xóa
-                                    </a>
+                                    
                                 </td>
                             </tr>
                             @endforeach
@@ -253,9 +249,7 @@
                                     <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'waiting_for_delivery']) }}" class="btn btn-outline-secondary btn-icon-text">
                                         <i class="bi bi-eye"></i> Chi tiết
                                     </a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text">
-                                        <i class="bi bi-trash"></i> Xóa
-                                    </a>
+                                    
                                 </td>
                             </tr>
                             @endforeach
@@ -307,9 +301,7 @@
                                     <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'refused']) }}" class="btn btn-outline-secondary btn-icon-text">
                                         <i class="bi bi-eye"></i> Chi tiết
                                     </a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text">
-                                        <i class="bi bi-trash"></i> Xóa
-                                    </a>
+                                    
                                 </td>
                             </tr>
                             @endforeach
@@ -361,9 +353,7 @@
                                     <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'cancelled']) }}" class="btn btn-outline-secondary btn-icon-text">
                                         <i class="bi bi-eye"></i> Chi tiết
                                     </a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text">
-                                        <i class="bi bi-trash"></i> Xóa
-                                    </a>
+                                    
                                 </td>
                             </tr>
                             @endforeach
@@ -415,9 +405,7 @@
                                     <a href="{{ route('seller.order.detail', ['id' => $order->id, 'status' => 'completed']) }}" class="btn btn-outline-secondary btn-icon-text">
                                         <i class="bi bi-eye"></i> Chi tiết
                                     </a>
-                                    <a href="" class="btn btn-outline-danger btn-icon-text">
-                                        <i class="bi bi-trash"></i> Xóa
-                                    </a>
+                                    
                                 </td>
                             </tr>
                             @endforeach

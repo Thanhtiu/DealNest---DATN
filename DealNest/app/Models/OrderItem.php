@@ -16,7 +16,7 @@ class OrderItem extends Model
         'product_id',
         'size',
         'color',
-        'quantity', 
+        'quantity',
         'total',
     ];
 
@@ -33,5 +33,9 @@ class OrderItem extends Model
     public function user()
     {
         return $this->hasOneThrough(User::class, Order::class, 'id', 'id', 'order_id', 'user_id');
+    }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'product_id', 'product_id');
     }
 }

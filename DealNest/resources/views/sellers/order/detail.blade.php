@@ -210,19 +210,31 @@
         <form action="{{ route('seller.order.confirm', ['id' => $order->id]) }}" method="POST">
             @csrf
             <div class="delivery_date">
-                <label for="delivery-date" class="form-label">Chọn ngày giao hàng:</label>
+                <label for="delivery-date" class="form-label">
+                    {{ $order->status === 'pending' ? 'Chọn ngày giao hàng' : 'Ngày giao hàng' }}
+                </label>
+
                 <input type="date" id="delivery-date" class="delivery-date-input" name="delivery_date" value="{{$order->delivery_date}}">
             </div>
             <select class="form-control order-status-select" name="status">
+                @if ($order->status == 'pending')
                 <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>⏳ Chờ duyệt</option>
                 <option value="waiting_for_delivery" {{ $order->status == 'waiting_for_delivery' ? 'selected' : '' }}>✔️ Duyệt</option>
-                <option value="cancelled" {{ $order->status == 'refuse' ? 'selected' : '' }}>❌ Từ chối</option>
-                <option value="refuse" {{ $order->status == 'cancelled' ? 'selected' : '' }}>⚠️ Khách hủy</option>
+                <option value="refuse" {{ $order->status == 'refuse' ? 'selected' : '' }}>❌ Từ chối</option>
+                @elseif ($order->status == 'waiting_for_delivery')
+                <option value="waiting_for_delivery"    >✔️ Đang giao</option>
+                @elseif ($order->status == 'completed')
+                <option value="completed">✅ Hoàn thành</option>
+                @elseif ($order->status == 'refuse')
+                <option value="refuse">❌ Từ chối</option>
+                @endif
             </select>
-
+            @if($order->status == 'pending' || $order->status == 'refuse')
             <textarea class="form-control mt-2" name="cancellation_reason" placeholder="Nhập ghi chú...">{{$order->cancellation_reason}}</textarea>
-
+            @endif
+            @if($order->status==='pending')
             <button type="submit" class="btn btn-primary mt-3">Cập nhật</button>
+            @endif
         </form>
         <a href="" class="btn btn-secondary mt-2">In đơn hàng</a>
         <a href="{{route('seller.order')}}" class="btn btn-secondary mt-2">Trở về</a>

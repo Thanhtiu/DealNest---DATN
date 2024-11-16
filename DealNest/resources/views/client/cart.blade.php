@@ -260,7 +260,7 @@
             </span>
             <span class="savings">Tiết kiệm ₫43k</span>
         </div>
-        <button type="button" class="purchase-button">Mua Hàng</button>
+        <button type="button" class="purchase-button btn btn-primary">Mua Hàng</button>
     </div>
 </div>
 

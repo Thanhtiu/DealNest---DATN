@@ -25,11 +25,10 @@ class OrderController extends Controller
                             ->whereIn('payment_status', ['pending', 'paid']);
                     });
             })
+            ->with('seller')
             ->whereHas('orderItems')
-            ->with('orderItems.product')
+            ->with('orderItems.product')   
             ->get();
-
-
         // Đơn hàng đang chờ xác nhận
         $pending = Order::where('user_id', $userId)
             ->where('status', 'pending')
@@ -43,10 +42,11 @@ class OrderController extends Controller
                             ->where('payment_status', 'pending');
                     });
             })
+            ->with('seller')
             ->whereHas('orderItems')
             ->with('orderItems.product')
             ->get();
-
+            
         // Đơn hàng chờ giao hàng
         $waitingForDelivery = Order::where('user_id', $userId)
             ->where('status', 'waiting_for_delivery')
@@ -60,6 +60,7 @@ class OrderController extends Controller
                             ->where('payment_status', 'pending');
                     });
             })
+            ->with('seller')
             ->whereHas('orderItems')
             ->with('orderItems.product')
             ->get();
@@ -78,6 +79,7 @@ class OrderController extends Controller
                             ->where('payment_status', 'paid');
                     });
             })
+            ->with('seller')
             ->whereHas('orderItems')
             ->with('orderItems.product')
             ->get();
@@ -95,6 +97,7 @@ class OrderController extends Controller
                             ->where('payment_status', 'pending');
                     });
             })
+            ->with('seller')
             ->whereHas('orderItems')
             ->with('orderItems.product')
             ->get();
@@ -111,10 +114,10 @@ class OrderController extends Controller
                             ->where('payment_status', 'pending');
                     });
             })
+            ->with('seller')
             ->whereHas('orderItems')
             ->with('orderItems.product')
             ->get();
-
         return view('client.order', compact('all', 'pending', 'waitingForDelivery', 'completed', 'refuse', 'cancelled'));
     }
 

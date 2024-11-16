@@ -109,7 +109,6 @@
     /* Order Item */
     .order-item {
         display: flex;
-        justify-content: space-between;
         align-items: center;
         padding: 10px;
         margin-bottom: 15px;

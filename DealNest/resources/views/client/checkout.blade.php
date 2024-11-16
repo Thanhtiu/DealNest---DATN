@@ -273,16 +273,7 @@
         /* Aligns the button to the right */
     }
 
-    .place-order button {
-        background-color: #ff4747;
-        color: white;
-        padding: 10px 20px;
-        font-size: 14px;
-        /* Slightly smaller font size */
-        border-radius: 5px;
-        border: none;
-        cursor: pointer;
-    }
+    
 
 
 
@@ -684,10 +675,8 @@
 
             <!-- Danh sách phương thức thanh toán (Ẩn mặc định) -->
             <div id="payment-options" style="display: none; margin-top: 10px;">
-                <div class="payment-method-button" data-method="ShopeePay" style="cursor: pointer;">Ví ShopeePay</div>
                 <div class="payment-method-button" data-method="vnpay" style="cursor: pointer;">VNPay</div>
-                <div class="payment-method-button" data-method="master_card" style="cursor: pointer;">Thẻ Tín dụng/Ghi
-                    nợ
+                <div class="payment-method-button" data-method="master_card" style="cursor: pointer;">Card
                 </div>
                 <div class="payment-method-button" data-method="cod" style="cursor: pointer;">Thanh toán khi nhận hàng
                 </div>
@@ -723,7 +712,7 @@
 
         <!-- Place Order Button -->
         <div class="place-order">
-            <button id="order-button"><i class="bi bi-bag-check-fill"></i> Đặt hàng</button>
+            <button id="order-button" class="btn btn-primary"><i class="bi bi-bag-check-fill"></i> Đặt hàng</button>
             <p>Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo <a href="#"><i
                         class="bi bi-exclamation-triangle"></i> Điều khoản Shopee</a></p>
         </div>

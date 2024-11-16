@@ -13,82 +13,81 @@ use Illuminate\Support\Facades\DB;
 
 class vnPayController extends Controller
 {
-    public function vnpay_payment() {
+    public function vnpay_payment()
+    {
         try {
             $orderIds = session('orderIds');
             $totalWithShipping = session('totalWithShipping');
-            
+
             // Kiểm tra xem giá trị đã tồn tại trong session hay chưa
             if (!$orderIds || !$totalWithShipping) {
                 return 'Không tìm thấy thông tin đơn hàng.';
             }
-            
+
             // Tạo chuỗi từ mảng orderIds
             $orderIdString = implode(',', $orderIds);
-            
+
             // Lưu giá trị "vnpay" vào session cho paymentMetho
-           
-        // call API
-        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = route("vnpay.success");
-        $vnp_TmnCode = "43MQAL12";//Mã website tại VNPAY 
-        $vnp_HashSecret = "KAA3D57BUMB4IGKSKD470IUAEYD3MNDF"; //Chuỗi bí mật
-        
-        $vnp_TxnRef = $orderIdString; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này 
-        $vnp_OrderInfo = "Thanh toán VNPAY";
-        $vnp_OrderType = "Online";
-        // $vnp_Amount = 100000 * 100;
-        $vnp_Amount = $totalWithShipping * 100;
-        $vnp_Locale = "vn";
-        $vnp_BankCode = "NCB";
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-         
-        $inputData = array(
-            "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount,
-            "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => $vnp_OrderInfo,
-            "vnp_OrderType" => $vnp_OrderType,
-            "vnp_ReturnUrl" => $vnp_Returnurl,
-            "vnp_TxnRef" => $vnp_TxnRef,
-        );
-        
-        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
-            $inputData['vnp_BankCode'] = $vnp_BankCode;
-        }
-        if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
-            $inputData['vnp_Bill_State'] = $vnp_Bill_State;
-        }
-        
-        //var_dump($inputData);
-        ksort($inputData);
-        $query = "";
-        $i = 0;
-        $hashdata = "";
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
-            } else {
-                $hashdata .= urlencode($key) . "=" . urlencode($value);
-                $i = 1;
+
+            // call API
+            $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+            $vnp_Returnurl = route("vnpay.success");
+            $vnp_TmnCode = "43MQAL12"; //Mã website tại VNPAY 
+            $vnp_HashSecret = "KAA3D57BUMB4IGKSKD470IUAEYD3MNDF"; //Chuỗi bí mật
+
+            $vnp_TxnRef = $orderIdString; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này 
+            $vnp_OrderInfo = "Thanh toán VNPAY";
+            $vnp_OrderType = "Online";
+            // $vnp_Amount = 100000 * 100;
+            $vnp_Amount = $totalWithShipping * 100;
+            $vnp_Locale = "vn";
+            $vnp_BankCode = "NCB";
+            $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+
+            $inputData = array(
+                "vnp_Version" => "2.1.0",
+                "vnp_TmnCode" => $vnp_TmnCode,
+                "vnp_Amount" => $vnp_Amount,
+                "vnp_Command" => "pay",
+                "vnp_CreateDate" => date('YmdHis'),
+                "vnp_CurrCode" => "VND",
+                "vnp_IpAddr" => $vnp_IpAddr,
+                "vnp_Locale" => $vnp_Locale,
+                "vnp_OrderInfo" => $vnp_OrderInfo,
+                "vnp_OrderType" => $vnp_OrderType,
+                "vnp_ReturnUrl" => $vnp_Returnurl,
+                "vnp_TxnRef" => $vnp_TxnRef,
+            );
+
+            if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+                $inputData['vnp_BankCode'] = $vnp_BankCode;
             }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
-        }
-        
-        $vnp_Url = $vnp_Url . "?" . $query;
-        if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//  
-            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
-        }
-        header('Location: ' . $vnp_Url);
-        die();
-    
-            
+            if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
+                $inputData['vnp_Bill_State'] = $vnp_Bill_State;
+            }
+
+            //var_dump($inputData);
+            ksort($inputData);
+            $query = "";
+            $i = 0;
+            $hashdata = "";
+            foreach ($inputData as $key => $value) {
+                if ($i == 1) {
+                    $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+                } else {
+                    $hashdata .= urlencode($key) . "=" . urlencode($value);
+                    $i = 1;
+                }
+                $query .= urlencode($key) . "=" . urlencode($value) . '&';
+            }
+
+            $vnp_Url = $vnp_Url . "?" . $query;
+            if (isset($vnp_HashSecret)) {
+                $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
+                $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+            }
+            header('Location: ' . $vnp_Url);
+            die();
         } catch (\Exception $e) {
             // Ghi lỗi vào log và trả về thông báo lỗi
             \Log::error('Lỗi trong vnpay_payment: ' . $e->getMessage());
@@ -100,63 +99,55 @@ class vnPayController extends Controller
 
 
     public function success()
-{
-    // Lấy userId từ auth() và productIds từ session
-    $userId = auth()->id();
-    $productIds = session('productIds');
-    
-    // Kiểm tra xem session có chứa productIds hay không
-    if (empty($productIds)) {
-        return response()->json(['message' => 'Không tìm thấy sản phẩm để xóa.'], 404);
-    }
-    
-    // Truy vấn cartId từ bảng carts dựa vào userId
-    $cartId = Cart::where('user_id', $userId)->value('id');
-    
-    // Kiểm tra xem cartId có tồn tại không
-    if (!$cartId) {
-        return response()->json(['message' => 'Không tìm thấy giỏ hàng cho người dùng này.'], 404);
-    }
-    
-    // Thực hiện xóa các CartItem với điều kiện cart_id và product_id
-    Cart_item::where('cart_id', $cartId)
-        ->whereIn('product_id', $productIds)
-        ->delete();
-    
-    // Kiểm tra phương thức thanh toán
-    if (session('paymentMethod') === 'vnpay' || session('paymentMethod') === 'master_card') {
-        // Lấy orderIds từ session
-        $orderIds = session('orderIds');
+    {
+        // Lấy userId từ auth() và productIds từ session
+        $userId = auth()->id();
+        $productIds = session('productIds');
 
-        // Kiểm tra xem orderIds có tồn tại và là một mảng không
-        if (is_array($orderIds) && !empty($orderIds)) {
-            // Cập nhật payment_status cho các đơn hàng
-            $updatedRows = DB::table('orders')
-                ->whereIn('id', $orderIds)
-                ->update(['payment_status' => 'paid']);
-            
-            // Trả về thông báo thành công
-            return response()->json(['message' => 'Đã cập nhật trạng thái thanh toán thành công.', 'updated_rows' => $updatedRows]);
-        } else {
-            return response()->json(['message' => 'orderIds không hợp lệ hoặc không có dữ liệu.'], 400);
+        // Kiểm tra xem session có chứa productIds hay không
+        if (empty($productIds)) {
+            return response()->json(['message' => 'Không tìm thấy sản phẩm để xóa.'], 404);
         }
+
+        // Truy vấn cartId từ bảng carts dựa vào userId
+        $cartId = Cart::where('user_id', $userId)->value('id');
+
+        // Kiểm tra xem cartId có tồn tại không
+        if (!$cartId) {
+            return response()->json(['message' => 'Không tìm thấy giỏ hàng cho người dùng này.'], 404);
+        }
+
+        // Thực hiện xóa các CartItem với điều kiện cart_id và product_id
+        Cart_item::where('cart_id', $cartId)
+            ->whereIn('product_id', $productIds)
+            ->delete();
+
+        // Kiểm tra phương thức thanh toán
+        if (session('paymentMethod') === 'vnpay' || session('paymentMethod') === 'master_card') {
+            // Lấy orderIds từ session
+            $orderIds = session('orderIds');
+
+            // Kiểm tra xem orderIds có tồn tại và là một mảng không
+            if (is_array($orderIds) && !empty($orderIds)) {
+                // Cập nhật payment_status cho các đơn hàng
+                $updatedRows = DB::table('orders')
+                    ->whereIn('id', $orderIds)
+                    ->update(['payment_status' => 'paid']);
+
+                // Trả về thông báo thành công
+                return redirect()->route('client.order')
+                    ->with('success', 'Mua hàng thành công!')
+                    ->with('updated_rows', $updatedRows);
+            } else {
+                return response()->json(['message' => 'orderIds không hợp lệ hoặc không có dữ liệu.'], 400);
+            }
+        }
+
+        // Xóa session productIds sau khi xóa xong
+        session()->forget('productIds');
+        session()->forget('orderIds');
+        session()->forget('paymentMethod');
+
+        return redirect()->route('client.order')->with('success', true)->with('message', 'Mua hàng thành công!');
     }
-
-    // Xóa session productIds sau khi xóa xong
-    session()->forget('productIds');
-    session()->forget('orderIds');
-    session()->forget('paymentMethod');
-
-    return response()->json(['message' => 'Đã xóa các sản phẩm khỏi giỏ hàng thành công.']);
-}
-
-
-    
-    
-    
-    
-    
-    
-
-    
 }
