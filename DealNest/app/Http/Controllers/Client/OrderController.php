@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -27,7 +28,7 @@ class OrderController extends Controller
             })
             ->with('seller')
             ->whereHas('orderItems')
-            ->with('orderItems.product')   
+            ->with('orderItems.product')
             ->get();
         // Đơn hàng đang chờ xác nhận
         $pending = Order::where('user_id', $userId)
@@ -46,7 +47,7 @@ class OrderController extends Controller
             ->whereHas('orderItems')
             ->with('orderItems.product')
             ->get();
-            
+
         // Đơn hàng chờ giao hàng
         $waitingForDelivery = Order::where('user_id', $userId)
             ->where('status', 'waiting_for_delivery')
@@ -132,10 +133,20 @@ class OrderController extends Controller
     {
         $order = Order::find($request->order_item_id);
 
+
         if ($order) {
             $order->status = $request->status;
             if ($request->status === 'completed') {
+                $orderItem = OrderItem::where('order_id', $order->id)->get();
                 $order->payment_status = 'paid';
+                foreach ($orderItem as $item) {
+                    $product = Product::find($item->product_id);
+                    $product->decrement('quantity', $item->quantity);
+                    if ($product) {
+                        $product->increment('sales', $item->quantity);
+                        $product->save();
+                    }
+                }
             }
             $order->save();
             return response()->json([
