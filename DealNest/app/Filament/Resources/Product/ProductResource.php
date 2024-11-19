@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use PhpParser\Node\Stmt\Label;
 use Illuminate\Support\Facades\Storage;
+use Filament\Tables\Actions\Action;
 
 
 class ProductResource extends Resource
@@ -78,7 +79,20 @@ class ProductResource extends Resource
                         'images' => $productImages // Truyền tất cả ảnh vào view
                     ]),
 
-                    Textarea::make('description')->label('Mô tả sản phẩm')->disabled(),
+                    
+
+                    Textarea::make('description')
+                    ->label('Mô tả sản phẩm')
+                    ->disabled()
+                    ->afterStateHydrated(function (Textarea $component, $state) {
+                        $component->state(strip_tags($state)); // Loại bỏ HTML
+                    })
+                    ->extraAttributes([
+                        'class' => 'w-full', // Cho phép chiều rộng đầy đủ
+                        'style' => 'height: 200px;' // Đặt chiều cao trực tiếp bằng style
+                    ])
+                
+                    
                 ]),
                 
             Grid::make(2) 
@@ -123,36 +137,8 @@ class ProductResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Tên')->sortable()->searchable()->limit(20),
                 TextColumn::make('seller.name')->label('Cửa hàng')->sortable()->searchable(),
-                TextColumn::make('status')
-                    ->label('Trạng thái')
-                    ->sortable()
-                    ->searchable()
-                    ->icon(function ($state) {
-                            switch ($state) {
-                                case 'pending':
-                                    return 'heroicon-o-clock'; 
-                                case 'approved':
-                                    return 'heroicon-o-check-circle'; 
-                                case 'cancel':
-                                    return 'heroicon-o-x-circle'; 
-                                default:
-                                    return null;
-                            }
-                    
-                })
-                ->formatStateUsing(function ($state) {
-                    switch ($state) {
-                        case 'pending':
-                            return 'Đang chờ';
-                        case 'approved':
-                            return 'Đã duyệt';
-                        case 'cancel':
-                            return 'Đã hủy';
-                        default:
-                            return $state;
-                    }
-                }),
 
+            
                 ImageColumn::make('image')
                 ->label('Hình ảnh')
                 ->disk('uploads') // Đảm bảo sử dụng đúng disk
@@ -160,14 +146,68 @@ class ProductResource extends Resource
                 ->width(100)
                 ->height(100),
 
+
                 
-            TextColumn::make('note')->label('Ghi chú')->sortable()->searchable()
+                TextColumn::make('status')
+                ->label('Trạng thái')
+                ->sortable()
+                ->searchable()
+                ->icon(fn ($state) => match ($state) {
+                    'pending' => 'heroicon-o-clock',
+                    'approved' => 'heroicon-o-check-circle',
+                    'cancel' => 'heroicon-o-x-circle',
+                    default => null,
+                })
+                ->color(fn ($state) => match ($state) {
+                    'pending' => 'yellow', // Màu vàng cho pending
+                    'approved' => 'green', // Màu xanh cho approved
+                    'cancel' => 'red',     // Màu đỏ cho cancel
+                    default => 'gray',     // Màu xám mặc định
+                })
+                ->formatStateUsing(fn ($state) => match ($state) {
+                    'pending' => 'Đang chờ',
+                    'approved' => 'Đã duyệt',
+                    'cancel' => 'Đã hủy',
+                    default => $state,
+                }),
+
+                
+                TextColumn::make('note')
+                ->label('Ghi chú')
+                ->sortable()
+                ->searchable()
+                ->limit(40)
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()->label('Chi tiết sản phẩm'),
+                Tables\Actions\EditAction::make()->label('Chi tiết'),
+
+                Action::make('Approve')
+                ->label(fn (Product $record) => match ($record->status) {
+                    'pending' => 'Duyệt',
+                    'approved' => 'Đã phê duyệt',
+                    'cancel' => 'Đã từ chối',
+                })
+                ->icon(fn (Product $record) => match ($record->status) {
+                    'pending' => 'heroicon-o-check',
+                    'approved' => 'heroicon-o-badge-check',
+            'cancel' => 'heroicon-o-x-circle',
+                })
+                ->action(function (Product $record) {
+                    // Cập nhật trạng thái thành 'approved'
+                    $record->status = 'approved';
+                    $record->save();
+                })
+                ->color(fn (Product $record) => match ($record->status) {
+                    'pending' => 'success',
+                    'approved' => 'gray',
+                    'cancel' => 'danger',
+                })
+                ->visible(fn (Product $record) => $record->status === 'pending') // Chỉ hiện nếu là pending
+                ->disabled(fn (Product $record) => $record->status !== 'pending'),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
