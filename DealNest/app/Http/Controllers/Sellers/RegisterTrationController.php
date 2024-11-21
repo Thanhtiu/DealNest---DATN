@@ -115,11 +115,14 @@ class RegisterTrationController extends Controller
             'address_id' => $address->id,
             'join' => Carbon::now()->toDateString(),
             'logo' => 'seller_default.jpg',
+            'status' => 2, //2 tức là chờ duyệt cửa hàng, 1 là thành cửa hàng
         ]);
 
-        $user->role = 'seller';
-        $user->save();
+        return redirect()->route('seller.register.pendingStore')->with('success', 'Đăng ký người bán thành công');
+    }
 
-        return redirect()->route('seller.index')->with('success', 'Đăng ký người bán thành công');
+    public function pendingStore()
+    {
+        return view('sellers.pendingStore.index');
     }
 }

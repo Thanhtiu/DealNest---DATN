@@ -44,7 +44,77 @@
 
 </head>
 
+<style>
+    
+  .navbar-nav .nav-item .nav-link {
+    color: #333; /* Màu chữ */
+    font-size: 16px; /* Cỡ chữ */
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
 
+.navbar-nav .nav-item .nav-link {
+    transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển đổi */
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    text-decoration: none; /* Bỏ gạch chân */
+    transform: scale(1.05); /* Phóng to nhẹ */
+}
+
+
+.avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    background-color: #f5f5f5;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Bao quanh avatar và tên như một nút */
+.btn-profile {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px; /* Tạo không gian xung quanh */
+    border: 1px solid #ddd; /* Viền nút */
+    border-radius: 25px; /* Góc bo tròn */
+    background-color: #f9f9f9; /* Màu nền */
+    color: #333; /* Màu chữ */
+    text-decoration: none; /* Bỏ gạch chân */
+    transition: all 0.3s ease; /* Hiệu ứng hover */
+    background-color: #007bff;
+}
+
+/* Avatar nhỏ trong nút */
+.btn-profile .avatar-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 8px;
+}
+
+.btn-profile .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+.btn-profile:hover .avatar-circle {
+    border: 2px solid #fff; /* Hiệu ứng viền avatar khi hover */
+}
+
+</style>
 <body>
 
     <!-- Header Section Begin -->
@@ -71,30 +141,57 @@
                 </form>
 
                 <!-- Right Side Menu -->
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('client.cart')}}"><i class="bi bi-cart"
-                                style="font-size: 20px;"></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('seller.index')}}">Kênh người bán</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#chatModal">Chat</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('client.index')}}">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        @if(Auth::check())
-                        <a class="nav-link" href="{{route('account.profile.index')}}">{{ Auth::user()->name }}</a>
-                        @else
-                        <a class="nav-link" href="{{route('account.login')}}">Đăng nhập</a>
-                        @endif
-                    </li>
+<ul class="navbar-nav ms-auto d-flex align-items-center gap-3">
+    <!-- Cart Icon -->
+    <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="{{route('client.cart')}}">
+            <i class="bi bi-cart" style="font-size: 20px;"></i>
+            <span class="ms-1">Giỏ hàng</span>
+        </a>
+    </li>
 
+    <!-- Seller Page -->
+    <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="{{route('seller.index')}}">
+            <i class="bi bi-shop" style="font-size: 20px;"></i>
+            <span class="ms-1">Kênh người bán</span>
+        </a>
+    </li>
 
-                </ul>
+    <!-- Chat Modal -->
+    <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#chatModal">
+            <i class="bi bi-chat-dots" style="font-size: 20px;"></i>
+            <span class="ms-1">Chat</span>
+        </a>
+    </li>
+
+    <!-- Homepage -->
+    <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="{{route('client.index')}}">
+            <i class="bi bi-house-door" style="font-size: 20px;"></i>
+            <span class="ms-1">Trang chủ</span>
+        </a>
+    </li>
+
+    <!-- User Profile or Login -->
+    <li class="nav-item">
+    @if(Auth::check())
+    <a class="nav-link d-flex align-items-center btn-profile" href="{{route('account.profile.index')}}">
+        <div class="avatar-circle">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC6iPDSqcgCcAtdEz_rPY0B-sxqMd7hz0Hlg&s" alt="Avatar" class="avatar-img">
+        </div>
+        <span class="ms-2">{{ Auth::user()->name }}</span>
+    </a>
+    @else
+    <a class="nav-link d-flex align-items-center" href="{{route('account.login')}}">
+    <i class="bi bi-box-arrow-in-right" style="font-size: 20px;"></i>
+    <span class="ms-2">Đăng Nhập</span>
+    </a>
+    @endif
+</li>
+</ul>
+
             </div>
         </nav>
 

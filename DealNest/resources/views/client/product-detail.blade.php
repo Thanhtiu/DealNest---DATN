@@ -4,6 +4,7 @@
 
 <!-- Product Details Section Begin -->
 <style>
+  
   .col-lg-12 {
     max-width: 1200px;
     margin: 0 auto;
@@ -120,6 +121,23 @@
   }
 
 
+  .form-label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 2px; /* Giảm khoảng cách dưới form-label */
+}
+
+.form-select {
+  width: 150px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f0f8ff;
+  color: #333;
+  font-size: 14px;
+  margin-top: 0px; /* Đảm bảo không có khoảng cách thừa phía trên */
+}
+
 
   .product-info {
     flex: 6;
@@ -147,7 +165,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-right: 50px;
+    margin-right: 170px;
   }
 
   .original-price {
@@ -222,24 +240,14 @@
   .product-options {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
-    margin-left: 145px;
+    margin-bottom: 100px;
+    margin-left: 140px;
+    
   }
 
-  .product-options .option {
-    display: flex;
-    align-items: flex-start;
-    /* Đặt căn chỉnh từ trên xuống */
-    margin-bottom: 15px;
-  }
+  
 
-  .product-options label {
-    width: 80px;
-    margin-right: 10px;
-    text-align: left;
-    font-size: 14px;
-    font-weight: bold;
-  }
+  
 
   .attribute-options {
     display: flex;
@@ -319,6 +327,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    margin-top: 5px;
   }
 
   .quantity-selector label {
@@ -666,11 +675,33 @@
     color: red;
   }
 
-  .favourite i {
-    color: red;
-    font-weight: bold;
-    font-size: 30px;
-  }
+  .favourite {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Giảm khoảng cách giữa icon và text */
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+  transition: transform 0.2s, color 0.2s;
+  
+}
+
+.favourite i {
+  color: red;
+  font-weight: bold;
+  font-size: 30px;
+  transition: transform 0.2s, color 0.2s; /* Hiệu ứng icon */
+}
+
+
+
+.favourite-count {
+  font-size: 16px;
+  color: #666;
+  font-weight: normal; /* Không quá đậm */
+}
+
 
   .shop-logo {
     width: 60px;
@@ -790,7 +821,7 @@
       </div>
       <form action="{{ route('cart.add') }}" method="POST">
         @csrf
-        <div class="product-options">
+        <div class="">
           @php
           $hasSize = false;
           $hasColor = false;
@@ -806,7 +837,7 @@
 
           @if ($hasSize)
           <label for="size-select" class="form-label">Kích thước</label>
-          <select id="size-select" class="form-select" style="width: 150px; background-color: #f0f8ff; color: #333;" name="size">
+          <select id="size-select" class="form-select" style="   width: 150px; background-color: #f0f8ff; color: #333;" name="size">
             @foreach($productDetail->productVariants as $item)
             @if($item->variant === 'Kích thước')
             <option value="{{$item->value}}">{{$item->value}}</option>

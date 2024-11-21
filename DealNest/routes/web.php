@@ -62,7 +62,7 @@ Route::post('/the-loai', [CategoryController::class, 'getProductAddress'])->name
 Route::post('/tim-kiem', [SearchController::class, 'index'])->name('client.search');
 Route::post('/theo-doi/cua-hang', [FollowerController::class, 'create'])->name('client.follow.create');
 
-
+Route::get('/cho-duyet/cua-hang', [RegisterTrationController::class, 'pendingStore'])->name('seller.register.pendingStore');
 
 
 Route::middleware(['web'])->group(function () {
@@ -104,7 +104,7 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
     Route::get('/dia-chi/mac-dinh/{id}', [AddressController::class, 'setDefault'])->name('account.address.setDefault');
     Route::get('/don-mua', [OrderController::class, 'index'])->name('client.order');
     Route::post('/don-mua/cap-nhat/trang-thai', [OrderController::class, 'updateOrderItemStatus'])->name('acccount.order.updateStatus');
-   
+
     Route::post('/san-pham/yeu-thich/{id}', [WishListController::class, 'create']);
     Route::get('/san-pham-yeu-thich', [WishListController::class, 'index'])->name('client.favourite');
     Route::get('/san-pham-yeu-thich/xoa/{id}', [WishListController::class, 'destroy'])->name('client.wishList.destroy');
@@ -118,7 +118,7 @@ Route::prefix('/tai-khoan-cua-toi')->group(function () {
 
     Route::post('/danh-gia/san-pham', [ReviewController::class, 'store'])->name('client.review.store');
 
-    Route::get('/thong-bao',[NotificationController::class, 'index'])->name('client.notification');
+    Route::get('/thong-bao', [NotificationController::class, 'index'])->name('client.notification');
 });
 
 
@@ -131,6 +131,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [DashBoardController::class, 'index'])->name('seller.index');
 
         Route::post('dang-ky-submit', [RegisterTrationController::class, 'store'])->name('seller.register.store');
+
+
 
         Route::get('/them-san-pham', [ProductController::class, 'store'])->name('seller.product.store');
 
@@ -196,7 +198,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/thong-bao/follower/da-doc/{id}', [DashBoardController::class, 'markNotificationAsRead'])->name('notifications.read');
 
-        Route::get('tin-nhan',[ChatController::class, 'index'])->name('seller.message');
+        Route::get('tin-nhan', [ChatController::class, 'index'])->name('seller.message');
     });
     // Cart Route
     Route::get('/gio-hang', [CartController::class, 'index'])->name('client.cart');

@@ -98,7 +98,7 @@
                     alt="Shopee Seller Illustration">
             </div>
             <div class="message">
-                <p>Vui lòng cung cấp thông tin để thành lập tài khoản người bán trên Shopee</p>
+                <p>Vui lòng cung cấp thông tin để thành lập tài khoản người bán trên DealNest</p>
             </div>
             <a href="{{route('seller.register.form')}}" class="button">Bắt đầu đăng ký</a>
         </div>

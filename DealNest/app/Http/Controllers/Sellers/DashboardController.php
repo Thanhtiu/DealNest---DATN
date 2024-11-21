@@ -17,7 +17,9 @@ class DashboardController extends Controller
     {
         $userId = Session::get('userId');
         $seller = Seller::where('user_id', $userId)->first();
-
+        if($seller->status == '2'){
+            return redirect(route('seller.register.pendingStore'));
+        }
         if (!$seller) {
             return redirect()->route('seller.register.index');
         } else {

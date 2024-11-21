@@ -105,7 +105,7 @@
         }
 
         .button-primary {
-            background-color: #ff3333;
+            background-color: #0d6efd;
             color: #fff;
         }
 
