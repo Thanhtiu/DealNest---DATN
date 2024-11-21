@@ -34,7 +34,10 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
-    protected static ?string $navigationLabel = 'Sản phẩm';
+    protected static ?string $navigationLabel = 'Danh sách sản phẩm';
+
+    protected static ?string $navigationGroup = 'Sản phẩm'; 
+
 
     protected static ?string $navigationBadgeTooltip = 'Số lượng sản phẩm';
 
@@ -159,9 +162,9 @@ class ProductResource extends Resource
                     default => null,
                 })
                 ->color(fn ($state) => match ($state) {
-                    'pending' => 'yellow', // Màu vàng cho pending
-                    'approved' => 'green', // Màu xanh cho approved
-                    'cancel' => 'red',     // Màu đỏ cho cancel
+                    'pending' => 'primary', // Màu vàng cho pending
+                    'approved' => 'success', // Màu xanh cho approved
+                    'cancel' => 'danger',     // Màu đỏ cho cancel
                     default => 'gray',     // Màu xám mặc định
                 })
                 ->formatStateUsing(fn ($state) => match ($state) {

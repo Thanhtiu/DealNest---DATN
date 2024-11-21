@@ -34,7 +34,7 @@ class DiscountedRevenueResource extends Resource
 
     protected static ?string $modelLabel = 'Doanh thu từ chiếc khấu';
 
-    protected static ?int $navigationSort = 7; 
+    protected static ?int $navigationSort = 4; 
 
     public static function form(Form $form): Form
     {

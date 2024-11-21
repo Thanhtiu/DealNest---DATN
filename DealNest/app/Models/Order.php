@@ -66,4 +66,12 @@ class Order extends Model
     public function voucher(){
         return $this->belongsTo(Voucher::class);
     }
+
+    public static function totalRevenueBySeller()
+    {
+        return Order::selectRaw('seller_id, SUM(total) as total_sum')
+                    ->groupBy('seller_id')
+                    ->orderByDesc('total_sum')
+                    ->get();
+    }
 }

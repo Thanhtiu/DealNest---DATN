@@ -38,7 +38,7 @@ class CategoryResource extends Resource
 
     protected static ?string $modelLabel = 'Danh mục';
 
-    protected static ?int $navigationSort = 2; // vị trí hiển thị
+    protected static ?int $navigationSort = 1; // vị trí hiển thị
 
     public static function form(Form $form): Form
     {

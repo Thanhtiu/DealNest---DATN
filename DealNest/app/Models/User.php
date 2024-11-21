@@ -43,6 +43,11 @@ class User extends Authenticatable implements FilamentUser
         'remember_token',
     ];
 
+    public function seller()
+{
+    return $this->hasOne(Seller::class);
+}
+
     /**
      * Get the attributes that should be cast.
      *

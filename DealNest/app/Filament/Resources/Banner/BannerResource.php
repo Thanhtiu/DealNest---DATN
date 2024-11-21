@@ -29,7 +29,7 @@ class BannerResource extends Resource
 
     protected static ?string $modelLabel = 'Banner';
 
-    protected static ?int $navigationSort =  6; // vị trí hiển thị
+    protected static ?int $navigationSort =  3; // vị trí hiển thị
 
     protected static ?string $navigationIcon = 'heroicon-o-flag'; // Hoặc 'heroicon-o-collection'
 
